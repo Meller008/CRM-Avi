@@ -4,4 +4,5 @@ import form.main_window
 
 app = QApplication(sys.argv)
 main = form.main_window.MainWindow()
-sys.exit(app.exec_() )
+sys.exit(app.exec_())
+
