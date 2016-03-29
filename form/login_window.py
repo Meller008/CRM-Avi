@@ -16,15 +16,11 @@ class LoginWindow(QDialog, login_class):
 
     def check_login(self):
 
-            query = 'SELECT  COUNT(*) FROM login WHERE Login.Login = %s AND Login.Password = %s'
-            login = self.le_login.text()
-            password = self.le_password.text()
-            par = (login.lower(), password.lower())
-            sql_result = my_sql.sql_select(query, par)
+            query = 'SELECT COUNT(*) FROM login WHERE Login.Login = %s AND Login.Password = %s'
+            par = (self.le_login.text(), self.le_password.text())
+            a = my_sql.sql_select(query, par)
+            print(a)
 
-            if sql_result[0][0] == 1:
-                self.main.login_access()
-                self.close()
-                self.destroy()
-            else:
-                QMessageBox.information(self, "Что то не так", "Не верный логин или пароль", QMessageBox.Ok)
+            # self.main.login_access()
+            # self.close()
+            # self.destroy()
