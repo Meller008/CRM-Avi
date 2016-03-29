@@ -27,24 +27,52 @@
     <property name="title">
      <string>Добавление</string>
     </property>
-    <addaction name="ma_add_material"/>
+    <addaction name="ma_material"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Поставщики</string>
+    </property>
+    <addaction name="ma_material_provider"/>
    </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="ma_add_material">
+  <action name="ma_material">
    <property name="text">
     <string>Приход ткани</string>
+   </property>
+  </action>
+  <action name="ma_material_provider">
+   <property name="text">
+    <string>Поставщики ткани</string>
    </property>
   </action>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>ma_add_material</sender>
+   <sender>ma_material</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>view_add_material()</slot>
+   <slot>view_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_material_provider</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_material_provider()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -58,6 +86,7 @@
   </connection>
  </connections>
  <slots>
-  <slot>view_add_material()</slot>
+  <slot>view_material()</slot>
+  <slot>view_material_provider()</slot>
  </slots>
 </ui>
