@@ -1,10 +1,7 @@
 from os import getcwd
-
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5.uic import loadUiType
-
 from function import my_sql
-
 
 login_class, login_base_class = loadUiType(getcwd() + '/ui/login.ui')
 
@@ -15,6 +12,7 @@ class LoginWindow(QDialog, login_class):
         self.user = args[1]
         super(LoginWindow, self).__init__()
         self.setupUi(self)
+        self.setModal(True)
 
     def check_login(self):
 
