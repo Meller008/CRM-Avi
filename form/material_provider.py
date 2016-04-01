@@ -5,8 +5,7 @@ from function import my_sql
 
 material_provider_class, material_provider_base_class = loadUiType(getcwd() + '/ui/material_provider.ui')
 add_material_provider_class, add_material_provider_base_class = loadUiType(getcwd() + '/ui/add_material_provider.ui')
-change_material_provider_class, change_material_provider_base_class = loadUiType(
-    getcwd() + '/ui/change_material_provider.ui')
+change_material_provider_class, change_material_provider_base_class = loadUiType(getcwd() + '/ui/change_material_provider.ui')
 
 
 class MaterialProvider(QDialog, material_provider_class):

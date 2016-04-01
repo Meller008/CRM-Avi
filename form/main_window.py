@@ -1,7 +1,7 @@
 from os import getcwd
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
-from form import login_window, material_provider
+from form import login_window, material_provider, material
 from classes import my_class
 
 main_class, main_base_class = loadUiType(getcwd() + '/ui/main.ui')
@@ -24,10 +24,13 @@ class MainWindow(QMainWindow, main_class):
             self.ma_material_provider.setDisabled(True)
 
     def view_material(self):
-        pass
+        self.material = material.Material()
+        self.mdi.addSubWindow(self.material)
+        self.material.show()
 
     def view_material_provider(self):
         self.mat_prov = material_provider.MaterialProvider()
+        self.mdi.addSubWindow(self.mat_prov)
         self.mat_prov.show()
 
     def login_access(self):

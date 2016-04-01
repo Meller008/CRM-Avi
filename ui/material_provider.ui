@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>271</width>
-    <height>483</height>
+    <width>226</width>
+    <height>425</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,16 +32,6 @@
    <property name="verticalSpacing">
     <number>0</number>
    </property>
-   <item row="0" column="3">
-    <widget class="QPushButton" name="pb_exit">
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
-     </property>
-     <property name="text">
-      <string>Выйти</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QPushButton" name="pb_add_provider">
      <property name="text">
@@ -52,7 +42,7 @@
    <item row="1" column="0" colspan="4">
     <widget class="QListWidget" name="lw_provider"/>
    </item>
-   <item row="0" column="1" colspan="2">
+   <item row="0" column="1" colspan="3">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -70,7 +60,6 @@
  <tabstops>
   <tabstop>pb_add_provider</tabstop>
   <tabstop>lw_provider</tabstop>
-  <tabstop>pb_exit</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -102,22 +91,6 @@
     </hint>
     <hint type="destinationlabel">
      <x>166</x>
-     <y>16</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_exit</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>exit_provider()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>207</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>186</x>
      <y>16</y>
     </hint>
    </hints>
