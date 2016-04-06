@@ -18,26 +18,35 @@ def sql_conn():
         cursor = conn.cursor()
         return conn, cursor
 
-    except mysql.connector.Error as e:
-        print(e)
+    except mysql.connector.Error as error:
+        return error
 
 
 def sql_select(query, parametr=tuple()):
-    connect, cursor, = sql_conn()
-    cursor.execute(query, parametr)
-    result = cursor.fetchall()
-    cursor.close()
-    connect.close()
-    return result
+    try:
+        connect, cursor, = sql_conn()
+        cursor.execute(query, parametr)
+        result = cursor.fetchall()
+        cursor.close()
+        connect.close()
+        return result
+
+    except mysql.connector.Error as error:
+        return error
 
 
 def sql_change(query, parametr=tuple()):
-    connect, cursor, = sql_conn()
-    cursor.execute(query, parametr)
-    result = "нет ID"
-    if cursor.lastrowid:
-        result = str(cursor.lastrowid)
-    connect.commit()
-    cursor.close()
-    connect.close()
-    return result
+    try:
+        connect, cursor, = sql_conn()
+        cursor.execute(query, parametr)
+        result = "нет ID"
+        if cursor.lastrowid:
+            result = str(cursor.lastrowid)
+        connect.commit()
+        cursor.close()
+        connect.close()
+        return result
+
+    except mysql.connector.Error as error:
+        a = error
+        return error

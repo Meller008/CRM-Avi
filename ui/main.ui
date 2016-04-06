@@ -13,7 +13,47 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QMdiArea" name="mdi">
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustIgnored</enum>
+      </property>
+      <property name="activationOrder">
+       <enum>QMdiArea::CreationOrder</enum>
+      </property>
+      <property name="viewMode">
+       <enum>QMdiArea::SubWindowView</enum>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>false</bool>
+      </property>
+      <property name="tabsMovable">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -31,9 +71,19 @@
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>Поставщики</string>
+     <string>Редактирование списков</string>
     </property>
-    <addaction name="ma_material_provider"/>
+    <widget class="QMenu" name="menu_3">
+     <property name="title">
+      <string>Поставщики</string>
+     </property>
+     <addaction name="ma_material_provider"/>
+     <addaction name="action_2"/>
+    </widget>
+    <addaction name="menu_3"/>
+    <addaction name="ma_material_name"/>
+    <addaction name="action_4"/>
+    <addaction name="ma_comparing_name"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -47,6 +97,26 @@
   <action name="ma_material_provider">
    <property name="text">
     <string>Поставщики ткани</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>Поставщики фурнитуры</string>
+   </property>
+  </action>
+  <action name="ma_material_name">
+   <property name="text">
+    <string>Виды ткани</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>Виды фурнитуры</string>
+   </property>
+  </action>
+  <action name="ma_comparing_name">
+   <property name="text">
+    <string>Виды прочих растрат</string>
    </property>
   </action>
  </widget>
@@ -84,9 +154,43 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_material_name</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_material_name()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_comparing_name</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_comparing_name()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
   <slot>view_material_provider()</slot>
+  <slot>view_material_name()</slot>
+  <slot>view_comparing_name()</slot>
  </slots>
 </ui>

@@ -24,7 +24,6 @@ class LoginWindow(QDialog, login_class):
 
             if not sql_result:
                 QMessageBox.information(self, "Что то не так", "Не верный логин или пароль")
-
             else:
                 self.user.id = sql_result[0][0]
                 self.user.login = sql_result[0][1]

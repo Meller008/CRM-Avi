@@ -1,104 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>226</width>
-    <height>425</height>
+    <width>254</width>
+    <height>393</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Поставщики</string>
+   <string>Поставщики ткани</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>0</number>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QListWidget" name="lw_provider"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
    </property>
-   <property name="topMargin">
-    <number>0</number>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 170, 0);</string>
    </property>
-   <property name="rightMargin">
-    <number>0</number>
+   <property name="movable">
+    <bool>false</bool>
    </property>
-   <property name="bottomMargin">
-    <number>2</number>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="pb_add_provider"/>
+   <addaction name="pb_change_provider"/>
+   <addaction name="pb_dell_provider"/>
+  </widget>
+  <action name="pb_add_provider">
+   <property name="text">
+    <string>Добавить</string>
    </property>
-   <property name="horizontalSpacing">
-    <number>6</number>
+   <property name="toolTip">
+    <string>Добавить поставщика</string>
    </property>
-   <property name="verticalSpacing">
-    <number>0</number>
+  </action>
+  <action name="pb_dell_provider">
+   <property name="text">
+    <string>Удалить</string>
    </property>
-   <item row="0" column="0">
-    <widget class="QPushButton" name="pb_add_provider">
-     <property name="text">
-      <string>Добавить поставщика</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="4">
-    <widget class="QListWidget" name="lw_provider"/>
-   </item>
-   <item row="0" column="1" colspan="3">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-  </layout>
+   <property name="toolTip">
+    <string>Удалить поставщика</string>
+   </property>
+  </action>
+  <action name="pb_change_provider">
+   <property name="text">
+    <string>Изменить</string>
+   </property>
+   <property name="toolTip">
+    <string>Изменить информацию</string>
+   </property>
+  </action>
  </widget>
- <tabstops>
-  <tabstop>pb_add_provider</tabstop>
-  <tabstop>lw_provider</tabstop>
- </tabstops>
  <resources/>
  <connections>
   <connection>
    <sender>pb_add_provider</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>view_add_provider()</slot>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>add_provider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>10</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>137</x>
-     <y>5</y>
+     <x>126</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_dell_provider</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>dell_provider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>126</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_change_provider</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_provider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>126</x>
+     <y>209</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>126</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>lw_provider</sender>
-   <signal>itemClicked(QListWidgetItem*)</signal>
-   <receiver>Dialog</receiver>
-   <slot>select_provider()</slot>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>double_click_provider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>177</x>
-     <y>68</y>
+     <x>126</x>
+     <y>209</y>
     </hint>
     <hint type="destinationlabel">
-     <x>166</x>
-     <y>16</y>
+     <x>126</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>view_add_provider()</slot>
-  <slot>select_provider()</slot>
-  <slot>exit_provider()</slot>
+  <slot>add_provider()</slot>
+  <slot>change_provider()</slot>
+  <slot>dell_provider()</slot>
+  <slot>double_click_provider()</slot>
  </slots>
 </ui>

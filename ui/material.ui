@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>604</width>
+    <width>758</width>
     <height>303</height>
    </rect>
   </property>
@@ -27,7 +27,7 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item row="1" column="0">
+    <item row="0" column="0">
      <widget class="QTableWidget" name="tableWidget">
       <attribute name="verticalHeaderDefaultSectionSize">
        <number>30</number>
@@ -35,11 +35,6 @@
       <attribute name="verticalHeaderHighlightSections">
        <bool>true</bool>
       </attribute>
-      <column>
-       <property name="text">
-        <string>Новый столбец</string>
-       </property>
-      </column>
       <column>
        <property name="text">
         <string>ID</string>
@@ -52,30 +47,34 @@
       </column>
       <column>
        <property name="text">
+        <string>Вес</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Сумма</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Новый столбец</string>
+        <string>Поставщик</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Примечание</string>
+        <string>Примичание</string>
        </property>
       </column>
      </widget>
     </item>
-    <item row="0" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout"/>
-    </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 170, 255);</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -101,5 +100,25 @@
   </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pb_add_material</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>add_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>151</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>add_material()</slot>
+ </slots>
 </ui>
