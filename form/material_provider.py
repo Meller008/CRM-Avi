@@ -9,12 +9,13 @@ change_material_provider_class, change_material_provider_base_class = loadUiType
 
 
 class MaterialProvider(QMainWindow, material_provider_class):
-    def __init__(self, *args):
+    def __init__(self, m_class=0):
         super(MaterialProvider, self).__init__()
         self.setupUi(self)
         self.set_settings()
         self.set_sql_query()
         self.list_provider()
+        self.m_class = m_class
 
     def set_settings(self):
         self.setWindowTitle("Поставщики ткани")

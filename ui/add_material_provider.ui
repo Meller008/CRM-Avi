@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>230</width>
+    <width>301</width>
     <height>200</height>
    </rect>
   </property>
@@ -72,9 +72,9 @@
     <widget class="QPlainTextEdit" name="le_info"/>
    </item>
    <item row="1" column="0" colspan="3">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lb_name">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Имя поставщика&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Название&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>

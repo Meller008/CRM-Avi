@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>207</width>
+    <width>253</width>
     <height>126</height>
    </rect>
   </property>
@@ -30,10 +30,18 @@
     <number>4</number>
    </property>
    <item row="3" column="1" colspan="2">
-    <widget class="QLineEdit" name="le_value"/>
+    <widget class="QLineEdit" name="le_value">
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="le_name"/>
+    <widget class="QLineEdit" name="le_name">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
    <item row="5" column="0" colspan="3">
     <widget class="QPushButton" name="pushButton">
@@ -50,7 +58,14 @@
     </widget>
    </item>
    <item row="2" column="1" colspan="2">
-    <widget class="QLineEdit" name="le_price"/>
+    <widget class="QLineEdit" name="le_price">
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="2">
     <widget class="QToolButton" name="pb_viev_material">
@@ -60,7 +75,7 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="lb_value">
      <property name="text">
       <string>Вес</string>
      </property>
@@ -89,6 +104,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>le_name</tabstop>
+  <tabstop>pb_viev_material</tabstop>
+  <tabstop>le_price</tabstop>
+  <tabstop>le_value</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -107,8 +129,58 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>le_price</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>change_price()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>120</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>103</x>
+     <y>62</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_value</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>change_price()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>120</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>103</x>
+     <y>62</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>add_material_line()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>163</x>
+     <y>107</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>205</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material_name()</slot>
+  <slot>change_price()</slot>
+  <slot>add_material_line()</slot>
  </slots>
 </ui>

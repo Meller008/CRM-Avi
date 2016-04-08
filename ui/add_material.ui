@@ -28,38 +28,12 @@
      <number>0</number>
     </property>
     <property name="spacing">
-     <number>4</number>
+     <number>2</number>
     </property>
     <item row="2" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Примичание&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1" colspan="2">
-     <widget class="QDateEdit" name="de_data">
-      <property name="wrapping">
-       <bool>false</bool>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-      <property name="accelerated">
-       <bool>false</bool>
-      </property>
-      <property name="dateTime">
-       <datetime>
-        <hour>0</hour>
-        <minute>0</minute>
-        <second>0</second>
-        <year>2000</year>
-        <month>1</month>
-        <day>1</day>
-       </datetime>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -88,7 +62,11 @@
      <widget class="QLineEdit" name="le_note"/>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="le_provider"/>
+     <widget class="QLineEdit" name="le_provider">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="3" column="0" colspan="3">
      <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -131,6 +109,18 @@
     </item>
     <item row="4" column="0" colspan="3">
      <widget class="QTableWidget" name="tw_position">
+      <property name="font">
+       <font>
+        <family>Tahoma</family>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
       <property name="rowCount">
        <number>0</number>
       </property>
@@ -144,7 +134,10 @@
        <number>110</number>
       </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
-       <number>23</number>
+       <number>20</number>
+      </attribute>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>18</number>
       </attribute>
       <column>
        <property name="text">
@@ -171,6 +164,42 @@
         <string>Сумма</string>
        </property>
       </column>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="3">
+     <widget class="QPushButton" name="pb_add">
+      <property name="text">
+       <string>Добавить</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QDateEdit" name="de_data">
+      <property name="wrapping">
+       <bool>false</bool>
+      </property>
+      <property name="readOnly">
+       <bool>false</bool>
+      </property>
+      <property name="accelerated">
+       <bool>false</bool>
+      </property>
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2000</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+      <property name="timeSpec">
+       <enum>Qt::LocalTime</enum>
+      </property>
      </widget>
     </item>
    </layout>
@@ -239,8 +268,76 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_add</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>add_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>460</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bu_set_provider</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_name_provider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>503</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_add_comparing</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>add_comparing_pozition()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_position</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>double_click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_materia_pozition()</slot>
+  <slot>add_material()</slot>
+  <slot>view_name_provider()</slot>
+  <slot>add_comparing_pozition()</slot>
+  <slot>double_click()</slot>
  </slots>
 </ui>
