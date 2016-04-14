@@ -56,6 +56,9 @@ class Material(QMainWindow, material_class):
         self.add_mat.setWindowModality(QtCore.Qt.ApplicationModal)
         self.add_mat.show()
 
+    def view_supply(self):
+        pass
+
 
 class AddMaterial(QMainWindow, add_material_class):
     def __init__(self, *args):
@@ -78,14 +81,16 @@ class AddMaterial(QMainWindow, add_material_class):
         self.add_mat_poz.setWindowModality(QtCore.Qt.ApplicationModal)
         self.add_mat_poz.show()
 
-    def add_pozition(self, mat_poz, collor):
+    def add_pozition(self, mat_poz, collor, row):
         self.j = 0
-        self.tw_position.setRowCount(self.tw_position.rowCount()+1)
+        if row is False:
+            self.tw_position.setRowCount(self.tw_position.rowCount() + 1)
+            row = self.tw_position.rowCount()-1
         for i in mat_poz:
             item = QTableWidgetItem(i)
             brush = QBrush(QColor(collor[0], collor[1], collor[2], 255))
             item.setBackground(brush)
-            self.tw_position.setItem(self.tw_position.rowCount()-1, self.j, item)
+            self.tw_position.setItem(row, self.j, item)
             self.j += 1
         self.tw_position.horizontalHeader().resizeSection(0, 270)
         self.tw_position.horizontalHeader().resizeSection(1, 75)
@@ -99,13 +104,42 @@ class AddMaterial(QMainWindow, add_material_class):
         price = self.tw_position.item(i, 2).text()
         summ = self.tw_position.item(i, 3).text()
 
-        self.add_mat_poz = AddMaterialPosition(self)
-        self.add_mat_poz.set_meaning((name, value, price, summ))
-        self.add_mat_poz.setWindowModality(QtCore.Qt.ApplicationModal)
-        self.add_mat_poz.show()
+        if collor == 153:
+            self.add_mat_poz = AddMaterialPosition(self)
+            self.add_mat_poz.set_meaning((name, value, price, summ), i)
+            self.add_mat_poz.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.add_mat_poz.show()
+        elif collor == 221:
+            self.add_mat_poz = AddComparingPosition(self)
+            self.add_mat_poz.set_meaning((name, value, price, summ), i)
+            self.add_mat_poz.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.add_mat_poz.show()
 
     def add_material(self):
-        pass
+        query = "insert into avi_crm.material_supply (Material_ProviderId, Data, Note) select Id, %s, %s from avi_crm.material_provider where Name=%s"
+        data = self.de_data.date().toString("yyyy.MM.dd")
+        parametr = (data, self.le_note.text(), self.le_provider.text())
+        self.id_supply = my_sql.sql_change(query, parametr)
+
+        self.matrial = []
+        self.comparing = []
+        for row in range(self.tw_position.rowCount()):
+            collor =  self.tw_position.item(row, 0).background().color().red()
+            self.name = self.tw_position.item(row, 0).text()
+            self.value = self.tw_position.item(row, 1).text()
+            self.price = self.tw_position.item(row, 2).text()
+            if collor == 153:
+                self.matrial.append((self.id_supply, self.value, self.price, self.name))
+            elif collor == 221:
+                self.comparing.append((self.id_supply, self.value, self.price, self.name))
+
+            
+            
+            
+            # query = "INSERT INTO avi_crm.material_supplyposition (Material_SupplyId, Material_NameId, Weight, Price) SELECT %s, Id, %s, %s FROM material_name WHERE Name = %s"
+
+    def dell_row(self):
+        self.tw_position.removeRow(self.tw_position.selectedItems()[0].row())
 
 
 class AddMaterialPosition(QDialog, add_material_pozition_class):
@@ -114,16 +148,17 @@ class AddMaterialPosition(QDialog, add_material_pozition_class):
         self.setupUi(self)
         self.main = args[0]
         self.set_settings()
+        self.i = False
 
     def set_settings(self):
         pass
 
-    def set_meaning(self, meaning):
+    def set_meaning(self, meaning, i):
+        self.i = i
         self.le_name.setText(meaning[0])
         self.le_price.setText(meaning[1])
         self.le_value.setText(meaning[2])
         # self.le_name.setText(meaning[3])
-
 
     def view_material_name(self):
         self.mat_name = MaterialName(self)
@@ -166,7 +201,7 @@ class AddMaterialPosition(QDialog, add_material_pozition_class):
         collor = (153, 221, 255)
         self.close()
         self.destroy()
-        self.main.add_pozition(par, collor)
+        self.main.add_pozition(par, collor, self.i)
 
 
 class AddComparingPosition(AddMaterialPosition):
@@ -185,5 +220,5 @@ class AddComparingPosition(AddMaterialPosition):
         collor = (221, 255, 204)
         self.close()
         self.destroy()
-        self.main.add_pozition(par, collor)
+        self.main.add_pozition(par, collor, self.i)
 

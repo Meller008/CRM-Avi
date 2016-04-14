@@ -332,6 +332,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_dell_maerial</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>dell_row()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_materia_pozition()</slot>
@@ -339,5 +355,6 @@
   <slot>view_name_provider()</slot>
   <slot>add_comparing_pozition()</slot>
   <slot>double_click()</slot>
+  <slot>dell_row()</slot>
  </slots>
 </ui>

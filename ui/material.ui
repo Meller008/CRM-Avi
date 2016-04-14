@@ -47,17 +47,17 @@
       </column>
       <column>
        <property name="text">
+        <string>Поставщик</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Вес</string>
        </property>
       </column>
       <column>
        <property name="text">
         <string>Сумма</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Поставщик</string>
        </property>
       </column>
       <column>
