@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Программа учета предприятия Авидевелопмент-м</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../favicon.ico</normaloff>../../favicon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -32,11 +36,14 @@
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
       </property>
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustIgnored</enum>
-      </property>
-      <property name="activationOrder">
-       <enum>QMdiArea::CreationOrder</enum>
+      <property name="background">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>166</red>
+         <green>166</green>
+         <blue>166</blue>
+        </color>
+       </brush>
       </property>
       <property name="viewMode">
        <enum>QMdiArea::SubWindowView</enum>
@@ -49,6 +56,9 @@
       </property>
       <property name="tabsMovable">
        <bool>false</bool>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
       </property>
      </widget>
     </item>
@@ -68,6 +78,7 @@
      <string>Добавление</string>
     </property>
     <addaction name="ma_material"/>
+    <addaction name="ma_accessories"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -78,11 +89,11 @@
       <string>Поставщики</string>
      </property>
      <addaction name="ma_material_provider"/>
-     <addaction name="action_2"/>
+     <addaction name="ma_accessories_provider"/>
     </widget>
     <addaction name="menu_3"/>
     <addaction name="ma_material_name"/>
-    <addaction name="action_4"/>
+    <addaction name="ma_accessories_name"/>
     <addaction name="ma_comparing_name"/>
    </widget>
    <addaction name="menu"/>
@@ -99,7 +110,7 @@
     <string>Поставщики ткани</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="ma_accessories_provider">
    <property name="text">
     <string>Поставщики фурнитуры</string>
    </property>
@@ -109,7 +120,7 @@
     <string>Виды ткани</string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="ma_accessories_name">
    <property name="text">
     <string>Виды фурнитуры</string>
    </property>
@@ -117,6 +128,11 @@
   <action name="ma_comparing_name">
    <property name="text">
     <string>Виды прочих растрат</string>
+   </property>
+  </action>
+  <action name="ma_accessories">
+   <property name="text">
+    <string>Приход фурнитуры</string>
    </property>
   </action>
  </widget>
@@ -186,11 +202,62 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_accessories_name</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_accessories_name()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_accessories_provider</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_accessories_provider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_accessories</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
   <slot>view_material_provider()</slot>
   <slot>view_material_name()</slot>
   <slot>view_comparing_name()</slot>
+  <slot>view_accessories_name()</slot>
+  <slot>view_accessories_provider()</slot>
+  <slot>view_accessories()</slot>
  </slots>
 </ui>

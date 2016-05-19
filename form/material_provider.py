@@ -2,6 +2,7 @@ from os import getcwd
 from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox
 from PyQt5.uic import loadUiType
 from function import my_sql
+from PyQt5.QtGui import QIcon
 
 material_provider_class, material_provider_base_class = loadUiType(getcwd() + '/ui/material_provider.ui')
 add_material_provider_class, add_material_provider_base_class = loadUiType(getcwd() + '/ui/add_material_provider.ui')
@@ -9,20 +10,21 @@ change_material_provider_class, change_material_provider_base_class = loadUiType
 
 
 class MaterialProvider(QMainWindow, material_provider_class):
-    def __init__(self, m_class=0):
+    def __init__(self, m_class=0, dc_select=False):
         super(MaterialProvider, self).__init__()
         self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.set_settings()
         self.set_sql_query()
         self.list_provider()
         self.m_class = m_class
+        self.dc_select = dc_select
 
     def set_settings(self):
         self.setWindowTitle("Поставщики ткани")
         self.toolBar.setStyleSheet("background-color: rgb(255, 170, 0);")
         self.add_title = "Добавить поставщика"
         self.change_title = "Изменить поставщика"
-
 
     def set_sql_query(self):
         self.sql_list = "SELECT material_provider.Name FROM material_provider"
@@ -35,7 +37,7 @@ class MaterialProvider(QMainWindow, material_provider_class):
     def list_provider(self):
         sql_result = my_sql.sql_select(self.sql_list)
         self.lw_provider.clear()
-        if "mysql.connector.errors.IntegrityError" in str(type(sql_result)):
+        if "mysql.connector.errors" in str(type(sql_result)):
             QMessageBox.critical(self, "Ошибка sql", sql_result.msg)
         else:
             for prov in sql_result:
@@ -56,13 +58,18 @@ class MaterialProvider(QMainWindow, material_provider_class):
         if select:
             par = (select[0].text(), )
             sql_ret = my_sql.sql_change(self.sql_dell, par)
-            if "mysql.connector.errors.IntegrityError" in str(type(sql_ret)):
+            if "mysql.connector.errors" in str(type(sql_ret)):
                 QMessageBox.critical(self, "Ошибка sql", sql_ret.msg)
             self.list_provider()
 
     def double_click_provider(self, select_prov):
-        self.change_provider = ChangeMaterialProvider(self, select_prov.text())
-        self.change_provider.show()
+        if not self.dc_select:
+            self.change_provider = ChangeMaterialProvider(self, select_prov.text())
+            self.change_provider.show()
+        else:
+            self.m_class.set_material_name(select_prov.text())
+            self.close()
+            self.destroy()
 
 
 class AddMaterialProvider(QDialog, add_material_provider_class):
@@ -70,6 +77,7 @@ class AddMaterialProvider(QDialog, add_material_provider_class):
         self.main = args[0]
         super(AddMaterialProvider, self).__init__()
         self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.setWindowTitle(self.main.add_title)
         self.setModal(True)
 
@@ -78,7 +86,7 @@ class AddMaterialProvider(QDialog, add_material_provider_class):
         info = self.le_info.toPlainText()
         par = (name, info)
         sql_ret = my_sql.sql_change(self.main.sql_add, par)
-        if "mysql.connector.errors.IntegrityError" in str(type(sql_ret)):
+        if "mysql.connector.errors" in str(type(sql_ret)):
             QMessageBox.critical(self, "Ошибка sql", sql_ret.msg)
         self.main.list_provider()
         self.close()
@@ -95,12 +103,13 @@ class ChangeMaterialProvider(QDialog, change_material_provider_class):
         self.change_provider = args[1]
         super(ChangeMaterialProvider, self).__init__()
         self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.setWindowTitle(self.main.change_title)
         self.setModal(True)
 
         par = (self.change_provider,)
         sql_ret = my_sql.sql_select(self.main.sql_change_select, par)
-        if "mysql.connector.errors.IntegrityError" in str(type(sql_ret)):
+        if "mysql.connector.errors" in str(type(sql_ret)):
             QMessageBox.critical(self, "Ошибка sql", sql_ret.msg)
         else:
             self.le_name.setText(sql_ret[0][0])
@@ -115,8 +124,24 @@ class ChangeMaterialProvider(QDialog, change_material_provider_class):
         info = self.le_info.toPlainText()
         par = (name, info, self.change_provider)
         sql_ret = my_sql.sql_change(self.main.sql_update_select, par)
-        if "mysql.connector.errors.IntegrityError" in str(type(sql_ret)):
+        if "mysql.connector.errors" in str(type(sql_ret)):
             QMessageBox.critical(self, "Ошибка sql", sql_ret.msg)
         self.main.list_provider()
         self.close()
         self.destroy()
+
+
+class MaterialName(MaterialProvider):
+    def set_sql_query(self):
+        self.sql_list = "SELECT material_name.Name FROM material_name"
+        self.sql_add = "INSERT INTO material_name (Name, Information) VALUES (%s, %s)"
+        self.sql_change_select = "SELECT material_name.Name, material_name.Information FROM material_name WHERE  Name = %s"
+        self.sql_update_select = 'UPDATE material_name SET material_name.Name = %s, material_name.Information = %s ' \
+                                 'WHERE material_name.Name = %s'
+        self.sql_dell = "DELETE FROM material_name WHERE material_name.Name = %s"
+
+    def set_settings(self):
+        self.setWindowTitle("Названия тканей")
+        self.toolBar.setStyleSheet("background-color: rgb(0, 170, 255);")
+        self.add_title = "Добавить ткань"
+        self.change_title = "Изменить ткань"

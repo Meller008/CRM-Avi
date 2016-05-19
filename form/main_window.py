@@ -1,8 +1,10 @@
 from os import getcwd
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
-from form import login_window, material_provider, material, comparing
+from form import login_window, material_provider, material, comparing, accessories_provider, accesspries
 from classes import my_class
+from PyQt5.QtGui import QIcon
+import sys
 
 main_class, main_base_class = loadUiType(getcwd() + '/ui/main.ui')
 
@@ -13,6 +15,7 @@ class MainWindow(QMainWindow, main_class):
         self.user = my_class.User
         super(MainWindow, self).__init__(*args)
         self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.show()
         self.setDisabled(True)
         self.login = login_window.LoginWindow(self, self.user)
@@ -40,7 +43,7 @@ class MainWindow(QMainWindow, main_class):
         self.sub_provider.show()
 
     def view_material_name(self):
-        self.material_neme = material.MaterialName()
+        self.material_neme = material_provider.MaterialName()
         self.sub_mater_name = QMdiSubWindow()
         self.sub_mater_name.setWidget(self.material_neme)
         self.mdi.addSubWindow(self.sub_mater_name)
@@ -55,8 +58,37 @@ class MainWindow(QMainWindow, main_class):
         self.sub_comp_name.resize(self.comparing_name.size())
         self.sub_comp_name.show()
 
+    def view_accessories_name(self):
+        self.accessoriesl_neme = accessories_provider.AccessoriesName()
+        self.sub_accsess_name = QMdiSubWindow()
+        self.sub_accsess_name.setWidget(self.accessoriesl_neme)
+        self.mdi.addSubWindow(self.sub_accsess_name)
+        self.sub_accsess_name.resize(self.accessoriesl_neme.size())
+        self.sub_accsess_name.show()
+
+    def view_accessories_provider(self):
+        self.access_prov = accessories_provider.AccessoriesProvider()
+        self.sub_provider_access = QMdiSubWindow()
+        self.sub_provider_access.setWidget(self.access_prov)
+        self.mdi.addSubWindow(self.sub_provider_access)
+        self.sub_provider_access.resize(self.access_prov.size())
+        self.sub_provider_access.show()
+
+    def view_accessories(self):
+        self.accessories = accesspries.Accessories()
+        self.accessories.set_settings()
+        self.sub_accessories = QMdiSubWindow()
+        self.sub_accessories.setWidget(self.accessories)
+        self.mdi.addSubWindow(self.sub_accessories)
+        self.sub_accessories.resize(self.accessories.size())
+        self.sub_accessories.show()
+
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % self.user.privilege)
         self.setEnabled(True)
         self.set_privilege()
         self.setFocus()
+
+    def closeEvent(self, e):
+        e.accept()
+        sys.exit()

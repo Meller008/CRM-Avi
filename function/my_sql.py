@@ -6,7 +6,7 @@ import mysql.connector
 def sql_settings():
     config = configparser.ConfigParser()
     config.sections()
-    config.read(getcwd() + '/setting/settings.ini')
+    config.read(getcwd() + '/setting/settings_lan.ini')
     return (config["sql_connect"]["ip"], config["sql_connect"]["db_name"],
             config["sql_connect"]["name"], config["sql_connect"]["password"])
 
@@ -39,6 +39,22 @@ def sql_change(query, parametr=tuple()):
     try:
         connect, cursor, = sql_conn()
         cursor.execute(query, parametr)
+        result = "нет ID"
+        if cursor.lastrowid:
+            result = str(cursor.lastrowid)
+        connect.commit()
+        cursor.close()
+        connect.close()
+        return result
+
+    except mysql.connector.Error as error:
+        return error
+
+
+def sql_many(query, parametr=tuple()):
+    try:
+        connect, cursor, = sql_conn()
+        cursor.executemany(query, parametr)
         result = "нет ID"
         if cursor.lastrowid:
             result = str(cursor.lastrowid)

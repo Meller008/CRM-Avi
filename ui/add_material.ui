@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
+    <width>605</width>
     <height>472</height>
    </rect>
   </property>
@@ -14,6 +14,9 @@
    <string>Новый приход</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
@@ -71,14 +74,14 @@
     <item row="3" column="0" colspan="3">
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
-       <widget class="QLabel" name="la_sum_weight_3">
+       <widget class="QLabel" name="la_sum_weight">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Вес = &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Вес/Кол-во = &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="la_sum_material_3">
+       <widget class="QLabel" name="la_sum_material">
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Сумма материала= &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -92,7 +95,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="la_sum_3">
+       <widget class="QLabel" name="la_sum">
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Сумма всего = &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -272,7 +275,7 @@
    <sender>pb_add</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>add_material()</slot>
+   <slot>add_material_sql()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>257</x>
@@ -348,13 +351,46 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>le_note</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_line_edit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>339</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>302</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_data</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_line_edit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>339</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>302</x>
+     <y>235</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_materia_pozition()</slot>
-  <slot>add_material()</slot>
+  <slot>add_material_sql()</slot>
   <slot>view_name_provider()</slot>
   <slot>add_comparing_pozition()</slot>
   <slot>double_click()</slot>
   <slot>dell_row()</slot>
+  <slot>change_line_edit()</slot>
  </slots>
 </ui>

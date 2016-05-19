@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>758</width>
+    <width>770</width>
     <height>303</height>
    </rect>
   </property>
@@ -28,12 +28,30 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QTableWidget" name="tw_supply_material">
+      <property name="font">
+       <font>
+        <family>Tahoma</family>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="textElideMode">
+       <enum>Qt::ElideRight</enum>
+      </property>
       <attribute name="verticalHeaderDefaultSectionSize">
-       <number>30</number>
+       <number>20</number>
       </attribute>
       <attribute name="verticalHeaderHighlightSections">
        <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>18</number>
       </attribute>
       <column>
        <property name="text">
@@ -117,8 +135,42 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_dell_material</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>dell_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>350</x>
+     <y>151</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_supply_material</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>double_click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>350</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>350</x>
+     <y>151</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_material()</slot>
+  <slot>dell_material()</slot>
+  <slot>double_click()</slot>
  </slots>
 </ui>

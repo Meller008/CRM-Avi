@@ -30,9 +30,9 @@
     <number>4</number>
    </property>
    <item row="3" column="1" colspan="2">
-    <widget class="QLineEdit" name="le_value">
+    <widget class="QLineEdit" name="le_price">
      <property name="text">
-      <string>0</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -58,12 +58,12 @@
     </widget>
    </item>
    <item row="2" column="1" colspan="2">
-    <widget class="QLineEdit" name="le_price">
+    <widget class="QLineEdit" name="le_value">
      <property name="inputMask">
       <string/>
      </property>
      <property name="text">
-      <string>0</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -75,9 +75,9 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="lb_value">
+    <widget class="QLabel" name="lb_3">
      <property name="text">
-      <string>Вес</string>
+      <string>Цена</string>
      </property>
     </widget>
    </item>
@@ -89,9 +89,9 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="lb_value">
      <property name="text">
-      <string>Цена</string>
+      <string>Вес</string>
      </property>
     </widget>
    </item>
@@ -107,8 +107,8 @@
  <tabstops>
   <tabstop>le_name</tabstop>
   <tabstop>pb_viev_material</tabstop>
-  <tabstop>le_price</tabstop>
   <tabstop>le_value</tabstop>
+  <tabstop>le_price</tabstop>
   <tabstop>pushButton</tabstop>
  </tabstops>
  <resources/>
@@ -130,7 +130,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>le_price</sender>
+   <sender>le_value</sender>
    <signal>textChanged(QString)</signal>
    <receiver>Dialog</receiver>
    <slot>change_price()</slot>
@@ -146,7 +146,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>le_value</sender>
+   <sender>le_price</sender>
    <signal>textChanged(QString)</signal>
    <receiver>Dialog</receiver>
    <slot>change_price()</slot>

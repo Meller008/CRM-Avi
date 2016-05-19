@@ -2,6 +2,7 @@ from os import getcwd
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5.uic import loadUiType
 from function import my_sql
+from PyQt5.QtGui import QIcon
 
 login_class, login_base_class = loadUiType(getcwd() + '/ui/login.ui')
 
@@ -12,6 +13,7 @@ class LoginWindow(QDialog, login_class):
         self.user = args[1]
         super(LoginWindow, self).__init__()
         self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.setModal(True)
 
     def check_login(self):
@@ -23,7 +25,7 @@ class LoginWindow(QDialog, login_class):
             sql_result = my_sql.sql_select(query, par)
 
             if not sql_result:
-                QMessageBox.information(self, "Что то не так", "Не верный логин или пароль")
+                QMessageBox.information(self, "Что то не так", "Не верный логин или пароль", QMessageBox.Ok)
             else:
                 self.user.id = sql_result[0][0]
                 self.user.login = sql_result[0][1]
