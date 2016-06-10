@@ -6,252 +6,293 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
-    <height>453</height>
+    <width>621</width>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Работник</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="0,2,0,0,0,0,1">
     <property name="leftMargin">
-     <number>3</number>
+     <number>1</number>
     </property>
     <property name="topMargin">
-     <number>3</number>
+     <number>1</number>
     </property>
     <property name="rightMargin">
-     <number>3</number>
+     <number>1</number>
     </property>
     <property name="bottomMargin">
-     <number>3</number>
+     <number>0</number>
     </property>
-    <property name="horizontalSpacing">
-     <number>4</number>
+    <property name="spacing">
+     <number>2</number>
     </property>
-    <property name="verticalSpacing">
-     <number>3</number>
-    </property>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_3">
+    <item row="6" column="2" colspan="2">
+     <widget class="QRadioButton" name="rb_sex_f">
       <property name="text">
-       <string>Отчество</string>
+       <string>Женщина</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Фамилия</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Имя</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
+    <item row="7" column="0">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Дата рождения</string>
       </property>
      </widget>
     </item>
-    <item row="9" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEdit_5"/>
+    <item row="7" column="5">
+     <widget class="QLabel" name="label_34">
+      <property name="text">
+       <string>ИНН №</string>
+      </property>
+     </widget>
     </item>
     <item row="3" column="5">
-     <widget class="QDateEdit" name="dateEdit_3">
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="4">
-     <widget class="QLabel" name="label_10">
-      <property name="text">
-       <string>Стаж: 1г 3м</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="5">
-     <widget class="QCheckBox" name="checkBox">
-      <property name="text">
-       <string>Уволен?</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="4">
-     <widget class="QLabel" name="label_9">
-      <property name="text">
-       <string>Дата увольнения</string>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="0" colspan="6">
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="4">
      <widget class="QLabel" name="label_8">
       <property name="text">
        <string>Дата приема</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="5">
-     <widget class="QDateEdit" name="dateEdit_2">
-      <property name="calendarPopup">
-       <bool>true</bool>
+    <item row="16" column="6">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="pb_acc">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Применить</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_11">
+        <property name="text">
+         <string>Отменить</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="4" rowspan="12">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
      </widget>
     </item>
-    <item row="6" column="3">
-     <widget class="QLabel" name="label_7">
+    <item row="3" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_last_name">
+      <property name="maxLength">
+       <number>40</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="5">
+     <widget class="QLabel" name="label_10">
       <property name="text">
-       <string>Возраст: 5л 4м</string>
+       <string>Стаж: новый</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEdit_6"/>
+    <item row="4" column="6">
+     <widget class="QCheckBox" name="cb_info_leave">
+      <property name="text">
+       <string>Уволен?</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Фамилия</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="6">
+     <widget class="QLineEdit" name="le_info_inn">
+      <property name="maxLength">
+       <number>12</number>
+      </property>
+     </widget>
     </item>
     <item row="8" column="0">
-     <widget class="QLabel" name="label_12">
-      <property name="text">
-       <string>Телефон</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>Гражданство</string>
       </property>
      </widget>
     </item>
-    <item row="9" column="0">
-     <widget class="QLabel" name="label_6">
+    <item row="7" column="3">
+     <widget class="QLabel" name="lb_info_years">
       <property name="text">
-       <string>Адрес регистрации</string>
+       <string>Возраст: --</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEdit"/>
+    <item row="6" column="5">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Дата увольнения</string>
+      </property>
+     </widget>
     </item>
-    <item row="2" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEdit_2"/>
-    </item>
-    <item row="6" column="1" colspan="2">
-     <widget class="QDateEdit" name="dateEdit">
+    <item row="3" column="6">
+     <widget class="QDateEdit" name="de_info_recruitment">
       <property name="calendarPopup">
        <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="3" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEdit_3"/>
-    </item>
-    <item row="5" column="4" colspan="2">
-     <widget class="QLabel" name="label_11">
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_12">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Комментарий&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>Телефон</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QRadioButton" name="radioButton">
+    <item row="8" column="5">
+     <widget class="QLabel" name="label_40">
       <property name="text">
-       <string>Мужчина</string>
+       <string>СНИЛС №</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="6" column="0">
      <widget class="QLabel" name="label_14">
       <property name="text">
        <string>Пол</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="2" colspan="2">
-     <widget class="QRadioButton" name="radioButton_2">
+    <item row="13" column="0" colspan="7">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_address">
+      <property name="maxLength">
+       <number>80</number>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>Женщина</string>
+       <string>Адрес регистр.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="5" rowspan="2" colspan="2">
+     <widget class="QLabel" name="lb_info_id">
+      <property name="styleSheet">
+       <string notr="true">font: 10pt &quot;Tahoma&quot;;</string>
+      </property>
+      <property name="text">
+       <string>Табельный номер: новый</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="6" rowspan="3">
+     <widget class="QPlainTextEdit" name="le_info_note"/>
+    </item>
+    <item row="4" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_middle_name">
+      <property name="maxLength">
+       <number>40</number>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="6">
+     <widget class="QDateEdit" name="de_info_leave">
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="5" rowspan="3">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Комментарий&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Отчество</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" rowspan="2" colspan="3">
+     <widget class="QLineEdit" name="le_info_first_name">
+      <property name="maxLength">
+       <number>40</number>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QRadioButton" name="rb_sex_m">
+      <property name="text">
+       <string>Мужчина</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="2">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Имя</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_phone">
+      <property name="maxLength">
+       <number>13</number>
       </property>
      </widget>
     </item>
     <item row="7" column="1" colspan="2">
-     <widget class="QComboBox" name="comboBox">
-      <property name="editable">
+     <widget class="QDateEdit" name="de_info_birth">
+      <property name="calendarPopup">
        <bool>true</bool>
       </property>
-      <item>
-       <property name="text">
-        <string>Россия</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Киргизия</string>
-       </property>
-      </item>
      </widget>
     </item>
-    <item row="7" column="3">
-     <widget class="QToolButton" name="toolButton">
+    <item row="9" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_birthplace"/>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label_7">
       <property name="text">
-       <string>...</string>
+       <string>Место рождения</string>
       </property>
      </widget>
     </item>
-    <item row="14" column="5">
-     <widget class="QPushButton" name="pushButton_10">
-      <property name="text">
-       <string>Отменить</string>
-      </property>
-     </widget>
-    </item>
-    <item row="14" column="3" colspan="2">
-     <widget class="QPushButton" name="pushButton_11">
-      <property name="text">
-       <string>Применить</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="0">
-     <widget class="QLabel" name="label_23">
-      <property name="text">
-       <string>Должность</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="4" rowspan="5" colspan="2">
-     <widget class="QPlainTextEdit" name="plainTextEdit"/>
-    </item>
-    <item row="10" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEdit_12"/>
-    </item>
-    <item row="13" column="0" colspan="6">
-     <widget class="QTabWidget" name="tabWidget">
+    <item row="15" column="0" colspan="7">
+     <widget class="QTabWidget" name="tw_info">
       <property name="styleSheet">
        <string notr="true"/>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
       </property>
       <property name="tabShape">
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
        <number>0</number>
-      </property>
-      <property name="elideMode">
-       <enum>Qt::ElideNone</enum>
       </property>
       <property name="usesScrollButtons">
        <bool>true</bool>
@@ -273,15 +314,8 @@
         <string>Паспорт</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="2" column="0" colspan="2">
-         <widget class="QLabel" name="label_18">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Кем выдан&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="2">
-         <widget class="QDateEdit" name="dateEdit_5">
+         <widget class="QDateEdit" name="de_passport_issued">
           <property name="calendarPopup">
            <bool>true</bool>
           </property>
@@ -295,7 +329,11 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_8"/>
+         <widget class="QLineEdit" name="le_passport_number">
+          <property name="maxLength">
+           <number>12</number>
+          </property>
+         </widget>
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="label_16">
@@ -305,7 +343,11 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLineEdit" name="lineEdit_7"/>
+         <widget class="QLineEdit" name="le_passport_series">
+          <property name="maxLength">
+           <number>6</number>
+          </property>
+         </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_15">
@@ -335,19 +377,26 @@
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QDateEdit" name="dateEdit_7"/>
-        </item>
-        <item row="3" column="0" colspan="4">
-         <widget class="QLineEdit" name="lineEdit_9">
-          <property name="maxLength">
-           <number>37</number>
+         <widget class="QDateEdit" name="de_passport_ending">
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+          <property name="timeSpec">
+           <enum>Qt::LocalTime</enum>
           </property>
          </widget>
         </item>
-        <item row="2" column="2" colspan="2">
-         <widget class="QLabel" name="label_19">
+        <item row="3" column="0" colspan="4">
+         <widget class="QLineEdit" name="le_passport_issued">
+          <property name="maxLength">
+           <number>40</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="4">
+         <widget class="QLabel" name="label_18">
           <property name="text">
-           <string>Осталось символов: </string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Кем выдан&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -374,7 +423,11 @@
          <number>2</number>
         </property>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="lineEdit_15"/>
+         <widget class="QLineEdit" name="le_migration_kpp">
+          <property name="maxLength">
+           <number>15</number>
+          </property>
+         </widget>
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_24">
@@ -384,17 +437,25 @@
          </widget>
         </item>
         <item row="6" column="3">
-         <widget class="QDateEdit" name="dateEdit_9">
+         <widget class="QDateEdit" name="de_migration_validity_to">
           <property name="calendarPopup">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="lineEdit_13"/>
+         <widget class="QLineEdit" name="le_migration_serial">
+          <property name="maxLength">
+           <number>5</number>
+          </property>
+         </widget>
         </item>
         <item row="3" column="3">
-         <widget class="QLineEdit" name="lineEdit_14"/>
+         <widget class="QLineEdit" name="le_migration_number">
+          <property name="maxLength">
+           <number>8</number>
+          </property>
+         </widget>
         </item>
         <item row="3" column="2">
          <widget class="QLabel" name="label_25">
@@ -411,7 +472,7 @@
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QDateEdit" name="dateEdit_8">
+         <widget class="QDateEdit" name="de_migration_validity_from">
           <property name="calendarPopup">
            <bool>true</bool>
           </property>
@@ -444,6 +505,20 @@
           </property>
          </spacer>
         </item>
+        <item row="5" column="3">
+         <widget class="QDateEdit" name="de_migration">
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QLabel" name="label_19">
+          <property name="text">
+           <string>Дата выдачи </string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tab_6">
@@ -454,7 +529,7 @@
         <item row="0" column="0" colspan="8">
          <widget class="QLabel" name="label_32">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Адреср регистрации&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Адрес регистрации&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -466,14 +541,14 @@
          </widget>
         </item>
         <item row="2" column="4">
-         <widget class="QDateEdit" name="dateEdit_11">
+         <widget class="QDateEdit" name="de_registration_validity_to">
           <property name="calendarPopup">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="2" column="2">
-         <widget class="QDateEdit" name="dateEdit_6">
+         <widget class="QDateEdit" name="de_registration_validity_from">
           <property name="calendarPopup">
            <bool>true</bool>
           </property>
@@ -500,10 +575,14 @@
          </spacer>
         </item>
         <item row="1" column="0" colspan="8">
-         <widget class="QLineEdit" name="lineEdit_18"/>
+         <widget class="QLineEdit" name="le_registration_address"/>
         </item>
         <item row="2" column="7">
-         <widget class="QDateEdit" name="dateEdit_13"/>
+         <widget class="QDateEdit" name="de_registration">
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="5">
          <spacer name="horizontalSpacer">
@@ -533,14 +612,18 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_8">
         <item row="5" column="1">
-         <widget class="QDateEdit" name="dateEdit_10">
+         <widget class="QDateEdit" name="de_patent_issued">
           <property name="calendarPopup">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_10"/>
+         <widget class="QLineEdit" name="le_patent_number">
+          <property name="maxLength">
+           <number>9</number>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_37">
@@ -564,10 +647,18 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLineEdit" name="lineEdit_4"/>
+         <widget class="QLineEdit" name="le_patent_serial">
+          <property name="maxLength">
+           <number>4</number>
+          </property>
+         </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QLineEdit" name="lineEdit_11"/>
+         <widget class="QLineEdit" name="le_patent_additional_number">
+          <property name="maxLength">
+           <number>10</number>
+          </property>
+         </widget>
         </item>
         <item row="6" column="1">
          <spacer name="verticalSpacer_4">
@@ -597,7 +688,11 @@
          </widget>
         </item>
         <item row="5" column="2">
-         <widget class="QDateEdit" name="dateEdit_12"/>
+         <widget class="QDateEdit" name="de_patent_ending">
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_39">
@@ -607,7 +702,65 @@
          </widget>
         </item>
         <item row="5" column="0">
-         <widget class="QLineEdit" name="lineEdit_21"/>
+         <widget class="QLineEdit" name="le_patent_issued">
+          <property name="maxLength">
+           <number>38</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_8">
+       <attribute name="title">
+        <string>Страховка</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_9">
+        <item row="1" column="0">
+         <widget class="QLineEdit" name="le_insurance_number"/>
+        </item>
+        <item row="1" column="3">
+         <widget class="QDateEdit" name="de_insurance_date">
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="le_insurance_company"/>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_42">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Страховая компания&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLabel" name="label_43">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Дата выдачи&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_41">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Номер страховки&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <spacer name="verticalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -634,42 +787,42 @@
         <item row="4" column="2">
          <widget class="QPushButton" name="pushButton_4">
           <property name="text">
-           <string>Документ 4</string>
+           <string>Трудовой договор</string>
           </property>
          </widget>
         </item>
         <item row="2" column="2">
          <widget class="QPushButton" name="pushButton_5">
           <property name="text">
-           <string>Документ 2</string>
+           <string>Уведомление о расторжении труд.дог.</string>
           </property>
          </widget>
         </item>
         <item row="1" column="2">
          <widget class="QPushButton" name="pushButton">
           <property name="text">
-           <string>Документ 1</string>
+           <string>Уведомление о заключении труд.дог.</string>
           </property>
          </widget>
         </item>
         <item row="3" column="2">
          <widget class="QPushButton" name="pushButton_6">
           <property name="text">
-           <string>Документ 3</string>
+           <string>Уведомление о регистрации</string>
           </property>
          </widget>
         </item>
         <item row="5" column="2">
          <widget class="QPushButton" name="pushButton_7">
           <property name="text">
-           <string>Документ 5</string>
+           <string>Пусто</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QPushButton" name="pushButton_2">
           <property name="text">
-           <string>Добавить</string>
+           <string>Добавить фаил</string>
           </property>
          </widget>
         </item>
@@ -681,33 +834,7 @@
          </widget>
         </item>
         <item row="2" column="0" rowspan="4" colspan="2">
-         <widget class="QListWidget" name="listWidget">
-          <item>
-           <property name="text">
-            <string>Скан паспорта</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Скан миграционки</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Скан ННН</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Фото</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Права</string>
-           </property>
-          </item>
-         </widget>
+         <widget class="QListWidget" name="listWidget"/>
         </item>
        </layout>
       </widget>
@@ -716,24 +843,35 @@
         <string>Напоминания</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="1">
-         <widget class="QDateEdit" name="dateEdit_4">
-          <property name="calendarPopup">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0">
-         <widget class="QCheckBox" name="checkBox_2">
+         <widget class="QCheckBox" name="cb_notification">
           <property name="text">
            <string>Включить напоминание</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QPlainTextEdit" name="plainTextEdit_2"/>
+        <item row="0" column="2">
+         <widget class="QDateEdit" name="de_notification">
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
-        <item row="1" column="0" colspan="2">
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_44">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Когда напомнить&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="3">
+         <widget class="QPlainTextEdit" name="le_notofication">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="3">
          <widget class="QLabel" name="label_13">
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Текст напоминания&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -747,15 +885,34 @@
         <string>Логин</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="le_login_password">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="1">
          <widget class="QLabel" name="label_31">
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Пароль&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLineEdit" name="lineEdit_16"/>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_30">
@@ -764,10 +921,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_17"/>
-        </item>
-        <item row="3" column="0">
+        <item row="2" column="0">
          <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -780,17 +934,13 @@
           </property>
          </spacer>
         </item>
-        <item row="2" column="1">
-         <widget class="QPushButton" name="pushButton_8">
-          <property name="text">
-           <string>Сгенерировать</string>
+        <item row="1" column="0">
+         <widget class="QLineEdit" name="le_login_login">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="pushButton_9">
-          <property name="text">
-           <string>Применить</string>
+          <property name="dragEnabled">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -798,7 +948,73 @@
       </widget>
      </widget>
     </item>
+    <item row="8" column="6">
+     <widget class="QLineEdit" name="le_info_snils">
+      <property name="maxLength">
+       <number>13</number>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1" colspan="3">
+     <widget class="QComboBox" name="cb_info_position">
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1" colspan="3">
+     <widget class="QComboBox" name="cb_info_country">
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="0">
+     <widget class="QLabel" name="label_23">
+      <property name="text">
+       <string>Должность</string>
+      </property>
+     </widget>
+    </item>
    </layout>
+   <zorder>label_3</zorder>
+   <zorder>le_info_last_name</zorder>
+   <zorder>le_info_middle_name</zorder>
+   <zorder>de_info_birth</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_5</zorder>
+   <zorder>le_info_address</zorder>
+   <zorder>label_6</zorder>
+   <zorder>lb_info_years</zorder>
+   <zorder>line</zorder>
+   <zorder>le_info_phone</zorder>
+   <zorder>label_12</zorder>
+   <zorder>tw_info</zorder>
+   <zorder>le_info_note</zorder>
+   <zorder>label_14</zorder>
+   <zorder>rb_sex_m</zorder>
+   <zorder>rb_sex_f</zorder>
+   <zorder>cb_info_country</zorder>
+   <zorder>label_23</zorder>
+   <zorder>line_2</zorder>
+   <zorder>label_11</zorder>
+   <zorder>le_info_snils</zorder>
+   <zorder>label_40</zorder>
+   <zorder>le_info_inn</zorder>
+   <zorder>de_info_leave</zorder>
+   <zorder>label_34</zorder>
+   <zorder>label_9</zorder>
+   <zorder>cb_info_leave</zorder>
+   <zorder>label_10</zorder>
+   <zorder>de_info_recruitment</zorder>
+   <zorder>label_8</zorder>
+   <zorder>lb_info_id</zorder>
+   <zorder>le_info_first_name</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>cb_info_position</zorder>
+   <zorder>le_info_birthplace</zorder>
+   <zorder>label_7</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -806,7 +1022,10 @@
     <string>toolBar</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 0, 255);</string>
+    <string notr="true">background-color: rgb(129, 66, 255);</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -816,6 +1035,1025 @@
    </attribute>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>le_info_first_name</tabstop>
+  <tabstop>le_info_last_name</tabstop>
+  <tabstop>le_info_middle_name</tabstop>
+  <tabstop>de_info_birth</tabstop>
+  <tabstop>cb_info_country</tabstop>
+  <tabstop>le_info_birthplace</tabstop>
+  <tabstop>le_info_phone</tabstop>
+  <tabstop>le_info_address</tabstop>
+  <tabstop>cb_info_position</tabstop>
+  <tabstop>de_info_recruitment</tabstop>
+  <tabstop>de_info_leave</tabstop>
+  <tabstop>le_info_inn</tabstop>
+  <tabstop>le_info_snils</tabstop>
+  <tabstop>le_info_note</tabstop>
+  <tabstop>le_passport_series</tabstop>
+  <tabstop>le_passport_number</tabstop>
+  <tabstop>de_passport_issued</tabstop>
+  <tabstop>de_passport_ending</tabstop>
+  <tabstop>le_passport_issued</tabstop>
+  <tabstop>le_migration_serial</tabstop>
+  <tabstop>le_migration_number</tabstop>
+  <tabstop>le_migration_kpp</tabstop>
+  <tabstop>de_migration_validity_from</tabstop>
+  <tabstop>de_migration_validity_to</tabstop>
+  <tabstop>le_registration_address</tabstop>
+  <tabstop>de_registration_validity_from</tabstop>
+  <tabstop>de_registration_validity_to</tabstop>
+  <tabstop>de_registration</tabstop>
+  <tabstop>le_patent_serial</tabstop>
+  <tabstop>le_patent_number</tabstop>
+  <tabstop>le_patent_additional_number</tabstop>
+  <tabstop>le_patent_issued</tabstop>
+  <tabstop>de_patent_issued</tabstop>
+  <tabstop>de_patent_ending</tabstop>
+  <tabstop>pb_acc</tabstop>
+  <tabstop>cb_info_leave</tabstop>
+  <tabstop>pushButton_5</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_6</tabstop>
+  <tabstop>pushButton_7</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>listWidget</tabstop>
+  <tabstop>cb_notification</tabstop>
+  <tabstop>le_notofication</tabstop>
+  <tabstop>le_login_login</tabstop>
+  <tabstop>le_login_password</tabstop>
+  <tabstop>tw_info</tabstop>
+  <tabstop>rb_sex_f</tabstop>
+  <tabstop>pushButton_11</tabstop>
+  <tabstop>rb_sex_m</tabstop>
+  <tabstop>pushButton_4</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pb_acc</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>acc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>470</x>
+     <y>416</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>275</x>
+     <y>391</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_info_leave</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>de_info_leave</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>394</x>
+     <y>66</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>429</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_info_birth</sender>
+   <signal>dateChanged(QDate)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_birth()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>143</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>14</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_patent_issued</sender>
+   <signal>dateChanged(QDate)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_patent_date()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>143</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_first_name</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>12</x>
+     <y>388</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_last_name</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>89</x>
+     <y>48</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>26</x>
+     <y>400</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_middle_name</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>75</x>
+     <y>79</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_sex_m</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>132</x>
+     <y>386</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_sex_f</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>210</x>
+     <y>382</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_info_country</sender>
+   <signal>activated(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>185</x>
+     <y>129</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>116</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_phone</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>179</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>243</x>
+     <y>170</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_address</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>206</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>193</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_info_position</sender>
+   <signal>activated(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>121</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_info_recruitment</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>398</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>41</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_info_leave</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>557</x>
+     <y>66</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>567</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_info_leave</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>481</x>
+     <y>92</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>496</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_inn</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>503</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>525</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_snils</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>457</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>464</x>
+     <y>146</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_note</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_passport_series</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_passport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>155</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>156</x>
+     <y>400</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_passport_number</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_passport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>385</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_passport_issued</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_passport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>474</x>
+     <y>300</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>356</x>
+     <y>397</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_passport_ending</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_passport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>554</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>227</x>
+     <y>388</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_passport_issued</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_passport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>331</x>
+     <y>339</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>256</x>
+     <y>401</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_migration_serial</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_migration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>219</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>27</x>
+     <y>383</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_migration_kpp</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_migration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>281</x>
+     <y>297</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>332</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_migration_number</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_migration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>451</x>
+     <y>281</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>77</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_migration_validity_from</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_migration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>174</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>528</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_migration_validity_to</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_migration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>314</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>527</x>
+     <y>403</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_patent_serial</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_migration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>168</x>
+     <y>291</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>256</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_patent_number</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_patent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>313</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>350</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_patent_serial</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_patent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>31</x>
+     <y>225</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_patent_additional_number</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_patent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>454</x>
+     <y>301</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_patent_issued</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_patent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>33</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_patent_issued</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_patent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>342</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>426</x>
+     <y>225</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_patent_ending</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_patent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>515</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>586</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_registration_address</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_registration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>364</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>528</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_registration_validity_from</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_registration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>281</x>
+     <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_registration_validity_to</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_registration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>281</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_registration</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_registration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>555</x>
+     <y>328</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>620</x>
+     <y>152</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_11</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>583</x>
+     <y>417</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>620</x>
+     <y>350</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>build_exel_in()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>545</x>
+     <y>281</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>617</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_info_birthplace</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-95</x>
+     <y>105</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>build_exel_out()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>599</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>661</x>
+     <y>291</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>build_exel_registration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>548</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>664</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>build_word_in()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>515</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>639</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_insurance_number</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_insurance()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-68</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_insurance_company</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_insurance()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>338</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>674</x>
+     <y>223</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_insurance_date</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_insurance()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>570</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>716</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>listWidget</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>select_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>13</x>
+     <y>308</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-58</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open_dir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>323</x>
+     <y>275</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>912</x>
+     <y>138</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>add_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-92</x>
+     <y>148</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_notification</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_notification()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>527</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>671</x>
+     <y>176</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_notofication</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_notification()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>473</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>808</x>
+     <y>151</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_notification</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_notification()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>277</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-73</x>
+     <y>153</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_notification</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>le_notofication</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>279</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>71</x>
+     <y>340</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_migration</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_migration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>527</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>774</x>
+     <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_login_login</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_login()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-91</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_login_password</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_login()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>414</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>797</x>
+     <y>329</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>acc()</slot>
+  <slot>change_birth()</slot>
+  <slot>change_patent_date()</slot>
+  <slot>alter_info()</slot>
+  <slot>alter_passport()</slot>
+  <slot>alter_migration()</slot>
+  <slot>alter_registration()</slot>
+  <slot>alter_patent()</slot>
+  <slot>build_exel_in()</slot>
+  <slot>build_exel_out()</slot>
+  <slot>build_exel_registration()</slot>
+  <slot>build_word_in()</slot>
+  <slot>alter_insurance()</slot>
+  <slot>select_file()</slot>
+  <slot>open_dir()</slot>
+  <slot>add_file()</slot>
+  <slot>alter_notification()</slot>
+  <slot>alter_login()</slot>
+ </slots>
 </ui>

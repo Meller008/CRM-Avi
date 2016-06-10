@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>360</width>
-    <height>160</height>
+    <width>329</width>
+    <height>179</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Настройки гражданства</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -29,31 +29,43 @@
    <property name="spacing">
     <number>2</number>
    </property>
+   <item row="4" column="0" colspan="3">
+    <widget class="QLineEdit" name="le_name"/>
+   </item>
    <item row="6" column="0" colspan="3">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;По какому заону&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="2">
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="text">
-      <string>Отменить</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;По какому закону&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0" colspan="3">
-    <widget class="QPlainTextEdit" name="plainTextEdit">
+    <widget class="QPlainTextEdit" name="te_act">
      <property name="enabled">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QCheckBox" name="cb_patent">
+     <property name="text">
+      <string>Нужен патент?</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="autoRepeat">
+      <bool>false</bool>
+     </property>
+     <property name="tristate">
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
-    <widget class="QPushButton" name="pushButton">
+   <item row="3" column="0" colspan="3">
+    <widget class="QLabel" name="label">
      <property name="text">
-      <string>Принять</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Гражданство&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
@@ -66,29 +78,87 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(85, 0, 255);</string>
+      <string notr="true">background-color: rgb(129, 66, 255);</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QCheckBox" name="checkBox">
+   <item row="8" column="2">
+    <widget class="QPushButton" name="pushButton_2">
      <property name="text">
-      <string>Нужен патент?</string>
+      <string>Отменить</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="QLineEdit" name="lineEdit"/>
-   </item>
-   <item row="3" column="0" colspan="3">
-    <widget class="QLabel" name="label">
+   <item row="8" column="1">
+    <widget class="QPushButton" name="pb_acc">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Гражданство&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>Принять</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>pb_acc</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>te_act</tabstop>
+  <tabstop>cb_patent</tabstop>
+  <tabstop>le_name</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>cb_patent</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Dialog</receiver>
+   <slot>check_patent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_acc</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>acc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>179</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>cancel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>292</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>81</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>check_patent(pat)</slot>
+  <slot>acc()</slot>
+  <slot>cancel()</slot>
+ </slots>
 </ui>

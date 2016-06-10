@@ -1,9 +1,11 @@
 from os import getcwd
-from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
+from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow, QMessageBox
 from PyQt5.uic import loadUiType
-from form import login_window, material_provider, material, comparing, accessories_provider, accesspries
+from form import login_window, material_provider, material, comparing, accessories_provider, accesspries, staff, program_settings, notification
 from classes import my_class
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt, QDate
+from function import my_sql
 import sys
 
 main_class, main_base_class = loadUiType(getcwd() + '/ui/main.ui')
@@ -82,6 +84,46 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_accessories)
         self.sub_accessories.resize(self.accessories.size())
         self.sub_accessories.show()
+
+    def view_staff_country(self):
+        self.staff_country = staff.Country()
+        self.sub_staff_country = QMdiSubWindow()
+        self.sub_staff_country.setWidget(self.staff_country)
+        self.mdi.addSubWindow(self.sub_staff_country)
+        self.sub_staff_country.resize(self.staff_country.size())
+        self.sub_staff_country.show()
+
+    def view_staff_position(self):
+        self.staff_position = staff.StaffPosition()
+        self.sub_staff_position = QMdiSubWindow()
+        self.sub_staff_position.setWidget(self.staff_position)
+        self.mdi.addSubWindow(self.sub_staff_position)
+        self.sub_staff_position.resize(self.staff_position.size())
+        self.sub_staff_position.show()
+
+    def view_staff_list(self):
+        self.staff_list = staff.Staff()
+        self.sub_staff_list = QMdiSubWindow()
+        self.sub_staff_list.setWidget(self.staff_list)
+        self.mdi.addSubWindow(self.sub_staff_list)
+        self.sub_staff_list.resize(self.staff_list.size())
+        self.sub_staff_list.show()
+
+    def view_staff_calendar(self):
+        self.staff_calendar = notification.WorkCalendar()
+        self.sub_staff_calendar = QMdiSubWindow()
+        self.sub_staff_calendar.setWidget(self.staff_calendar)
+        self.mdi.addSubWindow(self.sub_staff_calendar)
+        self.sub_staff_calendar.resize(self.staff_calendar.size())
+        self.sub_staff_calendar.show()
+
+    def view_settings_path(self):
+        self.sett_path = program_settings.SettingsPath()
+        self.sub_sett_path = QMdiSubWindow()
+        self.sub_sett_path.setWidget(self.sett_path)
+        self.mdi.addSubWindow(self.sub_sett_path)
+        self.sub_sett_path.resize(self.sett_path.size())
+        self.sub_sett_path.show()
 
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % self.user.privilege)

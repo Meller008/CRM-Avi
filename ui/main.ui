@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1104</width>
-    <height>810</height>
+    <width>1059</width>
+    <height>610</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,35 +69,61 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1104</width>
+     <width>1059</width>
      <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Добавление</string>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
-    <addaction name="ma_material"/>
-    <addaction name="ma_accessories"/>
-   </widget>
-   <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>Редактирование списков</string>
+     <string>Приходы материала</string>
     </property>
-    <widget class="QMenu" name="menu_3">
+    <widget class="QMenu" name="menu_5">
      <property name="title">
       <string>Поставщики</string>
      </property>
      <addaction name="ma_material_provider"/>
      <addaction name="ma_accessories_provider"/>
     </widget>
-    <addaction name="menu_3"/>
-    <addaction name="ma_material_name"/>
-    <addaction name="ma_accessories_name"/>
-    <addaction name="ma_comparing_name"/>
+    <widget class="QMenu" name="menu_6">
+     <property name="title">
+      <string>Виды материалов</string>
+     </property>
+     <addaction name="ma_material_name"/>
+     <addaction name="ma_accessories_name"/>
+     <addaction name="ma_comparing_name"/>
+    </widget>
+    <addaction name="ma_material"/>
+    <addaction name="ma_accessories"/>
+    <addaction name="menu_5"/>
+    <addaction name="menu_6"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>Персонал</string>
+    </property>
+    <widget class="QMenu" name="menu_2">
+     <property name="title">
+      <string>Редактировать списки</string>
+     </property>
+     <addaction name="ma_staff_position"/>
+     <addaction name="ma_staff_country"/>
+    </widget>
+    <addaction name="ma_staff"/>
+    <addaction name="ma_staff_calendar"/>
+    <addaction name="menu_2"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>Настройки</string>
+    </property>
+    <addaction name="ma_program_settings_path"/>
    </widget>
    <addaction name="menu"/>
-   <addaction name="menu_2"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="ma_material">
@@ -133,6 +159,31 @@
   <action name="ma_accessories">
    <property name="text">
     <string>Приход фурнитуры</string>
+   </property>
+  </action>
+  <action name="ma_staff_country">
+   <property name="text">
+    <string>Настройки гражданства</string>
+   </property>
+  </action>
+  <action name="ma_staff_position">
+   <property name="text">
+    <string>Должности</string>
+   </property>
+  </action>
+  <action name="ma_staff">
+   <property name="text">
+    <string>Штат</string>
+   </property>
+  </action>
+  <action name="ma_program_settings_path">
+   <property name="text">
+    <string>Пути к папкам</string>
+   </property>
+  </action>
+  <action name="ma_staff_calendar">
+   <property name="text">
+    <string>Напоминания</string>
    </property>
   </action>
  </widget>
@@ -250,6 +301,86 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_staff_country</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_staff_country()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_staff_position</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_staff_position()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_staff</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_staff_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_program_settings_path</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_settings_path()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_staff_calendar</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_staff_calendar()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -259,5 +390,10 @@
   <slot>view_accessories_name()</slot>
   <slot>view_accessories_provider()</slot>
   <slot>view_accessories()</slot>
+  <slot>view_staff_country()</slot>
+  <slot>view_staff_position()</slot>
+  <slot>view_staff_list()</slot>
+  <slot>view_settings_path()</slot>
+  <slot>view_staff_calendar()</slot>
  </slots>
 </ui>
