@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>777</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>Список работников</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="2,5">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <item row="0" column="1">
+     <widget class="QTableWidget" name="tw_workers">
+      <property name="font">
+       <font>
+        <family>Tahoma</family>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="acceptDrops">
+       <bool>true</bool>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="dragEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="dragDropOverwriteMode">
+       <bool>false</bool>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>20</number>
+      </attribute>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>18</number>
+      </attribute>
+      <row>
+       <property name="text">
+        <string>Новая строка</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>Имя</string>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>Саша</string>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string>Паша</string>
+       </property>
+      </item>
+      <item row="2" column="0">
+       <property name="text">
+        <string>Даша</string>
+       </property>
+      </item>
+      <item row="3" column="0">
+       <property name="text">
+        <string>Маша</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QTreeWidget" name="treeWidget">
+      <property name="acceptDrops">
+       <bool>true</bool>
+      </property>
+      <property name="dragEnabled">
+       <bool>true</bool>
+      </property>
+      <column>
+       <property name="text">
+        <string>Название</string>
+       </property>
+      </column>
+      <item>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 255, 255);
+</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="pb_add"/>
+   <addaction name="pb_change"/>
+   <addaction name="pb_dell"/>
+   <addaction name="action123"/>
+   <addaction name="actionEded"/>
+   <addaction name="action"/>
+   <addaction name="action_2"/>
+  </widget>
+  <action name="pb_add">
+   <property name="text">
+    <string>Добавить</string>
+   </property>
+  </action>
+  <action name="pb_change">
+   <property name="text">
+    <string>Изменить</string>
+   </property>
+  </action>
+  <action name="pb_dell">
+   <property name="text">
+    <string>Удалить</string>
+   </property>
+  </action>
+  <action name="action123">
+   <property name="text">
+    <string>'    '</string>
+   </property>
+  </action>
+  <action name="actionEded">
+   <property name="text">
+    <string>Добавить</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>Изменить</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>Удалить</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

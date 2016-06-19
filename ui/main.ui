@@ -121,8 +121,17 @@
     </property>
     <addaction name="ma_program_settings_path"/>
    </widget>
+   <widget class="QMenu" name="menu_7">
+    <property name="title">
+     <string>Нуменклатура</string>
+    </property>
+    <addaction name="ma_product_article"/>
+    <addaction name="ma_product_operations"/>
+    <addaction name="ma_clients"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_4"/>
+   <addaction name="menu_7"/>
    <addaction name="menu_3"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -184,6 +193,21 @@
   <action name="ma_staff_calendar">
    <property name="text">
     <string>Напоминания</string>
+   </property>
+  </action>
+  <action name="ma_product_article">
+   <property name="text">
+    <string>Артикула</string>
+   </property>
+  </action>
+  <action name="ma_product_operations">
+   <property name="text">
+    <string>Операции</string>
+   </property>
+  </action>
+  <action name="ma_clients">
+   <property name="text">
+    <string>Клиенты</string>
    </property>
   </action>
  </widget>
@@ -381,6 +405,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_clients</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_clients()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_product_operations</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_operation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -395,5 +451,7 @@
   <slot>view_staff_list()</slot>
   <slot>view_settings_path()</slot>
   <slot>view_staff_calendar()</slot>
+  <slot>view_clients()</slot>
+  <slot>view_operation()</slot>
  </slots>
 </ui>

@@ -1,11 +1,9 @@
 from os import getcwd
-from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
-from form import login_window, material_provider, material, comparing, accessories_provider, accesspries, staff, program_settings, notification
+from form import login_window, material_provider, material, comparing, accessories_provider, accesspries, staff, program_settings, notification, clients, operation
 from classes import my_class
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QDate
-from function import my_sql
 import sys
 
 main_class, main_base_class = loadUiType(getcwd() + '/ui/main.ui')
@@ -125,6 +123,22 @@ class MainWindow(QMainWindow, main_class):
         self.sub_sett_path.resize(self.sett_path.size())
         self.sub_sett_path.show()
 
+    def view_clients(self):
+        self.clients = clients.ClientsList()
+        self.sub_clients = QMdiSubWindow()
+        self.sub_clients.setWidget(self.clients)
+        self.mdi.addSubWindow(self.sub_clients)
+        self.sub_clients.resize(self.clients.size())
+        self.sub_clients.show()
+        
+    def view_operation(self):
+        self.operation_list = operation.OperationList()
+        self.sub_operation_list = QMdiSubWindow()
+        self.sub_operation_list.setWidget(self.operation_list)
+        self.mdi.addSubWindow(self.sub_operation_list)
+        self.sub_operation_list.resize(self.operation_list.size())
+        self.sub_operation_list.show()
+        
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % self.user.privilege)
         self.setEnabled(True)

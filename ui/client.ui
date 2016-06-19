@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
-    <height>265</height>
+    <width>535</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="14" column="0" colspan="4">
+   <item row="16" column="0" colspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <spacer name="horizontalSpacer">
@@ -60,10 +60,24 @@
      </item>
     </layout>
    </item>
+   <item row="1" column="1" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLineEdit" name="le_name"/>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cb_nds">
+       <property name="text">
+        <string>БезНДС?</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="9" column="3" rowspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPlainTextEdit" name="plainTextEdit"/>
+      <widget class="QPlainTextEdit" name="le_note"/>
      </item>
     </layout>
    </item>
@@ -74,9 +88,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="3">
-    <widget class="QLineEdit" name="lineEdit_13"/>
-   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_14">
      <property name="text">
@@ -85,7 +96,7 @@
     </widget>
    </item>
    <item row="6" column="1">
-    <widget class="QLineEdit" name="lineEdit_4"/>
+    <widget class="QLineEdit" name="le_inn"/>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_4">
@@ -102,7 +113,7 @@
     </widget>
    </item>
    <item row="7" column="1">
-    <widget class="QLineEdit" name="lineEdit_6"/>
+    <widget class="QLineEdit" name="le_kpp"/>
    </item>
    <item row="6" column="2">
     <widget class="QLabel" name="label_5">
@@ -112,17 +123,17 @@
     </widget>
    </item>
    <item row="6" column="3">
-    <widget class="QLineEdit" name="lineEdit_5"/>
+    <widget class="QLineEdit" name="le_fio"/>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>КПП:</string>
+      <string>ОГРН</string>
      </property>
     </widget>
    </item>
    <item row="8" column="1">
-    <widget class="QLineEdit" name="lineEdit_7"/>
+    <widget class="QLineEdit" name="le_ogrn"/>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_6">
@@ -139,13 +150,13 @@
     </widget>
    </item>
    <item row="9" column="1">
-    <widget class="QLineEdit" name="lineEdit_8"/>
+    <widget class="QLineEdit" name="le_rs"/>
    </item>
    <item row="2" column="1" colspan="3">
-    <widget class="QLineEdit" name="lineEdit_2"/>
+    <widget class="QLineEdit" name="le_legal_address"/>
    </item>
    <item row="3" column="1" colspan="3">
-    <widget class="QLineEdit" name="lineEdit_3"/>
+    <widget class="QLineEdit" name="le_actual_address"/>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_3">
@@ -162,7 +173,7 @@
     </widget>
    </item>
    <item row="7" column="3">
-    <widget class="QLineEdit" name="lineEdit_9"/>
+    <widget class="QLineEdit" name="le_phone"/>
    </item>
    <item row="0" column="0" colspan="4">
     <widget class="QWidget" name="widget" native="true">
@@ -178,7 +189,7 @@
     </widget>
    </item>
    <item row="8" column="3">
-    <widget class="QLineEdit" name="lineEdit_12"/>
+    <widget class="QLineEdit" name="le_mail"/>
    </item>
    <item row="8" column="2">
     <widget class="QLabel" name="label">
@@ -202,13 +213,13 @@
     </widget>
    </item>
    <item row="11" column="1">
-    <widget class="QLineEdit" name="lineEdit_10"/>
+    <widget class="QLineEdit" name="le_ks"/>
    </item>
    <item row="12" column="1">
-    <widget class="QLineEdit" name="lineEdit_11"/>
+    <widget class="QLineEdit" name="le_bik"/>
    </item>
    <item row="10" column="1">
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QLineEdit" name="le_bank"/>
    </item>
    <item row="12" column="0">
     <widget class="QLabel" name="label_12">
@@ -217,21 +228,309 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="13" column="0" colspan="4">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="enabled">
+      <bool>true</bool>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-    </spacer>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Фактические адреса</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>1</number>
+       </property>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="toolButton">
+           <property name="text">
+            <string>Добавить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButton_2">
+           <property name="text">
+            <string>Удалить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QTableWidget" name="tw_adres">
+         <property name="font">
+          <font>
+           <family>Tahoma</family>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>20</number>
+         </attribute>
+         <attribute name="verticalHeaderMinimumSectionSize">
+          <number>18</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Имя</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Адрес</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>КПП</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Файлы клиента</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,1,1,1,1">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <item row="1" column="0" rowspan="4">
+        <widget class="QListWidget" name="lw_file">
+         <property name="font">
+          <font>
+           <family>Tahoma</family>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" rowspan="4">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>4</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="pb_add_file">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string>Добавить фаил</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pb_open_file">
+           <property name="text">
+            <string>Открыть папку</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Файлы клиента&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>acc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>430</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>add_adress()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>36</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-15</x>
+     <y>240</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_adres</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>double_click_adress()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>29</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-5</x>
+     <y>298</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>dell_adress()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>96</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-29</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_open_file</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>open_dir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>509</x>
+     <y>309</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>592</x>
+     <y>316</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_add_file</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>add_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>496</x>
+     <y>279</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>582</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lw_file</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>Dialog</receiver>
+   <slot>select_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>312</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-140</x>
+     <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>acc()</slot>
+  <slot>add_adress()</slot>
+  <slot>double_click_adress()</slot>
+  <slot>dell_adress()</slot>
+  <slot>open_dir()</slot>
+  <slot>add_file()</slot>
+  <slot>select_file()</slot>
+ </slots>
 </ui>

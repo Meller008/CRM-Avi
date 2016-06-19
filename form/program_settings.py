@@ -27,6 +27,8 @@ class SettingsPath(QDialog, settings_path_class):
                 self.le_work_templates_path.setText(path[1])
             if path[0] == "Путь корень рабочие":
                 self.le_work_path.setText(path[1])
+            if path[0] == "Путь корень клиенты":
+                self.le_clients_path.setText(path[1])
 
     def work_path(self):
         self.le_work_path.setText(QFileDialog.getExistingDirectory(self))
@@ -34,9 +36,13 @@ class SettingsPath(QDialog, settings_path_class):
     def work_templates_path(self):
         self.le_work_templates_path.setText(QFileDialog.getExistingDirectory(self))
 
+    def clients_path(self):
+        self.le_clients_path.setText(QFileDialog.getExistingDirectory(self))
+
     def ok(self):
         query = "UPDATE program_settings_path SET `Values` = %s WHERE Name = %s"
-        parametrs = ((self.le_work_templates_path.text(), "Путь шаблон рабочие"), (self.le_work_path.text(), "Путь корень рабочие"))
+        parametrs = ((self.le_work_templates_path.text(), "Путь шаблон рабочие"), (self.le_work_path.text(), "Путь корень рабочие"),
+                     (self.le_clients_path.text(), "Путь корень клиенты"))
         sql_ret = my_sql.sql_many(query, parametrs)
         if "mysql.connector.errors" in str(type(sql_ret)):
             QMessageBox.critical(self, "Ошибка sql", sql_ret.msg, QMessageBox.Ok)

@@ -1,12 +1,10 @@
 from os import getcwd
-from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow, QMessageBox, QDialog, QTableWidgetItem, QTableWidgetSelectionRange
+from PyQt5.QtWidgets import QMessageBox, QDialog, QTableWidgetItem, QTableWidgetSelectionRange
 from PyQt5.uic import loadUiType
-from form import login_window, material_provider, material, comparing, accessories_provider, accesspries, staff, program_settings, staff
-from classes import my_class
-from PyQt5.QtGui import QIcon, QPainter, QTextCharFormat, QColor, QBrush
-from PyQt5.QtCore import Qt, QDate, QRect
+from form import staff
+from PyQt5.QtGui import QIcon, QTextCharFormat, QColor, QBrush
+from PyQt5.QtCore import Qt, QDate
 from function import my_sql
-import sys
 
 work_notif_calendar_class, work_notif_calendar_base_class = loadUiType(getcwd() + '/ui/work_notification_calendar.ui')
 

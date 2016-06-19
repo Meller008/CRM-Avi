@@ -54,13 +54,16 @@ class MaterialProvider(QMainWindow, material_provider_class):
             self.change_provider.show()
 
     def dell_provider(self):
-        select = self.lw_provider.selectedItems()
-        if select:
-            par = (select[0].text(), )
-            sql_ret = my_sql.sql_change(self.sql_dell, par)
-            if "mysql.connector.errors" in str(type(sql_ret)):
-                QMessageBox.critical(self, "Ошибка sql", sql_ret.msg)
-            self.list_provider()
+        try:
+            select = self.lw_provider.selectedItems()
+            if select:
+                par = (select[0].text(), )
+                sql_ret = my_sql.sql_change(self.sql_dell, par)
+                if "mysql.connector.errors" in str(type(sql_ret)):
+                    QMessageBox.critical(self, "Ошибка sql", sql_ret.msg)
+                self.list_provider()
+        except:
+            pass
 
     def double_click_provider(self, select_prov):
         if not self.dc_select:

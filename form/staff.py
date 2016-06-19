@@ -1,4 +1,4 @@
-from os import getcwd, path, mkdir, listdir, startfile
+from os import getcwd, path, mkdir, listdir, startfile, rmdir
 from shutil import copy
 from form import accessories_provider
 from PyQt5.uic import loadUiType
@@ -24,6 +24,24 @@ class Staff(QMainWindow, staff_list_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.set_settings()
         self.set_info()
+
+    def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
+        if not hasattr(self, 'path_work'):
+            query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % sql_dir_name
+            info_sql = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        return False
+            self.path_wor = info_sql[0][0]
+            if not path.isdir("%s/%s" % (self.path_wor, dir_name)):
+                try:
+                    mkdir("%s/%s" % (self.path_wor, dir_name))
+                    return "%s/%s" % (self.path_wor, dir_name)
+                except:
+                    QMessageBox.critical(self, "Ошибка файлы", "Нет доступа к корневому диалогу, файлы недоступны", QMessageBox.Ok)
+                    return False
+            else:
+                return "%s/%s" % (self.path_wor, dir_name)
 
     def set_settings(self):
         self.tw_workers.horizontalHeader().resizeSection(0, 50)
@@ -88,11 +106,18 @@ class Staff(QMainWindow, staff_list_class):
             if select_work:
                 result = QMessageBox.question(self, "Удаление", "Точно удалить работника?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 if result == 16384:
+                    query = "SELECT Last_Name, First_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y') FROM staff_worker_info WHERE Id = %s"
+                    dir_name = my_sql.sql_select(query, (select_work, ))
+                    if "mysql.connector.errors" in str(type(dir_name)):
+                        QMessageBox.critical(self, "Ошибка sql", dir_name.msg, QMessageBox.Ok)
+                        return False
                     query = "DELETE FROM staff_worker_info WHERE Id = %s"
                     info_sql = my_sql.sql_change(query, (select_work, ))
                     if "mysql.connector.errors" in str(type(info_sql)):
                         QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
                         return False
+                    dir = dir_name[0][0] + " " + dir_name[0][1] + " " + dir_name[0][2]
+                    rmdir(self.inspection_path(dir, "Путь корень рабочие"))
                     self.set_info()
         except:
             pass
@@ -166,31 +191,29 @@ class OneStaff(QMainWindow, one_staff_class):
         self.m = main
         self.alert = []  # Массив для запоминания изменений
 
-    def inspection_path(self):  # Находим путь работника
+    def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
         if not hasattr(self, 'path_work'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь корень рабочие'"
+            query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % sql_dir_name
             info_sql = my_sql.sql_select(query)
             if "mysql.connector.errors" in str(type(info_sql)):
                         QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
                         return False
             self.path_wor = info_sql[0][0]
-
-            self.dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
-            if not path.isdir("%s/%s" % (self.path_wor, self.dir_name)):
+            if not path.isdir("%s/%s" % (self.path_wor, dir_name)):
                 try:
-                    mkdir("%s/%s" % (self.path_wor, self.dir_name))
-                    return "%s/%s" % (self.path_wor, self.dir_name)
+                    mkdir("%s/%s" % (self.path_wor, dir_name))
+                    return "%s/%s" % (self.path_wor, dir_name)
                 except:
                     QMessageBox.critical(self, "Ошибка файлы", "Нет доступа к корневому диалогу, файлы недоступны", QMessageBox.Ok)
                     return False
             else:
-                return "%s/%s" % (self.path_wor, self.dir_name)
+                return "%s/%s" % (self.path_wor, dir_name)
 
-    def inspection_files(self):   # Проверяем файлы и даем иконки
-        self.path = self.inspection_path()
+    def inspection_files(self, dir_name, sql_dir_name):   # Проверяем файлы и даем иконки
+        self.path = self.inspection_path(dir_name, sql_dir_name)
         if self.path:
-            self.listWidget.clear()
-            files = listdir("%s/%s" % (self.path_wor, self.dir_name))
+            self.lw_file.clear()
+            files = listdir("%s/%s" % (self.path_wor, dir_name))
             for file in files:
                 if "~" not in file:
                     r = path.splitext(file)  # Получаем название и расширение
@@ -200,12 +223,14 @@ class OneStaff(QMainWindow, one_staff_class):
                         ico = "xml"
                     elif "png" in r[1] or "jpg" in r[1] or "jpeg" in r[1] or "jpe" in r[1] or "gif" in r[1] or "bmp" in r[1]:
                         ico = "image"
+                    elif "pdf" in r[1]:
+                        ico = "pdf"
                     else:
                         ico = "other"
 
                     list_item = QListWidgetItem(r[0] + r[1])
                     list_item.setIcon(QIcon(getcwd() + "/images/%s.ico" % ico))
-                    self.listWidget.addItem(list_item)
+                    self.lw_file.addItem(list_item)
 
     def set_add_settings(self):
         # Начальные чеки
@@ -258,13 +283,15 @@ class OneStaff(QMainWindow, one_staff_class):
         self.de_patent_ending.setDate(patent_date.addYears(1))
 
     def select_file(self, file):  # Открываем выбраный фаил
-        self.path = self.inspection_path()
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             file_name = file.text()
             startfile(r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\")))
 
     def open_dir(self):  # Открываем выбраную папку
-        self.path = self.inspection_path()
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             startfile(self.path.replace("/", "\\"))
 
@@ -273,8 +300,9 @@ class OneStaff(QMainWindow, one_staff_class):
         if info.exec() == 0:
             return False
         new_r = path.splitext(info.path_copy_file.text())[1]
-        copy(info.path_copy_file.text(), self.inspection_path() + "/" + info.le_new_file_name.text() + path.splitext(info.path_copy_file.text())[1])
-        self.inspection_files()
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        copy(info.path_copy_file.text(), self.inspection_path(dir_name, 'Путь корень рабочие') + "/" + info.le_new_file_name.text() + path.splitext(info.path_copy_file.text())[1])
+        self.inspection_files(dir_name, 'Путь корень рабочие')
 
     def input_check(self):
         self.alert2 = []  # Запоминаем введеные даные
@@ -533,7 +561,8 @@ class OneStaff(QMainWindow, one_staff_class):
             self.le_insurance_number.setText(sql_reply[0][1])
 
         # Заполняем список файлов
-        self.inspection_files()
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
 
         # Заполняем логин
         if leave == 0:
