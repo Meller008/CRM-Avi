@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QBrush, QColor, QIcon
 from PyQt5 import QtCore

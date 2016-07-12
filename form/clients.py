@@ -1,14 +1,16 @@
 from os import getcwd, path, mkdir, listdir, startfile
+from datetime import datetime
 from shutil import copy
 from form import accessories_provider, staff
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QVariant
+from PyQt5.QtCore import QVariant, QDate
 from function import my_sql
 
 client_class = loadUiType(getcwd() + '/ui/client.ui')[0]
 client_adress_class = loadUiType(getcwd() + '/ui/client_adres.ui')[0]
+client_number_class = loadUiType(getcwd() + '/ui/client_number.ui')[0]
 
 
 class ClientsList(accessories_provider.AccessoriesProvider):  # Вывод всех клиентов
@@ -73,6 +75,7 @@ class Client(QDialog, client_class):
         self.select_id = select_id
         self.set_info()
         self.delete_adress = []  # Для запоминания удаленых адрес
+        self.delete_numbers = []  # Для запоминания удаленых номеров
 
     def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
         if not hasattr(self, 'path_work'):
@@ -193,6 +196,30 @@ class Client(QDialog, client_class):
                 if "mysql.connector.errors" in str(type(info_sql)):
                     QMessageBox.critical(self, "Ошибка sql удаление адреса", info_sql.msg, QMessageBox.Ok)
 
+            for row in range(self.tw_vendor_number.rowCount()):
+                item = self.tw_vendor_number.item(row, 0)
+                if item.data(-2) is not None:
+                    if item.data(-2) == "new":
+                        query = "INSERT INTO clients_vendor_number (Client_Id, Number, Contract, Data_From) VALUES (%s, %s, %s, %s)"
+                        data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
+                        paremetrs = (self.select_id, self.tw_vendor_number.item(row, 0).text(), self.tw_vendor_number.item(row, 1).text(), data)
+                        info_sql = my_sql.sql_change(query, paremetrs)
+                        if "mysql.connector.errors" in str(type(info_sql)):
+                            QMessageBox.critical(self, "Ошибка sql добавления номера", info_sql.msg, QMessageBox.Ok)
+                    elif item.data(-2) == "update":
+                        query = "UPDATE clients_vendor_number SET Number = %s, Contract = %s, Data_From = %s WHERE Client_Id = %s"
+                        data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
+                        paremetrs = (self.tw_vendor_number.item(row, 0).text(), self.tw_vendor_number.item(row, 1).text(), data, item.data(-1))
+                        info_sql = my_sql.sql_change(query, paremetrs)
+                        if "mysql.connector.errors" in str(type(info_sql)):
+                            QMessageBox.critical(self, "Ошибка sql изменение номера", info_sql.msg, QMessageBox.Ok)
+
+            for del_id in self.delete_numbers:
+                query = 'DELETE FROM clients_vendor_number WHERE Id = %s'
+                info_sql = my_sql.sql_change(query, (del_id, ))
+                if "mysql.connector.errors" in str(type(info_sql)):
+                    QMessageBox.critical(self, "Ошибка sql удаление номера", info_sql.msg, QMessageBox.Ok)
+
         self.m.list_provider()
         self.close()
         self.destroy()
@@ -201,6 +228,11 @@ class Client(QDialog, client_class):
         self.tw_adres.horizontalHeader().resizeSection(0, 120)
         self.tw_adres.horizontalHeader().resizeSection(1, 300)
         self.tw_adres.horizontalHeader().resizeSection(2, 80)
+
+        self.tw_vendor_number.horizontalHeader().resizeSection(0, 120)
+        self.tw_vendor_number.horizontalHeader().resizeSection(1, 120)
+        self.tw_vendor_number.horizontalHeader().resizeSection(2, 120)
+
         if self.select_id == "new":
             self.pb_add_file.setEnabled(False)
             self.pb_open_file.setEnabled(False)
@@ -232,7 +264,7 @@ class Client(QDialog, client_class):
             query = """SELECT Id, Name, Adres, KPP FROM clients_actual_address WHERE Client_Id = %s"""
             info_client = my_sql.sql_select(query, (self.select_id, ))
             if "mysql.connector.errors" in str(type(info_client)):
-                    QMessageBox.critical(self, "Ошибка sql вывод клиента", info_client.msg, QMessageBox.Ok)
+                    QMessageBox.critical(self, "Ошибка sql вывод адресов клиента", info_client.msg, QMessageBox.Ok)
                     return False
 
             row = 0
@@ -245,6 +277,24 @@ class Client(QDialog, client_class):
                 self.tw_adres.setItem(row, 1, table_item)
                 table_item = QTableWidgetItem(item[3])
                 self.tw_adres.setItem(row, 2, table_item)
+                row += 1
+
+            query = """SELECT Id, Number, Contract, Data_From FROM clients_vendor_number WHERE Client_Id = %s"""
+            info_client = my_sql.sql_select(query, (self.select_id, ))
+            if "mysql.connector.errors" in str(type(info_client)):
+                    QMessageBox.critical(self, "Ошибка sql вывод адресов клиента", info_client.msg, QMessageBox.Ok)
+                    return False
+
+            row = 0
+            for item in info_client:
+                self.tw_vendor_number.insertRow(self.tw_vendor_number.rowCount())
+                table_item = QTableWidgetItem(item[1])
+                table_item.setData(-1, item[0])
+                self.tw_vendor_number.setItem(row, 0, table_item)
+                table_item = QTableWidgetItem(item[2])
+                self.tw_vendor_number.setItem(row, 1, table_item)
+                table_item = QTableWidgetItem(item[3].strftime("%d.%m.%Y"))
+                self.tw_vendor_number.setItem(row, 2, table_item)
                 row += 1
 
             self.inspection_files(self.le_name.text(), "Путь корень клиенты")
@@ -272,9 +322,10 @@ class Client(QDialog, client_class):
         adress.le_kpp.setText(select_adres[3])
         if adress.exec() == 0:
             return False
+        sql_status = "update" if (self.tw_adres.item(row, 0).data(-2) != "new") else "new"
         table_item = QTableWidgetItem(adress.le_name.text())
         table_item.setData(-1, select_adres[0])
-        table_item.setData(-2, "update")
+        table_item.setData(-2, sql_status)
         self.tw_adres.setItem(row, 0, table_item)
         table_item = QTableWidgetItem(adress.le_adres.text())
         self.tw_adres.setItem(row, 1, table_item)
@@ -291,6 +342,52 @@ class Client(QDialog, client_class):
         except:
             pass
 
+    def add_number(self):
+        number = ClientNumber()
+        number.de_date_from.setDate(QDate.currentDate())
+        if number.exec() == 0:
+            return False
+        row = self.tw_vendor_number.rowCount()
+        self.tw_vendor_number.insertRow(row)
+        table_item = QTableWidgetItem(number.le_vendor.text())
+        table_item.setData(-2, "new")
+        self.tw_vendor_number.setItem(row, 0, table_item)
+        table_item = QTableWidgetItem(number.le_contract.text())
+        self.tw_vendor_number.setItem(row, 1, table_item)
+        table_item = QTableWidgetItem(number.de_date_from.date().toString("dd.MM.yyyy"))
+        self.tw_vendor_number.setItem(row, 2, table_item)
+
+    def double_click_number(self, select_items):
+        row = select_items
+        select_adres = (self.tw_vendor_number.item(row, 0).data(-1), self.tw_vendor_number.item(row, 0).text(), self.tw_vendor_number.item(row, 1).text(),
+                        self.tw_vendor_number.item(row, 2).text())
+        number = ClientNumber()
+        number.le_vendor.setText(select_adres[1])
+        number.le_contract.setText(select_adres[2])
+        data = datetime.strptime(select_adres[3], "%d.%m.%Y")
+        number.de_date_from.setDate(data)
+        if number.exec() == 0:
+            return False
+        sql_status = "update" if (self.tw_vendor_number.item(row, 0).data(-2) != "new") else "new"
+        table_item = QTableWidgetItem(number.le_vendor.text())
+        table_item.setData(-1, select_adres[0])
+        table_item.setData(-2, sql_status)
+        self.tw_vendor_number.setItem(row, 0, table_item)
+        table_item = QTableWidgetItem(number.le_contract.text())
+        self.tw_vendor_number.setItem(row, 1, table_item)
+        table_item = QTableWidgetItem(number.de_date_from.date().toString("dd.MM.yyyy"))
+        self.tw_vendor_number.setItem(row, 2, table_item)
+
+    def dell_number(self):
+        try:
+            row = self.tw_vendor_number.selectedItems()[0].row()
+            id = self.tw_vendor_number.selectedItems()[0].data(-1)
+            if id is not None:
+                self.delete_numbers.append(id)
+            self.tw_vendor_number.removeRow(row)
+        except:
+            pass
+
 
 class ClientAdress(QDialog, client_adress_class):
     def __init__(self):
@@ -299,3 +396,10 @@ class ClientAdress(QDialog, client_adress_class):
         self.setModal(True)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+
+class ClientNumber(QDialog, client_number_class):
+    def __init__(self):
+        super(ClientNumber, self).__init__()
+        self.setupUi(self)
+        self.setModal(True)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))

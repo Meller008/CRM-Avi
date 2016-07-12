@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>327</width>
-    <height>511</height>
+    <width>244</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Поставщики ткани</string>
+   <string>Список</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -28,12 +28,9 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QListWidget" name="lw_provider">
-      <property name="font">
-       <font>
-        <family>Tahoma</family>
-        <pointsize>8</pointsize>
-       </font>
+     <widget class="QListWidget" name="lw_list">
+      <property name="editTriggers">
+       <set>QAbstractItemView::DoubleClicked</set>
       </property>
      </widget>
     </item>
@@ -44,7 +41,7 @@
     <string>toolBar</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 170, 0);</string>
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -55,42 +52,33 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="pb_add_provider"/>
-   <addaction name="pb_change_provider"/>
-   <addaction name="pb_dell_provider"/>
+   <addaction name="pb_add"/>
+   <addaction name="pb_change"/>
+   <addaction name="pb_dell"/>
   </widget>
-  <action name="pb_add_provider">
+  <action name="pb_add">
    <property name="text">
     <string>Добавить</string>
    </property>
-   <property name="toolTip">
-    <string>Добавить поставщика</string>
-   </property>
   </action>
-  <action name="pb_dell_provider">
+  <action name="pb_dell">
    <property name="text">
     <string>Удалить</string>
    </property>
-   <property name="toolTip">
-    <string>Удалить поставщика</string>
-   </property>
   </action>
-  <action name="pb_change_provider">
+  <action name="pb_change">
    <property name="text">
     <string>Изменить</string>
-   </property>
-   <property name="toolTip">
-    <string>Изменить информацию</string>
    </property>
   </action>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>pb_add_provider</sender>
+   <sender>pb_add</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>add_provider()</slot>
+   <slot>ui_add_item()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -103,10 +91,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>pb_dell_provider</sender>
+   <sender>pb_dell</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>dell_provider()</slot>
+   <slot>ui_dell_item()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -119,10 +107,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>pb_change_provider</sender>
+   <sender>pb_change</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>change_provider()</slot>
+   <slot>ui_change_item()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -135,10 +123,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>lw_provider</sender>
+   <sender>lw_list</sender>
    <signal>itemDoubleClicked(QListWidgetItem*)</signal>
    <receiver>MainWindow</receiver>
-   <slot>double_click_provider()</slot>
+   <slot>ui_double_click_item()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>126</x>
@@ -152,9 +140,9 @@
   </connection>
  </connections>
  <slots>
-  <slot>add_provider()</slot>
-  <slot>change_provider()</slot>
-  <slot>dell_provider()</slot>
-  <slot>double_click_provider()</slot>
+  <slot>ui_add_item()</slot>
+  <slot>ui_change_item()</slot>
+  <slot>ui_dell_item()</slot>
+  <slot>ui_double_click_item()</slot>
  </slots>
 </ui>

@@ -14,7 +14,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>Список операций</string>
+   <string>Список</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout" columnstretch="2,5">
@@ -34,7 +34,7 @@
      <number>2</number>
     </property>
     <item row="0" column="0">
-     <widget class="QTreeWidget" name="treeWidget">
+     <widget class="QTreeWidget" name="tree_widget">
       <property name="font">
        <font>
         <family>Tahoma</family>
@@ -76,7 +76,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QTableWidget" name="tw_workers">
+     <widget class="QTableWidget" name="table_widget">
       <property name="font">
        <font>
         <family>Tahoma</family>
@@ -107,62 +107,23 @@
       <attribute name="verticalHeaderMinimumSectionSize">
        <number>18</number>
       </attribute>
-      <row>
-       <property name="text">
-        <string>Новая строка</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>1</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>2</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>4</string>
-       </property>
-      </row>
-      <column>
-       <property name="text">
-        <string>Имя</string>
-       </property>
-      </column>
-      <item row="0" column="0">
-       <property name="text">
-        <string>Саша</string>
-       </property>
-      </item>
-      <item row="1" column="0">
-       <property name="text">
-        <string>Паша</string>
-       </property>
-      </item>
-      <item row="2" column="0">
-       <property name="text">
-        <string>Даша</string>
-       </property>
-      </item>
-      <item row="3" column="0">
-       <property name="text">
-        <string>Маша</string>
-       </property>
-      </item>
      </widget>
     </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
+   <property name="font">
+    <font>
+     <family>Tahoma</family>
+     <pointsize>8</pointsize>
+    </font>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(85, 255, 255);</string>
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -180,7 +141,10 @@
    <addaction name="pb_table_add"/>
    <addaction name="pb_table_change"/>
    <addaction name="pb_table_dell"/>
-   <addaction name="pb_table_drag"/>
+   <addaction name="pb_table_filter"/>
+   <addaction name="pb_table_transfer"/>
+   <addaction name="pb_table_double"/>
+   <addaction name="pb_table_update"/>
   </widget>
   <action name="pb_tree_add">
    <property name="text">
@@ -217,9 +181,24 @@
     <string>Удалить</string>
    </property>
   </action>
-  <action name="pb_table_drag">
+  <action name="pb_table_transfer">
    <property name="text">
     <string>Перенос</string>
+   </property>
+  </action>
+  <action name="pb_table_double">
+   <property name="text">
+    <string>Дублирование</string>
+   </property>
+  </action>
+  <action name="pb_table_filter">
+   <property name="text">
+    <string>Фильтр</string>
+   </property>
+  </action>
+  <action name="pb_table_update">
+   <property name="text">
+    <string>Обновить</string>
    </property>
   </action>
  </widget>
@@ -277,7 +256,135 @@
    <sender>pb_table_add</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>ui_add_operation()</slot>
+   <slot>ui_add_table_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tree_widget</sender>
+   <signal>itemClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_sorting()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-45</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_table_change</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_change_table_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_table_dell</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_dell_table_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>table_widget</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_double_click_table_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>538</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>952</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_table_filter</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_filter_table()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_table_transfer</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_transfer_table()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_table_double</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_double_item_table()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_table_update</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_update_table()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -294,6 +401,14 @@
   <slot>ui_add_tree_item()</slot>
   <slot>ui_change_tree_item()</slot>
   <slot>ui_dell_tree_item()</slot>
-  <slot>ui_add_operation()</slot>
+  <slot>ui_add_table_item()</slot>
+  <slot>ui_sorting()</slot>
+  <slot>ui_dell_table_item()</slot>
+  <slot>ui_change_table_item()</slot>
+  <slot>ui_double_click_table_item()</slot>
+  <slot>ui_filter_table()</slot>
+  <slot>ui_transfer_table()</slot>
+  <slot>ui_double_item_table()</slot>
+  <slot>ui_update_table()</slot>
  </slots>
 </ui>

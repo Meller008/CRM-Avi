@@ -6,47 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>436</width>
-    <height>111</height>
+    <width>250</width>
+    <height>92</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Адрес</string>
+   <string>Номер поставщика</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="topMargin">
     <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="bottomMargin">
     <number>0</number>
    </property>
    <property name="spacing">
-    <number>2</number>
+    <number>1</number>
    </property>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Адрес&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLineEdit" name="le_name"/>
-   </item>
    <item row="4" column="0" colspan="2">
-    <widget class="QLineEdit" name="le_adres">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -56,25 +39,39 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt; Название адреса&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="le_contract"/>
    </item>
    <item row="1" column="1">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLineEdit" name="le_vendor"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;КПП&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>Номер постащика</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="le_kpp"/>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Договор поставки</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QDateEdit" name="de_date_from">
+     <property name="calendarPopup">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>От какого числа</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0" colspan="2">
     <widget class="QWidget" name="widget" native="true">
@@ -89,25 +86,12 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>le_name</tabstop>
-  <tabstop>le_kpp</tabstop>
-  <tabstop>le_adres</tabstop>
+  <tabstop>le_vendor</tabstop>
+  <tabstop>le_contract</tabstop>
+  <tabstop>de_date_from</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -118,12 +102,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>435</x>
-     <y>102</y>
+     <x>219</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
-     <y>110</y>
+     <y>91</y>
     </hint>
    </hints>
   </connection>
@@ -134,12 +118,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>435</x>
-     <y>108</y>
+     <x>248</x>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>110</y>
+     <x>249</x>
+     <y>91</y>
     </hint>
    </hints>
   </connection>

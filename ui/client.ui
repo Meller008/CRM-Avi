@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
+    <width>528</width>
     <height>417</height>
    </rect>
   </property>
@@ -234,7 +234,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -254,7 +254,7 @@
         <number>0</number>
        </property>
        <property name="spacing">
-        <number>1</number>
+        <number>0</number>
        </property>
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -329,6 +329,99 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Номер поставщика</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="toolButton_3">
+           <property name="text">
+            <string>Добавить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButton_4">
+           <property name="text">
+            <string>Удалить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QTableWidget" name="tw_vendor_number">
+         <property name="font">
+          <font>
+           <family>Tahoma</family>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>20</number>
+         </attribute>
+         <attribute name="verticalHeaderMinimumSectionSize">
+          <number>18</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Номер поставщика</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Договор поставки</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>От какого числа</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
        <string>Файлы клиента</string>
@@ -347,7 +440,7 @@
         <number>0</number>
        </property>
        <property name="spacing">
-        <number>2</number>
+        <number>0</number>
        </property>
        <item row="1" column="0" rowspan="4">
         <widget class="QListWidget" name="lw_file">
@@ -409,6 +502,35 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>le_name</tabstop>
+  <tabstop>le_legal_address</tabstop>
+  <tabstop>le_actual_address</tabstop>
+  <tabstop>le_inn</tabstop>
+  <tabstop>le_kpp</tabstop>
+  <tabstop>le_ogrn</tabstop>
+  <tabstop>le_rs</tabstop>
+  <tabstop>le_bank</tabstop>
+  <tabstop>le_ks</tabstop>
+  <tabstop>le_bik</tabstop>
+  <tabstop>le_fio</tabstop>
+  <tabstop>le_phone</tabstop>
+  <tabstop>le_mail</tabstop>
+  <tabstop>le_note</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>cb_nds</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>toolButton_2</tabstop>
+  <tabstop>tw_adres</tabstop>
+  <tabstop>lw_file</tabstop>
+  <tabstop>pb_add_file</tabstop>
+  <tabstop>pb_open_file</tabstop>
+  <tabstop>toolButton_3</tabstop>
+  <tabstop>toolButton_4</tabstop>
+  <tabstop>tw_vendor_number</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -438,7 +560,7 @@
      <y>266</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-15</x>
+     <x>0</x>
      <y>240</y>
     </hint>
    </hints>
@@ -454,7 +576,7 @@
      <y>313</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-5</x>
+     <x>0</x>
      <y>298</y>
     </hint>
    </hints>
@@ -470,7 +592,7 @@
      <y>263</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-29</x>
+     <x>0</x>
      <y>333</y>
     </hint>
    </hints>
@@ -486,7 +608,7 @@
      <y>309</y>
     </hint>
     <hint type="destinationlabel">
-     <x>592</x>
+     <x>527</x>
      <y>316</y>
     </hint>
    </hints>
@@ -502,7 +624,7 @@
      <y>279</y>
     </hint>
     <hint type="destinationlabel">
-     <x>582</x>
+     <x>527</x>
      <y>280</y>
     </hint>
    </hints>
@@ -518,8 +640,56 @@
      <y>312</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-140</x>
+     <x>0</x>
      <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>add_number()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>24</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-188</x>
+     <y>256</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_vendor_number</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>double_click_number()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-70</x>
+     <y>321</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>dell_number()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>103</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-124</x>
+     <y>265</y>
     </hint>
    </hints>
   </connection>
@@ -532,5 +702,8 @@
   <slot>open_dir()</slot>
   <slot>add_file()</slot>
   <slot>select_file()</slot>
+  <slot>add_number()</slot>
+  <slot>double_click_number()</slot>
+  <slot>dell_number()</slot>
  </slots>
 </ui>

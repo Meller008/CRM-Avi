@@ -2,6 +2,8 @@ from os import getcwd
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
 from form import login_window, material_provider, material, comparing, accessories_provider, accesspries, staff, program_settings, notification, clients, operation
+from form import article
+from form.templates import table
 from classes import my_class
 from PyQt5.QtGui import QIcon
 import sys
@@ -138,6 +140,22 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_operation_list)
         self.sub_operation_list.resize(self.operation_list.size())
         self.sub_operation_list.show()
+        
+    def view_product(self):
+        self.article_list = article.ArticleList()
+        self.sub_article_list = QMdiSubWindow()
+        self.sub_article_list.setWidget(self.article_list)
+        self.mdi.addSubWindow(self.sub_article_list)
+        self.sub_article_list.resize(self.article_list.size())
+        self.sub_article_list.show()
+        
+    def view_order_list(self):
+        self.order_list = table.TableList()
+        self.sub_order_list = QMdiSubWindow()
+        self.sub_order_list.setWidget(self.order_list)
+        self.mdi.addSubWindow(self.sub_order_list)
+        self.sub_order_list.resize(self.order_list.size())
+        self.sub_order_list.show()
         
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % self.user.privilege)
