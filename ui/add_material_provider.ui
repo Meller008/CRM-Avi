@@ -87,6 +87,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>le_name</tabstop>
+  <tabstop>le_info</tabstop>
+  <tabstop>pb_add</tabstop>
+  <tabstop>pb_cancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

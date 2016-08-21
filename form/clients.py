@@ -51,7 +51,9 @@ class ClientsList(accessories_provider.AccessoriesProvider):  # Вывод вс�
             self.change_client = Client(self, select_prov.data(-1))
             self.change_client.show()
         else:
-            pass
+            self.m_class.of_set_client(select_prov.data(-1), select_prov.text())
+            self.close()
+            self.destroy()
 
     def dell_provider(self):
         try:
@@ -85,21 +87,21 @@ class Client(QDialog, client_class):
                         QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
                         return False
             self.path_wor = info_sql[0][0]
-            if not path.isdir("%s/%s" % (self.path_wor, dir_name)):
+            if not path.isdir("%s/%s" % (self.path_wor, dir_name.replace('"', "'"))):
                 try:
-                    mkdir("%s/%s" % (self.path_wor, dir_name))
-                    return "%s/%s" % (self.path_wor, dir_name)
+                    mkdir("%s/%s" % (self.path_wor, dir_name.replace('"', "'")))
+                    return "%s/%s" % (self.path_wor, dir_name.replace('"', "'"))
                 except:
                     QMessageBox.critical(self, "Ошибка файлы", "Нет доступа к корневому диалогу, файлы недоступны", QMessageBox.Ok)
                     return False
             else:
-                return "%s/%s" % (self.path_wor, dir_name)
+                return "%s/%s" % (self.path_wor, dir_name.replace('"', "'"))
 
     def inspection_files(self, dir_name, sql_dir_name):   # Проверяем файлы и даем иконки
-        self.path = self.inspection_path(dir_name, sql_dir_name)
+        self.path = self.inspection_path(dir_name.replace('"', "'"), sql_dir_name)
         if self.path:
             self.lw_file.clear()
-            files = listdir("%s/%s" % (self.path_wor, dir_name))
+            files = listdir("%s/%s" % (self.path_wor, dir_name.replace('"', "'")))
             for file in files:
                 if "~" not in file:
                     r = path.splitext(file)  # Получаем название и расширение
@@ -221,6 +223,10 @@ class Client(QDialog, client_class):
                     QMessageBox.critical(self, "Ошибка sql удаление номера", info_sql.msg, QMessageBox.Ok)
 
         self.m.list_provider()
+        self.close()
+        self.destroy()
+
+    def can(self):
         self.close()
         self.destroy()
 

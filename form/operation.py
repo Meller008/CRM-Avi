@@ -16,7 +16,7 @@ class OperationList(tree.TreeList):
         self.toolBar.setStyleSheet("background-color: rgb(85, 255, 255);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Название", 180), ("Цена", 70), ("Машинка", 120))
+        self.table_header_name = (("Название", 300), ("Цена", 70), ("Машинка", 120))
 
         self.query_tree_select = "SELECT Id, Parent_Id, Name FROM operation_tree"
         self.query_tree_add = "INSERT INTO operation_tree (Parent_Id, Name) VALUES (%s, %s)"

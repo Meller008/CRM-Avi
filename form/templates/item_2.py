@@ -15,6 +15,8 @@ class Item2(QDialog, item_2):
         for name, value in setting.items():
             if name == "WinTitle":
                 self.setWindowTitle(value)
+            elif name == "WinSize":
+                self.resize(value)
             elif name == "WinColor":
                 self.widget.setStyleSheet("background-color: rgb%s;" % value)
             else:

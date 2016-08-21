@@ -2,10 +2,9 @@ from os import getcwd
 from form.templates import tree
 from form import operation, material_provider, accessories_provider
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem
-from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut
+from PyQt5.QtGui import QIcon, QBrush, QColor, QKeySequence
 from PyQt5 import QtCore
-from PyQt5.QtCore import Qt
 from function import my_sql
 
 article_class = loadUiType(getcwd() + '/ui/article.ui')[0]
@@ -20,7 +19,7 @@ class ArticleList(tree.TreeList):
         self.toolBar.setStyleSheet("background-color: rgb(167, 183, 255);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Артикул", 70), ("Название", 150), ("Размеры", 120))
+        self.table_header_name = (("Артикул", 70), ("Название", 250), ("Размеры", 160))
 
         self.query_tree_select = "SELECT Id, Parent_Id, Name FROM product_tree"
         self.query_tree_add = "INSERT INTO product_tree (Parent_Id, Name) VALUES (%s, %s)"
@@ -31,7 +30,7 @@ class ArticleList(tree.TreeList):
         self.query_table_select = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
                                     GROUP_CONCAT(product_article_size.Size ORDER BY product_article_size.Size) FROM product_article
                                     LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
-                                    GROUP BY product_article.Article"""
+                                    GROUP BY product_article.Article ORDER BY product_article.Article"""
         self.query_transfer_item = "UPDATE product_article SET Tree_Id = %s WHERE Id = %s"
         self.query_table_dell = "DELETE FROM product_article WHERE Id = %s"
 
@@ -88,9 +87,18 @@ class ArticleList(tree.TreeList):
             return False
         self.set_table_info()
 
+    def ui_double_click_table_item(self, item):  # Двойной клик по элементу
+        if not self.dc_select:
+            self.ui_change_table_item(item.data(5))
+        else:
+            item_id = item.data(5)
+            self.new_operation = Article(self.main, item_id, dc_select=True)
+            self.new_operation.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.new_operation.show()
+
 
 class Article(QMainWindow, article_class):
-    def __init__(self, main, id=False, tree_id=False):
+    def __init__(self, main, id=False, tree_id=False, dc_select=False):
         super(Article, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
@@ -99,12 +107,14 @@ class Article(QMainWindow, article_class):
         self.tree_id = tree_id
         self.view_show = False
         self.show_complete = False  # Переменная показывает что страница загружена
+        self.dc_select = dc_select
         self.save_change = []  # Переменная для запоминания изменений
         self.pb_up.setIcon(QIcon(getcwd() + "/images/up.ico"))
         self.pb_down.setIcon(QIcon(getcwd() + "/images/down.ico"))
         self.set_start_settings()
         self.show_complete = True  # Переменная показывает что страница загружена
 
+    # noinspection PyUnresolvedReferences
     def set_start_settings(self):
         # Ширина материалов
         self.tw_materials.horizontalHeader().resizeSection(0, 240)
@@ -114,14 +124,36 @@ class Article(QMainWindow, article_class):
         # Ширина операций
         self.tw_operations.horizontalHeader().resizeSection(0, 250)
         self.tw_operations.horizontalHeader().resizeSection(1, 80)
-        self.tw_operations.horizontalHeader().resizeSection(2, 80)
+        self.tw_operations.horizontalHeader().resizeSection(2, 110)
 
         if not self.id and self.tree_id:  # Если новый артикул
             self.set_enabled(False)  # закрываем поля
             self.gb_parametrs.setEnabled(False)
 
         if self.id:
-            self.set_start_sql_info()
+            if not self.dc_select:
+                self.set_start_sql_info()
+            else:
+                self.set_start_sql_info()
+                self.set_all_enabled(False)
+
+        key_up = QShortcut(QtCore.Qt.Key_Up, self)
+        key_up.activated.connect(self.key_up)
+        key_down = QShortcut(QtCore.Qt.Key_Down, self)
+        key_down.activated.connect(self.key_down)
+        key_left = QShortcut(QtCore.Qt.Key_Left, self)
+        key_left.activated.connect(self.key_left)
+        key_right = QShortcut(QtCore.Qt.Key_Right, self)
+        key_right.activated.connect(self.key_right)
+        key_j = QShortcut(QtCore.Qt.Key_J, self)
+        key_j.activated.connect(self.ui_add_operation)
+        key_j.activated.connect(self.ui_save_change_operation)
+        key_n = QShortcut(QtCore.Qt.Key_N, self)
+        key_n.activated.connect(self.ui_add_material)
+        key_n.activated.connect(self.ui_save_change_material)
+        key_A = QShortcut(QtCore.Qt.Key_A, self)
+        key_A.activated.connect(self.ui_add_accessories)
+        key_A.activated.connect(self.ui_save_change_material)
 
     def set_start_sql_info(self):
         if not self.get_start_sql_info():
@@ -141,7 +173,8 @@ class Article(QMainWindow, article_class):
 
     def get_start_sql_info(self):
         query = """SELECT product_article.Article, product_article.Name,product_article_size.Id , product_article_size.Size
-                  FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id WHERE product_article.Id = %s"""
+                  FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id WHERE product_article.Id = %s
+                  ORDER BY product_article_size.Size"""
         sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения размера", sql_info.msg, QMessageBox.Ok)
@@ -150,9 +183,10 @@ class Article(QMainWindow, article_class):
 
         query = """SELECT product_article_parametrs.Product_Article_Size_Id, product_article_parametrs.Id, product_article_parametrs.Name,
                 product_article_parametrs.Client_Name, product_article_parametrs.Barcode, product_article_parametrs.Client_code, product_article_parametrs.In_On_Place,
-                product_article_parametrs.Price, product_article_parametrs.Product_Note, product_article_parametrs.Cut_Note, product_article_parametrs.`Show`
-                FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
-                LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id WHERE product_article.Id = %s"""
+                product_article_parametrs.Price, product_article_parametrs.Product_Note, product_article_parametrs.Cut_Note, product_article_parametrs.`Show`,
+                product_article_parametrs.NDS FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
+                LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id WHERE product_article.Id = %s
+                order by FIELD(product_article_parametrs.Name, 'Обычный') desc"""
         sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения настроек", sql_info.msg, QMessageBox.Ok)
@@ -180,9 +214,14 @@ class Article(QMainWindow, article_class):
                     LEFT JOIN product_article_material ON product_article_parametrs.Id = product_article_material.Product_Article_Parametrs_Id
                     LEFT JOIN material_name ON product_article_material.Material_Id = material_name.Id
                     LEFT JOIN material_supplyposition ON material_name.Id = material_supplyposition.Material_NameId
-                    LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
                     LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
-                    WHERE product_article.Id = %s AND product_article_material.Material_Id IS NOT NULL GROUP BY product_article_material.Id"""
+                    WHERE product_article.Id = %s AND product_article_material.Material_Id IS NOT NULL
+                    AND (material_supply.Data = (SELECT min(material_supply.Data) FROM material_supply
+                    LEFT JOIN material_supplyposition ON material_supply.Id = material_supplyposition.Material_SupplyId
+                    LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                    WHERE material_balance.BalanceWeight > 0 AND material_supplyposition.Material_NameId = product_article_material.Material_Id)
+                    OR material_supply.Data IS NULL)
+                    GROUP BY product_article_material.Id"""
         sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения материала", sql_info.msg, QMessageBox.Ok)
@@ -196,9 +235,14 @@ class Article(QMainWindow, article_class):
                     LEFT JOIN product_article_material ON product_article_parametrs.Id = product_article_material.Product_Article_Parametrs_Id
                     LEFT JOIN accessories_name ON product_article_material.Accessories_Id = accessories_name.Id
                     LEFT JOIN accessories_supplyposition ON accessories_name.Id = accessories_supplyposition.accessories_NameId
-                    LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.accessories_SupplyPositionId
                     LEFT JOIN accessories_supply ON accessories_supplyposition.Accessories_SupplyId = accessories_supply.Id
-                    WHERE product_article.Id = %s AND product_article_material.Accessories_Id IS NOT NULL GROUP BY product_article_material.Id"""
+                    WHERE product_article.Id = %s AND product_article_material.Accessories_Id IS NOT NULL
+                    AND (accessories_supply.Data = (SELECT MIN(accessories_supply.Data) FROM accessories_supply
+                    LEFT JOIN accessories_supplyposition ON accessories_supply.Id = accessories_supplyposition.Accessories_SupplyId
+                    LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
+                    WHERE accessories_balance.BalanceValue > 0 AND accessories_supplyposition.Accessories_NameId = product_article_material.Accessories_Id)
+                    OR accessories_supply.Data IS NULL)
+                    GROUP BY product_article_material.Id"""
         sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения аксесуаров", sql_info.msg, QMessageBox.Ok)
@@ -209,20 +253,21 @@ class Article(QMainWindow, article_class):
 
     def set_size_parametr(self):
         self.cb_parametrs.clear()
-        select_size_id = self.cb_size.currentData()
+        if self.cb_size.currentData() is not None:
+            select_size_id = int(self.cb_size.currentData())
 
-        if hasattr(self, 'article_parametrs'):
-            for param in self.article_parametrs:
-                if select_size_id == param[0] and param[10] == 1:
-                    self.cb_parametrs.addItem(param[2], param[1])
+            if hasattr(self, 'article_parametrs'):
+                for param in self.article_parametrs:
+                    if select_size_id == param[0] and param[10] == 1:
+                        self.cb_parametrs.addItem(param[2], param[1])
 
-        if self.cb_show.isChecked():
-            icon = QIcon(getcwd() + "/images/eye.ico")
-            for param in self.article_parametrs:
-                if select_size_id == param[0] and param[10] == 0:
-                    self.cb_parametrs.addItem(icon, param[2], param[1])
+            if self.cb_show.isChecked():
+                icon = QIcon(getcwd() + "/images/eye.ico")
+                for param in self.article_parametrs:
+                    if select_size_id == param[0] and param[10] == 0:
+                        self.cb_parametrs.addItem(icon, param[2], param[1])
 
-    def set_parametr_info(self, other_param_id=False):
+    def set_parametr_info(self, other_param_id=False):  # Вставляем данные о параметрах получение из БД
         if not other_param_id:
             self.tw_operations.clearContents()
             self.tw_operations.setRowCount(0)
@@ -254,6 +299,10 @@ class Article(QMainWindow, article_class):
                 self.le_price.setText(str(price))
                 self.pe_product_note.appendPlainText(param_info[8])
                 self.pe_cut_note.appendPlainText(param_info[9])
+                if param_info[11] == 18:
+                    self.rb_nds_1.setChecked(True)
+                else:
+                    self.rb_nds_2.setChecked(True)
                 break
 
         for operation in self.article_operations:
@@ -338,8 +387,8 @@ class Article(QMainWindow, article_class):
                 self.id = sql_info
                 self.save_change.remove("article")
 
-        new_size = QInputDialog.getInt(self, "Размер", "Введите размер")
-        if not new_size[1] or new_size[0] == 0:
+        new_size = QInputDialog.getText(self, "Размер", "Введите размер")
+        if not new_size[1]:
             return False
         else:
             new_size = new_size[0]
@@ -366,10 +415,11 @@ class Article(QMainWindow, article_class):
         self.set_size_parametr()
         self.save_change = []  # Переменная для запоминания изменений
 
-        if self.cb_parametrs.count() == 0:
-            self.set_enabled(False)  # закрываем поля
-        else:
-            self.set_enabled(True)
+        if not self.dc_select:
+            if self.cb_parametrs.count() == 0:
+                self.set_enabled(False)  # закрываем поля
+            else:
+                self.set_enabled(True)
 
     def ui_dell_size(self):
         if self.cb_parametrs.count() != 0:
@@ -511,15 +561,21 @@ class Article(QMainWindow, article_class):
 
         result = QMessageBox.question(self, "Удалить?", "Точно удалить материал?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
-            self.tw_materials.setRowHidden(row, True)
-            for col in range(4):
-                self.tw_materials.item(row, col).setData(-1, "del")
+            if self.tw_materials.item(row, 0).data(-1) == "new":
+                self.tw_materials.removeRow(row)
+            else:
+                self.tw_materials.setRowHidden(row, True)
+                for col in range(4):
+                    self.tw_materials.item(row, col).setData(-1, "del")
             self.calc()
 
     def ui_change_material(self):
         try:
             row = self.tw_materials.currentRow()
         except:
+            QMessageBox.information(self, "Ошибка", "Выберете материал для изменения", QMessageBox.Ok)
+            return False
+        if row == -1:
             QMessageBox.information(self, "Ошибка", "Выберете материал для изменения", QMessageBox.Ok)
             return False
         self.ui_double_click_material(row)
@@ -530,6 +586,10 @@ class Article(QMainWindow, article_class):
         name = item.text()
         id_material = item.data(5)
         sql_id = item.data(-2)
+        if item.data(-1) == "new":
+            sql_status = "new"
+        else:
+            sql_status = "upd"
         value = float(self.tw_materials.item(row, 1).text())
 
         self.change_material = ChangeMaterial(variant)
@@ -541,7 +601,7 @@ class Article(QMainWindow, article_class):
 
         id = self.change_material.exec()
 
-        if id != -1:
+        if id == -1:
             return False
 
         value = self.change_material.sb_value.value()
@@ -585,25 +645,25 @@ class Article(QMainWindow, article_class):
 
         item = QTableWidgetItem(material)
         item.setData(5, sql_info[0][0])
-        item.setData(-1, "upd")
+        item.setData(-1, sql_status)
         item.setData(-2, sql_id)
         item.setBackground(brush)
         self.tw_materials.setItem(row, 0, item)
         item = QTableWidgetItem(str(value))
         item.setData(5, sql_info[0][0])
-        item.setData(-1, "upd")
+        item.setData(-1, sql_status)
         item.setData(-2, sql_id)
         item.setBackground(brush)
         self.tw_materials.setItem(row, 1, item)
         item = QTableWidgetItem(str(sql_info[0][1]))
         item.setData(5, sql_info[0][0])
-        item.setData(-1, "upd")
+        item.setData(-1, sql_status)
         item.setData(-2, sql_id)
         item.setBackground(brush)
         self.tw_materials.setItem(row, 2, item)
         item = QTableWidgetItem(str(round(value * float(sql_info[0][1]), 4)))
         item.setData(5, sql_info[0][0])
-        item.setData(-1, "upd")
+        item.setData(-1, sql_status)
         item.setData(-2, sql_id)
         item.setBackground(brush)
         self.tw_materials.setItem(row, 3, item)
@@ -622,10 +682,10 @@ class Article(QMainWindow, article_class):
     def ui_change_operation(self):
         try:
             row = self.tw_operations.currentRow()
+            self.ui_double_click_operation(row)
         except:
             QMessageBox.information(self, "Ошибка", "Выберете операцию для изменения", QMessageBox.Ok)
             return False
-        self.ui_double_click_operation(row)
 
     def ui_dell_operation(self):
         try:
@@ -636,9 +696,13 @@ class Article(QMainWindow, article_class):
 
         result = QMessageBox.question(self, "Удалить?", "Точно удалить операцию?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
-            self.tw_operations.setRowHidden(row, True)
-            for col in range(3):
-                self.tw_operations.item(row, col).setData(-1, "del")
+
+            if self.tw_operations.item(row, 0).data(-1) == "new":
+                self.tw_operations.removeRow(row)
+            else:
+                self.tw_operations.setRowHidden(row, True)
+                for col in range(3):
+                    self.tw_operations.item(row, col).setData(-1, "del")
 
             for row in range(row + 1, self.tw_operations.rowCount()):
                 for col in range(3):
@@ -735,19 +799,52 @@ class Article(QMainWindow, article_class):
             return False
         else:
             sql_id = item.data(-2)
+            if item.data(-1) == "new":
+                sql_status = "new"
+            else:
+                sql_status = "upd"
             item = self.change_operation.new_operation
             for col in range(1, len(item)):
                 new_item = QTableWidgetItem(item[col])
                 new_item.setData(5, item[0])
-                new_item.setData(-1, "upd")
+                new_item.setData(-1, sql_status)
                 new_item.setData(-2, sql_id)
                 self.tw_operations.setItem(row, col - 1, new_item)
         self.calc()
 
+    def ui_calc_nds(self):
+        try:
+            price = float(self.le_price.text())
+        except:
+            price = 0
+        if self.rb_nds_1.isChecked():
+            nds = 18
+        else:
+            nds = 10
+        self.sb_no_nds.setValue(round(price - (price * nds) / (100 + nds), 4))
+
     def ui_acc(self):
-        self.save_sql()
-        self.close()
-        self.destroy()
+
+        if not self.dc_select:
+            self.save_sql()
+            self.close()
+            self.destroy()
+            self.main.ui_update_table()
+        else:
+            if self.rb_nds_1.isChecked():
+                nds = 18
+            else:
+                nds = 10
+            article_info = {"article": self.le_article.text(),
+                            "size": self.cb_size.currentText(),
+                            "parametr": self.cb_parametrs.currentText(),
+                            "parametr_id": self.cb_parametrs.currentData(),
+                            "price": self.le_price.text(),
+                            "in on place": self.le_in_on_place.text(),
+                            "nds": nds}
+            self.main.of_tree_select_article(article_info)
+            self.close()
+            self.destroy()
 
     def ui_cancel(self):
         if self.save_change:
@@ -756,6 +853,8 @@ class Article(QMainWindow, article_class):
                 self.save_sql()
         self.close()
         self.destroy()
+        if not self.dc_select:
+            self.main.ui_update_table()
 
     def ui_save_change_article(self):
         if "article" not in self.save_change:
@@ -776,6 +875,34 @@ class Article(QMainWindow, article_class):
     def ui_check_show(self):
         self.set_size_parametr()
 
+    def key_up(self):
+        index = self.cb_size.currentIndex()
+        if index == 0:
+            self.cb_size.setCurrentIndex(self.cb_size.count()-1)
+        else:
+            self.cb_size.setCurrentIndex(index-1)
+
+    def key_down(self):
+        index = self.cb_size.currentIndex()
+        if index == self.cb_size.count()-1:
+            self.cb_size.setCurrentIndex(0)
+        else:
+            self.cb_size.setCurrentIndex(index+1)
+
+    def key_left(self):
+        index = self.cb_parametrs.currentIndex()
+        if index == self.cb_parametrs.count()-1:
+            self.cb_parametrs.setCurrentIndex(0)
+        else:
+            self.cb_parametrs.setCurrentIndex(index+1)
+
+    def key_right(self):
+        index = self.cb_parametrs.currentIndex()
+        if index == 0:
+            self.cb_parametrs.setCurrentIndex(self.cb_parametrs.count()-1)
+        else:
+            self.cb_parametrs.setCurrentIndex(index-1)
+
     def save_sql(self):
         if "article" in self.save_change:
             query = """UPDATE product_article SET Article = %s, Name = %s WHERE Id = %s"""
@@ -794,9 +921,13 @@ class Article(QMainWindow, article_class):
 
         if "parametr" in self.save_change:
             query = """UPDATE product_article_parametrs SET Client_Name = %s, Barcode = %s,
-                      Client_code = %s, In_On_Place = %s, Price = %s, Product_Note = %s, Cut_Note = %s WHERE Id = %s"""
+                      Client_code = %s, In_On_Place = %s, Price = %s, Product_Note = %s, Cut_Note = %s, NDS = %s WHERE Id = %s"""
+            if self.rb_nds_1.isChecked():
+                nds = 18
+            else:
+                nds = 10
             sql_param = (self.le_client_name.text(), self.le_barcode.text(), self.le_client_code.text(), self.le_in_on_place.text().replace(",", "."),
-                         self.le_price.text().replace(",", "."), self.pe_product_note.toPlainText(), self.pe_cut_note.toPlainText(), parametr_id)
+                         self.le_price.text().replace(",", "."), self.pe_product_note.toPlainText(), self.pe_cut_note.toPlainText(), nds, parametr_id)
             sql_info = my_sql.sql_change(query, sql_param)
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql изменения параметров", sql_info.msg, QMessageBox.Ok)
@@ -813,9 +944,6 @@ class Article(QMainWindow, article_class):
                         if "mysql.connector.errors" in str(type(sql_info)):
                             QMessageBox.critical(self, "Ошибка sql удаление операции", sql_info.msg, QMessageBox.Ok)
                             return False
-                    else:
-                        QMessageBox.critical(self, "Ошибка", "Нету id у операции при удалении, это не нормально позовите администратора", QMessageBox.Ok)
-                        return False
 
                 elif table_item.data(-1) == "new":
                     query = "INSERT INTO product_article_operation (Product_Article_Parametrs_Id, Operation_Id, Position) VALUES (%s, %s, %s)"
@@ -837,7 +965,7 @@ class Article(QMainWindow, article_class):
                     position_operation += 1
 
                 else:
-                    QMessageBox.critical(self, "Ошибка", "Строка операций не подошла в if при созранении, это не нормально позовите администратора", QMessageBox.Ok)
+                    QMessageBox.critical(self, "Ошибка", "Строка операций не подошла в if при сохранении, это не нормально позовите администратора", QMessageBox.Ok)
                     return False
 
         if "material" in self.save_change:
@@ -875,7 +1003,6 @@ class Article(QMainWindow, article_class):
                 elif table_item.data(-1) == "upd" and table_item.data(-2):
                     query = "UPDATE product_article_material SET Material_Id = %s, Accessories_Id = %s, Value = %s WHERE Id = %s"
                     sql_info = my_sql.sql_change(query, (material_id, accessories_id, table_item.text(), table_item.data(-2)))
-                    position_operation += 1
                     if "mysql.connector.errors" in str(type(sql_info)):
                         QMessageBox.critical(self, "Ошибка sql изменение материала", sql_info.msg, QMessageBox.Ok)
                         return False
@@ -884,7 +1011,7 @@ class Article(QMainWindow, article_class):
                     pass
 
                 else:
-                    QMessageBox.critical(self, "Ошибка", "Строка материала не подошла в if при созранении, это не нормально позовите администратора", QMessageBox.Ok)
+                    QMessageBox.critical(self, "Ошибка", "Строка материала не подошла в if при сохранении, это не нормально позовите администратора", QMessageBox.Ok)
                     return False
 
         self.save_change = []
@@ -899,6 +1026,32 @@ class Article(QMainWindow, article_class):
         self.pe_cut_note.setEnabled(en_bool)
         self.tab_widget.setEnabled(en_bool)
         self.pb_acc.setEnabled(en_bool)
+
+    def set_all_enabled(self, en_bool):
+        self.le_client_name.setEnabled(en_bool)
+        self.le_barcode.setEnabled(en_bool)
+        self.le_client_code.setEnabled(en_bool)
+        self.le_in_on_place.setEnabled(en_bool)
+        self.le_price.setEnabled(en_bool)
+        self.pe_product_note.setEnabled(en_bool)
+        self.pe_cut_note.setEnabled(en_bool)
+        self.toolButton_7.setEnabled(en_bool)
+        self.toolButton_11.setEnabled(en_bool)
+        self.pb_dell_param.setEnabled(en_bool)
+        self.pb_show_param.setEnabled(en_bool)
+        self.toolButton_10.setEnabled(en_bool)
+        self.toolButton_9.setEnabled(en_bool)
+        self.toolButton_2.setEnabled(en_bool)
+        self.toolButton_3.setEnabled(en_bool)
+        self.toolButton.setEnabled(en_bool)
+        self.pb_up.setEnabled(en_bool)
+        self.pb_down.setEnabled(en_bool)
+        self.toolButton_4.setEnabled(en_bool)
+        self.toolButton_8.setEnabled(en_bool)
+        self.toolButton_5.setEnabled(en_bool)
+        self.toolButton_6.setEnabled(en_bool)
+        self.tw_materials.setEnabled(en_bool)
+        self.tw_operations.setEnabled(en_bool)
 
     def calc(self):
         price_all_operations = 0.0
@@ -1074,11 +1227,11 @@ class ChangeMaterial(QDialog, article_change_material_class):
 
     def of_set_material_name(self, item):
         self.le_material.setText(item)
-        self.le_material.setWhatsThis(str(-1))
+        self.le_material.setWhatsThis(str(1))
 
     def of_set_accessories_name(self, item):
         self.le_material.setText(item)
-        self.le_material.setWhatsThis(str(-1))
+        self.le_material.setWhatsThis(str(1))
 
 
 class CopyParametr(QDialog, article_copy_parametr):

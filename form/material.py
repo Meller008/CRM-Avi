@@ -105,13 +105,16 @@ class Material(QMainWindow, material_class):
         self.tw_supply_material.setRowCount(len(supply))
         for row in range(len(supply)):
             for column in range(6):
-                a = supply[row][column]
-                item = QTableWidgetItem(str(a))
+                if isinstance(supply[row][column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(supply[row][column]))
+                else:
+                    text = str(supply[row][column])
+                item = QTableWidgetItem(str(text))
                 self.tw_supply_material.setItem(row, column, item)
 
         self.tw_supply_material.horizontalHeader().resizeSection(0, 20)
-        self.tw_supply_material.horizontalHeader().resizeSection(1, 75)
-        self.tw_supply_material.horizontalHeader().resizeSection(2, 130)
+        self.tw_supply_material.horizontalHeader().resizeSection(1, 70)
+        self.tw_supply_material.horizontalHeader().resizeSection(2, 220)
         self.tw_supply_material.horizontalHeader().resizeSection(3, 80)
         self.tw_supply_material.horizontalHeader().resizeSection(4, 100)
         self.tw_supply_material.horizontalHeader().resizeSection(5, 250)

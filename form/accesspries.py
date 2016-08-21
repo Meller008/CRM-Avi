@@ -3,6 +3,7 @@ from PyQt5 import QtCore
 from function import my_sql
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 from decimal import Decimal
+import re
 
 
 class Accessories(material.Material):
@@ -22,14 +23,17 @@ class Accessories(material.Material):
         self.tw_supply_material.setRowCount(len(supply))
         for row in range(len(supply)):
             for column in range(6):
-                a = supply[row][column]
-                item = QTableWidgetItem(str(a))
+                if isinstance(supply[row][column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(supply[row][column]))
+                else:
+                    text = str(supply[row][column])
+                item = QTableWidgetItem(text)
                 self.tw_supply_material.setItem(row, column, item)
 
         self.tw_supply_material.horizontalHeader().resizeSection(0, 20)
         self.tw_supply_material.horizontalHeader().resizeSection(1, 75)
-        self.tw_supply_material.horizontalHeader().resizeSection(2, 130)
-        self.tw_supply_material.horizontalHeader().resizeSection(3, 80)
+        self.tw_supply_material.horizontalHeader().resizeSection(2, 190)
+        self.tw_supply_material.horizontalHeader().resizeSection(3, 90)
         self.tw_supply_material.horizontalHeader().resizeSection(4, 100)
         self.tw_supply_material.horizontalHeader().resizeSection(5, 250)
         self.tw_supply_material.horizontalHeader().setSectionHidden(0, True)

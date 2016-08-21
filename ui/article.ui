@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>496</width>
-    <height>485</height>
+    <width>538</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,7 +52,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab_3">
          <attribute name="title">
@@ -276,6 +276,9 @@
             </property>
             <item>
              <widget class="QToolButton" name="toolButton_4">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(0, 133, 200);</string>
+              </property>
               <property name="text">
                <string>Добавить ткань</string>
               </property>
@@ -283,6 +286,12 @@
             </item>
             <item>
              <widget class="QToolButton" name="toolButton_8">
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(199, 87, 203);</string>
+              </property>
               <property name="text">
                <string>Добавить аксесуар</string>
               </property>
@@ -441,40 +450,17 @@
        <property name="spacing">
         <number>1</number>
        </property>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="le_client_code"/>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="le_barcode"/>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="cb_show">
+         <property name="text">
+          <string>Показ. скрытые</string>
+         </property>
+        </widget>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Цена</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Штрих-код</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLineEdit" name="le_in_on_place"/>
-       </item>
-       <item row="7" column="1">
-        <widget class="QLineEdit" name="le_price">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Код клиента</string>
          </property>
         </widget>
        </item>
@@ -485,33 +471,13 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0" colspan="2">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="cb_parametrs"/>
        </item>
-       <item row="10" column="0" colspan="2">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="le_client_name"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_10">
-         <property name="text">
-          <string>Название у клиента</string>
+       <item row="7" column="1">
+        <widget class="QLineEdit" name="le_price">
+         <property name="enabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -563,7 +529,68 @@
          </item>
         </layout>
        </item>
-       <item row="11" column="0" colspan="2">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Название у клиента</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="le_client_code"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="le_client_name"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>НДС</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Штрих-код</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Код клиента</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="le_barcode"/>
+       </item>
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="le_in_on_place"/>
+       </item>
+       <item row="8" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QRadioButton" name="rb_nds_1">
+           <property name="text">
+            <string>18%</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rb_nds_2">
+           <property name="text">
+            <string>10%</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="10" column="1">
         <widget class="QLineEdit" name="le_cost_price">
          <property name="enabled">
           <bool>true</bool>
@@ -573,13 +600,30 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="cb_parametrs"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="cb_show">
+       <item row="9" column="1">
+        <widget class="QLabel" name="label_11">
          <property name="text">
-          <string>Показ. скрытые</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Цена без НДС&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QDoubleSpinBox" name="sb_no_nds">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="decimals">
+          <number>4</number>
          </property>
         </widget>
        </item>
@@ -674,7 +718,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
     <hint type="destinationlabel">
      <x>397</x>
-     <y>631</y>
+     <y>477</y>
     </hint>
    </hints>
   </connection>
@@ -690,7 +734,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
     <hint type="destinationlabel">
      <x>371</x>
-     <y>-110</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -705,7 +749,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>283</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-97</x>
+     <x>0</x>
      <y>263</y>
     </hint>
    </hints>
@@ -721,7 +765,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>282</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-63</x>
+     <x>0</x>
      <y>259</y>
     </hint>
    </hints>
@@ -737,7 +781,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>283</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-23</x>
+     <x>0</x>
      <y>221</y>
     </hint>
    </hints>
@@ -750,10 +794,10 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>279</x>
-     <y>264</y>
+     <y>270</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-57</x>
+     <x>0</x>
      <y>235</y>
     </hint>
    </hints>
@@ -769,7 +813,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>282</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-73</x>
+     <x>0</x>
      <y>213</y>
     </hint>
    </hints>
@@ -781,11 +825,11 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_up_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>452</x>
-     <y>272</y>
+     <x>506</x>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
-     <x>516</x>
+     <x>495</x>
      <y>252</y>
     </hint>
    </hints>
@@ -797,11 +841,11 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_down_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>486</x>
-     <y>273</y>
+     <x>529</x>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
-     <x>524</x>
+     <x>495</x>
      <y>277</y>
     </hint>
    </hints>
@@ -817,7 +861,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>348</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-104</x>
+     <x>0</x>
      <y>350</y>
     </hint>
    </hints>
@@ -833,7 +877,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>274</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-46</x>
+     <x>0</x>
      <y>231</y>
     </hint>
    </hints>
@@ -849,7 +893,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>355</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-82</x>
+     <x>0</x>
      <y>358</y>
     </hint>
    </hints>
@@ -862,10 +906,10 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>234</x>
-     <y>268</y>
+     <y>274</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-97</x>
+     <x>0</x>
      <y>250</y>
     </hint>
    </hints>
@@ -877,12 +921,12 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_change_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>349</x>
-     <y>42</y>
+     <x>422</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>342</x>
-     <y>-86</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -893,12 +937,12 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_dell_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>413</x>
-     <y>50</y>
+     <x>479</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>406</x>
-     <y>-47</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -909,12 +953,12 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_show_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>44</y>
+     <x>531</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>458</x>
-     <y>-90</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -929,7 +973,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>73</y>
     </hint>
     <hint type="destinationlabel">
-     <x>513</x>
+     <x>495</x>
      <y>74</y>
     </hint>
    </hints>
@@ -946,7 +990,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
     <hint type="destinationlabel">
      <x>141</x>
-     <y>-75</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -961,7 +1005,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>39</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-104</x>
+     <x>0</x>
      <y>39</y>
     </hint>
    </hints>
@@ -977,7 +1021,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>57</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-71</x>
+     <x>0</x>
      <y>44</y>
     </hint>
    </hints>
@@ -993,7 +1037,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>120</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-26</x>
+     <x>0</x>
      <y>118</y>
     </hint>
    </hints>
@@ -1009,7 +1053,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-93</x>
+     <x>0</x>
      <y>181</y>
     </hint>
    </hints>
@@ -1025,7 +1069,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>91</y>
     </hint>
     <hint type="destinationlabel">
-     <x>567</x>
+     <x>495</x>
      <y>93</y>
     </hint>
    </hints>
@@ -1041,7 +1085,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>117</y>
     </hint>
     <hint type="destinationlabel">
-     <x>662</x>
+     <x>495</x>
      <y>117</y>
     </hint>
    </hints>
@@ -1057,7 +1101,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>133</y>
     </hint>
     <hint type="destinationlabel">
-     <x>619</x>
+     <x>495</x>
      <y>134</y>
     </hint>
    </hints>
@@ -1073,7 +1117,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>160</y>
     </hint>
     <hint type="destinationlabel">
-     <x>699</x>
+     <x>495</x>
      <y>155</y>
     </hint>
    </hints>
@@ -1089,7 +1133,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>179</y>
     </hint>
     <hint type="destinationlabel">
-     <x>681</x>
+     <x>495</x>
      <y>177</y>
     </hint>
    </hints>
@@ -1105,7 +1149,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>279</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-116</x>
+     <x>0</x>
      <y>279</y>
     </hint>
    </hints>
@@ -1121,7 +1165,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>273</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-209</x>
+     <x>0</x>
      <y>244</y>
     </hint>
    </hints>
@@ -1134,10 +1178,10 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>163</x>
-     <y>268</y>
+     <y>274</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-209</x>
+     <x>0</x>
      <y>233</y>
     </hint>
    </hints>
@@ -1149,11 +1193,11 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_save_change_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>475</x>
-     <y>264</y>
+     <x>529</x>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
-     <x>851</x>
+     <x>495</x>
      <y>264</y>
     </hint>
    </hints>
@@ -1165,11 +1209,11 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_save_change_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>444</x>
-     <y>283</y>
+     <x>506</x>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
-     <x>854</x>
+     <x>495</x>
      <y>334</y>
     </hint>
    </hints>
@@ -1185,7 +1229,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>406</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-108</x>
+     <x>0</x>
      <y>419</y>
     </hint>
    </hints>
@@ -1201,7 +1245,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>271</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-209</x>
+     <x>0</x>
      <y>270</y>
     </hint>
    </hints>
@@ -1217,7 +1261,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>272</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-42</x>
+     <x>0</x>
      <y>296</y>
     </hint>
    </hints>
@@ -1233,7 +1277,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>273</y>
     </hint>
     <hint type="destinationlabel">
-     <x>726</x>
+     <x>495</x>
      <y>278</y>
     </hint>
    </hints>
@@ -1246,10 +1290,10 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>330</x>
-     <y>269</y>
+     <y>275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>869</x>
+     <x>495</x>
      <y>287</y>
     </hint>
    </hints>
@@ -1265,7 +1309,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
      <y>362</y>
     </hint>
     <hint type="destinationlabel">
-     <x>707</x>
+     <x>495</x>
      <y>371</y>
     </hint>
    </hints>
@@ -1282,7 +1326,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
     <hint type="destinationlabel">
      <x>276</x>
-     <y>-32</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1298,7 +1342,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
     <hint type="destinationlabel">
      <x>248</x>
-     <y>-110</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1330,7 +1374,55 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
     <hint type="destinationlabel">
      <x>463</x>
-     <y>640</y>
+     <y>477</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_nds_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_parametr()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>469</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_nds_1</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_parametr()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>401</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_price</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_nds()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>507</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>677</x>
+     <y>182</y>
     </hint>
    </hints>
   </connection>
@@ -1363,5 +1455,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
   <slot>ui_dell_size()</slot>
   <slot>ui_copy_parametr()</slot>
   <slot>ui_cancel()</slot>
+  <slot>ui_key_up()</slot>
+  <slot>ui_calc_nds()</slot>
  </slots>
 </ui>

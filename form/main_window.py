@@ -2,10 +2,9 @@ from os import getcwd
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
 from form import login_window, material_provider, material, comparing, accessories_provider, accesspries, staff, program_settings, notification, clients, operation
-from form import article
-from form.templates import table
+from form import article, order, cut
 from classes import my_class
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QBrush, QImage
 import sys
 
 main_class, main_base_class = loadUiType(getcwd() + '/ui/main.ui')
@@ -17,6 +16,7 @@ class MainWindow(QMainWindow, main_class):
         self.user = my_class.User
         super(MainWindow, self).__init__(*args)
         self.setupUi(self)
+        self.mdi.setBackground(QBrush(QImage(getcwd() + "/images/logo.png")))
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.show()
         self.setDisabled(True)
@@ -150,12 +150,20 @@ class MainWindow(QMainWindow, main_class):
         self.sub_article_list.show()
         
     def view_order_list(self):
-        self.order_list = table.TableList()
+        self.order_list = order.OrderList()
         self.sub_order_list = QMdiSubWindow()
         self.sub_order_list.setWidget(self.order_list)
         self.mdi.addSubWindow(self.sub_order_list)
         self.sub_order_list.resize(self.order_list.size())
         self.sub_order_list.show()
+
+    def view_cut_list(self):
+        self.cut_list = cut.CutList()
+        self.sub_cut_list = QMdiSubWindow()
+        self.sub_cut_list.setWidget(self.cut_list)
+        self.mdi.addSubWindow(self.sub_cut_list)
+        self.sub_cut_list.resize(self.cut_list.size())
+        self.sub_cut_list.show()
         
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % self.user.privilege)

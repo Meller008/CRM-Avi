@@ -130,9 +130,16 @@
     <addaction name="ma_product_article"/>
     <addaction name="ma_product_operations"/>
    </widget>
+   <widget class="QMenu" name="menu_8">
+    <property name="title">
+     <string>Крой</string>
+    </property>
+    <addaction name="ma_cut_list"/>
+   </widget>
    <addaction name="menu"/>
-   <addaction name="menu_4"/>
+   <addaction name="menu_8"/>
    <addaction name="menu_7"/>
+   <addaction name="menu_4"/>
    <addaction name="menu_3"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -214,6 +221,11 @@
   <action name="ma_order_list">
    <property name="text">
     <string>Заказы</string>
+   </property>
+  </action>
+  <action name="ma_cut_list">
+   <property name="text">
+    <string>Список кроя</string>
    </property>
   </action>
  </widget>
@@ -475,6 +487,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_cut_list</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_cut_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -493,5 +521,6 @@
   <slot>view_operation()</slot>
   <slot>view_product()</slot>
   <slot>view_order_list()</slot>
+  <slot>view_cut_list()</slot>
  </slots>
 </ui>

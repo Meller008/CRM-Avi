@@ -58,9 +58,10 @@ class TreeList(QMainWindow, tree_class):
             i += 1
 
     def set_table_info(self):
+        self.table_widget.setSortingEnabled(True)
         self.table_items = my_sql.sql_select(self.query_table_select)
         if "mysql.connector.errors" in str(type(self.table_items)):
-                QMessageBox.critical(self, "Ошибка sql получение табюлицы", self.table_items.msg, QMessageBox.Ok)
+                QMessageBox.critical(self, "Ошибка sql получение таблицы", self.table_items.msg, QMessageBox.Ok)
                 return False
 
         if not self.table_items:
@@ -224,17 +225,17 @@ class TreeList(QMainWindow, tree_class):
             self.destroy()
 
     def ui_dell_table_item(self):  # Удалить предмет
-        result = QMessageBox.question(self, "Удаление", "Точно удалить предмет?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        result = QMessageBox.question(self, "Удаление", "Точно удалить элемент?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
             try:
                 id_item = self.table_widget.selectedItems()
             except:
-                QMessageBox.critical(self, "Ошибка изменения", "Выделите элемент который хотите удалить", QMessageBox.Ok)
+                QMessageBox.critical(self, "Ошибка Удаления", "Выделите элемент который хотите удалить", QMessageBox.Ok)
                 return False
             for id in id_item:
                 sql_info = my_sql.sql_change(self.query_table_dell, (id.data(5), ))
                 if "mysql.connector.errors" in str(type(sql_info)):
-                    QMessageBox.critical(self, "Ошибка sql удаления итема таблицы", sql_info.msg, QMessageBox.Ok)
+                    QMessageBox.critical(self, "Ошибка sql удаления элемента таблицы", sql_info.msg, QMessageBox.Ok)
                     return False
 
             self.set_table_info()

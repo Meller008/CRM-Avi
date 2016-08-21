@@ -30,7 +30,11 @@
     <number>2</number>
    </property>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="le_material"/>
+    <widget class="QLineEdit" name="le_material">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label">
@@ -122,6 +126,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>sb_value</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>le_material</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
