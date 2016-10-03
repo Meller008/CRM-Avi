@@ -157,6 +157,14 @@ class MainWindow(QMainWindow, main_class):
         self.sub_order_list.resize(self.order_list.size())
         self.sub_order_list.show()
 
+    def view_cut_mission_list(self):
+        self.cut_mission_list = cut.CutListMission()
+        self.sub_cut_mission_list = QMdiSubWindow()
+        self.sub_cut_mission_list.setWidget(self.cut_mission_list)
+        self.mdi.addSubWindow(self.sub_cut_mission_list)
+        self.sub_cut_mission_list.resize(self.cut_mission_list.size())
+        self.sub_cut_mission_list.show()
+
     def view_cut_list(self):
         self.cut_list = cut.CutList()
         self.sub_cut_list = QMdiSubWindow()

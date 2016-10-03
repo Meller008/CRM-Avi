@@ -5,6 +5,7 @@ from PyQt5.QtGui import QBrush, QColor, QIcon
 from PyQt5 import QtCore
 from function import my_sql
 from form import material_provider, comparing
+from form.templates import list
 from decimal import Decimal
 import re
 
@@ -669,3 +670,29 @@ class AddComparingPosition(AddMaterialPosition):
         self.destroy()
         self.main.add_pozition(par, collor, self.i)
 
+
+class MaterialName(list.ListItems):
+    def set_settings(self):
+        self.setWindowTitle("Ткани")  # Имя окна
+        self.toolBar.setStyleSheet("background-color: rgb(0, 170, 255);")  # Цвет бара
+        self.title_new_window = "Ткань"  # Имя вызываемых окон
+
+        self.sql_list = "SELECT Id, Name FROM material_name"
+        self.sql_add = "INSERT INTO material_name (Name, Information) VALUES %s, %s"
+        self.sql_change_select = "SELECT Name, Information FROM material_name WHERE Id = %s"
+        self.sql_update_select = 'UPDATE material_name SET Name = %s, Information = %s WHERE Id = %s'
+        self.sql_dell = "DELETE FROM material_name WHERE Id = %s"
+
+        self.set_new_win = {"WinTitle": "Материал",
+                            "WinColor": "(0, 170, 255)",
+                            "lb_name": "Название",
+                            "lb_note": "Заметка"}
+
+    def ui_double_click_item(self, select_prov):
+        if not self.dc_select:
+            self.ui_change_item(select_prov.data(3))
+        else:
+            item = (select_prov.data(3), select_prov.text())
+            self.m_class.of_list_material_name(item)
+            self.close()
+            self.destroy()

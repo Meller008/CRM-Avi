@@ -134,6 +134,7 @@
     <property name="title">
      <string>Крой</string>
     </property>
+    <addaction name="ma_cut_mission_list"/>
     <addaction name="ma_cut_list"/>
    </widget>
    <addaction name="menu"/>
@@ -221,6 +222,11 @@
   <action name="ma_order_list">
    <property name="text">
     <string>Заказы</string>
+   </property>
+  </action>
+  <action name="ma_cut_mission_list">
+   <property name="text">
+    <string>Закройные листы</string>
    </property>
   </action>
   <action name="ma_cut_list">
@@ -488,14 +494,30 @@
    </hints>
   </connection>
   <connection>
+   <sender>ma_cut_mission_list</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_cut_mission_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>ma_cut_list</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>view_cut_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>529</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>529</x>
@@ -521,6 +543,7 @@
   <slot>view_operation()</slot>
   <slot>view_product()</slot>
   <slot>view_order_list()</slot>
+  <slot>view_cut_mission_list()</slot>
   <slot>view_cut_list()</slot>
  </slots>
 </ui>

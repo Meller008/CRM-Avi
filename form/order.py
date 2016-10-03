@@ -60,6 +60,7 @@ class Order(QMainWindow, order_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.id = id
+        self.main = main_class
         self.start_settings()
 
         self.save_change_order = False
@@ -391,6 +392,8 @@ class Order(QMainWindow, order_class):
         if self.save_sql():
             self.close()
             self.destroy()
+            if self.main != 0:
+                self.main.of_order_complete()
 
     def ui_can(self):
         if self.save_change_order or self.save_change_order_position:

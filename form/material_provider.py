@@ -70,7 +70,7 @@ class MaterialProvider(QMainWindow, material_provider_class):
             self.change_provider = ChangeMaterialProvider(self, select_prov.text())
             self.change_provider.show()
         else:
-            self.m_class.set_material_name(select_prov.text())
+            self.m_class.set_material_name(select_prov.text(), 5)
             self.close()
             self.destroy()
 

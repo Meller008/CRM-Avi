@@ -7,6 +7,7 @@ def sql_settings():
     config = configparser.ConfigParser()
     config.sections()
     config.read(getcwd() + '/setting/settings_lan.ini')
+    # config.read("C:/Users/cs007/Desktop/CRM-Avi/setting/settings_lan.ini")
     return (config["sql_connect"]["ip"], config["sql_connect"]["db_name"],
             config["sql_connect"]["name"], config["sql_connect"]["password"])
 
