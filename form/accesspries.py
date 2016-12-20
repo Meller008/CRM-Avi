@@ -1,5 +1,6 @@
 from form import material, accessories_provider
 from PyQt5 import QtCore
+from form.templates import list
 from function import my_sql
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 from decimal import Decimal
@@ -419,3 +420,33 @@ class AddAccessoriesPosition(material.AddMaterialPosition):
                 self.widget.setStyleSheet("background-color: rgb%s;" % value)
             else:
                 getattr(self, name).setText(value)
+
+    def set_material_name(self, name, fail):
+        self.le_name.setText(name)
+
+
+class AccessoriesName(list.ListItems):
+    def set_settings(self):
+        self.setWindowTitle("Фурнитура")  # Имя окна
+        self.toolBar.setStyleSheet("background-color: rgb(251, 110, 255);")  # Цвет бара
+        self.title_new_window = "материал"  # Имя вызываемых окон
+
+        self.sql_list = "SELECT Id, Name FROM accessories_name"
+        self.sql_add = "INSERT INTO accessories_name (Name, Information) VALUES %s, %s"
+        self.sql_change_select = "SELECT Name, Information FROM accessories_name WHERE Id = %s"
+        self.sql_update_select = 'UPDATE accessories_name SET Name = %s, Information = %s WHERE Id = %s'
+        self.sql_dell = "DELETE FROM accessories_name WHERE Id = %s"
+
+        self.set_new_win = {"WinTitle": "Фурнитура",
+                            "WinColor": "(251, 110, 255)",
+                            "lb_name": "Название",
+                            "lb_note": "Заметка"}
+
+    def ui_double_click_item(self, select_prov):
+        if not self.dc_select:
+            self.ui_change_item(select_prov.data(3))
+        else:
+            item = (select_prov.data(3), select_prov.text())
+            self.m_class.of_list_accessories_name(item)
+            self.close()
+            self.destroy()

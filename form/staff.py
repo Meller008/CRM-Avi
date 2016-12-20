@@ -18,10 +18,12 @@ add_file_date_class, add_file_base_class = loadUiType(getcwd() + '/ui/work_add_f
 
 
 class Staff(QMainWindow, staff_list_class):
-    def __init__(self, *args):
+    def __init__(self, main=None, dc_select=False):
         super(Staff, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+        self.main = main
+        self.dc_select = dc_select
         self.set_settings()
         self.set_info()
 
@@ -86,12 +88,18 @@ class Staff(QMainWindow, staff_list_class):
         self.add_mat.show()
 
     def double_click(self, row):
-        id = self.tw_workers.item(row, 0).text()
-        self.add_mat = OneStaff(self, True)
-        self.add_mat.set_add_settings()
-        if self.add_mat.insert_info(id):
-            self.add_mat.setWindowModality(Qt.ApplicationModal)
-            self.add_mat.show()
+        if not self.dc_select:
+            id = self.tw_workers.item(row, 0).text()
+            self.add_mat = OneStaff(self, True)
+            self.add_mat.set_add_settigs()
+            if self.add_mat.insert_info(id):
+                self.add_mat.setWindowModality(Qt.ApplicationModal)
+                self.add_mat.show()
+        else:
+            item = (self.tw_workers.item(row, 0).text(), self.tw_workers.item(row, 2).text())
+            self.main.of_list_worker(item)
+            self.close()
+            self.destroy()
 
     def change(self):
         try:

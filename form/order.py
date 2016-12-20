@@ -53,6 +53,16 @@ class OrderList(table.TableList):
         self.order.start_set_sql_info()
         self.order.show()
 
+    def ui_double_click_table_item(self, item):  # Двойной клик по элементу
+        if not self.dc_select:
+            self.ui_change_table_item(item.data(5))
+        else:
+            # что хотим получить ставим всместо 0
+            item = (self.table_widget.item(item.row(), 4).text(), item.data(5))
+            self.main.of_tree_select_order(item)
+            self.close()
+            self.destroy()
+
 
 class Order(QMainWindow, order_class):
     def __init__(self, main_class=0, id=False):

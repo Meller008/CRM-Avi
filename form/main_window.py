@@ -1,7 +1,8 @@
 from os import getcwd
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
-from form import login_window, material_provider, material, comparing, accessories_provider, accesspries, staff, program_settings, notification, clients, operation
+from form import login_window, material_provider, material, comparing, accessories_provider,\
+    accesspries, staff, program_settings, notification, clients, operation, other, audit
 from form import article, order, cut
 from classes import my_class
 from PyQt5.QtGui import QIcon, QBrush, QImage
@@ -172,6 +173,22 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_cut_list)
         self.sub_cut_list.resize(self.cut_list.size())
         self.sub_cut_list.show()
+
+    def view_other_order_edi(self):
+        self.input_order_edi = other.OrderEDI()
+        self.sub_input_order_edi = QMdiSubWindow()
+        self.sub_input_order_edi.setWidget(self.input_order_edi)
+        self.mdi.addSubWindow(self.sub_input_order_edi)
+        self.sub_input_order_edi.resize(self.input_order_edi.size())
+        self.sub_input_order_edi.show()
+
+    def view_audit_verification(self):
+        self.audit_verification = audit.AuditVerification()
+        self.sub_audit_verification = QMdiSubWindow()
+        self.sub_audit_verification.setWidget(self.audit_verification)
+        self.mdi.addSubWindow(self.sub_audit_verification)
+        self.sub_audit_verification.resize(self.audit_verification.size())
+        self.sub_audit_verification.show()
         
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % self.user.privilege)

@@ -1,14 +1,16 @@
 from os import getcwd
-from form import order
+from form import order, staff
 from datetime import datetime
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QPushButton
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QObject
 from form.material import MaterialName
+from form.pack import PackBrows
 import re
 
-from function import my_sql
+from function import my_sql, classes_function
+from classes import cut
 from form.templates import table, list
 from form import clients, article
 
@@ -33,10 +35,65 @@ class CutList(QMainWindow, cut_list_class):
 
 
 class CutBrows(QDialog, cut_brows_class):
-    def __init__(self):
+    def __init__(self, cut_id=None):
         super(CutBrows, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.cut = cut.Cut(cut_id)
+
+        self.set_start_info()
+
+    def set_start_info(self):
+        if self.cut.number() is None:
+            self.le_number_cut.setText(str(self.cut.take_new_number()))
+            self.de_cut_date.setDate(QDate.currentDate())
+
+    def ui_edit_date_cut(self):
+        self.cut.set_date(self.de_cut_date.date())
+
+    def ui_edit_material_cut(self):
+        price = self.cut.set_material_id(self.le_material_cut.whatsThis())
+        self.cut_material_price.setText(str(price))
+
+    def ui_edit_worker_cut(self):
+        self.cut.set_worker_id(self.le_worker_cut.whatsThis())
+
+    def ui_edit_width_cut(self):
+        pass
+
+    def ui_edit_width_rest_cut(self):
+        self.cut.set_weight_rest(self.le_width_rest_cut.text())
+
+    def ui_edit_note_cut(self):
+        self.cut.set_note(self.le_note_cut.text())
+
+    def ui_view_list_material(self):
+        self.material_name = MaterialName(self, True)
+        self.material_name.setWindowModality(Qt.ApplicationModal)
+        self.material_name.show()
+
+    def ui_view_list_worker(self):
+        self.worker_list = staff.Staff(self, True)
+        self.worker_list.setWindowModality(Qt.ApplicationModal)
+        self.worker_list.show()
+
+    def ui_add_pack(self):
+        self.pack = cut.Pack()
+        self.pack.set_number_pack(self.cut.take_new_number_pack())
+        self.pack.set_number_cut(self.cut.number())
+
+        self.pack_win = PackBrows(self, self.pack)
+        self.pack_win.setModal(True)
+        self.pack_win.show()
+
+    def of_list_material_name(self, item):
+        self.le_material_cut.setWhatsThis(str(item[0]))
+        self.le_material_cut.setText(item[1])
+
+    def of_list_worker(self, item):
+        self.le_worker_cut.setWhatsThis(str(item[0]))
+        self.le_worker_cut.setText(item[1])
 
 
 class CutListMission(QMainWindow, cut_list_mission_class):

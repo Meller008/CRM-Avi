@@ -137,11 +137,25 @@
     <addaction name="ma_cut_mission_list"/>
     <addaction name="ma_cut_list"/>
    </widget>
+   <widget class="QMenu" name="menu_9">
+    <property name="title">
+     <string>Разное</string>
+    </property>
+    <addaction name="ma_order_edi"/>
+   </widget>
+   <widget class="QMenu" name="menu_10">
+    <property name="title">
+     <string>Аудит</string>
+    </property>
+    <addaction name="ma_audit_verification"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_8"/>
    <addaction name="menu_7"/>
    <addaction name="menu_4"/>
    <addaction name="menu_3"/>
+   <addaction name="menu_9"/>
+   <addaction name="menu_10"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="ma_material">
@@ -232,6 +246,16 @@
   <action name="ma_cut_list">
    <property name="text">
     <string>Список кроя</string>
+   </property>
+  </action>
+  <action name="ma_order_edi">
+   <property name="text">
+    <string>Входящие заказы EDI</string>
+   </property>
+  </action>
+  <action name="ma_audit_verification">
+   <property name="text">
+    <string>Верификация</string>
    </property>
   </action>
  </widget>
@@ -516,8 +540,40 @@
    <slot>view_cut_list()</slot>
    <hints>
     <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
      <x>529</x>
      <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_order_edi</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_other_order_edi()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_audit_verification</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_audit_verification()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>529</x>
@@ -545,5 +601,7 @@
   <slot>view_order_list()</slot>
   <slot>view_cut_mission_list()</slot>
   <slot>view_cut_list()</slot>
+  <slot>view_other_order_edi()</slot>
+  <slot>view_audit_verification()</slot>
  </slots>
 </ui>
