@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>781</width>
+    <width>656</width>
     <height>418</height>
    </rect>
   </property>
@@ -124,7 +124,7 @@
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QLineEdit" name="cut_material_price"/>
+        <widget class="QLineEdit" name="le_material_price"/>
        </item>
        <item row="0" column="3">
         <widget class="QLabel" name="label_10">
@@ -144,14 +144,18 @@
         <number>0</number>
        </property>
        <item row="1" column="0">
-        <widget class="QLineEdit" name="le_width_cut">
+        <widget class="QLineEdit" name="le_weight_cut">
          <property name="readOnly">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="le_width_rest_cut"/>
+        <widget class="QLineEdit" name="le_weight_rest_cut">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="3">
         <widget class="QLineEdit" name="le_rest_cut">
@@ -161,7 +165,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLineEdit" name="le_all_width_cut">
+        <widget class="QLineEdit" name="le_all_weight_cut">
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -236,7 +240,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QToolButton" name="toolButton_6">
+         <widget class="QToolButton" name="bu_pack_add">
           <property name="font">
            <font>
             <pointsize>8</pointsize>
@@ -248,7 +252,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="toolButton_5">
+         <widget class="QToolButton" name="bu_pack_change">
           <property name="font">
            <font>
             <pointsize>8</pointsize>
@@ -260,7 +264,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="toolButton_4">
+         <widget class="QToolButton" name="bu_pack_del">
           <property name="font">
            <font>
             <pointsize>8</pointsize>
@@ -298,40 +302,6 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
-       <widget class="QTableWidget" name="tableWidget">
-        <column>
-         <property name="text">
-          <string>№</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Артикул</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Размер</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Параметр</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Кол-во</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Вес</string>
-         </property>
-        </column>
-       </widget>
-      </item>
       <item row="2" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
@@ -362,6 +332,72 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QTableWidget" name="tw_pack">
+        <property name="font">
+         <font>
+          <family>Tahoma</family>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>false</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>20</number>
+        </attribute>
+        <attribute name="verticalHeaderMinimumSectionSize">
+         <number>18</number>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>№</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Артикул</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Размер</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Артикул</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Кол-во</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Брак</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Вес</string>
+         </property>
+        </column>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -454,7 +490,7 @@
    <slot>ui_view_list_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>442</x>
+     <x>369</x>
      <y>50</y>
     </hint>
     <hint type="destinationlabel">
@@ -470,17 +506,17 @@
    <slot>ui_view_list_worker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>775</x>
+     <x>650</x>
      <y>50</y>
     </hint>
     <hint type="destinationlabel">
-     <x>750</x>
+     <x>655</x>
      <y>0</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>le_width_rest_cut</sender>
+   <sender>le_weight_rest_cut</sender>
    <signal>editingFinished()</signal>
    <receiver>Dialog</receiver>
    <slot>ui_edit_width_rest_cut()</slot>
@@ -490,13 +526,13 @@
      <y>88</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-28</x>
+     <x>0</x>
      <y>54</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_6</sender>
+   <sender>bu_pack_add</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
    <slot>ui_add_pack()</slot>
@@ -506,8 +542,104 @@
      <y>127</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-57</x>
+     <x>0</x>
      <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_pack</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_double_click_pack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>599</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>655</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bu_pack_change</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_pack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>116</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bu_pack_del</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_del_pack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>140</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>170</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_weight_cut</sender>
+   <signal>editingFinished()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_width_cut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>68</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_acc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>546</x>
+     <y>408</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>546</x>
+     <y>455</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_can()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>616</x>
+     <y>403</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>721</x>
+     <y>389</y>
     </hint>
    </hints>
   </connection>
@@ -523,5 +655,10 @@
   <slot>ui_view_list_worker()</slot>
   <slot>ui_edit_width_rest_cut()</slot>
   <slot>ui_add_pack()</slot>
+  <slot>ui_double_click_pack()</slot>
+  <slot>ui_edit_pack()</slot>
+  <slot>ui_del_pack()</slot>
+  <slot>ui_acc()</slot>
+  <slot>ui_can()</slot>
  </slots>
 </ui>

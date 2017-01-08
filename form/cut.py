@@ -28,45 +28,181 @@ class CutList(QMainWindow, cut_list_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        self.set_size_table()
+        self.set_cut_table()
+
     def ui_add_cut(self):
-        self.cut_window = CutBrows()
+        self.cut_window = CutBrows(self)
         self.cut_window.setModal(True)
         self.cut_window.show()
 
+    def set_size_table(self):
+        self.tw_cut_list.horizontalHeader().resizeSection(0, 35)
+        self.tw_cut_list.horizontalHeader().resizeSection(1, 80)
+        self.tw_cut_list.horizontalHeader().resizeSection(2, 80)
+        self.tw_cut_list.horizontalHeader().resizeSection(3, 80)
+        self.tw_cut_list.horizontalHeader().resizeSection(4, 55)
+        self.tw_cut_list.horizontalHeader().resizeSection(5, 140)
+        self.tw_cut_list.horizontalHeader().resizeSection(6, 220)
+
+    def ui_double_table(self, table_item):
+        self.cut_window = CutBrows(self, table_item.data(-2))
+        self.cut_window.setModal(True)
+        self.cut_window.show()
+
+    def ui_del_cut(self):
+        try:
+            id = int(self.tw_cut_list.item(self.tw_cut_list.currentRow(), 0).data(-2))
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите крой", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Удалить?", "Точно удалить крой?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+
+            cut_del = cut.Cut(id)
+            del_note = cut_del.del_sql()
+            if not del_note[0]:
+                QMessageBox.information(self, "Ошибка удаления кроя", del_note[1], QMessageBox.Ok)
+
+            self.set_cut_table()
+            return True
+        else:
+            return False
+
+    def set_cut_table(self):
+        query = """SELECT cut.Id, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
+                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                      LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
+                      GROUP BY cut.Id"""
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            print("Не смог получить список кроя")
+            return False
+
+        self.tw_cut_list.clearContents()
+        self.tw_cut_list.setRowCount(0)
+
+        for row, cut in enumerate(sql_info):
+            self.tw_cut_list.insertRow(row)
+
+            new_table_item = QTableWidgetItem(str(cut[0]))
+            new_table_item.setData(-2, cut[0])
+            self.tw_cut_list.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(cut[1]))
+            new_table_item.setData(-2, cut[0])
+            self.tw_cut_list.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(cut[2]))
+            new_table_item.setData(-2, cut[0])
+            self.tw_cut_list.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(cut[1] + cut[2]))
+            new_table_item.setData(-2, cut[0])
+            self.tw_cut_list.setItem(row, 3, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(cut[3]))
+            new_table_item.setData(-2, cut[0])
+            self.tw_cut_list.setItem(row, 4, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(cut[4]))
+            new_table_item.setData(-2, cut[0])
+            self.tw_cut_list.setItem(row, 5, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(cut[5]))
+            new_table_item.setData(-2, cut[0])
+            self.tw_cut_list.setItem(row, 6, new_table_item)
+
+    def of_change_cut_complete(self):
+        self.set_cut_table()
+
 
 class CutBrows(QDialog, cut_brows_class):
-    def __init__(self, cut_id=None):
+    def __init__(self, main=None, cut_id=None):
         super(CutBrows, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        self.insert_values_sql = False
         self.cut = cut.Cut(cut_id)
+        self.main = main
 
         self.set_start_info()
+        self.set_size_table()
 
     def set_start_info(self):
         if self.cut.number() is None:
             self.le_number_cut.setText(str(self.cut.take_new_number()))
             self.de_cut_date.setDate(QDate.currentDate())
+        else:
+            self.insert_values_sql = True
+
+            self.le_number_cut.setText(str(self.cut.number()))
+            self.de_cut_date.setDate(self.cut.date())
+            self.le_worker_cut.setWhatsThis(str(self.cut.worker_id()))
+            self.le_worker_cut.setText(str(self.cut.worker_name()))
+            self.le_material_price.setText(str(self.cut.material_price()))
+            self.le_material_cut.setWhatsThis(str(self.cut.material_id()))
+            self.le_material_cut.setText(str(self.cut.material_name()))
+            self.le_weight_cut.setText(str(self.cut.weight()))
+            self.le_weight_rest_cut.setText(str(self.cut.weight_rest()))
+            self.le_all_weight_cut.setText(str(self.cut.weight_all()))
+            self.le_rest_cut.setText(str(self.cut.percent_rest()))
+            self.le_note_cut.setText(str(self.cut.note()))
+
+            self.cut.take_pack_sql()
+            self.set_pack()
+
+            self.insert_values_sql = False
+
+    def set_size_table(self):
+        self.tw_pack.horizontalHeader().resizeSection(0, 35)
+        self.tw_pack.horizontalHeader().resizeSection(1, 65)
+        self.tw_pack.horizontalHeader().resizeSection(2, 55)
+        self.tw_pack.horizontalHeader().resizeSection(3, 180)
+        self.tw_pack.horizontalHeader().resizeSection(4, 55)
+        self.tw_pack.horizontalHeader().resizeSection(5, 55)
+        self.tw_pack.horizontalHeader().resizeSection(6, 65)
 
     def ui_edit_date_cut(self):
-        self.cut.set_date(self.de_cut_date.date())
+        if not self.insert_values_sql:
+            self.cut.set_date(self.de_cut_date.date())
 
     def ui_edit_material_cut(self):
-        price = self.cut.set_material_id(self.le_material_cut.whatsThis())
-        self.cut_material_price.setText(str(price))
+        if not self.insert_values_sql:
+            price = self.cut.set_material_id(self.le_material_cut.whatsThis())
+            self.le_material_price.setText(str(price))
+
+            if not self.cut.change_cut_weight():
+                self.bu_pack_add.setEnabled(False)
+                self.bu_pack_change.setEnabled(False)
+                self.bu_pack_del.setEnabled(False)
+
+                self.le_weight_rest_cut.setText(str(self.cut.weight_rest_old()))
+                self.le_weight_rest_cut.setReadOnly(True)
+                self.le_weight_rest_cut.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
+                self.le_weight_rest_cut.setToolTip("При смене материала нельзя менять вес обрези!\n Изменения не сохранятся!")
+            else:
+                self.set_width_rest_color()
 
     def ui_edit_worker_cut(self):
-        self.cut.set_worker_id(self.le_worker_cut.whatsThis())
+        if not self.insert_values_sql:
+            self.cut.set_worker_id(self.le_worker_cut.whatsThis())
 
     def ui_edit_width_cut(self):
-        pass
+        if not self.insert_values_sql:
+            self.set_width_all()
 
     def ui_edit_width_rest_cut(self):
-        self.cut.set_weight_rest(self.le_width_rest_cut.text())
+        if not self.insert_values_sql:
+            self.cut.set_weight_rest(self.le_weight_rest_cut.text())
+            self.set_width_rest_color()
+            self.set_width_all()
 
     def ui_edit_note_cut(self):
-        self.cut.set_note(self.le_note_cut.text())
+        if not self.insert_values_sql:
+            self.cut.set_note(self.le_note_cut.text())
 
     def ui_view_list_material(self):
         self.material_name = MaterialName(self, True)
@@ -79,21 +215,178 @@ class CutBrows(QDialog, cut_brows_class):
         self.worker_list.show()
 
     def ui_add_pack(self):
+        if self.cut.material_id() is None:
+            QMessageBox.critical(self, "Ошибка ткани", "Сначало выберите ткань.", QMessageBox.Ok)
+            return False
+
         self.pack = cut.Pack()
         self.pack.set_number_pack(self.cut.take_new_number_pack())
         self.pack.set_number_cut(self.cut.number())
+        self.pack.set_material_id(self.cut.material_id())
 
         self.pack_win = PackBrows(self, self.pack)
         self.pack_win.setModal(True)
         self.pack_win.show()
 
+    def ui_edit_pack(self):
+        try:
+            id = int(self.tw_pack.item(self.tw_pack.currentRow(), 0).data(-2))
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите пачку", QMessageBox.Ok)
+            return False
+
+        self.pack_win = PackBrows(self, self.cut.pack(id))
+        self.pack_win.setModal(True)
+        self.pack_win.show()
+
+    def ui_del_pack(self):
+        try:
+            id = int(self.tw_pack.item(self.tw_pack.currentRow(), 0).data(-2))
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите пачку", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Удалить?", "Точно удалить пачку?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+
+            save_note = self.cut.pack(id).del_pack()
+            if not save_note[0]:
+                QMessageBox.critical(self, "Ошибка удаления пачки.", save_note[1], QMessageBox.Ok)
+                return False
+
+            self.cut.check_material_weight()
+            self.le_weight_cut.setText(str(self.cut.weight()))
+            self.cut.take_pack_sql()
+            self.set_pack()
+            return True
+        else:
+            return False
+
+    def ui_double_click_pack(self, table_item):
+        if self.cut.change_cut_weight():
+            self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)))
+            self.pack_win.setModal(True)
+            self.pack_win.show()
+
+    def ui_acc(self):
+        if self.cut.error_material():
+            result = QMessageBox.question(self, "Сохранить?", "Что то не так с весом обрези.\nМогу сохранить без веса обрези!", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if result == 16384:
+                pass
+            else:
+                return False
+
+        save_note = self.cut.save_sql()
+        if not save_note[0]:
+            QMessageBox.critical(self, "Ошибка сохранения кроя", save_note[1], QMessageBox.Ok)
+            return False
+
+        if self.main is not None:
+            self.main.of_change_cut_complete()
+        self.close()
+        self.destroy()
+
+    def ui_can(self):
+        pass
+
+    def set_pack(self):
+        self.tw_pack.clearContents()
+        self.tw_pack.setRowCount(0)
+
+        if not self.cut.pack_list():
+            return False
+
+        self.tw_pack.clearContents()
+        self.tw_pack.setRowCount(0)
+
+        need_set_pack = len(self.cut.pack_list())
+        pack_number_table = 1
+
+        pack_list = self.cut.pack_list()
+        row = 0
+        while need_set_pack != 0:
+            for pack_id, pack in pack_list.items():
+                if pack.number_pack() == pack_number_table:
+                    self.tw_pack.insertRow(row)
+
+                    new_table_item = QTableWidgetItem(str(pack.number_pack()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 0, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.article()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 1, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.size()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 2, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.parametr_name()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 3, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.value()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 4, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.value_damage()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 5, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.weight()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 6, new_table_item)
+
+                    row += 1
+                    pack_number_table += 1
+                    need_set_pack -= 1
+                    break
+            else:
+                    pack_number_table += 1
+
+    def set_width_all(self):
+        self.le_all_weight_cut.setText(str(self.cut.weight_all()))
+        self.le_rest_cut.setText(str(self.cut.rest_percent()))
+
+    def set_material_price(self):
+        self.le_material_price.setText(str(self.cut.material_price()))
+
+    def set_width_rest_color(self):
+        material_check = self.cut.check_balance_material()
+        if material_check[0]:
+            self.le_weight_rest_cut.setStyleSheet("border: 4px solid;\nborder-color: rgb(122, 247, 84);")
+            self.le_weight_rest_cut.setToolTip(material_check[1])
+        else:
+            self.le_weight_rest_cut.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
+            self.le_weight_rest_cut.setToolTip(material_check[1])
+
     def of_list_material_name(self, item):
-        self.le_material_cut.setWhatsThis(str(item[0]))
-        self.le_material_cut.setText(item[1])
+        result = self.cut.check_balance_new_material(item[0])
+        if result[0]:
+            self.le_material_cut.setWhatsThis(str(item[0]))
+            self.le_material_cut.setText(item[1])
+        else:
+            QMessageBox.critical(self, "Ошибка новой ткани", result[1], QMessageBox.Ok)
+            return False
 
     def of_list_worker(self, item):
         self.le_worker_cut.setWhatsThis(str(item[0]))
         self.le_worker_cut.setText(item[1])
+
+    def of_cut_id(self):
+        if self.cut.id() is None:
+            return self.cut.new_save()
+        else:
+            return self.cut.id()
+
+    def of_save_pack_complete(self):
+        self.cut.check_material_weight()
+        self.le_weight_cut.setText(str(self.cut.weight()))
+        self.cut.take_pack_sql()
+        self.set_pack()
+        self.cut.take_material_price()
+        self.set_width_all()
+        self.cut.set_material_id_old(self.cut.material_id())
 
 
 class CutListMission(QMainWindow, cut_list_mission_class):

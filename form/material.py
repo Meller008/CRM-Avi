@@ -255,7 +255,7 @@ class AddMaterial(QMainWindow, add_material_class):
             self.add_mat_poz.show()
 
     def add_material_sql(self):
-        query = "insert into avi_crm.material_supply (Material_ProviderId, Data, Note) select Id, %s, %s from avi_crm.material_provider where Name=%s"
+        query = "INSERT INTO avi_crm.material_supply (Material_ProviderId, Data, Note) SELECT Id, %s, %s FROM avi_crm.material_provider WHERE Name=%s"
         data = self.de_data.date().toString("yyyy.MM.dd")
         parametr = (data, self.le_note.text(), self.le_provider.text())
         self.id_supply = my_sql.sql_change(query, parametr)

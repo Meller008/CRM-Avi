@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Пачка</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,10">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,10,0">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -32,7 +32,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="tabWidget_2">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -170,37 +170,6 @@
          </column>
         </widget>
        </item>
-       <item row="2" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <item>
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_2">
-           <property name="text">
-            <string>Принять</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton">
-           <property name="text">
-            <string>Отмена</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_4">
@@ -309,12 +278,22 @@
          </column>
          <column>
           <property name="text">
-           <string>Цена</string>
+           <string>Кол-во</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Кол-во</string>
+           <string>В штуке</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Итого штук</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Цена</string>
           </property>
          </column>
          <column>
@@ -377,7 +356,11 @@ background-color: rgb(240,240,240);}</string>
        <item row="2" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="le_client"/>
+          <widget class="QLineEdit" name="le_client">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_2">
@@ -461,7 +444,11 @@ border-color: rgb(170, 0, 0);
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_article"/>
+          <widget class="QLineEdit" name="le_article">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton">
@@ -566,7 +553,7 @@ border-color: rgb(170, 0, 0);
           </spacer>
          </item>
          <item>
-          <widget class="QGroupBox" name="cb_date_make">
+          <widget class="QGroupBox" name="cb_date_complete">
            <property name="title">
             <string>Дата провекрки</string>
            </property>
@@ -593,7 +580,7 @@ border-color: rgb(170, 0, 0);
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QDateEdit" name="de_date_make">
+             <widget class="QDateEdit" name="de_date_complete">
               <property name="calendarPopup">
                <bool>true</bool>
               </property>
@@ -603,7 +590,7 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="cb_date_complete">
+          <widget class="QGroupBox" name="cb_date_make">
            <property name="title">
             <string>Дата приемки</string>
            </property>
@@ -630,7 +617,7 @@ border-color: rgb(170, 0, 0);
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QDateEdit" name="de_date_complete">
+             <widget class="QDateEdit" name="de_date_make">
               <property name="calendarPopup">
                <bool>true</bool>
               </property>
@@ -672,17 +659,33 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLineEdit" name="le_value_product"/>
+          <widget class="QLineEdit" name="le_value_product">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="readOnly">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="le_value_damage">
            <property name="text">
             <string>0</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
           </widget>
          </item>
          <item row="1" column="2">
           <widget class="QLineEdit" name="le_value_all">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
@@ -690,6 +693,9 @@ border-color: rgb(170, 0, 0);
          </item>
          <item row="1" column="3">
           <widget class="QLineEdit" name="le_weight">
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
            <property name="readOnly">
             <bool>false</bool>
            </property>
@@ -758,14 +764,14 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_11">
+          <widget class="QLineEdit" name="le_calc_many_operation">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_10">
+          <widget class="QLineEdit" name="le_calc_one_operation">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -786,7 +792,7 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QLineEdit" name="lineEdit_14">
+          <widget class="QLineEdit" name="le_calc_one_material">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -800,28 +806,28 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QLineEdit" name="lineEdit_12">
+          <widget class="QLineEdit" name="le_calc_one_accessory">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="2" column="3">
-          <widget class="QLineEdit" name="lineEdit_15">
+          <widget class="QLineEdit" name="le_calc_many_material">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QLineEdit" name="lineEdit_13">
+          <widget class="QLineEdit" name="le_calc_many_accessory">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="1" column="4">
-          <widget class="QLineEdit" name="lineEdit_16">
+          <widget class="QLineEdit" name="le_calc_one_all">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -835,7 +841,7 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item row="1" column="5" rowspan="2">
-          <widget class="QLineEdit" name="lineEdit_18">
+          <widget class="QLineEdit" name="le_calc_percent">
            <property name="text">
             <string>0</string>
            </property>
@@ -852,7 +858,7 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item row="2" column="4">
-          <widget class="QLineEdit" name="lineEdit_17">
+          <widget class="QLineEdit" name="le_calc_many_all">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -866,14 +872,14 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item row="1" column="6">
-          <widget class="QLineEdit" name="lineEdit_19">
+          <widget class="QLineEdit" name="le_calc_one_percent">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="2" column="6">
-          <widget class="QLineEdit" name="lineEdit_20">
+          <widget class="QLineEdit" name="le_calc_many_percent">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -882,7 +888,7 @@ border-color: rgb(170, 0, 0);
         </layout>
        </item>
        <item row="2" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1,10">
+        <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1,10,0">
          <item>
           <widget class="QLabel" name="label_24">
            <property name="text">
@@ -891,7 +897,14 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_25"/>
+          <widget class="QLineEdit" name="le_calc_damage">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer_3">
@@ -905,6 +918,13 @@ border-color: rgb(170, 0, 0);
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>Рассчитать</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -923,6 +943,11 @@ border-color: rgb(170, 0, 0);
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Печать</string>
+      </attribute>
+     </widget>
     </widget>
    </item>
    <item row="0" column="0">
@@ -937,6 +962,37 @@ border-color: rgb(170, 0, 0);
       <string notr="true">background-color: rgb(170, 0, 0);</string>
      </property>
     </widget>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pb_acc">
+       <property name="text">
+        <string>Принять</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Отмена</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -1135,22 +1191,6 @@ border-color: rgb(170, 0, 0);
    </hints>
   </connection>
   <connection>
-   <sender>de_date_complete</sender>
-   <signal>editingFinished()</signal>
-   <receiver>Dialog</receiver>
-   <slot>ui_edit_date_complete()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>580</x>
-     <y>51</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>610</x>
-     <y>-44</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>toolButton_6</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
@@ -1183,18 +1223,178 @@ border-color: rgb(170, 0, 0);
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
+   <sender>pb_acc</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
    <slot>ui_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>545</x>
-     <y>416</y>
+     <x>563</x>
+     <y>414</y>
     </hint>
     <hint type="destinationlabel">
-     <x>539</x>
-     <y>456</y>
+     <x>563</x>
+     <y>458</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_note</sender>
+   <signal>editingFinished()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_note()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-149</x>
+     <y>113</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_date_make</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_date_make()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>620</x>
+     <y>34</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>617</x>
+     <y>-40</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_date_make</sender>
+   <signal>editingFinished()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_date_make()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>585</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>622</x>
+     <y>-97</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_date_complete</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_date_complete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>461</x>
+     <y>41</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>478</x>
+     <y>-63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_date_complete</sender>
+   <signal>editingFinished()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_date_complete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>515</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>550</x>
+     <y>-124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_can()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>638</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>733</x>
+     <y>421</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_operation</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_double_click_operation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>612</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>766</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_accessories</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_double_click_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>641</x>
+     <y>377</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>708</x>
+     <y>377</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_del_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>168</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-74</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_calc_pack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>624</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>765</x>
+     <y>160</y>
     </hint>
    </hints>
   </connection>
@@ -1217,5 +1417,11 @@ border-color: rgb(170, 0, 0);
   <slot>ui_add_accessories()</slot>
   <slot>ui_change_accessories()</slot>
   <slot>ui_acc()</slot>
+  <slot>ui_edit_note()</slot>
+  <slot>ui_can()</slot>
+  <slot>ui_double_click_operation()</slot>
+  <slot>ui_double_click_accessories()</slot>
+  <slot>ui_del_accessories()</slot>
+  <slot>ui_calc_pack()</slot>
  </slots>
 </ui>

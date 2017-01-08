@@ -38,37 +38,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(127, 127, 127);</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" colspan="3">
-    <widget class="QLineEdit" name="le_name"/>
-   </item>
-   <item row="5" column="1">
-    <widget class="QDateEdit" name="de_make">
-     <property name="calendarPopup">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLineEdit" name="le_price"/>
-   </item>
-   <item row="3" column="2">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Кол-во</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="QLineEdit" name="le_value"/>
-   </item>
-   <item row="5" column="2">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Дата ввода</string>
+      <string notr="true">background-color: rgb(85, 255, 255);</string>
      </property>
     </widget>
    </item>
@@ -79,17 +49,30 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Цена</string>
+   <item row="5" column="3">
+    <widget class="QDateTimeEdit" name="de_input">
+     <property name="calendarPopup">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_6">
+   <item row="5" column="2">
+    <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Дата пошива</string>
+      <string>Дата ввода</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QLineEdit" name="le_value"/>
+   </item>
+   <item row="2" column="1" colspan="3">
+    <widget class="QLineEdit" name="le_name"/>
+   </item>
+   <item row="3" column="2">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Кол-во</string>
      </property>
     </widget>
    </item>
@@ -100,7 +83,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="4">
+   <item row="7" column="0" colspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <property name="spacing">
       <number>0</number>
@@ -134,17 +117,10 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Швея</string>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="1" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
-      <number>0</number>
+      <number>2</number>
      </property>
      <item>
       <widget class="QLineEdit" name="le_worker">
@@ -175,7 +151,37 @@ border-color: rgb(170, 0, 0);
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QCheckBox" name="cb_pay">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Выплачено</string>
+       </property>
+       <property name="tristate">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Цена</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QDateEdit" name="de_make">
+     <property name="calendarPopup">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="le_price"/>
    </item>
    <item row="1" column="1" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -198,12 +204,32 @@ border-color: rgb(170, 0, 0);
      </item>
     </layout>
    </item>
-   <item row="5" column="3">
-    <widget class="QDateTimeEdit" name="de_input">
-     <property name="calendarPopup">
-      <bool>true</bool>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Дата пошива</string>
      </property>
     </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Швея</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -264,8 +290,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_staff()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>332</x>
-     <y>96</y>
+     <x>244</x>
+     <y>99</y>
     </hint>
     <hint type="destinationlabel">
      <x>457</x>
@@ -280,8 +306,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_dell_work()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>346</x>
-     <y>94</y>
+     <x>266</x>
+     <y>99</y>
     </hint>
     <hint type="destinationlabel">
      <x>429</x>

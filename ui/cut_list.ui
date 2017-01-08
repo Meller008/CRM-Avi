@@ -44,15 +44,56 @@
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
        <number>20</number>
       </attribute>
       <attribute name="verticalHeaderMinimumSectionSize">
        <number>18</number>
       </attribute>
+      <column>
+       <property name="text">
+        <string>№</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Вес пачек</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Вес обрези</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Вес итого</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Пачек</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Раскладчик</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Заметка</string>
+       </property>
+      </column>
      </widget>
     </item>
    </layout>
@@ -111,8 +152,42 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tw_cut_list</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_double_table()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>602</x>
+     <y>105</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>798</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_del_cut</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_del_cut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>372</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_cut()</slot>
+  <slot>ui_double_table()</slot>
+  <slot>ui_del_cut()</slot>
  </slots>
 </ui>

@@ -65,5 +65,78 @@ def sql_many(query, parametr=tuple()):
         return result
 
     except mysql.connector.Error as error:
-        a = error
+        return error
+
+
+def sql_start_transaction():
+    try:
+        connect, cursor, = sql_conn()
+        connect.start_transaction(isolation_level='REPEATABLE READ')
+        cursor.close()
+        print("SQL - Транзакция начата")
+        return connect
+
+    except mysql.connector.Error as error:
+        print("SQL - Ошибка открытия транзакции")
+        print(error)
+        return error
+
+
+def sql_select_transaction(connect, query, parametr=tuple()):
+    try:
+        cursor = connect.cursor()
+        cursor.execute(query, parametr)
+        result = cursor.fetchall()
+        cursor.close()
+        print("SQL - Получил информацию")
+        return result
+
+    except mysql.connector.Error as error:
+        print("SQL - Ошибка при получении информации")
+        print(error)
+        sql_rollback_transaction(connect)
+        return error
+
+
+def sql_change_transaction(connect, query, parametr=tuple()):
+    try:
+        cursor = connect.cursor()
+        cursor.execute(query, parametr)
+        result = "нет ID"
+        if cursor.lastrowid:
+            result = str(cursor.lastrowid)
+        cursor.close()
+        print("SQL - Изменения прошли")
+        return result
+
+    except mysql.connector.Error as error:
+        print("SQL - Ошибка при изменении")
+        print(error)
+        sql_rollback_transaction(connect)
+        return error
+
+
+def sql_commit_transaction(connect):
+    try:
+        connect.commit()
+        connect.close()
+        print("SQL - Транзакция закомичена")
+        return True
+
+    except mysql.connector.Error as error:
+        print("SQL - Ошибка закомичивании транзакции")
+        print(error)
+        return error
+
+
+def sql_rollback_transaction(connect):
+    try:
+        connect.rollback()
+        connect.close()
+        print("SQL - Транзакция откачена")
+        return True
+
+    except mysql.connector.Error as error:
+        print("SQL - Ошибка при откате транзакции")
+        print(error)
         return error
