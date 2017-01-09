@@ -229,7 +229,7 @@ class MainWindowOperation(QMainWindow, main_class):
                         LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id
                         LEFT JOIN staff_worker_info ON pack_operation.Worker_Id = staff_worker_info.Id
                       WHERE pack.Id = %s
-                      ORDER BY pack_operation.Position"""
+                      ORDER BY -pack_operation.Position DESC """
         sql_info = my_sql.sql_select(query, (self.cut["pack_id"], ))
         if "mysql.connector.errors" in str(type(sql_info)):
             self.lb_pack_error.setText('<html><head/><body><p align="center"><span style=" color:#ff0000;">Не смог получить операции(Err BD)</span></p></body></html>')

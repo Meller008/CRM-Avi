@@ -1984,6 +1984,7 @@ class Pack:
             for operation in self.__operation:
                 if operation["id"] == id:
                     edit_operation = operation
+                    position = operation["position"]
                     if self.__save_operation_sql.count(operation["id"]) == 0:
                         self.__save_operation_sql.append(operation["id"])
                     break
@@ -2005,10 +2006,12 @@ class Pack:
             self.__save_operation_sql.append(self.__new_operation_count)
             self.__new_operation_count -= 1
             self.__operation.append(edit_operation)
+
+            position = self.new_position_operation()
         else:
             raise RuntimeError("Что то пошло не так со вставкой операции (id)")
 
-        edit_operation["position"] = self.new_position_operation()
+        edit_operation["position"] = position
         edit_operation["operation_id"] = info["operation_id"]
         edit_operation["name"] = info["name"]
         edit_operation["worker_id"] = info["worker_id"]
