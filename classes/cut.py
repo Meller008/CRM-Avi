@@ -715,6 +715,9 @@ class Cut:
     def change_cut_weight(self):
         return self.__change_cut_weight
 
+    def need_save(self):
+        return self.__save_sql_info
+
     # Вставка заначений
     def set_id(self):
         pass
@@ -1981,11 +1984,11 @@ class Pack:
             for operation in self.__operation:
                 if operation["id"] == id:
                     edit_operation = operation
-                    self.__save_operation_sql.append(operation["id"])
+                    if self.__save_operation_sql.count(operation["id"]) == 0:
+                        self.__save_operation_sql.append(operation["id"])
                     break
             else:
                 raise RuntimeError("Что то пошло не так со вставкой операции (id в for)")
-
 
         elif id is None:
             edit_operation = {"id": self.__new_operation_count,
@@ -2005,7 +2008,7 @@ class Pack:
         else:
             raise RuntimeError("Что то пошло не так со вставкой операции (id)")
 
-        edit_operation["position"] = info["position"]
+        edit_operation["position"] = self.new_position_operation()
         edit_operation["operation_id"] = info["operation_id"]
         edit_operation["name"] = info["name"]
         edit_operation["worker_id"] = info["worker_id"]
@@ -2023,7 +2026,8 @@ class Pack:
             for accessories in self.__accessories:
                 if accessories["id"] == id:
                     edit_accessories = accessories
-                    self.__save_accessories_sql.append(accessories["id"])
+                    if self.__save_accessories_sql.count(accessories["id"]) == 0:
+                        self.__save_accessories_sql.append(accessories["id"])
                     break
             else:
                 raise RuntimeError("Что то пошло не так со вставкой фурнитуры (id в for)")
@@ -2264,6 +2268,37 @@ class Pack:
             return True
         else:
             return False
+
+    def new_position_operation(self):
+        max_position = 0
+        for operation in self.__operation:
+            if operation["position"] is not None:
+                max_position = max(max_position, operation["position"])
+
+        return max_position + 1
+
+    def clone_operation(self, id):
+        for operation in self.__operation:
+            if operation["id"] == id:
+
+                clone_operation = {"id": self.__new_operation_count,
+                                   "position": None,
+                                   "operation_id": operation["operation_id"],
+                                   "name": operation["name"],
+                                   "worker_id": operation["worker_id"],
+                                   "worker_name": operation["worker_name"],
+                                   "date_make": operation["date_make"],
+                                   "date_input": operation["date_input"],
+                                   "value": operation["value"],
+                                   "price": operation["price"],
+                                   "pay": operation["pay"]}
+
+                self.__save_operation_sql.append(self.__new_operation_count)
+                self.__new_operation_count -= 1
+                self.__operation.append(clone_operation)
+                return [True, ""]
+        else:
+            return [False, "Не найден ID дублируемой операции"]
 
 
 

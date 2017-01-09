@@ -15,9 +15,9 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
-    <widget class="QStackedWidget" name="stackedWidget">
+    <widget class="QStackedWidget" name="sw_main">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="p_date">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -37,9 +37,18 @@
         <number>6</number>
        </property>
        <item row="1" column="0">
-        <widget class="QCalendarWidget" name="calendarWidget">
+        <widget class="QCalendarWidget" name="cw_date_make">
+         <property name="font">
+          <font>
+           <family>Tahoma</family>
+           <pointsize>16</pointsize>
+          </font>
+         </property>
          <property name="verticalHeaderFormat">
           <enum>QCalendarWidget::NoVerticalHeader</enum>
+         </property>
+         <property name="dateEditEnabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -85,7 +94,7 @@
      <widget class="QWidget" name="p_acc">
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="5" column="0">
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="ld_date_make">
          <property name="font">
           <font>
            <family>Tahoma</family>
@@ -98,7 +107,7 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="lb_operation">
          <property name="font">
           <font>
            <family>Tahoma</family>
@@ -197,7 +206,7 @@
         </layout>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="lb_cut">
          <property name="font">
           <font>
            <family>Tahoma</family>
@@ -210,7 +219,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="lb_pack">
          <property name="font">
           <font>
            <family>Tahoma</family>
@@ -242,5 +251,59 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_date_acc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>332</x>
+     <y>443</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_can()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>65</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-38</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_acc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>461</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>586</x>
+     <y>367</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>ui_date_acc()</slot>
+  <slot>ui_can()</slot>
+  <slot>ui_acc()</slot>
+ </slots>
 </ui>

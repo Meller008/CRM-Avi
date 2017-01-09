@@ -32,7 +32,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="tabWidget_2">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -92,6 +92,13 @@
            </property>
            <property name="text">
             <string>Удалить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButton_12">
+           <property name="text">
+            <string>Разделение операции</string>
            </property>
           </widget>
          </item>
@@ -1398,6 +1405,22 @@ border-color: rgb(170, 0, 0);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>toolButton_12</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_clone_operation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>280</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>280</x>
+     <y>-54</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_edit_date_make()</slot>
@@ -1423,5 +1446,6 @@ border-color: rgb(170, 0, 0);
   <slot>ui_double_click_accessories()</slot>
   <slot>ui_del_accessories()</slot>
   <slot>ui_calc_pack()</slot>
+  <slot>ui_clone_operation()</slot>
  </slots>
 </ui>

@@ -91,7 +91,7 @@ class Staff(QMainWindow, staff_list_class):
         if not self.dc_select:
             id = self.tw_workers.item(row, 0).text()
             self.add_mat = OneStaff(self, True)
-            self.add_mat.set_add_settigs()
+            self.add_mat.set_add_settings()
             if self.add_mat.insert_info(id):
                 self.add_mat.setWindowModality(Qt.ApplicationModal)
                 self.add_mat.show()

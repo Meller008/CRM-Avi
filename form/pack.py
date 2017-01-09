@@ -7,6 +7,7 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QObject
 from form.material import MaterialName
 import re
+from decimal import *
 
 from function import my_sql, classes_function
 from classes import cut
@@ -227,6 +228,20 @@ class PackBrows(QDialog, pack_class):
         self.pack.set_operation(operation, id)
         self.set_operation_name()
 
+    def ui_clone_operation(self):
+        try:
+            id = int(self.tw_operation.item(self.tw_operation.currentRow(), 0).data(-2))
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите операцию.", QMessageBox.Ok)
+            return False
+
+        error = self.pack.clone_operation(id)
+        if not error[0]:
+            QMessageBox.information(self, "Ошибка", error[1], QMessageBox.Ok)
+            return False
+
+        self.set_operation_name()
+
     def ui_double_click_accessories(self, table_item):
         try:
             id = int(table_item.data(-2))
@@ -295,12 +310,12 @@ class PackBrows(QDialog, pack_class):
         operations_price = 0
         operations = self.pack.operations()
         for operation in operations:
-            operations_price += operation["value"] * operation["price"]
+            operations_price += operation["value"] * Decimal(str(operation["price"]))
 
         accessories_price = 0
         accessories = self.pack.accessories()
         for accessory in accessories:
-            accessories_price += accessory["value"] * accessory["value_thing"] * accessory["price"]
+            accessories_price += accessory["value"] * Decimal(str(accessory["value_thing"])) * Decimal(str(accessory["price"]))
 
         price_one_weight = round((weight / value) * material_price, 4)
 

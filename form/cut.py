@@ -287,7 +287,16 @@ class CutBrows(QDialog, cut_brows_class):
         self.destroy()
 
     def ui_can(self):
-        pass
+        if self.cut.need_save():
+            result = QMessageBox.question(self, "Выйти?", "Есть несохраненая информация.\nТочно выйти без сохранения?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if result == 16384:
+                self.close()
+                self.destroy()
+            else:
+                return False
+        else:
+            self.close()
+            self.destroy()
 
     def set_pack(self):
         self.tw_pack.clearContents()

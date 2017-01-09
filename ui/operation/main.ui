@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="QStackedWidget" name="sw_main">
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -50,20 +50,7 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="0">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="2">
+        <item row="2" column="2">
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -76,7 +63,20 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="1">
+        <item row="2" column="0">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="1">
          <layout class="QGridLayout" name="gridLayout_2">
           <property name="spacing">
            <number>3</number>
@@ -104,6 +104,25 @@
             </property>
             <property name="text">
              <string>Пароль:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QPushButton" name="pb_login">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Войти</string>
             </property>
            </widget>
           </item>
@@ -139,28 +158,9 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QPushButton" name="pb_login">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Tahoma</family>
-              <pointsize>16</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Войти</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
-        <item row="2" column="1">
+        <item row="3" column="1">
          <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -172,6 +172,27 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="lb_login_error">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>16</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -244,7 +265,7 @@
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLabel" name="label_7">
+           <widget class="QLabel" name="lb_f_name">
             <property name="font">
              <font>
               <family>Tahoma</family>
@@ -257,7 +278,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_6">
+           <widget class="QLabel" name="lb_l_name">
             <property name="font">
              <font>
               <family>Tahoma</family>
@@ -301,7 +322,7 @@
       </widget>
       <widget class="QWidget" name="p_cut_number">
        <layout class="QGridLayout" name="gridLayout_7">
-        <item row="2" column="1">
+        <item row="3" column="1">
          <spacer name="verticalSpacer_5">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -327,7 +348,7 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="0">
+        <item row="2" column="0">
          <spacer name="horizontalSpacer_4">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -340,40 +361,7 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="1">
-         <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit">
-            <property name="minimumSize">
-             <size>
-              <width>200</width>
-              <height>80</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Tahoma</family>
-              <pointsize>20</pointsize>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="font">
-             <font>
-              <family>Tahoma</family>
-              <pointsize>20</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Номер кроя</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="2">
+        <item row="2" column="2">
          <spacer name="horizontalSpacer_5">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -386,7 +374,7 @@
           </property>
          </spacer>
         </item>
-        <item row="3" column="0" colspan="3">
+        <item row="4" column="0" colspan="3">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QPushButton" name="pushButton_5">
@@ -441,14 +429,67 @@
           </item>
          </layout>
         </item>
+        <item row="2" column="1">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="le_cut_number">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>80</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>20</pointsize>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>20</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Номер кроя</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="lb_cut_error">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>16</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="p_pack_number">
        <layout class="QGridLayout" name="gridLayout_9">
-        <item row="1" column="1">
+        <item row="2" column="1">
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_2">
+           <widget class="QLineEdit" name="le_pack_number">
             <property name="minimumSize">
              <size>
               <width>200</width>
@@ -469,6 +510,8 @@
              <font>
               <family>Tahoma</family>
               <pointsize>20</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="text">
@@ -478,59 +521,7 @@
           </item>
          </layout>
         </item>
-        <item row="1" column="2">
-         <spacer name="horizontalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="1">
-         <spacer name="verticalSpacer_7">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="0">
-         <spacer name="horizontalSpacer_7">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="1">
-         <spacer name="verticalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="3" column="0" colspan="3">
+        <item row="4" column="0" colspan="3">
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QPushButton" name="pushButton_6">
@@ -585,6 +576,76 @@
           </item>
          </layout>
         </item>
+        <item row="2" column="2">
+         <spacer name="horizontalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="1">
+         <spacer name="verticalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1">
+         <spacer name="verticalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="0">
+         <spacer name="horizontalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="lb_pack_error">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>16</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="p_operation_list">
@@ -608,35 +669,80 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QLineEdit" name="lineEdit_5">
+         <widget class="QLineEdit" name="le_operation_pack_value">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="1" column="5">
-         <widget class="QLineEdit" name="lineEdit_8">
+         <widget class="QLineEdit" name="le_operation_client">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="1" column="4">
-         <widget class="QLineEdit" name="lineEdit_7">
+         <widget class="QLineEdit" name="le_operation_size">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QLineEdit" name="lineEdit_6">
+         <widget class="QLineEdit" name="le_operation_article">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="1" column="6">
-         <widget class="QLineEdit" name="lineEdit_9">
+         <widget class="QLineEdit" name="le_operation_cut_date">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -733,7 +839,16 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLineEdit" name="lineEdit_3">
+         <widget class="QLineEdit" name="le_operation_cut">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -758,13 +873,22 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_4">
+         <widget class="QLineEdit" name="le_operation_pack">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="7">
+        <item row="6" column="0" colspan="7">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QPushButton" name="pushButton_8">
@@ -799,6 +923,38 @@
            </spacer>
           </item>
           <item>
+           <widget class="QPushButton" name="pushButton_10">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Закончить ввод</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QPushButton" name="pushButton_9">
             <property name="minimumSize">
              <size>
@@ -819,7 +975,7 @@
           </item>
          </layout>
         </item>
-        <item row="2" column="0" colspan="7">
+        <item row="3" column="0" colspan="7">
          <widget class="QLabel" name="label_14">
           <property name="font">
            <font>
@@ -837,8 +993,8 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0" colspan="7">
-         <widget class="QTableWidget" name="tableWidget">
+        <item row="5" column="0" colspan="7">
+         <widget class="QTableWidget" name="tw_operation">
           <property name="font">
            <font>
             <family>Tahoma</family>
@@ -888,14 +1044,32 @@
           </column>
           <column>
            <property name="text">
-            <string>Дата выполнения</string>
+            <string>Дата выполн.</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Цена за операцию</string>
+            <string>Цена операции</string>
            </property>
           </column>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="7">
+         <widget class="QLabel" name="lb_operation_error">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>16</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
          </widget>
         </item>
        </layout>
@@ -907,5 +1081,178 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pb_login</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_login()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>571</x>
+     <y>424</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>513</x>
+     <y>969</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_add_operation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>357</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-97</x>
+     <y>357</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_cut_back()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>43</x>
+     <y>693</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-21</x>
+     <y>693</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_cut_next()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1070</x>
+     <y>696</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1150</x>
+     <y>688</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_pack_back()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>691</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-43</x>
+     <y>685</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_7</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_pack_next()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1042</x>
+     <y>690</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1178</x>
+     <y>680</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_8</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_operation_back()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>64</x>
+     <y>703</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>64</x>
+     <y>864</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_9</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_operation_next()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1012</x>
+     <y>695</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1014</x>
+     <y>818</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_10</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_operation_input_complete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>547</x>
+     <y>701</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>536</x>
+     <y>779</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_log_out()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>458</x>
+     <y>695</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>770</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>ui_login()</slot>
+  <slot>ui_add_operation()</slot>
+  <slot>ui_cut_back()</slot>
+  <slot>ui_cut_next()</slot>
+  <slot>ui_pack_back()</slot>
+  <slot>ui_pack_next()</slot>
+  <slot>ui_operation_back()</slot>
+  <slot>ui_operation_next()</slot>
+  <slot>ui_operation_input_complete()</slot>
+  <slot>ui_log_out()</slot>
+ </slots>
 </ui>
