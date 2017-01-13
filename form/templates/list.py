@@ -48,6 +48,7 @@ class ListItems(QMainWindow, list_class):
 
     def ui_add_item(self):
         add_item = item_2.Item2()
+        add_item.set_settings(self.set_new_win)
         add_item.setModal(True)
         add_item.show()
         if add_item.exec() == 0:

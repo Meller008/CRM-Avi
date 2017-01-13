@@ -120,6 +120,7 @@
      <string>Настройки</string>
     </property>
     <addaction name="ma_program_settings_path"/>
+    <addaction name="ma_settings_road"/>
    </widget>
    <widget class="QMenu" name="menu_7">
     <property name="title">
@@ -149,10 +150,19 @@
     </property>
     <addaction name="ma_audit_verification"/>
    </widget>
+   <widget class="QMenu" name="menu_11">
+    <property name="title">
+     <string>Зарплата</string>
+    </property>
+    <addaction name="ma_pay_plus_minus"/>
+    <addaction name="separator"/>
+    <addaction name="ma_salary_work"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_8"/>
    <addaction name="menu_7"/>
    <addaction name="menu_4"/>
+   <addaction name="menu_11"/>
    <addaction name="menu_3"/>
    <addaction name="menu_9"/>
    <addaction name="menu_10"/>
@@ -256,6 +266,21 @@
   <action name="ma_audit_verification">
    <property name="text">
     <string>Верификация</string>
+   </property>
+  </action>
+  <action name="ma_pay_plus_minus">
+   <property name="text">
+    <string>Доплаты и вычеты</string>
+   </property>
+  </action>
+  <action name="ma_settings_road">
+   <property name="text">
+    <string>Цена доплаты проезда</string>
+   </property>
+  </action>
+  <action name="ma_salary_work">
+   <property name="text">
+    <string>Отчет по зарплате</string>
    </property>
   </action>
  </widget>
@@ -581,6 +606,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_pay_plus_minus</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_pay_plus_minus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_settings_road</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_settings_road()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_salary_work</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_salary_work()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -603,5 +676,8 @@
   <slot>view_cut_list()</slot>
   <slot>view_other_order_edi()</slot>
   <slot>view_audit_verification()</slot>
+  <slot>view_pay_plus_minus()</slot>
+  <slot>view_settings_road()</slot>
+  <slot>view_salary_work()</slot>
  </slots>
 </ui>

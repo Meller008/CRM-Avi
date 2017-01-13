@@ -14,6 +14,8 @@ from classes import cut
 from form.templates import table, list
 from form import clients, article
 
+from classes.my_class import User
+
 cut_list_class = loadUiType(getcwd() + '/ui/cut_list.ui')[0]
 cut_brows_class = loadUiType(getcwd() + '/ui/cut_brows.ui')[0]
 
@@ -74,7 +76,8 @@ class CutList(QMainWindow, cut_list_class):
         query = """SELECT cut.Id, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
-                      GROUP BY cut.Id"""
+                      GROUP BY cut.Id
+                      ORDER BY Cut_Id DESC"""
         sql_info = my_sql.sql_select(query)
         if "mysql.connector.errors" in str(type(sql_info)):
             print("Не смог получить список кроя")

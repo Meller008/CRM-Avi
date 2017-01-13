@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow,
 from PyQt5.QtGui import QIcon
 from function import my_sql
 from decimal import Decimal
+import datetime
 import re
 
 
@@ -60,6 +61,8 @@ class TableList(QMainWindow, table_list_class):
             for column in range(1, len(table_typle)):
                 if isinstance(table_typle[column], Decimal):
                     text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
+                elif isinstance(table_typle[column], datetime.date):
+                    text = table_typle[column].strftime("%d.%m.%Y")
                 else:
                     text = str(table_typle[column])
                 item = QTableWidgetItem(text)

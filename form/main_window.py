@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
 from form import login_window, material_provider, material, comparing, accessories_provider,\
     accesspries, staff, program_settings, notification, clients, operation, other, audit
-from form import article, order, cut
+from form import article, order, cut, pay, salary
 from classes import my_class
+from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
 import sys
 
@@ -14,20 +15,13 @@ main_class, main_base_class = loadUiType(getcwd() + '/ui/main.ui')
 class MainWindow(QMainWindow, main_class):
     def __init__(self, *args):
 
-        self.user = my_class.User
         super(MainWindow, self).__init__(*args)
         self.setupUi(self)
         self.mdi.setBackground(QBrush(QImage(getcwd() + "/images/logo.png")))
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.show()
         self.setDisabled(True)
-        self.login = login_window.LoginWindow(self, self.user)
-        self.login.show()
-
-    def set_privilege(self):
-        if self.user.privilege == "швея":
-            self.ma_material.setDisabled(True)
-            self.ma_material_provider.setDisabled(True)
+        self.login = login_window.LoginWindow(self)
 
     def view_material(self):
         self.material = material.Material()
@@ -126,6 +120,14 @@ class MainWindow(QMainWindow, main_class):
         self.sub_sett_path.resize(self.sett_path.size())
         self.sub_sett_path.show()
 
+    def view_settings_road(self):
+        self.sett_road = program_settings.SettingsRoad()
+        self.sub_sett_road = QMdiSubWindow()
+        self.sub_sett_road.setWidget(self.sett_road)
+        self.mdi.addSubWindow(self.sub_sett_road)
+        self.sub_sett_road.resize(self.sett_road.size())
+        self.sub_sett_road.show()
+
     def view_clients(self):
         self.clients = clients.ClientsList()
         self.sub_clients = QMdiSubWindow()
@@ -174,6 +176,14 @@ class MainWindow(QMainWindow, main_class):
         self.sub_cut_list.resize(self.cut_list.size())
         self.sub_cut_list.show()
 
+    def view_pay_plus_minus(self):
+        self.pay_plus_minus = pay.PayList()
+        self.sub_pay_plus_minus = QMdiSubWindow()
+        self.sub_pay_plus_minus.setWidget(self.pay_plus_minus)
+        self.mdi.addSubWindow(self.sub_pay_plus_minus)
+        self.sub_pay_plus_minus.resize(self.pay_plus_minus.size())
+        self.sub_pay_plus_minus.show()
+
     def view_other_order_edi(self):
         self.input_order_edi = other.OrderEDI()
         self.sub_input_order_edi = QMdiSubWindow()
@@ -189,11 +199,18 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_audit_verification)
         self.sub_audit_verification.resize(self.audit_verification.size())
         self.sub_audit_verification.show()
+
+    def view_salary_work(self):
+        self.salary_list = salary.SalaryList()
+        self.sub_salary_list = QMdiSubWindow()
+        self.sub_salary_list.setWidget(self.salary_list)
+        self.mdi.addSubWindow(self.sub_salary_list)
+        self.sub_salary_list.resize(self.salary_list.size())
+        self.sub_salary_list.show()
         
     def login_access(self):
-        self.statusBar().showMessage("Вы вошли как -= %s =-" % self.user.privilege)
+        self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())
         self.setEnabled(True)
-        self.set_privilege()
         self.setFocus()
 
     def closeEvent(self, e):

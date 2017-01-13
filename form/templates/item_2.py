@@ -11,7 +11,6 @@ class Item2(QDialog, item_2):
         self.setupUi(self)
 
     def set_settings(self, setting):
-        self.collor = (252, 163, 255)
         for name, value in setting.items():
             if name == "WinTitle":
                 self.setWindowTitle(value)
