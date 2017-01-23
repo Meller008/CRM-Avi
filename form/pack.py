@@ -20,13 +20,16 @@ pack_accessories_class = loadUiType(getcwd() + '/ui/pack_accsessories.ui')[0]
 
 
 class PackBrows(QDialog, pack_class):
-    def __init__(self, main=None, pack=None):
+    def __init__(self, main=None, pack=None, pack_id=None):
         super(PackBrows, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
-        self.pack = pack
+        if pack_id is not None:
+            self.pack = cut.Pack(pack_id)
+        else:
+            self.pack = pack
 
         self.insert_values_sql = False
 

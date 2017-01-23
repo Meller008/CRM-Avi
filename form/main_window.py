@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
 from form import login_window, material_provider, material, comparing, accessories_provider,\
     accesspries, staff, program_settings, notification, clients, operation, other, audit
-from form import article, order, cut, pay, salary
+from form import article, order, cut, pay, salary, operation_list, warehouse
 from classes import my_class
 from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
@@ -207,6 +207,22 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_salary_list)
         self.sub_salary_list.resize(self.salary_list.size())
         self.sub_salary_list.show()
+
+    def view_pack_operation_list(self):
+        self.operation_list = operation_list.PayList()
+        self.sub_operation_list = QMdiSubWindow()
+        self.sub_operation_list.setWidget(self.operation_list)
+        self.mdi.addSubWindow(self.sub_operation_list)
+        self.sub_operation_list.resize(self.operation_list.size())
+        self.sub_operation_list.show()
+
+    def view_product_warehouse(self):
+        self.product_warehouse = warehouse.Warehouse()
+        self.sub_product_warehouse = QMdiSubWindow()
+        self.sub_product_warehouse.setWidget(self.product_warehouse)
+        self.mdi.addSubWindow(self.sub_product_warehouse)
+        self.sub_product_warehouse.resize(self.product_warehouse.size())
+        self.sub_product_warehouse.show()
         
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())

@@ -50,7 +50,6 @@ class OrderList(table.TableList):
 
         self.order = Order(0, item_id)
         self.order.setWindowModality(Qt.ApplicationModal)
-        self.order.start_set_sql_info()
         self.order.show()
 
     def ui_double_click_table_item(self, item):  # Двойной клик по элементу
@@ -71,6 +70,10 @@ class Order(QMainWindow, order_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.id = id
         self.main = main_class
+
+        self.save_change_order = False
+        self.save_change_order_position = False
+
         self.start_settings()
 
         self.save_change_order = False
@@ -86,7 +89,7 @@ class Order(QMainWindow, order_class):
         self.tw_position.horizontalHeader().resizeSection(6, 70)
 
         if self.id:
-            pass
+            self.start_set_sql_info()
         else:
             self.pb_add_position.setEnabled(False)
             self.pb_change_position.setEnabled(False)

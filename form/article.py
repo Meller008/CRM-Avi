@@ -44,6 +44,7 @@ class ArticleList(tree.TreeList):
                                  "WinColor": "(167, 183, 255)"}
 
         self.pb_table_double.deleteLater()
+        self.pb_other.deleteLater()
 
     def ui_add_table_item(self):  # Добавить предмет
         try:
@@ -452,6 +453,11 @@ class Article(QMainWindow, article_class):
             sql_info = my_sql.sql_change(query, (size_id, new_param, 1))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql добавление параметра", sql_info.msg, QMessageBox.Ok)
+                return False
+            query = "INSERT INTO product_article_warehouse (Id_Article_Parametr, Value_In_Warehouse) VALUES (%s, %s)"
+            sql_info_2 = my_sql.sql_change(query, (sql_info, 0))
+            if "mysql.connector.errors" in str(type(sql_info_2)):
+                QMessageBox.critical(self, "Ошибка sql добавление пустой позиции на склад", sql_info_2.msg, QMessageBox.Ok)
                 return False
             self.cb_parametrs.addItem(str(new_param), str(sql_info))
             self.set_enabled(True)

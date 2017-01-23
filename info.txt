@@ -10,3 +10,6 @@
 
 date.strftime("%d.%m.%Y")
 date.strftime("%d.%m.%Y %H:%M:%S")
+
+
+self.done()

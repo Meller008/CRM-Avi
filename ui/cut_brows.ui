@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>656</width>
+    <width>673</width>
     <height>418</height>
    </rect>
   </property>
@@ -395,6 +395,16 @@
         <column>
          <property name="text">
           <string>Вес</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Приемка</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Проверка</string>
          </property>
         </column>
        </widget>

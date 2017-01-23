@@ -289,6 +289,9 @@ class TreeList(QMainWindow, tree_class):
         self.set_table_info()
         self.set_tree_info()
 
+    def ui_other(self):
+        pass
+
 
 class ChangeTreeItem(QDialog, change_tree_item_class):
     def __init__(self):

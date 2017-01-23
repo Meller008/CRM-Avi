@@ -7,6 +7,7 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QObject
 from form.material import MaterialName
 from form.pack import PackBrows
+
 import re
 
 from function import my_sql, classes_function
@@ -167,6 +168,8 @@ class CutBrows(QDialog, cut_brows_class):
         self.tw_pack.horizontalHeader().resizeSection(4, 55)
         self.tw_pack.horizontalHeader().resizeSection(5, 55)
         self.tw_pack.horizontalHeader().resizeSection(6, 65)
+        self.tw_pack.horizontalHeader().resizeSection(7, 65)
+        self.tw_pack.horizontalHeader().resizeSection(8, 65)
 
     def ui_edit_date_cut(self):
         if not self.insert_values_sql:
@@ -308,9 +311,6 @@ class CutBrows(QDialog, cut_brows_class):
         if not self.cut.pack_list():
             return False
 
-        self.tw_pack.clearContents()
-        self.tw_pack.setRowCount(0)
-
         need_set_pack = len(self.cut.pack_list())
         pack_number_table = 1
 
@@ -348,6 +348,16 @@ class CutBrows(QDialog, cut_brows_class):
                     new_table_item = QTableWidgetItem(str(pack.weight()))
                     new_table_item.setData(-2, pack_id)
                     self.tw_pack.setItem(row, 6, new_table_item)
+
+                    date_make = pack.date_make().strftime("%d.%m.%Y") if pack.date_make() is not None else ""
+                    new_table_item = QTableWidgetItem(date_make)
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 7, new_table_item)
+
+                    date_complete = pack.date_complete().strftime("%d.%m.%Y") if pack.date_complete() is not None else ""
+                    new_table_item = QTableWidgetItem(date_complete)
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 8, new_table_item)
 
                     row += 1
                     pack_number_table += 1

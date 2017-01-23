@@ -17,7 +17,7 @@
    <string>Список</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout" columnstretch="2,5">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="1,10">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -35,6 +35,12 @@
     </property>
     <item row="0" column="0">
      <widget class="QTreeWidget" name="tree_widget">
+      <property name="minimumSize">
+       <size>
+        <width>210</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="font">
        <font>
         <family>Tahoma</family>
@@ -145,6 +151,7 @@
    <addaction name="pb_table_transfer"/>
    <addaction name="pb_table_double"/>
    <addaction name="pb_table_update"/>
+   <addaction name="pb_other"/>
   </widget>
   <action name="pb_tree_add">
    <property name="text">
@@ -199,6 +206,11 @@
   <action name="pb_table_update">
    <property name="text">
     <string>Обновить</string>
+   </property>
+  </action>
+  <action name="pb_other">
+   <property name="text">
+    <string>Разное</string>
    </property>
   </action>
  </widget>
@@ -396,6 +408,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_other</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_other()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_tree_item()</slot>
@@ -410,5 +438,6 @@
   <slot>ui_transfer_table()</slot>
   <slot>ui_double_item_table()</slot>
   <slot>ui_update_table()</slot>
+  <slot>ui_other()</slot>
  </slots>
 </ui>
