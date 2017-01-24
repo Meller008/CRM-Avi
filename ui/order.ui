@@ -192,6 +192,16 @@
       <item>
        <widget class="QLineEdit" name="le_note"/>
       </item>
+      <item>
+       <widget class="QCheckBox" name="cb_shipping">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Отгружено</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="5" column="0" colspan="4">
@@ -242,6 +252,13 @@
            <widget class="QToolButton" name="pb_dell_position">
             <property name="text">
              <string>Удалить</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="pb_check_warehouse">
+            <property name="text">
+             <string>Проверить наличие</string>
             </property>
            </widget>
           </item>
@@ -347,7 +364,7 @@
       <item>
        <widget class="QPushButton" name="pb_acc">
         <property name="text">
-         <string>Оформить заказ</string>
+         <string>Принять</string>
         </property>
        </widget>
       </item>
@@ -680,6 +697,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>cb_shipping</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_order_info_edit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>686</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>930</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_check_warehouse</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_check_warehouse()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>240</x>
+     <y>176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>254</x>
+     <y>-67</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_client()</slot>
@@ -691,5 +740,6 @@
   <slot>ui_acc()</slot>
   <slot>ui_can()</slot>
   <slot>ui_double_click_position()</slot>
+  <slot>ui_check_warehouse()</slot>
  </slots>
 </ui>

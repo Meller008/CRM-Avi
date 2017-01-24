@@ -66,7 +66,7 @@ class PayList(table.TableList):
             if table_typle[2] > 0:
                 color = QBrush(QColor(150, 255, 161, 255))
             else:
-                color = QBrush(QColor(255, 105, 105, 255))
+                color = QBrush(QColor(252, 141, 141, 255))
 
             for column in range(1, len(table_typle)):
                 if isinstance(table_typle[column], Decimal):

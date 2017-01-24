@@ -327,7 +327,7 @@ class WarehouseInfo(QDialog, warehouse_info):
             if transaction[2] > 0:
                 color = QBrush(QColor(150, 255, 161, 255))
             else:
-                color = QBrush(QColor(255, 105, 105, 255))
+                color = QBrush(QColor(252, 141, 141, 255))
 
             new_table_item = QTableWidgetItem(transaction[1].strftime("%d.%m.%Y"))
             new_table_item.setData(-2, transaction[0])

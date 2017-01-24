@@ -234,7 +234,7 @@ class Cut:
                 # Делаем запись о заборе ткани с баланса склада
                 query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                             VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                txt_note = "Крой №%s - Увеличение обрези в крое" % self.__id
+                txt_note = "%s - Увеличение обрези в крое" % self.__id
                 sql_values = (sql_balance_material[0][0], -take_material_value, txt_note, self.__id)
                 sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                 if "mysql.connector.errors" in str(type(sql_info)):
@@ -294,7 +294,7 @@ class Cut:
                     # Делаем запись о возырате фурнитуры на баланс склада
                     query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                 VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                    txt_note = "Крой №%s - Уменьшение обрези в крое" % self.__id
+                    txt_note = "%s - Уменьшение обрези в крое" % self.__id
                     sql_values = (supply_row[1], take_material_value, txt_note, self.__id)
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                     if "mysql.connector.errors" in str(type(sql_info)):
@@ -375,7 +375,7 @@ class Cut:
                     # Делаем запись о возырате ткани на баланс склада
                     query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                   VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                    txt_note = "Крой №%s - Возврат ткани из за смены ткани" % self.__id
+                    txt_note = "%s - Возврат ткани из за смены ткани" % self.__id
                     sql_values = (transaction_id_all[1], -transaction_id_all[0], txt_note, self.__id)
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                     if "mysql.connector.errors" in str(type(sql_info)):
@@ -414,7 +414,7 @@ class Cut:
                 # Делаем запись о заборе ткани с баланса склада
                 query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                   VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                txt_note = "Крой №%s - Забор ткани из за смены ткани" % self.__id
+                txt_note = "%s - Забор ткани из за смены ткани" % self.__id
                 sql_values = (sql_balance_material[0][0], -take_material_value, txt_note, self.__id)
                 sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                 if "mysql.connector.errors" in str(type(sql_info)):
@@ -511,7 +511,7 @@ class Cut:
                 # Делаем запись о возырате ткани на баланс склада
                 query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                 VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                txt_note = "Крой №%s - Возврат ткани из за удаления кроя" % self.__id
+                txt_note = "%s - Возврат ткани из за удаления кроя" % self.__id
                 sql_values = (transaction_id_all[1], -transaction_id_all[0], txt_note, self.__id)
                 sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                 if "mysql.connector.errors" in str(type(sql_info)):
@@ -1008,7 +1008,7 @@ class Pack:
                         # Делаем запись о заборе ткани с баланса склада
                         query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                     VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                        txt_note = "Крой №%s Пачка №%s - Новая пачка в крое" % (self.__cut_id, self.__number_pack)
+                        txt_note = "%s/%s - Новая пачка в крое" % (self.__cut_id, self.__number_pack)
                         sql_values = (sql_balance_material[0][0], -take_material_value, txt_note, self.__cut_id)
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                         if "mysql.connector.errors" in str(type(sql_info)):
@@ -1022,7 +1022,7 @@ class Pack:
                             my_sql.sql_rollback_transaction(sql_connect_transaction)
                             return [False, "Не смог изменить баланс склада товара (Это плохо к админу)"]
 
-                        txt_note = "Крой №%s Пачка №%s - Принято упаковкой" % (self.__cut_id, self.__number_pack)
+                        txt_note = "%s/%s - Принято упаковкой" % (self.__cut_id, self.__number_pack)
                         query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note)
                                                             VALUES (%s, %s, %s, %s)"""
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__article_parametr, datetime.now(),
@@ -1077,7 +1077,7 @@ class Pack:
                         # Делаем запись о заборе ткани с баланса склада
                         query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                     VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                        txt_note = "Крой №%s Пачка №%s - Увеличение ткани в пачке" % (self.__cut_id, self.__number_pack)
+                        txt_note = "%s/%s - Увеличение ткани в пачке" % (self.__cut_id, self.__number_pack)
                         sql_values = (sql_balance_material[0][0], -take_material_value, txt_note, self.__cut_id)
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                         if "mysql.connector.errors" in str(type(sql_info)):
@@ -1093,7 +1093,7 @@ class Pack:
                         my_sql.sql_rollback_transaction(sql_connect_transaction)
                         return [False, "Не смог изменить баланс склада товара (Это плохо к админу)"]
 
-                    txt_note = "Крой №%s Пачка №%s - Изменено кол-во принятой пачки" % (self.__cut_id, self.__number_pack)
+                    txt_note = "%s/%s - Изменено кол-во принятой пачки" % (self.__cut_id, self.__number_pack)
                     query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note)
                                                                                 VALUES (%s, %s, %s, %s)"""
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__article_parametr, datetime.now(),
@@ -1110,7 +1110,7 @@ class Pack:
                         my_sql.sql_rollback_transaction(sql_connect_transaction)
                         return [False, "Не смог изменить баланс склада товара (Это плохо к админу)"]
 
-                    txt_note = "Крой №%s Пачка №%s - Принята пачка" % (self.__cut_id, self.__number_pack)
+                    txt_note = "%s/%s - Принята пачка" % (self.__cut_id, self.__number_pack)
                     query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note)
                                                                                                     VALUES (%s, %s, %s, %s)"""
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__article_parametr, datetime.now(),
@@ -1127,7 +1127,7 @@ class Pack:
                         my_sql.sql_rollback_transaction(sql_connect_transaction)
                         return [False, "Не смог изменить баланс склада товара (Это плохо к админу)"]
 
-                    txt_note = "Крой №%s Пачка №%s - Пачка вернулась со склада" % (self.__cut_id, self.__number_pack)
+                    txt_note = "%s/%s - Пачка вернулась со склада" % (self.__cut_id, self.__number_pack)
                     query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note)
                                                                                                                         VALUES (%s, %s, %s, %s)"""
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__article_parametr, datetime.now(),
@@ -1189,7 +1189,7 @@ class Pack:
                             # Делаем запись о возырате ткани на баланс склада
                             query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                         VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                            txt_note = "Крой №%s Пачка №%s - Уменьшение ткани в пачке" % (self.__cut_id, self.__number_pack)
+                            txt_note = "%s/%s - Уменьшение ткани в пачке" % (self.__cut_id, self.__number_pack)
                             sql_values = (supply_row[1], take_material_value, txt_note, self.__cut_id)
                             sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                             if "mysql.connector.errors" in str(type(sql_info)):
@@ -1244,7 +1244,7 @@ class Pack:
                             # Делаем запись о возырате фурнитуры на баланс склада
                             query = """INSERT INTO transaction_records_accessories (Supply_Balance_Id, Balance, Date, Note, Pack_Accessories_Id)
                                         VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                            txt_note = "Крой №%s Пачка №%s - Удаление фурнитуры в пачке" % (self.__cut_id, self.__number_pack)
+                            txt_note = "%s/%s - Удаление фурнитуры в пачке" % (self.__cut_id, self.__number_pack)
                             sql_values = (supply_row[1], -supply_row[2], txt_note, dell_accessories_id)
                             sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                             if "mysql.connector.errors" in str(type(sql_info)):
@@ -1343,7 +1343,7 @@ class Pack:
                         # Делаем запись о заборе фурнитуры на баланс склада
                         query = """INSERT INTO transaction_records_accessories (Supply_Balance_Id, Balance, Date, Note, Pack_Accessories_Id)
                                     VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                        txt_note = "Крой №%s Пачка №%s - Добавление фурнитуры в пачку" % (self.__cut_id, self.__number_pack)
+                        txt_note = "%s/%s - Добавление фурнитуры в пачку" % (self.__cut_id, self.__number_pack)
                         sql_values = (sql_balance_accessories[0][0], -take_accessory_value, txt_note, save_accessory["id"])
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                         if "mysql.connector.errors" in str(type(sql_info)):
@@ -1417,7 +1417,7 @@ class Pack:
                             # Делаем запись о заборе фурнитуры на баланс склада
                             query = """INSERT INTO transaction_records_accessories (Supply_Balance_Id, Balance, Date, Note, Pack_Accessories_Id)
                                         VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                            txt_note = "Крой №%s Пачка №%s - Увеличение фурнитуры в пачке" % (self.__cut_id, self.__number_pack)
+                            txt_note = "%s/%s - Увеличение фурнитуры в пачке" % (self.__cut_id, self.__number_pack)
                             sql_values = (sql_balance_accessories[0][0], -take_accessory_value, txt_note, change_accessory["id"])
                             sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                             if "mysql.connector.errors" in str(type(sql_info)):
@@ -1475,7 +1475,7 @@ class Pack:
                             # Делаем запись о возырате фурнитуры на баланс склада
                             query = """INSERT INTO transaction_records_accessories (Supply_Balance_Id, Balance, Date, Note, Pack_Accessories_Id)
                                         VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                            txt_note = "Крой №%s Пачка №%s - Уменьшение фурнитуры в пачке" % (self.__cut_id, self.__number_pack)
+                            txt_note = "%s/%s - Уменьшение фурнитуры в пачке" % (self.__cut_id, self.__number_pack)
                             sql_values = (supply_row[1], take_accessory_value, txt_note, change_accessory["id"])
                             sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                             if "mysql.connector.errors" in str(type(sql_info)):
@@ -1638,7 +1638,7 @@ class Pack:
                     # Делаем запись о возырате фурнитуры на баланс склада
                     query = """INSERT INTO transaction_records_accessories (Supply_Balance_Id, Balance, Date, Note, Pack_Accessories_Id)
                                     VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                    txt_note = "Крой №%s Пачка №%s - Удаление пачки" % (self.__cut_id, self.__number_pack)
+                    txt_note = "%s/%s - Удаление пачки" % (self.__cut_id, self.__number_pack)
                     sql_values = (supply_row[1], -supply_row[2], txt_note, dell_accessories_id)
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                     if "mysql.connector.errors" in str(type(sql_info)):
@@ -1711,7 +1711,7 @@ class Pack:
                 # Делаем запись о возырате ткани на баланс склада
                 query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                   VALUES (%s, %s, SYSDATE(), %s, %s)"""
-                txt_note = "Крой №%s Пачка №%s - Удаление пачки из кроя" % (self.__cut_id, self.__number_pack)
+                txt_note = "%s/%s - Удаление пачки из кроя" % (self.__cut_id, self.__number_pack)
                 sql_values = (supply_row[1], take_material_value, txt_note, self.__cut_id)
                 sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                 if "mysql.connector.errors" in str(type(sql_info)):

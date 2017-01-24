@@ -3,6 +3,7 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtGui import QIcon, QBrush, QColor, QKeySequence
 
 from function import my_sql
 from form.templates import table, list
@@ -94,15 +95,18 @@ class Order(QMainWindow, order_class):
             self.pb_add_position.setEnabled(False)
             self.pb_change_position.setEnabled(False)
             self.pb_dell_position.setEnabled(False)
+            self.pb_check_warehouse.setEnabled(False)
+
+            self.sql_shipped = False
 
             self.de_date_order.setDate(QDate.currentDate())
             self.de_date_shipment.setDate(QDate.currentDate())
 
             query = "SELECT IFNULL(MAX(Number_Doc + 1), 'No Number') FROM `order` WHERE YEAR(Date_Order) = %s"
-            sql_info = my_sql.sql_select(query, (QDate.currentDate().year(), ))
+            sql_info = my_sql.sql_select(query, (QDate.currentDate().year(),))
             if "mysql.connector.errors" in str(type(sql_info)):
-                    QMessageBox.critical(self, "Ошибка sql получения нового номера документа", sql_info.msg, QMessageBox.Ok)
-                    return False
+                QMessageBox.critical(self, "Ошибка sql получения нового номера документа", sql_info.msg, QMessageBox.Ok)
+                return False
             if sql_info[0][0] == "No Number":
                 self.le_number_doc.setText("1")
             else:
@@ -110,13 +114,13 @@ class Order(QMainWindow, order_class):
 
     def start_set_sql_info(self):
         query = """SELECT `order`.Client_Id, clients.Name, `order`.Clients_Vendor_Id, `order`.Clients_Adress_Id, order_transport_company.Id,
-                    order_transport_company.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Order, `order`.Number_Doc, `order`.Note
+                    order_transport_company.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Order, `order`.Number_Doc, `order`.Note, `order`.Shipped
                     FROM `order` LEFT JOIN order_transport_company ON `order`.Transport_Company_Id = order_transport_company.Id
                     LEFT JOIN clients ON `order`.Client_Id = clients.Id WHERE `order`.Id = %s"""
-        sql_info = my_sql.sql_select(query, (self.id, ))
+        sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получения информации о заказе", sql_info.msg, QMessageBox.Ok)
-                return False
+            QMessageBox.critical(self, "Ошибка sql получения информации о заказе", sql_info.msg, QMessageBox.Ok)
+            return False
         self.of_set_client(sql_info[0][0], sql_info[0][1])
 
         find_index = self.cb_clients_vendor.findData(sql_info[0][2])
@@ -137,16 +141,27 @@ class Order(QMainWindow, order_class):
         self.le_number_doc.setText(str(sql_info[0][9]))
         self.le_note.setText(sql_info[0][10])
 
+        if sql_info[0][11] != 0:
+            self.cb_shipping.setChecked(True)
+            self.cb_shipping.setEnabled(True)
+            self.pb_add_position.setEnabled(False)
+            self.pb_change_position.setEnabled(False)
+            self.pb_dell_position.setEnabled(False)
+            self.sql_shipped = True
+        else:
+            self.cb_shipping.setChecked(False)
+            self.sql_shipped = False
+
         query = """SELECT order_position.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Id, product_article_parametrs.Name,
                     product_article_parametrs.Client_Name,order_position.Price, order_position.NDS, order_position.Value, order_position.In_On_Place,
                     order_position.Price * order_position.Value
                     FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
                     LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                     LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id WHERE Order_Id = %s"""
-        sql_info = my_sql.sql_select(query, (self.id, ))
+        sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получения позиций заказа", sql_info.msg, QMessageBox.Ok)
-                return False
+            QMessageBox.critical(self, "Ошибка sql получения позиций заказа", sql_info.msg, QMessageBox.Ok)
+            return False
 
         for position in sql_info:
             row = self.tw_position.rowCount()
@@ -207,6 +222,13 @@ class Order(QMainWindow, order_class):
         if not self.position.exec_():
             return False
 
+        if self.position.le_parametr.whatsThis() == "":
+            return False
+
+        if not self.sql_shipped:
+            self.cb_shipping.setChecked(self.sql_shipped)
+            self.cb_shipping.setEnabled(self.sql_shipped)
+
         row = self.tw_position.rowCount()
         self.tw_position.insertRow(row)
         table_item = QTableWidgetItem(self.position.le_article.text())
@@ -223,10 +245,10 @@ class Order(QMainWindow, order_class):
         self.tw_position.setItem(row, 2, table_item)
 
         query = "SELECT Client_Name FROM product_article_parametrs WHERE Id = %s"
-        sql_info = my_sql.sql_select(query, (self.position.le_parametr.whatsThis(), ))
+        sql_info = my_sql.sql_select(query, (self.position.le_parametr.whatsThis(),))
         if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получения имени артикула", sql_info.msg, QMessageBox.Ok)
-                return False
+            QMessageBox.critical(self, "Ошибка sql получения имени артикула", sql_info.msg, QMessageBox.Ok)
+            return False
         table_item = QTableWidgetItem(sql_info[0][0])
         table_item.setData(-1, "new")
         self.tw_position.setItem(row, 3, table_item)
@@ -273,6 +295,9 @@ class Order(QMainWindow, order_class):
                 QMessageBox.critical(self, "Ошибка ", "Выделите элемент который хотите изменить", QMessageBox.Ok)
                 return False
 
+            if select_row == -1:
+                return False
+
         self.position = Position()
         self.position.setModal(True)
         self.position.le_article.setText(self.tw_position.item(select_row, 0).text())
@@ -294,10 +319,15 @@ class Order(QMainWindow, order_class):
             self.position.price_name_change = "nds"
 
         self.position.le_value.setText(self.tw_position.item(select_row, 5).text())
+        self.position.le_in_on_place.setText(str(self.tw_position.item(select_row, 5).data(5)))
         self.position.ui_calculation()
         self.position.show()
         if not self.position.exec_():
             return False
+
+        if not self.sql_shipped:
+            self.cb_shipping.setChecked(self.sql_shipped)
+            self.cb_shipping.setEnabled(self.sql_shipped)
 
         row = select_row
         if self.tw_position.item(row, 0).data(-1) == "new":
@@ -327,10 +357,10 @@ class Order(QMainWindow, order_class):
         self.tw_position.setItem(row, 2, table_item)
 
         query = "SELECT Client_Name FROM product_article_parametrs WHERE Id = %s"
-        sql_info = my_sql.sql_select(query, (self.position.le_parametr.whatsThis(), ))
+        sql_info = my_sql.sql_select(query, (self.position.le_parametr.whatsThis(),))
         if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получения имени артикула", sql_info.msg, QMessageBox.Ok)
-                return False
+            QMessageBox.critical(self, "Ошибка sql получения имени артикула", sql_info.msg, QMessageBox.Ok)
+            return False
         table_item = QTableWidgetItem(sql_info[0][0])
         table_item.setData(-1, status)
         if id:
@@ -380,7 +410,8 @@ class Order(QMainWindow, order_class):
         return True
 
     def ui_double_click_position(self, row):
-        self.ui_change_position(row)
+        if not self.sql_shipped:
+            self.ui_change_position(row)
 
     def ui_del_position(self):
         try:
@@ -389,8 +420,15 @@ class Order(QMainWindow, order_class):
             QMessageBox.information(self, "Ошибка", "Выберете позицию для удаления", QMessageBox.Ok)
             return False
 
+        if row == -1:
+            return False
+
         result = QMessageBox.question(self, "Удалить?", "Точно удалить позицию?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
+            if not self.sql_shipped:
+                self.cb_shipping.setChecked(self.sql_shipped)
+                self.cb_shipping.setEnabled(self.sql_shipped)
+
             self.tw_position.setRowHidden(row, True)
             for col in range(4):
                 self.tw_position.item(row, col).setData(-1, "del")
@@ -400,6 +438,86 @@ class Order(QMainWindow, order_class):
     def ui_order_info_edit(self):
         if not self.save_change_order:
             self.save_change_order = True
+
+    def ui_check_warehouse(self):
+        position_article_id = []
+
+        # Переберем таблицу и получим нужные ID для проверки слада
+        for row in range(self.tw_position.rowCount()):
+            table_item = self.tw_position.item(row, 2)
+
+            self.tw_position.item(row, 1).setBackground(QBrush(QColor(252, 141, 141, 255)))
+
+            if table_item.data(-1) == "new":
+                if position_article_id.count(int(table_item.data(5))) == 0:
+                    position_article_id.append(int(table_item.data(5)))
+                else:
+                    name = str(
+                        self.tw_position.item(row, 0).text() + " (" + self.tw_position.item(row, 1).text() + ") [" + self.tw_position.item(row, 2).text() + "]")
+                    QMessageBox.critical(self, "Ошибка проверки", "Эта позиция встречается 2 раза\n%s" % name, QMessageBox.Ok)
+                    return False
+
+            elif table_item.data(-1) == "upd":
+                if position_article_id.count(int(table_item.data(5))) == 0:
+                    position_article_id.append(int(table_item.data(5)))
+                else:
+                    name = str(
+                        self.tw_position.item(row, 0).text() + " (" + self.tw_position.item(row, 1).text() + ") [" + self.tw_position.item(row, 2).text() + "]")
+                    QMessageBox.critical(self, "Ошибка проверки", "Эта позиция встречается 2 раза\n%s" % name, QMessageBox.Ok)
+                    return False
+
+            elif table_item.data(-1) == "del":
+                pass
+
+            elif table_item.data(-1) == "set":
+                if position_article_id.count(int(table_item.data(5))) == 0:
+                    position_article_id.append(int(table_item.data(5)))
+                else:
+                    name = str(
+                        self.tw_position.item(row, 0).text() + " (" + self.tw_position.item(row, 1).text() + ") [" + self.tw_position.item(row, 2).text() + "]")
+                    QMessageBox.critical(self, "Ошибка проверки", "Эта позиция встречается 2 раза\n%s" % name, QMessageBox.Ok)
+                    return False
+            else:
+                QMessageBox.critical(self, "Ошибка проверки", "Позиция без состояния", QMessageBox.Ok)
+                return False
+
+        # Получим остатки склада
+        query = "SELECT Id_Article_Parametr, Value_In_Warehouse FROM product_article_warehouse WHERE Id_Article_Parametr IN %s" % str(
+            tuple(position_article_id)).replace(",)", ")")
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получение остатков склада", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        if len(position_article_id) != len(sql_info):
+            QMessageBox.critical(self, "Ошибка проверки", "Не равны списки заказа и баланса склада", QMessageBox.Ok)
+            return False
+
+        # переберем таблицу и сравним остатки
+        color_yes = QBrush(QColor(150, 255, 161, 255))
+        color_no = QBrush(QColor(252, 141, 141, 255))
+        error = False
+
+        for row in range(self.tw_position.rowCount()):
+            table_item = self.tw_position.item(row, 2)
+            if table_item.data(-1) != "del":
+                warehouse_id = [warehouse for warehouse in sql_info if warehouse[0] == int(table_item.data(5))][0]
+
+                value = warehouse_id[1] - int(self.tw_position.item(row, 5).text())
+                if value >= 0:
+                    color = color_yes
+                    note = "На складе %s" % warehouse_id[1]
+                else:
+                    color = color_no
+                    note = "Не хватает %s" % -value
+                    error = True
+
+                for col in range(7):
+                    self.tw_position.item(row, col).setBackground(color)
+                    self.tw_position.item(row, col).setToolTip(note)
+
+        if not error:
+            self.cb_shipping.setEnabled(True)
 
     def ui_acc(self):
         if self.save_sql():
@@ -418,11 +536,18 @@ class Order(QMainWindow, order_class):
 
     def save_sql(self):
         if self.save_change_order:
+
+            if self.cb_shipping.isChecked():
+                shipped = 1
+            else:
+                shipped = 0
+
             if self.id:
                 if self.le_transport_company.text() == "":
                     tc_id = None
                 else:
                     tc_id = self.le_transport_company.whatsThis()
+
                 query = """UPDATE `order` SET Client_Id = %s, Clients_Vendor_Id = %s, Clients_Adress_Id = %s, Transport_Company_Id = %s, Date_Order = %s,
                             Date_Shipment = %s, Number_Order = %s, Number_Doc = %s, Note = %s WHERE Id = %s"""
                 parametrs = (self.le_client.whatsThis(), self.cb_clients_vendor.currentData(), self.cb_clients_adress.currentData(),
@@ -430,21 +555,27 @@ class Order(QMainWindow, order_class):
                              self.le_number_order.text(), self.le_number_doc.text(), self.le_note.text(), self.id)
                 sql_info = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(sql_info)):
-                        QMessageBox.critical(self, "Ошибка sql изменения заказа", sql_info.msg, QMessageBox.Ok)
-                        return False
+                    QMessageBox.critical(self, "Ошибка sql изменения заказа", sql_info.msg, QMessageBox.Ok)
+                    return False
                 self.new_id = False
             else:
                 query = """INSERT INTO `order` (Client_Id, Clients_Vendor_Id, Clients_Adress_Id, Transport_Company_Id, Date_Order, Date_Shipment,
-                                                Number_Order, Number_Doc, Note) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                                                Number_Order, Number_Doc, Note, Shipped) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0)"""
                 parametrs = (self.le_client.whatsThis(), self.cb_clients_vendor.currentData(), self.cb_clients_adress.currentData(),
                              self.le_transport_company.whatsThis(), self.de_date_order.date().toString(Qt.ISODate),
                              self.de_date_shipment.date().toString(Qt.ISODate), self.le_number_order.text(), self.le_number_doc.text(), self.le_note.text())
                 sql_info = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(sql_info)):
-                        QMessageBox.critical(self, "Ошибка sql добавления заказа", sql_info.msg, QMessageBox.Ok)
-                        return False
+                    QMessageBox.critical(self, "Ошибка sql добавления заказа", sql_info.msg, QMessageBox.Ok)
+                    return False
                 self.new_id = sql_info[0][0]
-        if self.save_change_order_position:
+        if self.save_change_order_position or self.sql_shipped != self.cb_shipping.isChecked():
+
+            if self.cb_shipping.isChecked():
+                shipped = 1
+            else:
+                shipped = 0
+
             if self.id:
                 sql_order_id = self.id
             elif self.new_id:
@@ -456,18 +587,30 @@ class Order(QMainWindow, order_class):
             sql_new = []
             sql_upd = []
             sql_del = []
+            sql_shipped_position = []
+            if not self.sql_shipped and shipped == 1:
+                str_transaction = "Заказ %s - отгружен" % self.le_number_doc.text()
+            elif self.sql_shipped and shipped == 0:
+                str_transaction = "Заказ %s - отменен" % self.le_number_doc.text()
+            else:
+                str_transaction = ""
             for row in range(self.tw_position.rowCount()):
                 table_item = self.tw_position.item(row, 2)
                 if table_item.data(-1) == "new":
                     sql_new.append((sql_order_id, table_item.data(5), self.tw_position.item(row, 4).text(), self.tw_position.item(row, 4).data(5),
                                     self.tw_position.item(row, 5).text(), self.tw_position.item(row, 5).data(5)))
+                    if str_transaction:
+                        sql_shipped_position.append([table_item.data(5), int(self.tw_position.item(row, 5).text()), str_transaction])
                 elif table_item.data(-1) == "upd":
                     sql_upd.append((sql_order_id, table_item.data(5), self.tw_position.item(row, 4).text(), self.tw_position.item(row, 4).data(5),
                                     self.tw_position.item(row, 5).text(), self.tw_position.item(row, 5).data(5), table_item.data(-2)))
+                    if str_transaction:
+                        sql_shipped_position.append([table_item.data(5), int(self.tw_position.item(row, 5).text()), str_transaction])
                 elif table_item.data(-1) == "del":
-                    sql_del.append((table_item.data(-2), ))
+                    sql_del.append((table_item.data(-2),))
                 elif table_item.data(-1) == "set":
-                    pass
+                    if str_transaction:
+                        sql_shipped_position.append([table_item.data(5), int(self.tw_position.item(row, 5).text()), str_transaction])
                 else:
                     QMessageBox.critical(self, "Ошибка состояния в save_sql", "Ошибка Непонятное sql состояние строки. Это не нормально!", QMessageBox.Ok)
                     return False
@@ -476,22 +619,55 @@ class Order(QMainWindow, order_class):
                 query = "INSERT INTO order_position (Order_Id, Product_Article_Parametr_Id, Price, NDS, Value, In_On_Place) VALUES (%s, %s, %s, %s, %s, %s)"
                 sql_info = my_sql.sql_many(query, sql_new)
                 if "mysql.connector.errors" in str(type(sql_info)):
-                        QMessageBox.critical(self, "Ошибка sql добавления позиций", sql_info.msg, QMessageBox.Ok)
-                        return False
+                    QMessageBox.critical(self, "Ошибка sql добавления позиций", sql_info.msg, QMessageBox.Ok)
+                    return False
             elif sql_upd:
                 query = "UPDATE order_position SET Order_Id = %s, Product_Article_Parametr_Id = %s, Price = %s, NDS = %s, Value = %s, In_On_Place = %s WHERE Id = %s"
                 for sql_tuple in sql_upd:
                     sql_info = my_sql.sql_change(query, sql_tuple)
                     if "mysql.connector.errors" in str(type(sql_info)):
-                            QMessageBox.critical(self, "Ошибка sql изменения позиции", sql_info.msg, QMessageBox.Ok)
-                            return False
+                        QMessageBox.critical(self, "Ошибка sql изменения позиции", sql_info.msg, QMessageBox.Ok)
+                        return False
             elif sql_del:
                 query = "DELETE FROM order_position WHERE Id = %s"
                 for sql_tuple in sql_del:
                     sql_info = my_sql.sql_change(query, sql_tuple)
                     if "mysql.connector.errors" in str(type(sql_info)):
-                            QMessageBox.critical(self, "Ошибка sql удаления позиции", sql_info.msg, QMessageBox.Ok)
-                            return False
+                        QMessageBox.critical(self, "Ошибка sql удаления позиции", sql_info.msg, QMessageBox.Ok)
+                        return False
+
+            if sql_shipped_position:
+                sql_connect_transaction = my_sql.sql_start_transaction()
+                if shipped == 0:
+                    query = "UPDATE product_article_warehouse SET Value_In_Warehouse = Value_In_Warehouse + %s WHERE Id_Article_Parametr = %s"
+                else:
+                    query = "UPDATE product_article_warehouse SET Value_In_Warehouse = Value_In_Warehouse - %s WHERE Id_Article_Parametr = %s"
+                for item in sql_shipped_position:
+                    sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (item[1], item[0]))
+                    if "mysql.connector.errors" in str(type(sql_info)):
+                        my_sql.sql_rollback_transaction(sql_connect_transaction)
+                        QMessageBox.critical(self, "Ошибка sql изменения склада", sql_info.msg, QMessageBox.Ok)
+                        return False
+
+                if shipped == 0:
+                    query = "INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note) VALUES (%s, NOW(), %s, %s)"
+                else:
+                    query = "INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note) VALUES (%s, NOW(), -%s, %s)"
+                sql_info = my_sql.sql_many_transaction(sql_connect_transaction, query, sql_shipped_position)
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    QMessageBox.critical(self, "Ошибка sql добавления записей изменения склада", sql_info.msg, QMessageBox.Ok)
+                    return False
+
+                query = "UPDATE `order` SET Shipped = %s WHERE Id = %s"
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (shipped, self.id))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    QMessageBox.critical(self, "Ошибка sql добавления записей изменения склада", sql_info.msg, QMessageBox.Ok)
+                    return False
+
+                my_sql.sql_commit_transaction(sql_connect_transaction)
+
         return True
 
     def of_set_client(self, id_client, name_client):
@@ -499,11 +675,11 @@ class Order(QMainWindow, order_class):
         self.le_client.setWhatsThis(str(id_client))
 
         query = "SELECT No_Nds FROM clients WHERE Id = %s"
-        parametrs = (id_client, )
+        parametrs = (id_client,)
         sql_info = my_sql.sql_select(query, parametrs)
         if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получение НДС/Не НДС", sql_info.msg, QMessageBox.Ok)
-                return False
+            QMessageBox.critical(self, "Ошибка sql получение НДС/Не НДС", sql_info.msg, QMessageBox.Ok)
+            return False
 
         if sql_info[0][0]:
             self.lb_client.setText("<html><head/><body><p align='center'> Клиент (Без НДС) </p></body></html>")
@@ -513,19 +689,19 @@ class Order(QMainWindow, order_class):
             self.lb_client.setWhatsThis("nds")
 
         query = "SELECT Id, Name, Adres FROM clients_actual_address WHERE Client_Id = %s"
-        parametrs = (id_client, )
+        parametrs = (id_client,)
         sql_info = my_sql.sql_select(query, parametrs)
         if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получение адресов клиента", sql_info.msg, QMessageBox.Ok)
-                return False
+            QMessageBox.critical(self, "Ошибка sql получение адресов клиента", sql_info.msg, QMessageBox.Ok)
+            return False
 
         if not sql_info:
             query = "SELECT Actual_Address FROM clients WHERE Id = %s"
-            parametrs = (id_client, )
+            parametrs = (id_client,)
             sql_info = my_sql.sql_select(query, parametrs)
             if "mysql.connector.errors" in str(type(sql_info)):
-                    QMessageBox.critical(self, "Ошибка sql получение адреса клиента", sql_info.msg, QMessageBox.Ok)
-                    return False
+                QMessageBox.critical(self, "Ошибка sql получение адреса клиента", sql_info.msg, QMessageBox.Ok)
+                return False
             if sql_info[0][0] == "":
                 self.cb_clients_adress.clear()
                 self.cb_clients_adress.addItem("None", None)
@@ -542,11 +718,11 @@ class Order(QMainWindow, order_class):
                 self.cb_clients_adress.addItem(item[1], item[0])
 
         query = 'SELECT Id,CONCAT_WS(", ", Number, Contract, Data_From) FROM clients_vendor_number WHERE Client_Id = %s'
-        parametrs = (id_client, )
+        parametrs = (id_client,)
         sql_info = my_sql.sql_select(query, parametrs)
         if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получение номеров клиента", sql_info.msg, QMessageBox.Ok)
-                return False
+            QMessageBox.critical(self, "Ошибка sql получение номеров клиента", sql_info.msg, QMessageBox.Ok)
+            return False
 
         if sql_info:
             self.cb_clients_vendor.clear()

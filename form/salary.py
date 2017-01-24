@@ -186,6 +186,20 @@ class SalaryList(QDialog, salary_list):
         if date.toString(Qt.ISODate) == "2000-01-01":
             QMessageBox.critical(self, "Ошибка", "Выберите дату начисления зарплаты", QMessageBox.Ok)
             return False
+        elif date.day() != date.daysInMonth():
+            QMessageBox.critical(self, "Ошибка", "Вы выбрали не последний день. Пока это запрещено", QMessageBox.Ok)
+            return False
+
+        query = """SELECT COUNT(*)
+                      FROM pack_operation
+                      WHERE Date_Pay = %s"""
+        sql_info = my_sql.sql_select(query, (date.toString(1), ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            print("Не смог проверить дату")
+            return False
+        if sql_info[0][0] != 0:
+            QMessageBox.critical(self, "Ошибка", "На эту дату уже был расчет", QMessageBox.Ok)
+            return False
 
         self.date_pay = datetime(date.year(), date.month(), date.day()).date()
 

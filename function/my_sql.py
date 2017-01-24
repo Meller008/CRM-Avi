@@ -116,6 +116,23 @@ def sql_change_transaction(connect, query, parametr=tuple()):
         return error
 
 
+def sql_many_transaction(connect, query, parametr=tuple()):
+    try:
+        cursor = connect.cursor()
+        cursor.executemany(query, parametr)
+        result = "нет ID"
+        if cursor.lastrowid:
+            result = str(cursor.lastrowid)
+        cursor.close()
+        return result
+
+    except mysql.connector.Error as error:
+        print("SQL - Ошибка при изменении")
+        print(error)
+        sql_rollback_transaction(connect)
+        return error
+
+
 def sql_commit_transaction(connect):
     try:
         connect.commit()
