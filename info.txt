@@ -1,10 +1,5 @@
-Крой №12345 Пачка №12 - Добавление фурнитуры в пачку +
-Крой №12345 Пачка №12 - Увеличение фурнитуры в пачке +
-Крой №12345 Пачка №12 - Уменьшение фурнитуры в пачке +
-Крой №12345 Пачка №12 - Удаление фурнитуры в пачке +
-
-
-Крой №12345 Пачка №12 - Удаление фурнитуры при удалении пачки
+!!! При вайпе !!!
+1 - Для нарезки бейки выбрать поставщика для заказа!
 
 
 
@@ -14,7 +9,15 @@ date.strftime("%d.%m.%Y %H:%M:%S")
 
 self.done()
 
- need = [id[1] for id in check_position if id[0] == position[0]][0]
+need = [id[1] for id in check_position if id[0] == position[0]][0]
 
 color_yes = QBrush(QColor(150, 255, 161, 255))  зеленый
 color_no = QBrush(QColor(252, 141, 141, 255))   Алый
+
+CASE
+  WHEN SUM(IF(pack.Date_Coplete IS NULL, 1, 0)) > 0 THEN '0'
+  ELSE '1'
+END
+
+import re
+re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(operations_price / value, 4))

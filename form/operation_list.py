@@ -39,6 +39,7 @@ class PayList(table.TableList):
         self.pb_change.deleteLater()
         self.pb_dell.deleteLater()
         self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
 
         self.query_table_all = """SELECT pack.Id, CONCAT(work.Last_Name, ' ', work.First_Name), pack_operation.Name, cut.Id, pack.Number, pack_operation.Price, pack_operation.Value,
                                         pack_operation.Price* pack_operation.Value, DATE_FORMAT(pack_operation.Date_make, '%d.%m.%Y'),

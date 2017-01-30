@@ -87,6 +87,12 @@
          <property name="text">
           <string>Выбрать</string>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -250,6 +256,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>cw_date_make</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -275,8 +287,8 @@
    <slot>ui_can()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>65</x>
-     <y>368</y>
+     <x>74</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
      <x>-38</x>
@@ -291,8 +303,8 @@
    <slot>ui_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>461</x>
-     <y>362</y>
+     <x>158</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
      <x>586</x>

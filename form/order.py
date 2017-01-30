@@ -1,9 +1,11 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow
 from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtGui import QIcon, QBrush, QColor, QKeySequence
+from PyQt5.QtGui import QIcon, QBrush, QColor
+import re
+from decimal import Decimal
+import datetime
 
 from function import my_sql
 from form.templates import table, list
@@ -16,20 +18,22 @@ order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
 class OrderList(table.TableList):
     def set_settings(self):
 
-        self.setWindowTitle("Список")  # Имя окна
+        self.setWindowTitle("Заказы")  # Имя окна
         self.resize(900, 270)
         self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
         self.toolBar.setStyleSheet("background-color: rgb(126, 176, 127);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Клиент", 120), ("Пункт разгрузки", 170), ("Дата заказ.", 75), ("Дата отгр.", 70), ("№ док.", 50), ("Стоймость", 105),
-                                  ("Примечание", 250))
+                                  ("Примечание", 230),("Отгр.", 40))
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc,
-                                    SUM(order_position.Value * order_position.Price), `order`.Note FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
-                                    LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
-                                    LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
+                                    SUM(order_position.Value * order_position.Price), `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да')
+                                      FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                                        LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                                        LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
 
         self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
 
@@ -62,6 +66,38 @@ class OrderList(table.TableList):
             self.main.of_tree_select_order(item)
             self.close()
             self.destroy()
+
+    def set_table_info(self):
+        self.table_items = my_sql.sql_select(self.query_table_select)
+        if "mysql.connector.errors" in str(type(self.table_items)):
+                QMessageBox.critical(self, "Ошибка sql получение таблицы", self.table_items.msg, QMessageBox.Ok)
+                return False
+
+        self.table_widget.clearContents()
+        self.table_widget.setRowCount(0)
+
+        if not self.table_items:
+            return False
+
+        for table_typle in self.table_items:
+            self.table_widget.insertRow(self.table_widget.rowCount())
+            if table_typle[8] == "Да":
+                color = QBrush(QColor(62, 240, 130, 255))
+            else:
+                color = QBrush(QColor(228, 242, 99, 255))
+
+            for column in range(1, len(table_typle)):
+
+                if isinstance(table_typle[column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
+                elif isinstance(table_typle[column], datetime.date):
+                    text = table_typle[column].strftime("%d.%m.%Y")
+                else:
+                    text = str(table_typle[column])
+                item = QTableWidgetItem(text)
+                item.setData(5, table_typle[0])
+                item.setBackground(color)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 1, item)
 
 
 class Order(QMainWindow, order_class):
@@ -434,6 +470,17 @@ class Order(QMainWindow, order_class):
                 self.tw_position.item(row, col).setData(-1, "del")
         self.save_change_order_position = True
         return True
+
+    def ui_change_date_shipment(self):
+        query = "SELECT IFNULL(MAX(Number_Doc + 1), 'No Number') FROM `order` WHERE YEAR(Date_Order) = %s"
+        sql_info = my_sql.sql_select(query, (self.de_date_shipment.date().year(),))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения нового номера документа", sql_info.msg, QMessageBox.Ok)
+            return False
+        if sql_info[0][0] == "No Number":
+            self.le_number_doc.setText("1")
+        else:
+            self.le_number_doc.setText(str(sql_info[0][0]))
 
     def ui_order_info_edit(self):
         if not self.save_change_order:

@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
 from form import login_window, material_provider, material, comparing, accessories_provider,\
     accesspries, staff, program_settings, notification, clients, operation, other, audit
-from form import article, order, cut, pay, salary, operation_list, warehouse
+from form import article, order, cut, pay, salary, operation_list, warehouse, beika
 from classes import my_class
 from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
@@ -223,6 +223,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_product_warehouse)
         self.sub_product_warehouse.resize(self.product_warehouse.size())
         self.sub_product_warehouse.show()
+
+    def view_beika(self):
+        self.beika = beika.BeikaList()
+        self.sub_beika = QMdiSubWindow()
+        self.sub_beika.setWidget(self.beika)
+        self.mdi.addSubWindow(self.sub_beika)
+        self.sub_beika.resize(self.beika.size())
+        self.sub_beika.show()
         
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())

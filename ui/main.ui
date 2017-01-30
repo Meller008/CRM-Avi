@@ -97,6 +97,7 @@
     </widget>
     <addaction name="ma_material"/>
     <addaction name="ma_accessories"/>
+    <addaction name="ma_beika"/>
     <addaction name="menu_5"/>
     <addaction name="menu_6"/>
    </widget>
@@ -293,6 +294,11 @@
   <action name="ma_warehouse">
    <property name="text">
     <string>Склад</string>
+   </property>
+  </action>
+  <action name="ma_beika">
+   <property name="text">
+    <string>Нарезка бейки</string>
    </property>
   </action>
  </widget>
@@ -698,6 +704,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_beika</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_beika()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -725,5 +747,6 @@
   <slot>view_salary_work()</slot>
   <slot>view_pack_operation_list()</slot>
   <slot>view_product_warehouse()</slot>
+  <slot>view_beika()</slot>
  </slots>
 </ui>

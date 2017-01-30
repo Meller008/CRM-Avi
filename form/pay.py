@@ -26,6 +26,7 @@ class PayList(table.TableList):
         self.setWindowTitle("Доплаты и вычеты")  # Имя окна
         self.resize(900, 270)
         self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
         self.toolBar.setStyleSheet("background-color: rgb(191, 255, 42);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)

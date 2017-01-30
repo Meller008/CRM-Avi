@@ -1,13 +1,15 @@
 import sys
 from os import getcwd
-from PyQt5.QtWidgets import QApplication, QLabel, QTableWidgetItem, QDialog, QMainWindow
+from PyQt5.QtWidgets import QApplication, QLabel, QTableWidgetItem, QDialog, QMainWindow, QListWidgetItem
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql
+import re
 
 main_class = loadUiType(getcwd() + '/ui/operation/main.ui')[0]
 operation_acc = loadUiType(getcwd() + '/ui/operation/operation_acc.ui')[0]
+salary_date = loadUiType(getcwd() + '/ui/operation/salary_date.ui')[0]
 
 
 class MainWindowOperation(QMainWindow, main_class):
@@ -43,6 +45,32 @@ class MainWindowOperation(QMainWindow, main_class):
         self.tw_operation.horizontalHeader().resizeSection(3, 230)
         self.tw_operation.horizontalHeader().resizeSection(4, 145)
         self.tw_operation.horizontalHeader().resizeSection(5, 140)
+
+        self.tw_salary_operation.horizontalHeader().resizeSection(0, 55)
+        self.tw_salary_operation.horizontalHeader().resizeSection(1, 50)
+        self.tw_salary_operation.horizontalHeader().resizeSection(2, 80)
+        self.tw_salary_operation.horizontalHeader().resizeSection(3, 58)
+        self.tw_salary_operation.horizontalHeader().resizeSection(4, 260)
+        self.tw_salary_operation.horizontalHeader().resizeSection(5, 70)
+        self.tw_salary_operation.horizontalHeader().resizeSection(6, 60)
+        self.tw_salary_operation.horizontalHeader().resizeSection(7, 70)
+        self.tw_salary_operation.horizontalHeader().resizeSection(8, 100)
+        self.tw_salary_operation.horizontalHeader().resizeSection(9, 155)
+
+        self.tw_salary_p_m.horizontalHeader().resizeSection(0, 280)
+        self.tw_salary_p_m.horizontalHeader().resizeSection(1, 65)
+        self.tw_salary_p_m.horizontalHeader().resizeSection(2, 90)
+        self.tw_salary_p_m.horizontalHeader().resizeSection(3, 400)
+
+        self.tw_salary_history.horizontalHeader().resizeSection(0, 75)
+        self.tw_salary_history.horizontalHeader().resizeSection(1, 280)
+        self.tw_salary_history.horizontalHeader().resizeSection(2, 85)
+        self.tw_salary_history.horizontalHeader().resizeSection(3, 90)
+        self.tw_salary_history.horizontalHeader().resizeSection(4, 70)
+        self.tw_salary_history.horizontalHeader().resizeSection(5, 60)
+        self.tw_salary_history.horizontalHeader().resizeSection(6, 80)
+        self.tw_salary_history.horizontalHeader().resizeSection(7, 100)
+        self.tw_salary_history.horizontalHeader().resizeSection(8, 150)
 
     def ui_login(self):
         query = """SELECT staff_worker_info.Id, staff_worker_info.First_Name, staff_worker_info.Last_Name
@@ -84,6 +112,7 @@ class MainWindowOperation(QMainWindow, main_class):
         self.sw_main.setCurrentIndex(0)
 
     def ui_add_operation(self):
+        self.le_cut_number.setFocus()
         self.sw_main.setCurrentIndex(2)
 
     def ui_cut_back(self):
@@ -101,6 +130,7 @@ class MainWindowOperation(QMainWindow, main_class):
             self.cut["cut_id"] = int(self.le_cut_number.text())
             self.lb_cut_error.setText('')
             self.le_cut_number.setText("")
+            self.le_pack_number.setFocus()
             self.sw_main.setCurrentIndex(3)
         else:
             self.lb_cut_error.setText('<html><head/><body><p align="center"><span style=" color:#ff0000;">Нет кроя с таким номером</span></p></body></html>')
@@ -108,6 +138,7 @@ class MainWindowOperation(QMainWindow, main_class):
 
     def ui_pack_back(self):
         self.le_pack_number.setText("")
+        self.le_cut_number.setFocus()
         self.sw_main.setCurrentIndex(2)
 
     def ui_pack_next(self):
@@ -143,6 +174,7 @@ class MainWindowOperation(QMainWindow, main_class):
         self.tw_operation.clearContents()
         self.tw_operation.setRowCount(0)
 
+        self.le_pack_number.setFocus()
         self.sw_main.setCurrentIndex(3)
 
     def ui_operation_next(self):
@@ -189,6 +221,162 @@ class MainWindowOperation(QMainWindow, main_class):
         self.tw_operation.setRowCount(0)
 
         self.sw_main.setCurrentIndex(1)
+
+    def ui_salary_menu(self):
+        self.sw_main.setCurrentIndex(5)
+
+    def ui_salary_operation(self):
+        query = """SELECT cut.Id, pack.Number, product_article.Article, product_article_size.Size, pack_operation.Name, pack_operation.Price,
+                        pack.Value_Pieces - pack.Value_Damage, pack_operation.Price * (pack.Value_Pieces - pack.Value_Damage ),
+                        pack_operation.Date_make, pack_operation.Date_Input,
+                          CASE
+                            WHEN pack.Date_Make IS NOT NULL AND pack.Date_Coplete IS NOT NULL THEN 1
+                            ELSE 0
+                          END
+                      FROM pack_operation LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
+                        LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                        LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                      WHERE pack_operation.Worker_Id = %s AND pack_operation.Pay = 0"""
+        sql_info = my_sql.sql_select(query, (self.user["id"], ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            return False
+
+        self.tw_salary_operation.clearContents()
+        self.tw_salary_operation.setRowCount(0)
+
+        operation_all = 0
+        operation_ok = 0
+        operation_waiting = 0
+
+        for row, operation in enumerate(sql_info):
+
+            if operation[10] == 0:
+                color = QBrush(QColor(246, 250, 127, 255))
+                operation_waiting += operation[7]
+            else:
+                color = QBrush(QColor(120, 240, 138, 255))
+                operation_ok += operation[7]
+
+            self.tw_salary_operation.insertRow(row)
+
+            new_table_item = QTableWidgetItem(str(operation[0]))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[1]))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[2]))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[3]))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 3, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[4]))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 4, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(operation[5], 2)))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 5, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[6]))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 6, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(operation[7], 2)))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 7, new_table_item)
+
+            new_table_item = QTableWidgetItem(operation[8].strftime("%d.%m.%Y"))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 8, new_table_item)
+
+            new_table_item = QTableWidgetItem(operation[9].strftime("%d.%m.%Y %H:%M:%S"))
+            new_table_item.setBackground(color)
+            self.tw_salary_operation.setItem(row, 9, new_table_item)
+
+        operation_all = operation_waiting + operation_ok
+
+        self.le_salary_operation_all.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(operation_all, 2))))
+        self.le_salary_operation_waiting.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(operation_waiting, 2))))
+        self.le_salary_operation_ok.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(operation_ok, 2))))
+
+        self.sw_main.setCurrentIndex(6)
+
+    def ui_salary_p_m(self):
+        query = """SELECT pay_reason.Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_worker.Note
+                      FROM pay_worker LEFT JOIN pay_reason ON pay_worker.Reason_Id = pay_reason.Id
+                      WHERE pay_worker.Worker_Id = %s AND pay_worker.Pay = 0"""
+        sql_info = my_sql.sql_select(query, (self.user["id"],))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            return False
+
+        self.tw_salary_p_m.clearContents()
+        self.tw_salary_p_m.setRowCount(0)
+
+        p_m_plus = 0
+        p_m_minus = 0
+        p_m_all = 0
+
+        for row, p_m in enumerate(sql_info):
+
+            if p_m[1] >= 0:
+                color = QBrush(QColor(246, 250, 127, 255))
+                p_m_plus += p_m[1]
+            else:
+                color = QBrush(QColor(245, 113, 113, 255))
+                p_m_minus += -p_m[1]
+
+            self.tw_salary_p_m.insertRow(row)
+
+            new_table_item = QTableWidgetItem(str(p_m[0]))
+            new_table_item.setBackground(color)
+            self.tw_salary_p_m.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(p_m[1], 2)))
+            new_table_item.setBackground(color)
+            self.tw_salary_p_m.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(p_m[2].strftime("%d.%m.%Y")))
+            new_table_item.setBackground(color)
+            self.tw_salary_p_m.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(p_m[3]))
+            new_table_item.setBackground(color)
+            self.tw_salary_p_m.setItem(row, 3, new_table_item)
+
+        p_m_all = p_m_plus - p_m_minus
+        self.tw_salary_p_m_all.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(p_m_all, 2))))
+        self.tw_salary_p_m_minus.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(p_m_minus, 2))))
+        self.tw_salary_p_m_plus.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(p_m_plus, 2))))
+
+        self.sw_main.setCurrentIndex(7)
+
+    def ui_salary_history(self):
+        self.date = SalaryDate(self, self.user["id"])
+        self.date.setModal(True)
+        self.date.show()
+
+    def ui_salary_menu_back(self):
+        self.sw_main.setCurrentIndex(1)
+
+    def ui_back_to_salary_menu(self):
+        self.tw_salary_operation.clearContents()
+        self.tw_salary_operation.setRowCount(0)
+
+        self.tw_salary_p_m.clearContents()
+        self.tw_salary_p_m.setRowCount(0)
+
+        self.tw_salary_history.clearContents()
+        self.tw_salary_history.setRowCount(0)
+
+        self.sw_main.setCurrentIndex(5)
 
     def set_pack_info(self):
         query = """SELECT pack.Value_Pieces, product_article.Article, pack.Size, clients.Name, DATE_FORMAT(cut.Date_Cut, '%d.%m.%Y')
@@ -311,6 +499,160 @@ class MainWindowOperation(QMainWindow, main_class):
         self.set_operation_table()
         self.lb_operation_error.setText('<html><head/><body><p align="center"><span style=" color:#00aa00;">Операция сохранена</span></p></body></html>')
 
+    def of_salary_history_date(self, date):
+        query = """SELECT 'Операция', pack_operation.Name, CONCAT(cut.Id, '/', pack.Number), CONCAT(product_article.Article, ' (', product_article_size.Size, ')'),
+                        pack_operation.Price, pack.Value_Pieces - pack.Value_Damage, pack_operation.Price * (pack.Value_Pieces - pack.Value_Damage ),
+                        pack_operation.Date_make, pack_operation.Date_Input
+                      FROM pack_operation LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
+                        LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                        LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                      WHERE pack_operation.Worker_Id = %s AND pack_operation.Date_Pay = %s AND pack_operation.Pay = 1"""
+        sql_info_1 = my_sql.sql_select(query, (self.user["id"], date))
+        if "mysql.connector.errors" in str(type(sql_info_1)):
+            return False
+
+        query = """SELECT IF(pay_worker.Balance >= 0, 'Доплата', 'Вычет'), pay_reason.Name, '', '', pay_worker.Balance, '1', pay_worker.Balance, pay_worker.Date_In_Pay, ''
+                      FROM pay_worker LEFT JOIN pay_reason ON pay_worker.Reason_Id = pay_reason.Id
+                      WHERE pay_worker.Worker_Id = %s AND pay_worker.Date_Pay = %s AND pay_worker.Pay = 1"""
+        sql_info_2 = my_sql.sql_select(query, (self.user["id"], date))
+        if "mysql.connector.errors" in str(type(sql_info_2)):
+            return False
+
+        position_salary = sql_info_1 + sql_info_2
+
+        self.tw_salary_history.clearContents()
+        self.tw_salary_history.setRowCount(0)
+
+        all_operation = 0
+        all_p_m = 0
+
+        for row, operation in enumerate(position_salary):
+            self.tw_salary_history.insertRow(row)
+
+            if operation[0] == "Операция":
+                all_operation += operation[6]
+            else:
+                all_p_m += operation[6]
+
+            new_table_item = QTableWidgetItem(str(operation[0]))
+            self.tw_salary_history.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[1]))
+            self.tw_salary_history.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[2]))
+            self.tw_salary_history.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[3]))
+            self.tw_salary_history.setItem(row, 3, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(operation[4], 2)))
+            self.tw_salary_history.setItem(row, 4, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(operation[5]))
+            self.tw_salary_history.setItem(row, 5, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(operation[6], 2)))
+            self.tw_salary_history.setItem(row, 6, new_table_item)
+
+            new_table_item = QTableWidgetItem(operation[7].strftime("%d.%m.%Y"))
+            self.tw_salary_history.setItem(row, 7, new_table_item)
+
+            if operation[8]:
+                new_table_item = QTableWidgetItem(operation[8].strftime("%d.%m.%Y %H:%M:%S"))
+                self.tw_salary_history.setItem(row, 8, new_table_item)
+
+        all = all_operation + all_p_m
+        self.tw_salary_history_p_m.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_p_m, 2))))
+        self.tw_salary_history_operation.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_operation, 2))))
+        self.tw_salary_history_all.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all, 2))))
+
+        self.sw_main.setCurrentIndex(8)
+
+    def ui_beika(self):
+
+        query = "SELECT Id, Name FROM accessories_name WHERE For_Beika = 1"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            return False
+
+        if len(sql_info) == 1:
+            self.beika_accessories_id = sql_info[0][0]
+        else:
+            return False
+
+        query = """SELECT Id, Name FROM material_name WHERE For_Beika = 1 ORDER BY Name"""
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            return False
+
+        for material in sql_info:
+            item = QListWidgetItem(material[1])
+            item.setData(-1, (material[0]))
+            item.setTextAlignment(Qt.AlignHCenter)
+            self.lw_material.addItem(item)
+
+        self.lw_material.setSpacing(5)
+
+        self.sw_main.setCurrentIndex(9)
+
+    def ui_beika_change_value(self, text):
+        if text:
+            if text[-1].isdigit():
+                return True
+            elif text[-1] == ".":
+                return True
+            elif text[-1] == ",":
+                self.le_value.setText(text.replace(",", "."))
+            else:
+                self.le_value.setText(text[:-1])
+
+    def ui_beika_acc(self):
+        if self.le_value.text() == "":
+            return False
+        elif self.lw_material.currentRow() < 0:
+            return False
+
+        query = """INSERT INTO beika (Material_Id, Accessories_Id, Date, Value, Finished, Worker_Id, Supply_Id)
+                      VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+        sql_value = (self.lw_material.selectedItems()[0].data(-1), self.beika_accessories_id, self.cw_date.selectedDate().toString(Qt.ISODate),
+                     self.le_value.value(), 0, self.user["id"], None)
+        sql_info = my_sql.sql_change(query, sql_value)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            self.le_error.setText("Не получилось сохранить нарезку. Обратитесь к администрации.")
+            self.pushButton_21.setEnabled(False)
+            return False
+
+        self.lw_material.clear()
+        self.le_value.clear()
+
+        self.sw_main.setCurrentIndex(1)
+
+    def ui_beika_back(self):
+        self.lw_material.clear()
+        self.le_value.clear()
+
+        self.sw_main.setCurrentIndex(1)
+
+    def keyPressEvent(self, event):
+        if event.key() == 16777221 or event.key() == 16777220:
+            if self.sw_main.currentIndex() == 0:
+                self.ui_login()
+            elif self.sw_main.currentIndex() == 1:
+                self.ui_add_operation()
+            elif self.sw_main.currentIndex() == 2:
+                self.ui_cut_next()
+            elif self.sw_main.currentIndex() == 3:
+                self.ui_pack_next()
+            elif self.sw_main.currentIndex() == 4:
+                self.ui_operation_next()
+            elif self.sw_main.currentIndex() == 9:
+                self.ui_beika_acc()
+
+        event.accept()
+
 
 class OperationAcc(QDialog, operation_acc):
     def __init__(self, main, cut, operation):
@@ -339,10 +681,59 @@ class OperationAcc(QDialog, operation_acc):
         self.close()
         self.destroy()
 
+    def keyPressEvent(self, event):
+        if event.key() == 16777221 or event.key() == 16777220:
+            if self.sw_main.currentIndex() == 0:
+                self.ui_date_acc()
+            elif self.sw_main.currentIndex() == 1:
+                self.ui_acc()
 
-try:
-    app = QApplication(sys.argv)
-    main = MainWindowOperation()
-    sys.exit(app.exec_())
-except:
-    print(123)
+        event.accept()
+
+
+class SalaryDate(QDialog, salary_date):
+    def __init__(self, main, work_id):
+        super(SalaryDate, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+        self.work = work_id
+
+        self.set_sql_salary_date()
+
+    def set_sql_salary_date(self):
+        query = """(SELECT Date_Pay FROM pack_operation WHERE Pay = 1 AND Worker_Id = %s GROUP BY Date_Pay ORDER BY Date_Pay DESC)
+                    UNION
+                    (SELECT Date_Pay FROM pay_worker WHERE Pay = 1 AND Worker_Id = %s GROUP BY Date_Pay ORDER BY Date_Pay DESC)
+                    ORDER BY Date_Pay DESC LIMIT 3"""
+        sql_info = my_sql.sql_select(query, (self.work, self.work))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            return False
+
+        for date in sql_info:
+            date_item = QListWidgetItem(date[0].strftime("%d.%m.%Y"))
+            date_item.setData(-1, date[0])
+            date_item.setTextAlignment(Qt.AlignHCenter)
+            self.lw_date_salary.addItem(date_item)
+
+    def ui_acc(self, item):
+        try:
+            date = self.lw_date_salary.selectedItems()[0].data(-1)
+        except:
+            return False
+
+        self.main.of_salary_history_date(date)
+        self.close()
+        self.destroy()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
+
+
+
+app = QApplication(sys.argv)
+main = MainWindowOperation()
+sys.exit(app.exec_())
+

@@ -729,6 +729,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>de_date_shipment</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_change_date_shipment()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>596</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>942</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_client()</slot>
@@ -741,5 +757,6 @@
   <slot>ui_can()</slot>
   <slot>ui_double_click_position()</slot>
   <slot>ui_check_warehouse()</slot>
+  <slot>ui_change_date_shipment()</slot>
  </slots>
 </ui>

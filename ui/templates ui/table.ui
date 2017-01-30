@@ -79,6 +79,7 @@
    <addaction name="pb_filter"/>
    <addaction name="pb_copy"/>
    <addaction name="pb_update"/>
+   <addaction name="pb_other"/>
   </widget>
   <action name="pb_add">
    <property name="text">
@@ -108,6 +109,11 @@
   <action name="pb_update">
    <property name="text">
     <string>Обновить</string>
+   </property>
+  </action>
+  <action name="pb_other">
+   <property name="text">
+    <string>Разное</string>
    </property>
   </action>
  </widget>
@@ -225,6 +231,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_other</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_other()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>359</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_table_item()</slot>
@@ -234,5 +256,6 @@
   <slot>ui_duplicate_table_item()</slot>
   <slot>ui_filter()</slot>
   <slot>ui_dell_table_item()</slot>
+  <slot>ui_other()</slot>
  </slots>
 </ui>

@@ -1,6 +1,6 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow
 from PyQt5.QtGui import QIcon
 from function import my_sql
 from decimal import Decimal
@@ -118,4 +118,7 @@ class TableList(QMainWindow, table_list_class):
         pass
 
     def ui_filter(self):
+        pass
+
+    def ui_other(self):
         pass
