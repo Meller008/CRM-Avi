@@ -1,10 +1,10 @@
 from os import getcwd
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
-from form import login_window, material_provider, material, comparing, accessories_provider,\
-    accesspries, staff, program_settings, notification, clients, operation, other, audit
-from form import article, order, cut, pay, salary, operation_list, warehouse, beika
-from classes import my_class
+from form import login_window, provider, comparing, staff, program_settings, notification, \
+    clients, operation, other, audit
+from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
+    warehouse_rest, supply_material, supply_accessories
 from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
 import sys
@@ -24,7 +24,7 @@ class MainWindow(QMainWindow, main_class):
         self.login = login_window.LoginWindow(self)
 
     def view_material(self):
-        self.material = material.Material()
+        self.material = supply_material.MaterialSupplyList()
         self.sub_material = QMdiSubWindow()
         self.sub_material.setWidget(self.material)
         self.mdi.addSubWindow(self.sub_material)
@@ -32,7 +32,7 @@ class MainWindow(QMainWindow, main_class):
         self.sub_material.show()
 
     def view_material_provider(self):
-        self.mat_prov = material_provider.MaterialProvider()
+        self.mat_prov = provider.ProviderMaterial()
         self.sub_provider = QMdiSubWindow()
         self.sub_provider.setWidget(self.mat_prov)
         self.mdi.addSubWindow(self.sub_provider)
@@ -40,7 +40,7 @@ class MainWindow(QMainWindow, main_class):
         self.sub_provider.show()
 
     def view_material_name(self):
-        self.material_neme = material_provider.MaterialName()
+        self.material_neme = supply_material.MaterialName()
         self.sub_mater_name = QMdiSubWindow()
         self.sub_mater_name.setWidget(self.material_neme)
         self.mdi.addSubWindow(self.sub_mater_name)
@@ -56,15 +56,15 @@ class MainWindow(QMainWindow, main_class):
         self.sub_comp_name.show()
 
     def view_accessories_name(self):
-        self.accessoriesl_neme = accessories_provider.AccessoriesName()
+        self.accessories_name = supply_accessories.AccessoriesName()
         self.sub_accsess_name = QMdiSubWindow()
-        self.sub_accsess_name.setWidget(self.accessoriesl_neme)
+        self.sub_accsess_name.setWidget(self.accessories_name)
         self.mdi.addSubWindow(self.sub_accsess_name)
-        self.sub_accsess_name.resize(self.accessoriesl_neme.size())
+        self.sub_accsess_name.resize(self.accessories_name.size())
         self.sub_accsess_name.show()
 
     def view_accessories_provider(self):
-        self.access_prov = accessories_provider.AccessoriesProvider()
+        self.access_prov = provider.ProviderAccessories()
         self.sub_provider_access = QMdiSubWindow()
         self.sub_provider_access.setWidget(self.access_prov)
         self.mdi.addSubWindow(self.sub_provider_access)
@@ -72,7 +72,7 @@ class MainWindow(QMainWindow, main_class):
         self.sub_provider_access.show()
 
     def view_accessories(self):
-        self.accessories = accesspries.Accessories()
+        self.accessories = supply_accessories.AccessoriesSupplyList()
         self.accessories.set_settings()
         self.sub_accessories = QMdiSubWindow()
         self.sub_accessories.setWidget(self.accessories)
@@ -129,7 +129,7 @@ class MainWindow(QMainWindow, main_class):
         self.sub_sett_road.show()
 
     def view_clients(self):
-        self.clients = clients.ClientsList()
+        self.clients = clients.ClientList()
         self.sub_clients = QMdiSubWindow()
         self.sub_clients.setWidget(self.clients)
         self.mdi.addSubWindow(self.sub_clients)
@@ -217,12 +217,20 @@ class MainWindow(QMainWindow, main_class):
         self.sub_operation_list.show()
 
     def view_product_warehouse(self):
-        self.product_warehouse = warehouse.Warehouse()
+        self.product_warehouse = warehouse_product.Warehouse()
         self.sub_product_warehouse = QMdiSubWindow()
         self.sub_product_warehouse.setWidget(self.product_warehouse)
         self.mdi.addSubWindow(self.sub_product_warehouse)
         self.sub_product_warehouse.resize(self.product_warehouse.size())
         self.sub_product_warehouse.show()
+
+    def view_warehouse_rest(self):
+        self.rest_warehouse = warehouse_rest.WarehouseRest()
+        self.sub_rest_warehouse = QMdiSubWindow()
+        self.sub_rest_warehouse.setWidget(self.rest_warehouse)
+        self.mdi.addSubWindow(self.sub_rest_warehouse)
+        self.sub_rest_warehouse.resize(self.rest_warehouse.size())
+        self.sub_rest_warehouse.show()
 
     def view_beika(self):
         self.beika = beika.BeikaList()
@@ -231,6 +239,22 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_beika)
         self.sub_beika.resize(self.beika.size())
         self.sub_beika.show()
+
+    def view_supply_material(self):
+        self.supply_material = supply_material.MaterialSupplyList()
+        self.sub_supply_material = QMdiSubWindow()
+        self.sub_supply_material.setWidget(self.supply_material)
+        self.mdi.addSubWindow(self.sub_supply_material)
+        self.sub_supply_material.resize(self.supply_material.size())
+        self.sub_supply_material.show()
+
+    def view_supply_accessories(self):
+        self.supply_accessories = supply_accessories.AccessoriesSupplyList()
+        self.sub_supply_accessories = QMdiSubWindow()
+        self.sub_supply_accessories.setWidget(self.supply_accessories)
+        self.mdi.addSubWindow(self.sub_supply_accessories)
+        self.sub_supply_accessories.resize(self.supply_accessories.size())
+        self.sub_supply_accessories.show()
         
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())

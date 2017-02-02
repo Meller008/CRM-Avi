@@ -1,17 +1,12 @@
 from os import getcwd
-from form import order, staff, operation, order, accesspries
-from datetime import datetime
+from form import staff, operation, order, supply_accessories
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QPushButton
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
-from PyQt5.QtCore import Qt, QDate, QObject
-from form.material import MaterialName
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtCore import Qt, QDate
 import re
 from decimal import *
-
-from function import my_sql, classes_function
 from classes import cut
-from form.templates import table, list
 from form import clients, article
 
 pack_class = loadUiType(getcwd() + '/ui/pack.ui')[0]
@@ -671,7 +666,7 @@ class PackAccessories(QDialog, pack_accessories_class):
         self.calc()
 
     def ui_accessories(self):
-        self.accessories_name = accesspries.AccessoriesName(self, True)
+        self.accessories_name = supply_accessories.AccessoriesName(self, True)
         self.accessories_name.setWindowModality(Qt.ApplicationModal)
         self.accessories_name.show()
 

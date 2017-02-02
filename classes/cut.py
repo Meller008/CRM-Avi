@@ -202,6 +202,7 @@ class Cut:
 
         # смотрим разницу нового и старого веса обрези
         change_value = Decimal(str(self.__weight_rest)) - self.__weight_rest_old
+        change_rest = change_value
 
         sql_connect_transaction = my_sql.sql_start_transaction()
         if change_value > 0:
@@ -240,6 +241,19 @@ class Cut:
                 if "mysql.connector.errors" in str(type(sql_info)):
                     my_sql.sql_rollback_transaction(sql_connect_transaction)
                     return [False, "Не смог добавить запись при увеличении обрези ткани (Это плохо к админу)"]
+
+            query = "UPDATE rest_warehouse SET Weight = Weight + %s"
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (change_rest, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                return [False, "Не смог положить обрезь на склад (Это плохо к админу)"]
+
+            txt_note = "%s - Увеличение обрези в крое" % self.__id
+            query = "INSERT INTO transaction_records_rest (Cut_Id, Date, Balance, Note) VALUES (%s, NOW(), %s, %s)"
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__id, change_rest, txt_note))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                return [False, "Не смог записать добавление на склад обрези (Это плохо к админу)"]
 
         elif change_value < 0:
             change_value = -change_value
@@ -300,6 +314,19 @@ class Cut:
                     if "mysql.connector.errors" in str(type(sql_info)):
                         my_sql.sql_rollback_transaction(sql_connect_transaction)
                         return [False, "Не смог добавить запись при уменьшении ткани (Это плохо к админу)"]
+
+            query = "UPDATE rest_warehouse SET Weight = Weight + %s"
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (change_rest,))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                return [False, "Не смог забрать обрезь со склада (Это плохо к админу)"]
+
+            txt_note = "%s - Уменьшение обрези в крое" % self.__id
+            query = "INSERT INTO transaction_records_rest (Cut_Id, Date, Balance, Note) VALUES (%s, NOW(), %s, %s)"
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__id, change_rest, txt_note))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                return [False, "Не смог забисать забор со склада обрези (Это плохо к админу)"]
 
         query = "UPDATE cut SET Weight_Rest = %s WHERE Id = %s"
         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__weight_rest, self.__id))
@@ -523,6 +550,19 @@ class Cut:
         if fabs(return_material - self.__weight_all) > Decimal(str(0.0005)):
             my_sql.sql_rollback_transaction(sql_connect_transaction)
             return [False, "Возвратная ткань не равна сумме кроя (Это плохо к админу)"]
+
+        query = "UPDATE rest_warehouse SET Weight = Weight - %s"
+        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__weight_all,))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            my_sql.sql_rollback_transaction(sql_connect_transaction)
+            return [False, "Не смог забрать обрезь со склада (Это плохо к админу)"]
+
+        txt_note = "%s - Удаление кроя" % self.__id
+        query = "INSERT INTO transaction_records_rest (Cut_Id, Date, Balance, Note) VALUES (%s, NOW(), %s, %s)"
+        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__id, -self.__weight_all, txt_note))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            my_sql.sql_rollback_transaction(sql_connect_transaction)
+            return [False, "Не смог забисать забор со склада обрези (Это плохо к админу)"]
 
         query = "DELETE FROM cut WHERE Id = %s"
         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__id, ))

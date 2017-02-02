@@ -1,70 +1,61 @@
 from os import getcwd, path, mkdir, listdir, startfile
 from datetime import datetime
 from shutil import copy
-from form import accessories_provider, staff
+from form import staff
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QVariant, QDate
+from PyQt5.QtCore import QDate
 from function import my_sql
+from form.templates import list
 
 client_class = loadUiType(getcwd() + '/ui/client.ui')[0]
 client_adress_class = loadUiType(getcwd() + '/ui/client_adres.ui')[0]
 client_number_class = loadUiType(getcwd() + '/ui/client_number.ui')[0]
 
 
-class ClientsList(accessories_provider.AccessoriesProvider):  # Вывод всех клиентов
+class ClientList(list.ListItems):
     def set_settings(self):
-        self.setWindowTitle("Клиенты")
-        self.toolBar.setStyleSheet("background-color: rgb(85, 170, 0);")
+        self.setWindowTitle("Клиенты")  # Имя окна
+        self.toolBar.setStyleSheet("background-color: rgb(85, 170, 0);")  # Цвет бара
+        self.title_new_window = "Клиент"  # Имя вызываемых окон
 
-    def set_sql_query(self):
-        self.sql_list = "SELECT clients.Id, clients.Name FROM clients"
+        self.sql_list = "SELECT clients.Id, clients.Name FROM clients ORDER BY clients.Name"
+        self.sql_add = ""
+        self.sql_change_select = ""
+        self.sql_update_select = ''
         self.sql_dell = "DELETE FROM clients WHERE Id = %s"
 
-    def list_provider(self):
-        sql_result = my_sql.sql_select(self.sql_list)
-        self.lw_provider.clear()
-        if "mysql.connector.errors" in str(type(sql_result)):
-            QMessageBox.critical(self, "Ошибка sql", sql_result.msg)
-        else:
-            for prov in sql_result:
-                var = QVariant(prov[0])
-                item = QListWidgetItem(prov[1])
-                item.setData(-1, var)
-                self.lw_provider.addItem(item)
+        self.set_new_win = {"WinTitle": "Клиент",
+                            "WinColor": "(85, 170, 0)",
+                            "lb_name": "Название",
+                            "lb_note": "Заметка"}
 
-    def add_provider(self):
+    def ui_add_item(self):
         self.add_client = Client(self)
         self.add_client.show()
 
-    def change_provider(self):
-        try:
-            select = self.lw_provider.selectedItems()[0].data(-1)
-            self.change_client = Client(self, select)
-            self.change_client.show()
-        except:
-            pass
-
-    def double_click_provider(self, select_prov):
-        if not self.dc_select:
-            self.change_client = Client(self, select_prov.data(-1))
-            self.change_client.show()
+    def ui_change_item(self, id=False):
+        if id:
+            id_select = id
         else:
-            self.m_class.of_set_client(select_prov.data(-1), select_prov.text())
+            try:
+                id_select = self.lw_list.selectedItems()[0].data(3)
+            except:
+                QMessageBox.critical(self, "Ошибка", "Выберете элемент", QMessageBox.Ok)
+                return False
+
+        self.change_client = Client(self, id_select)
+        self.change_client.show()
+
+    def ui_double_click_item(self, select_prov):
+        if not self.dc_select:
+            self.ui_change_item(select_prov.data(3))
+        else:
+            item = (select_prov.data(3), select_prov.text())
+            self.m_class.of_list_insert(item)
             self.close()
             self.destroy()
-
-    def dell_provider(self):
-        try:
-            select = self.lw_provider.selectedItems()[0].data(-1)
-            par = (select, )
-            sql_ret = my_sql.sql_change(self.sql_dell, par)
-            if "mysql.connector.errors" in str(type(sql_ret)):
-                QMessageBox.critical(self, "Ошибка sql кдаление клиента", sql_ret.msg)
-            self.list_provider()
-        except BaseException as e:
-            print(e)
 
 
 class Client(QDialog, client_class):
@@ -222,7 +213,7 @@ class Client(QDialog, client_class):
                 if "mysql.connector.errors" in str(type(info_sql)):
                     QMessageBox.critical(self, "Ошибка sql удаление номера", info_sql.msg, QMessageBox.Ok)
 
-        self.m.list_provider()
+        self.m.sql_set_list()
         self.close()
         self.destroy()
 

@@ -3,20 +3,20 @@ from form import article
 from form.pack import PackBrows
 from form.order import Order
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut
-from PyQt5.QtGui import QIcon, QBrush, QColor, QKeySequence
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql
 
 
-warehouse_change = loadUiType(getcwd() + '/ui/warehouse_change.ui')[0]
-warehouse_info = loadUiType(getcwd() + '/ui/warehouse_info.ui')[0]
+warehouse_change = loadUiType(getcwd() + '/ui/warehouse_product_change.ui')[0]
+warehouse_info = loadUiType(getcwd() + '/ui/warehouse_product_info.ui')[0]
 
 
 # Просто перепишем окно отображения артикулов под склад.
 class Warehouse(article.ArticleList):
     def set_settings(self):
-        self.setWindowTitle("Список артикулов")  # Имя окна
+        self.setWindowTitle("Склад продукции")  # Имя окна
         self.toolBar.setStyleSheet("background-color: rgb(167, 183, 255);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)

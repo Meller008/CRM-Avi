@@ -1,21 +1,11 @@
 from os import getcwd
-from form import order, staff
-from datetime import datetime
+from form import staff
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QPushButton
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
-from PyQt5.QtCore import Qt, QDate, QObject
-from form.material import MaterialName
+from PyQt5.QtWidgets import QDialog
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt
 from form.pack import PackBrows
-from classes import cut
-import re
-import datetime
-from decimal import Decimal
-from function import my_sql, classes_function
-from classes import cut
-from form.templates import table, list
-from form import clients, article
-from classes.my_class import User
+from form.templates import table
 
 
 operation_pack_filter = loadUiType(getcwd() + '/ui/operation_pack_filter.ui')[0]

@@ -1,11 +1,11 @@
 from os import getcwd, path, mkdir, listdir, startfile, rmdir
 from shutil import copy
-from form import accessories_provider
+from form.templates import list
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
-from function import my_sql, format_date
+from function import my_sql
 import openpyxl
 
 staff_list_class, staff_list_base_class = loadUiType(getcwd() + '/ui/staff.ui')
@@ -1540,53 +1540,62 @@ class OneStaff(QMainWindow, one_staff_class):
             e.accept()
 
 
-class Country(accessories_provider.AccessoriesProvider):  # Вывод всех гражданств
+class Country(list.ListItems):
     def set_settings(self):
-        self.setWindowTitle("Настройка стран")
-        self.toolBar.setStyleSheet("background-color: rgb(129, 66, 255);")
+        self.setWindowTitle("Настройка стран")  # Имя окна
+        self.toolBar.setStyleSheet("background-color: rgb(129, 66, 255);")  # Цвет бара
+        self.title_new_window = "Страна"  # Имя вызываемых окон
 
-    def set_sql_query(self):
-        self.sql_list = "SELECT staff_country.Country_name FROM staff_country"
+        self.sql_list = "SELECT id, staff_country.Country_name FROM staff_country ORDER BY staff_country.Country_name"
         self.sql_add = "INSERT INTO staff_country (Country_name, Patent, Act) VALUES (%s, %s, %s)"
-        self.sql_change_select = "SELECT Country_name, Patent, Act FROM staff_country WHERE Country_name = %s"
-        self.sql_update_select = "UPDATE staff_country SET Country_name = %s, Patent = %s, Act = %s WHERE Country_name = %s"
-        self.sql_dell = "DELETE FROM staff_country WHERE Country_name = %s"
+        self.sql_change_select = "SELECT Country_name, Patent, Act FROM staff_country WHERE Id = %s"
+        self.sql_update_select = 'UPDATE staff_country SET Country_name = %s, Patent = %s, Act = %s WHERE Id = %s'
+        self.sql_dell = "DELETE FROM staff_country WHERE Id = %s"
 
-    def add_provider(self):
+        self.set_new_win = {"WinTitle": "Страна",
+                            "WinColor": "(129, 66, 255)",
+                            "lb_name": "Название",
+                            "lb_note": "Заметка"}
+
+    def ui_add_item(self):
         self.add_country = ChangeCountry(self)
+        self.add_country.setModal(True)
         self.add_country.show()
 
-    def change_provider(self):
-        select = self.lw_provider.selectedItems()
-        if select:
-            self.change_country = ChangeCountry(self)
-            self.change_country.set_info(select[0].text())
-            self.change_country.show()
-
-    def double_click_provider(self, select_prov):
-        pass
-        if not self.dc_select:
-            self.change_country = ChangeCountry(self)
-            self.change_country.set_info(select_prov.text())
-            self.change_country.show()
+    def ui_change_item(self, id=False):
+        if id:
+            id_select = id
         else:
-            pass
+            try:
+                id_select = self.lw_list.selectedItems()[0].data(3)
+            except:
+                QMessageBox.critical(self, "Ошибка", "Выберете элемент", QMessageBox.Ok)
+                return False
+
+        self.change_country = ChangeCountry(self, id_select)
+        self.change_country.setModal(True)
+        self.change_country.show()
 
 
-class ChangeCountry(QDialog, country_class):  # Ввод и зменение гражданств
-    def __init__(self, *args):
+class ChangeCountry(QDialog, country_class):  # Ввод и изменение гражданств
+    def __init__(self, main, id=None):
         super(ChangeCountry, self).__init__()
-        self.main = args[0]
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
-        self.setModal(True)
+
+        self.main = main
+        self.id = id
         self.change_on = False
 
-    def set_info(self, country_name_change):
-        self.change_on = True
-        self.country_name_change = country_name_change
-        par = (country_name_change,)
-        sql_ret = my_sql.sql_select(self.main.sql_change_select, par)
+        if self.id:
+            self.set_info()
+            self.change_on = True
+        else:
+            self.change_on = False
+
+    def set_info(self):
+        self.country_id_change = self.id
+        sql_ret = my_sql.sql_select(self.main.sql_change_select, (self.id, ))
         if "mysql.connector.errors" in str(type(sql_ret)):
             QMessageBox.critical(self, "Ошибка sql", sql_ret.msg, QMessageBox.Ok)
             return False
@@ -1608,24 +1617,21 @@ class ChangeCountry(QDialog, country_class):  # Ввод и зменение г�
 
     def acc(self):
         name = self.le_name.text()
-        a = self.cb_patent.isTristate()
         if not self.cb_patent.isChecked():
             patent = 0
             act = self.te_act.toPlainText()
         else:
             patent = 1
             act = ""
-        par = (name, patent, act)
+
         if self.change_on:
-            par = (name, patent, act, self.country_name_change)
-            sql_ret = my_sql.sql_change(self.main.sql_update_select, par)
+            sql_ret = my_sql.sql_change(self.main.sql_update_select, (name, patent, act, self.id))
         else:
-            par = (name, patent, act)
-            sql_ret = my_sql.sql_change(self.main.sql_add, par)
+            sql_ret = my_sql.sql_change(self.main.sql_add, (name, patent, act))
         if "mysql.connector.errors" in str(type(sql_ret)):
             QMessageBox.critical(self, "Ошибка sql", sql_ret.msg, QMessageBox.Ok)
             return False
-        self.main.list_provider()
+        self.main.sql_set_list()
         self.close()
         self.destroy()
 

@@ -1,9 +1,9 @@
 from os import getcwd
 from form.templates import tree
-from form import operation, material_provider, accessories_provider
+from form import operation, supply_material, supply_accessories
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut
-from PyQt5.QtGui import QIcon, QBrush, QColor, QKeySequence
+from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql
 
@@ -554,7 +554,7 @@ class Article(QMainWindow, article_class):
         self.calc()
 
     def ui_add_material(self):
-        self.material_name = MaterialName(self, True)
+        self.material_name = supply_material.MaterialName(self, True)
         self.material_name.setWindowModality(QtCore.Qt.ApplicationModal)
         self.material_name.show()
 
@@ -676,7 +676,7 @@ class Article(QMainWindow, article_class):
         self.calc()
 
     def ui_add_accessories(self):
-        self.accessories_name = AccessoriesName(self, True)
+        self.accessories_name = supply_accessories.AccessoriesName(self, True)
         self.accessories_name.setWindowModality(QtCore.Qt.ApplicationModal)
         self.accessories_name.show()
 
@@ -1082,31 +1082,27 @@ class Article(QMainWindow, article_class):
             self.tw_operations.setItem(self.tw_operations.rowCount() - 1, col - 1, new_item)
         self.calc()
 
-    def of_set_material_name(self, material):  # Внешняя функция добавления материала
+    def of_list_material_name(self, material):  # Внешняя функция добавления материала
         query = """SELECT material_name.Id, material_supplyposition.Price
                     FROM material_name LEFT JOIN material_supplyposition ON material_name.Id = material_supplyposition.Material_NameId
                     LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
                     LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
-                    WHERE material_name.Name =%s AND material_balance.BalanceWeight > 0 ORDER BY material_supply.Data LIMIT 1"""
+                    WHERE material_name.Id =%s AND material_balance.BalanceWeight > 0 ORDER BY material_supply.Data LIMIT 1"""
 
         value = QInputDialog.getDouble(self, "Количество", "Введите требуемое количество матриала", decimals=4)
         if value[0] == 0 or value[1] == False:
             return False
         value = value[0]
 
-        sql_info = my_sql.sql_select(query, (material,))
+        sql_info = my_sql.sql_select(query, (material[0],))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql поиск цены материала", sql_info.msg, QMessageBox.Ok)
             return False
         elif not sql_info:
-            query = "SELECT Id, 0 FROM material_name WHERE Name = %s"
-            sql_info = my_sql.sql_select(query, (material,))
-            if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql поиск ID материала", sql_info.msg, QMessageBox.Ok)
-                return False
+            sql_info = ((material[0], "0"), )
 
         self.tw_materials.insertRow(self.tw_materials.rowCount())
-        item = QTableWidgetItem(material)
+        item = QTableWidgetItem(material[1])
         item.setData(5, sql_info[0][0])
         item.setData(-1, "new")
         item.setBackground(QBrush(QColor(153, 221, 255, 255)))
@@ -1128,31 +1124,27 @@ class Article(QMainWindow, article_class):
         self.tw_materials.setItem(self.tw_materials.rowCount() - 1, 3, item)
         self.calc()
 
-    def of_set_accessories_name(self, accessories):
+    def of_list_accessories_name(self, accessories):
         query = """SELECT accessories_name.Id, accessories_supplyposition.Price
                     FROM accessories_name LEFT JOIN accessories_supplyposition ON accessories_name.Id = accessories_supplyposition.accessories_NameId
                     LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.accessories_SupplyPositionId
                     LEFT JOIN accessories_supply ON accessories_supplyposition.accessories_SupplyId = accessories_supply.Id
-                    WHERE accessories_name.Name = %s AND accessories_balance.BalanceValue > 0 ORDER BY accessories_supply.Data LIMIT 1"""
+                    WHERE accessories_name.Id = %s AND accessories_balance.BalanceValue > 0 ORDER BY accessories_supply.Data LIMIT 1"""
 
         value = QInputDialog.getDouble(self, "Количество", "Введите требуемое количество аксесуара", decimals=4)
         if value[0] == 0 or value[1] == False:
             return False
         value = value[0]
 
-        sql_info = my_sql.sql_select(query, (accessories,))
+        sql_info = my_sql.sql_select(query, (accessories[0],))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql поиск цены аксесуара", sql_info.msg, QMessageBox.Ok)
             return False
         elif not sql_info:
-            query = "SELECT Id, 0 FROM accessories_name WHERE Name = %s"
-            sql_info = my_sql.sql_select(query, (accessories,))
-            if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql поиск ID аксесуара", sql_info.msg, QMessageBox.Ok)
-                return False
+            sql_info = ((accessories[0], "0"), )
 
         self.tw_materials.insertRow(self.tw_materials.rowCount())
-        item = QTableWidgetItem(accessories)
+        item = QTableWidgetItem(accessories[1])
         item.setData(5, sql_info[0][0])
         item.setData(-1, "new")
         item.setBackground(QBrush(QColor(252, 163, 255, 255)))
@@ -1212,11 +1204,11 @@ class ChangeMaterial(QDialog, article_change_material_class):
 
     def ui_view_list_material(self):
         if self.variant == "material":
-            self.material_name = MaterialName(self, True)
+            self.material_name = supply_material.MaterialName(self, True)
             self.material_name.setWindowModality(QtCore.Qt.ApplicationModal)
             self.material_name.show()
         elif self.variant == "accessories":
-            self.accessories_name = AccessoriesName(self, True)
+            self.accessories_name = supply_accessories.AccessoriesName(self, True)
             self.accessories_name.setWindowModality(QtCore.Qt.ApplicationModal)
             self.accessories_name.show()
 
@@ -1231,12 +1223,12 @@ class ChangeMaterial(QDialog, article_change_material_class):
         self.close()
         self.destroy()
 
-    def of_set_material_name(self, item):
-        self.le_material.setText(item)
+    def of_list_material_name(self, item):
+        self.le_material.setText(item[1])
         self.le_material.setWhatsThis(str(1))
 
-    def of_set_accessories_name(self, item):
-        self.le_material.setText(item)
+    def of_list_accessories_name(self, item):
+        self.le_material.setText(item[1])
         self.le_material.setWhatsThis(str(1))
 
 
@@ -1297,19 +1289,5 @@ class CopyParametr(QDialog, article_copy_parametr):
 
     def ui_cancel(self):
         self.done(-1)
-        self.close()
-        self.destroy()
-
-
-class AccessoriesName(accessories_provider.AccessoriesName):  # Обновленный клас для добавления аксесуаров
-    def double_click_provider(self, select_prov):
-        self.m_class.of_set_accessories_name(select_prov.text())
-        self.close()
-        self.destroy()
-
-
-class MaterialName(material_provider.MaterialName):  # Обновленный клас для добавления Ткани
-    def double_click_provider(self, select_prov):
-        self.m_class.of_set_material_name(select_prov.text())
         self.close()
         self.destroy()

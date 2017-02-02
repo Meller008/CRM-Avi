@@ -2,20 +2,16 @@ from os import getcwd
 from form import order, staff
 from datetime import datetime
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QPushButton
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QObject
-from form.material import MaterialName
+from form.supply_material import MaterialName
 from form.pack import PackBrows
 
 import re
 
-from function import my_sql, classes_function
+from function import my_sql
 from classes import cut
-from form.templates import table, list
-from form import clients, article
-
-from classes.my_class import User
 
 cut_list_class = loadUiType(getcwd() + '/ui/cut_list.ui')[0]
 cut_brows_class = loadUiType(getcwd() + '/ui/cut_brows.ui')[0]
@@ -102,7 +98,9 @@ class CutList(QMainWindow, cut_list_class):
             new_table_item.setData(-2, cut[0])
             self.tw_cut_list.setItem(row, 2, new_table_item)
 
-            new_table_item = QTableWidgetItem(str(cut[1] + cut[2]))
+            rest = cut[2] if cut[2] is not None else 0
+            weight = cut[1] if cut[1] is not None else 0
+            new_table_item = QTableWidgetItem(str(rest + weight))
             new_table_item.setData(-2, cut[0])
             self.tw_cut_list.setItem(row, 3, new_table_item)
 

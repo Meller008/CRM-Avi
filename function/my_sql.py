@@ -20,6 +20,7 @@ def sql_conn():
         return conn, cursor
 
     except mysql.connector.Error as error:
+        print(error)
         return error
 
 
@@ -33,6 +34,7 @@ def sql_select(query, parametr=tuple()):
         return result
 
     except mysql.connector.Error as error:
+        print(error)
         return error
 
 
@@ -49,6 +51,7 @@ def sql_change(query, parametr=tuple()):
         return result
 
     except mysql.connector.Error as error:
+        print(error)
         return error
 
 
@@ -65,6 +68,7 @@ def sql_many(query, parametr=tuple()):
         return result
 
     except mysql.connector.Error as error:
+        print(error)
         return error
 
 

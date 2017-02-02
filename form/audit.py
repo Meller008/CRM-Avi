@@ -1,17 +1,13 @@
 from os import getcwd
-from form import order, staff
 from datetime import datetime
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QFileDialog, QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QPushButton
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
-from PyQt5.QtCore import Qt, QDate, QObject
-from form.material import MaterialName
-from form.pack import PackBrows
+from PyQt5.QtWidgets import QFileDialog,QMainWindow
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QDate
 import re
 import json
 import openpyxl
 import random
-from openpyxl.styles import Border, Side, Alignment
 
 verification_class = loadUiType(getcwd() + '/ui/audit_verification.ui')[0]
 

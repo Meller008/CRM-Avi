@@ -1,5 +1,6 @@
 from function import my_sql
 
+
 class Singleton(type):
     _instances = {}
 

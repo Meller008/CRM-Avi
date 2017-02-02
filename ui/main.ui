@@ -131,7 +131,6 @@
     <addaction name="ma_order_list"/>
     <addaction name="ma_clients"/>
     <addaction name="ma_product_operations"/>
-    <addaction name="ma_warehouse"/>
    </widget>
    <widget class="QMenu" name="menu_8">
     <property name="title">
@@ -145,6 +144,8 @@
      <string>Разное</string>
     </property>
     <addaction name="ma_order_edi"/>
+    <addaction name="ma_supply_material"/>
+    <addaction name="ma_supply_accessories"/>
    </widget>
    <widget class="QMenu" name="menu_10">
     <property name="title">
@@ -161,9 +162,17 @@
     <addaction name="ma_salary_work"/>
     <addaction name="ma_pack_operation_list"/>
    </widget>
+   <widget class="QMenu" name="menu_12">
+    <property name="title">
+     <string>Склады</string>
+    </property>
+    <addaction name="ma_warehouse"/>
+    <addaction name="ma_warehouse_rest"/>
+   </widget>
    <addaction name="menu"/>
-   <addaction name="menu_8"/>
+   <addaction name="menu_12"/>
    <addaction name="menu_7"/>
+   <addaction name="menu_8"/>
    <addaction name="menu_4"/>
    <addaction name="menu_11"/>
    <addaction name="menu_3"/>
@@ -293,12 +302,27 @@
   </action>
   <action name="ma_warehouse">
    <property name="text">
-    <string>Склад</string>
+    <string>Продукция</string>
    </property>
   </action>
   <action name="ma_beika">
    <property name="text">
     <string>Нарезка бейки</string>
+   </property>
+  </action>
+  <action name="ma_warehouse_rest">
+   <property name="text">
+    <string>Обрезь</string>
+   </property>
+  </action>
+  <action name="ma_supply_material">
+   <property name="text">
+    <string>Новый приход ткани</string>
+   </property>
+  </action>
+  <action name="ma_supply_accessories">
+   <property name="text">
+    <string>Новый приход фурнитруы</string>
    </property>
   </action>
  </widget>
@@ -720,6 +744,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_warehouse_rest</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_warehouse_rest()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_supply_material</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_supply_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_supply_accessories</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_supply_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -748,5 +820,8 @@
   <slot>view_pack_operation_list()</slot>
   <slot>view_product_warehouse()</slot>
   <slot>view_beika()</slot>
+  <slot>view_warehouse_rest()</slot>
+  <slot>view_supply_material()</slot>
+  <slot>view_supply_accessories()</slot>
  </slots>
 </ui>

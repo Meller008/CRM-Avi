@@ -1,20 +1,15 @@
 from os import getcwd
-from form import order, staff
+from form import staff
 from datetime import datetime
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QPushButton
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
-from PyQt5.QtCore import Qt, QDate, QObject
-from form.material import MaterialName
-from form.pack import PackBrows
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtCore import Qt, QDate
 import re
 import datetime
 from decimal import Decimal
-
-from function import my_sql, classes_function
-from classes import cut
+from function import my_sql
 from form.templates import table, list
-from form import clients, article
 from classes.my_class import User
 
 brows_pay = loadUiType(getcwd() + '/ui/pay_plus_minus.ui')[0]

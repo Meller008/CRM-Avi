@@ -8,7 +8,7 @@ from math import fabs
 
 from function import my_sql
 from form.templates import table, list
-from form import accesspries, material, staff
+from form import supply_accessories, supply_material, staff
 
 
 beika_settings = loadUiType(getcwd() + '/ui/beika_settings.ui')[0]
@@ -25,6 +25,7 @@ class BeikaList(table.TableList):
         self.resize(700, 270)
         self.pb_copy.deleteLater()
         self.pb_filter.deleteLater()
+        self.pb_other.setText("Настройки")
         self.toolBar.setStyleSheet("background-color: rgb(255, 203, 219);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
@@ -116,12 +117,12 @@ class BeikaSettings(QDialog, beika_settings):
             self.lw_material_name.addItem(item)
 
     def ui_view_accessories_name(self):
-        self.accessories_name = accesspries.AccessoriesName(self, True)
+        self.accessories_name = supply_accessories.AccessoriesName(self, True)
         self.accessories_name.setWindowModality(Qt.ApplicationModal)
         self.accessories_name.show()
 
     def ui_add_material(self):
-        self.material_name = material.MaterialName(self, True)
+        self.material_name = supply_material.MaterialName(self, True)
         self.material_name.setWindowModality(Qt.ApplicationModal)
         self.material_name.show()
 

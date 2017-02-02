@@ -1,21 +1,12 @@
 from os import getcwd
-from form import order, staff
 from datetime import datetime
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QPushButton, QListWidgetItem
-from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
-from PyQt5.QtCore import Qt, QDate, QObject
-from form.material import MaterialName
-from form.pack import PackBrows
-import re
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem
+from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtCore import Qt
 from decimal import *
+from function import my_sql
 
-from function import my_sql, classes_function
-from classes import cut
-from form.templates import table, list
-from form import clients, article
-
-from classes.my_class import User
 
 salary_list = loadUiType(getcwd() + '/ui/salary_work.ui')[0]
 salary_work = loadUiType(getcwd() + '/ui/salary_work_info.ui')[0]
