@@ -7,9 +7,7 @@ from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QObject
 from form.supply_material import MaterialName
 from form.pack import PackBrows
-
 import re
-
 from function import my_sql
 from classes import cut
 

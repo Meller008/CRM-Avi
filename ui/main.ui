@@ -122,6 +122,7 @@
     </property>
     <addaction name="ma_program_settings_path"/>
     <addaction name="ma_settings_road"/>
+    <addaction name="ma_settings_acces"/>
    </widget>
    <widget class="QMenu" name="menu_7">
     <property name="title">
@@ -144,8 +145,7 @@
      <string>Разное</string>
     </property>
     <addaction name="ma_order_edi"/>
-    <addaction name="ma_supply_material"/>
-    <addaction name="ma_supply_accessories"/>
+    <addaction name="ma_scan_pack"/>
    </widget>
    <widget class="QMenu" name="menu_10">
     <property name="title">
@@ -166,6 +166,8 @@
     <property name="title">
      <string>Склады</string>
     </property>
+    <addaction name="ma_warehouse_material"/>
+    <addaction name="ma_warehouse_accessories"/>
     <addaction name="ma_warehouse"/>
     <addaction name="ma_warehouse_rest"/>
    </widget>
@@ -323,6 +325,26 @@
   <action name="ma_supply_accessories">
    <property name="text">
     <string>Новый приход фурнитруы</string>
+   </property>
+  </action>
+  <action name="ma_warehouse_material">
+   <property name="text">
+    <string>Ткань</string>
+   </property>
+  </action>
+  <action name="ma_warehouse_accessories">
+   <property name="text">
+    <string>Фурнитура</string>
+   </property>
+  </action>
+  <action name="ma_scan_pack">
+   <property name="text">
+    <string>Сканер пачек</string>
+   </property>
+  </action>
+  <action name="ma_settings_acces">
+   <property name="text">
+    <string>Доступы</string>
    </property>
   </action>
  </widget>
@@ -792,6 +814,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_warehouse_material</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_warehouse_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_warehouse_accessories</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_warehouse_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_scan_pack</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_scan_pack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_settings_acces</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_settings_access()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -823,5 +909,9 @@
   <slot>view_warehouse_rest()</slot>
   <slot>view_supply_material()</slot>
   <slot>view_supply_accessories()</slot>
+  <slot>view_warehouse_material()</slot>
+  <slot>view_warehouse_accessories()</slot>
+  <slot>view_scan_pack()</slot>
+  <slot>view_settings_access()</slot>
  </slots>
 </ui>

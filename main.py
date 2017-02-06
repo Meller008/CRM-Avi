@@ -10,7 +10,7 @@ def ex(t, v, tb):
         file.write("Time = %s" % datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
         traceback.print_exception(t, v, tb, file=file)
 
-# sys.excepthook = ex
+sys.excepthook = ex
 
 app = QApplication(sys.argv)
 main = form.main_window.MainWindow()

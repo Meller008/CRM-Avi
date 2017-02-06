@@ -5,9 +5,11 @@ from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate
 import re
+import codecs
 from decimal import *
-from classes import cut
+from classes import cut, print_qt
 from form import clients, article
+from function import barcode, files, my_sql
 
 pack_class = loadUiType(getcwd() + '/ui/pack.ui')[0]
 pack_operation_class = loadUiType(getcwd() + '/ui/pack_operation.ui')[0]
@@ -359,6 +361,51 @@ class PackBrows(QDialog, pack_class):
         else:
             self.close()
             self.destroy()
+
+    def ui_print_pack_passport(self):
+        cod = str(self.pack.id()).zfill(7)
+        row_html = """<tr>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;"><strong>#o_number#</strong></td>
+                        <td style="height: 30px; text-align: left; vertical-align: middle;"><strong>#o_name#</strong></td>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;"><strong>#o_sw#</strong></td>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        </tr>"""
+
+        operation_table = ""
+
+        for operation in self.pack.operations():
+            query = "SELECT sewing_machine.Name FROM operations LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id WHERE operations.Id = %s"
+            sql_info = my_sql.sql_select(query, (operation["operation_id"],))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                print("Не смог получить данные пачки")
+                return False
+            new_row_html = row_html.replace("#o_number#", str(operation["position"]))
+            new_row_html = new_row_html.replace("#o_name#", str(operation["name"]))
+            new_row_html = new_row_html.replace("#o_sw#", sql_info[0][0])
+
+            operation_table = operation_table + "\n" + new_row_html
+
+        barcode.generate(cod)
+
+        html = codecs.open(getcwd() + "/templates/pack/passport.html", encoding='utf-8').read()
+        html = html.replace("#art#", str(self.pack.article_name()))
+        html = html.replace("#size#", str(self.pack.size()))
+        html = html.replace("#cut#", str(self.pack.number_cut()))
+        html = html.replace("#pack#", str(self.pack.number_pack()))
+        html = html.replace("#data#", self.pack.cut_date().strftime("%d.%m.%Y"))
+        html = html.replace("#pac_barcode_src#", "%s.%s" % (cod, "svg"))
+        html = html.replace("#art_name#", str(self.pack.article_product_name()))
+        html = html.replace("#pack_value#", str(self.pack.value()))
+        html = html.replace("#client#", str(self.pack.client_name()))
+        html = html.replace("#art_barcode#", str(self.pack.article_barcode()))
+        html = html.replace("#note#", str(self.pack.note()))
+        html = html.replace("#o_table#", operation_table)
+
+        self.print_class = print_qt.PrintHtml(self, html)
+
+        files.del_temp_file(cod + ".svg")
 
     def set_operation_name(self):
         operation_list = self.pack.operations()

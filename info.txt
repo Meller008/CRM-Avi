@@ -26,6 +26,7 @@ else:
    new_table_item.setBackground(color)
 
 color_yes = QBrush(QColor(150, 255, 161, 255))  зеленый
+color_yes = QBrush(QColor(255, 255, 153, 255))  желтый
 color_no = QBrush(QColor(252, 141, 141, 255))   Алый
 
 
@@ -39,6 +40,8 @@ END
 
 import re
 re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(operations_price / value, 4))
+
+
 
 rest = cut[2] if cut[2] is not None else 0
 
@@ -59,3 +62,9 @@ for row, info in enumerate(sql_info):
     new_table_item.setData(-2, info[4])
     new_table_item.setBackground(color)
     self.tw_info.setItem(row, 0, new_table_item)
+
+
+
+self.new_supply = MaterialSupply(self)
+self.new_supply.setWindowModality(Qt.ApplicationModal)
+self.new_supply.show()

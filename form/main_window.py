@@ -2,14 +2,14 @@ from os import getcwd
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
 from PyQt5.uic import loadUiType
 from form import login_window, provider, comparing, staff, program_settings, notification, \
-    clients, operation, other, audit
+    clients, operation, other, audit, warehouse_material, warehouse_accessories
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
-    warehouse_rest, supply_material, supply_accessories
+    warehouse_rest, supply_material, supply_accessories, scan_pack, settings_access
 from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
 import sys
 
-main_class, main_base_class = loadUiType(getcwd() + '/ui/main.ui')
+main_class = loadUiType(getcwd() + '/ui/main.ui')[0]
 
 
 class MainWindow(QMainWindow, main_class):
@@ -22,6 +22,17 @@ class MainWindow(QMainWindow, main_class):
         self.show()
         self.setDisabled(True)
         self.login = login_window.LoginWindow(self)
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def view_material(self):
         self.material = supply_material.MaterialSupplyList()
@@ -135,7 +146,7 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_clients)
         self.sub_clients.resize(self.clients.size())
         self.sub_clients.show()
-        
+
     def view_operation(self):
         self.operation_list = operation.OperationList()
         self.sub_operation_list = QMdiSubWindow()
@@ -143,7 +154,7 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_operation_list)
         self.sub_operation_list.resize(self.operation_list.size())
         self.sub_operation_list.show()
-        
+
     def view_product(self):
         self.article_list = article.ArticleList()
         self.sub_article_list = QMdiSubWindow()
@@ -151,7 +162,7 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_article_list)
         self.sub_article_list.resize(self.article_list.size())
         self.sub_article_list.show()
-        
+
     def view_order_list(self):
         self.order_list = order.OrderList()
         self.sub_order_list = QMdiSubWindow()
@@ -232,6 +243,22 @@ class MainWindow(QMainWindow, main_class):
         self.sub_rest_warehouse.resize(self.rest_warehouse.size())
         self.sub_rest_warehouse.show()
 
+    def view_warehouse_material(self):
+        self.material_warehouse = warehouse_material.Warehouse()
+        self.sub_material_warehouse = QMdiSubWindow()
+        self.sub_material_warehouse.setWidget(self.material_warehouse)
+        self.mdi.addSubWindow(self.sub_material_warehouse)
+        self.sub_material_warehouse.resize(self.material_warehouse.size())
+        self.sub_material_warehouse.show()
+
+    def view_warehouse_accessories(self):
+        self.accessories_warehouse = warehouse_accessories.Warehouse()
+        self.sub_material_accessories = QMdiSubWindow()
+        self.sub_material_accessories.setWidget(self.accessories_warehouse)
+        self.mdi.addSubWindow(self.sub_material_accessories)
+        self.sub_material_accessories.resize(self.accessories_warehouse.size())
+        self.sub_material_accessories.show()
+
     def view_beika(self):
         self.beika = beika.BeikaList()
         self.sub_beika = QMdiSubWindow()
@@ -255,11 +282,28 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_supply_accessories)
         self.sub_supply_accessories.resize(self.supply_accessories.size())
         self.sub_supply_accessories.show()
-        
+
+    def view_scan_pack(self):
+        self.scan_pack = scan_pack.ScanPack()
+        self.sub_scan_pack = QMdiSubWindow()
+        self.sub_scan_pack.setWidget(self.scan_pack)
+        self.mdi.addSubWindow(self.sub_scan_pack)
+        self.sub_scan_pack.resize(self.scan_pack.size())
+        self.sub_scan_pack.show()
+
+    def view_settings_access(self):
+        self.settings_access = settings_access.Access()
+        self.sub_settings_access = QMdiSubWindow()
+        self.sub_settings_access.setWidget(self.settings_access)
+        self.mdi.addSubWindow(self.sub_settings_access)
+        self.sub_settings_access.resize(self.settings_access.size())
+        self.sub_settings_access.show()
+
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())
         self.setEnabled(True)
         self.setFocus()
+        self.access()
 
     def closeEvent(self, e):
         e.accept()

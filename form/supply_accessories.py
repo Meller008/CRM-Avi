@@ -182,7 +182,7 @@ class AccessoriesSupply(QMainWindow, supply_accessories):
                 self.tw_position.insertRow(row)
                 if info[3] == info[6]:
                     color = QBrush(QColor(251, 110, 255, 50))
-                elif info[3] == 0:
+                elif info[6] == 0:
                     color = QBrush(QColor(252, 141, 141, 255))
                 else:
                     color = QBrush(QColor(255, 255, 127, 255))
