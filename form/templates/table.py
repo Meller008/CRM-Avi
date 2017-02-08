@@ -1,8 +1,8 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
 from PyQt5.QtGui import QIcon
-from function import my_sql
+from function import my_sql, to_excel
 from decimal import Decimal
 import datetime
 import re
@@ -123,3 +123,8 @@ class TableList(QMainWindow, table_list_class):
 
     def ui_other(self):
         pass
+
+    def ui_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.table_widget, path[0])

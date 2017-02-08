@@ -263,6 +263,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QToolButton" name="toolButton">
+            <property name="text">
+             <string>Экспорт</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -745,6 +752,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>toolButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_export()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>338</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>337</x>
+     <y>-106</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_client()</slot>
@@ -758,5 +781,6 @@
   <slot>ui_double_click_position()</slot>
   <slot>ui_check_warehouse()</slot>
   <slot>ui_change_date_shipment()</slot>
+  <slot>ui_export()</slot>
  </slots>
 </ui>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>777</width>
+    <width>804</width>
     <height>441</height>
    </rect>
   </property>
@@ -152,6 +152,7 @@
    <addaction name="pb_table_double"/>
    <addaction name="pb_table_update"/>
    <addaction name="pb_other"/>
+   <addaction name="pb_export"/>
   </widget>
   <action name="pb_tree_add">
    <property name="text">
@@ -211,6 +212,11 @@
   <action name="pb_other">
    <property name="text">
     <string>Разное</string>
+   </property>
+  </action>
+  <action name="pb_export">
+   <property name="text">
+    <string>Экспорт</string>
    </property>
   </action>
  </widget>
@@ -424,6 +430,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_export</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_export()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_tree_item()</slot>
@@ -439,5 +461,6 @@
   <slot>ui_double_item_table()</slot>
   <slot>ui_update_table()</slot>
   <slot>ui_other()</slot>
+  <slot>ui_export()</slot>
  </slots>
 </ui>

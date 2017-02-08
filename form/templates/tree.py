@@ -1,8 +1,8 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QFileDialog
 from PyQt5.QtGui import QIcon
-from function import my_sql
+from function import my_sql, to_excel
 
 tree_class = loadUiType(getcwd() + '/ui/templates ui/tree.ui')[0]
 change_tree_item_class = loadUiType(getcwd() + '/ui/templates ui/add_tree_item.ui')[0]
@@ -291,6 +291,11 @@ class TreeList(QMainWindow, tree_class):
 
     def ui_other(self):
         pass
+
+    def ui_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.table_widget, path[0])
 
 
 class ChangeTreeItem(QDialog, change_tree_item_class):

@@ -1,11 +1,11 @@
 from os import getcwd
 from datetime import datetime
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt
 from decimal import *
-from function import my_sql
+from function import my_sql, to_excel
 
 
 salary_list = loadUiType(getcwd() + '/ui/salary_work.ui')[0]
@@ -243,6 +243,11 @@ class SalaryList(QDialog, salary_list):
         else:
             return False
 
+    def ui_export_new_salary(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tw_main_salary, path[0])
+
     # окно прошлой ЗП
     def ui_view_history_date(self):
         self.history = SalaryHistory()
@@ -475,6 +480,11 @@ class SalaryList(QDialog, salary_list):
         self.le_all_minus.setText(str(round(self.all_minus, 2)))
         self.le_all_sum.setText(str(round((self.all_operation + self.all_plus) - self.all_minus, 2)))
 
+    def ui_export_salary(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tw_main_salary_history, path[0])
+
     # сводное окно
     def ui_calc_many(self):
         table_column = {}
@@ -548,6 +558,12 @@ class SalaryList(QDialog, salary_list):
                 new_salary = round(Decimal(operation_item.text()) + p_m[2], 2)
                 item = QTableWidgetItem(str(new_salary))
                 self.tw_many.setItem(table_row[p_m[0]], table_column[p_m[1]], item)
+
+    def ui_many_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tw_many, path[0])
+
 
 
 class SalaryInfo(QDialog, salary_work):

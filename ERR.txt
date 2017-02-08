@@ -298,3 +298,19 @@ Time = 17.01.2017 15:30:15Traceback (most recent call last):
   File "C:/Users/Meller/Desktop/CRM-Avi\form\salary.py", line 495, in ui_calc_many
     self.tw_many.horizontalHeaderItem(col).setText(operation[0])
 AttributeError: 'NoneType' object has no attribute 'setText'
+
+---===Error===---
+Time = 07.02.2017 01:07:03Traceback (most recent call last):
+  File "C:/Users/Alexandr/Desktop/CRM-Avi\form\salary.py", line 553, in ui_export_salary
+    to_excel.table_to_excel(self.tw_main_salary_history)
+  File "C:/Users/Alexandr/Desktop/CRM-Avi\function\to_excel.py", line 12, in table_to_excel
+    for col in table.rowCount():
+TypeError: 'int' object is not iterable
+
+---===Error===---
+Time = 07.02.2017 01:07:38Traceback (most recent call last):
+  File "C:/Users/Alexandr/Desktop/CRM-Avi\form\salary.py", line 553, in ui_export_salary
+    to_excel.table_to_excel(self.tw_main_salary_history)
+  File "C:/Users/Alexandr/Desktop/CRM-Avi\function\to_excel.py", line 12, in table_to_excel
+    for col in table.rowCount():
+TypeError: 'int' object is not iterable

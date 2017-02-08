@@ -1,18 +1,19 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QIcon, QBrush, QColor
 import re
 from decimal import Decimal
 import datetime
 
-from function import my_sql
+from function import my_sql, to_excel
 from form.templates import table, list
 from form import clients, article
 
 position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
 order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
+order_doc = loadUiType(getcwd() + '/ui/order_doc_list.ui')[0]
 
 
 class OrderList(table.TableList):
@@ -566,6 +567,11 @@ class Order(QMainWindow, order_class):
         if not error:
             self.cb_shipping.setEnabled(True)
 
+    def ui_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.table_widget, path[0])
+
     def ui_acc(self):
         if self.save_sql():
             self.close()
@@ -898,3 +904,10 @@ class TransportCompanyName(list.ListItems):
                             "WinColor": "(211, 49, 60)",
                             "lb_name": "Название",
                             "lb_note": "Подробность"}
+
+
+class OrderDocList(QDialog, order_doc):
+    def __init__(self):
+        super(OrderDocList, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))

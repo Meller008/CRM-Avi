@@ -83,6 +83,7 @@
    <addaction name="pb_copy"/>
    <addaction name="pb_update"/>
    <addaction name="pb_other"/>
+   <addaction name="pb_export"/>
   </widget>
   <action name="pb_add">
    <property name="text">
@@ -117,6 +118,11 @@
   <action name="pb_other">
    <property name="text">
     <string>Разное</string>
+   </property>
+  </action>
+  <action name="pb_export">
+   <property name="text">
+    <string>Экспорт</string>
    </property>
   </action>
  </widget>
@@ -250,6 +256,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_export</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_export()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>359</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_table_item()</slot>
@@ -260,5 +282,6 @@
   <slot>ui_filter()</slot>
   <slot>ui_dell_table_item()</slot>
   <slot>ui_other()</slot>
+  <slot>ui_export()</slot>
  </slots>
 </ui>
