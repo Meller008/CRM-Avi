@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>753</width>
+    <width>763</width>
     <height>430</height>
    </rect>
   </property>
@@ -768,6 +768,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_doc</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_document_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>376</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_client()</slot>
@@ -782,5 +798,6 @@
   <slot>ui_check_warehouse()</slot>
   <slot>ui_change_date_shipment()</slot>
   <slot>ui_export()</slot>
+  <slot>ui_document_list()</slot>
  </slots>
 </ui>

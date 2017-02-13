@@ -6,7 +6,10 @@ from PyQt5.QtGui import QIcon, QBrush, QColor
 import re
 from decimal import Decimal
 import datetime
-
+import openpyxl
+from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
+from openpyxl.worksheet.pagebreak import Break
+from copy import copy
 from function import my_sql, to_excel
 from form.templates import table, list
 from form import clients, article
@@ -27,7 +30,7 @@ class OrderList(table.TableList):
 
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Клиент", 120), ("Пункт разгрузки", 170), ("Дата заказ.", 75), ("Дата отгр.", 70), ("№ док.", 50), ("Стоймость", 105),
-                                  ("Примечание", 230),("Отгр.", 40))
+                                  ("Примечание", 230), ("Отгр.", 40))
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc,
@@ -71,8 +74,8 @@ class OrderList(table.TableList):
     def set_table_info(self):
         self.table_items = my_sql.sql_select(self.query_table_select)
         if "mysql.connector.errors" in str(type(self.table_items)):
-                QMessageBox.critical(self, "Ошибка sql получение таблицы", self.table_items.msg, QMessageBox.Ok)
-                return False
+            QMessageBox.critical(self, "Ошибка sql получение таблицы", self.table_items.msg, QMessageBox.Ok)
+            return False
 
         self.table_widget.clearContents()
         self.table_widget.setRowCount(0)
@@ -190,7 +193,7 @@ class Order(QMainWindow, order_class):
             self.sql_shipped = False
 
         query = """SELECT order_position.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Id, product_article_parametrs.Name,
-                    product_article_parametrs.Client_Name,order_position.Price, order_position.NDS, order_position.Value, order_position.In_On_Place,
+                    product_article_parametrs.Client_Name, order_position.Price, order_position.NDS, order_position.Value, order_position.In_On_Place,
                     order_position.Price * order_position.Value
                     FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
                     LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
@@ -572,6 +575,11 @@ class Order(QMainWindow, order_class):
         if path[0]:
             to_excel.table_to_excel(self.table_widget, path[0])
 
+    def ui_document_list(self):
+        self.position = OrderDocList(self)
+        self.position.setModal(True)
+        self.position.show()
+
     def ui_acc(self):
         if self.save_sql():
             self.close()
@@ -795,6 +803,205 @@ class Order(QMainWindow, order_class):
         self.le_transport_company.setText(item[1])
         self.le_transport_company.setWhatsThis(str(item[0]))
 
+    def of_ex_torg12(self, head=True, article=False):
+
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if not path[0]:
+            return False
+
+        border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+        border_all_big = Border(left=Side(style='medium'), right=Side(style='medium'), top=Side(style='medium'), bottom=Side(style='medium'))
+
+        font_7 = Font(name="Arial", size=7)
+
+        ald_center = Alignment(horizontal="center")
+        ald_right = Alignment(horizontal="right")
+
+        wite = PatternFill(start_color='ffffff',
+                              end_color='ffffff',
+                              fill_type='solid')
+
+        book = openpyxl.load_workbook(filename='%s\\Накладная 2.xlsx' % (getcwd() + "\\templates\\order",))
+        sheet = book['Отчет']
+
+        sheet.oddHeader.left.text = "Продолжение накладной № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        sheet.oddHeader.left.size = 7
+
+
+        # заполнение шапки
+        if not head:
+            sheet["A1"] = ""
+
+        query = "SELECT Name,  INN, KPP, Actual_Address, Legal_Address, Account, Bank, corres_Account, BIK FROM clients WHERE Id = %s"
+        sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
+        if sql_info[0][2]:
+            client += " КПП " + str(sql_info[0][2])
+        client += ", " + sql_info[0][3] + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
+        sheet["C7"] = client
+
+        client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
+        if sql_info[0][2]:
+            client += " КПП " + str(sql_info[0][2])
+        client += ", " + sql_info[0][4] + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
+        sheet["C11"] = client
+
+        if self.cb_clients_vendor.currentData():
+            query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Client_Id = %s"
+            sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            base = "№ заказа " + self.le_number_order.text() + ", Номер поставщика " + str(sql_info[0][0]) \
+                   + " договор поставки № " + str(sql_info[0][1]) + " от " + sql_info[0][2].strftime("%d.%m.%Y")
+
+            sheet["C13"] = base
+
+        # заполнение середины
+        sheet["G16"] = self.le_number_doc.text()
+        sheet["I16"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
+        sheet["G16"].border = border_all_big
+        sheet["I16"].border = border_all_big
+
+        all_value = 0
+        all_no_nds = 0
+        all_nds = 0
+        all_sum = 0
+
+        row_break = 11
+        row_ex = 21
+        for row in range(self.tw_position.rowCount()):
+            query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
+            sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
+                return False
+            if article:
+                name = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
+            else:
+                name = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+            nds = self.tw_position.item(row, 4).data(5)
+            no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
+                                 / (100 + float(nds)), 2)
+            sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
+            sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+
+            sheet.merge_cells("B%s:D%s" % (row_ex, row_ex))
+            sheet.merge_cells("L%s:M%s" % (row_ex, row_ex))
+            sheet.merge_cells("N%s:O%s" % (row_ex, row_ex))
+            sheet.merge_cells("P%s:Q%s" % (row_ex, row_ex))
+            sheet.merge_cells("R%s:S%s" % (row_ex, row_ex))
+            sheet.merge_cells("T%s:U%s" % (row_ex, row_ex))
+
+            sheet["A%s" % row_ex] = row + 1
+            sheet["B%s" % row_ex] = name
+            sheet["B%s" % row_ex].font = font_7
+            sheet["E%s" % row_ex] = str(sql_info[0][1])
+            sheet["F%s" % row_ex] = "шт."
+            sheet["G%s" % row_ex] = "796"
+            sheet["H%s" % row_ex] = "кор."
+            sheet["I%s" % row_ex] = self.tw_position.item(row, 5).data(5)
+            sheet["J%s" % row_ex] = int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
+            sheet["L%s" % row_ex] = int(self.tw_position.item(row, 5).text())
+            sheet["N%s" % row_ex] = no_nds_price
+            sheet["P%s" % row_ex] = sum_no_nds
+            sheet["R%s" % row_ex] = nds
+            sheet["T%s" % row_ex] = round(sum - sum_no_nds, 2)
+            sheet["V%s" % row_ex] = sum
+
+            all_value += int(self.tw_position.item(row, 5).text())
+            all_no_nds += sum_no_nds
+            all_nds += round(sum - sum_no_nds, 2)
+            all_sum += sum
+
+            sheet.row_dimensions[row_ex].height = 23
+
+            if row_break == 25:
+                sheet.page_breaks.append(Break(row_ex))
+                row_break = 0
+
+            row_break += 1
+            row_ex += 1
+
+        if row_break + 8 > 25:
+            sheet.page_breaks.append(Break(row_ex-4))
+
+        # Заполняем сумму
+        sheet["K%s" % row_ex] = "Всего по накладной"
+        sheet["K%s" % row_ex].alignment = ald_right
+
+        sheet.merge_cells("L%s:M%s" % (row_ex, row_ex))
+        sheet["L%s" % row_ex] = all_value
+        sheet["L%s" % row_ex].alignment = ald_right
+
+        sheet.merge_cells("N%s:O%s" % (row_ex, row_ex))
+        sheet["N%s" % row_ex] = "X"
+        sheet["N%s" % row_ex].alignment = ald_center
+
+        sheet.merge_cells("P%s:Q%s" % (row_ex, row_ex))
+        sheet["P%s" % row_ex] = all_no_nds
+        sheet["P%s" % row_ex].alignment = ald_right
+
+        sheet.merge_cells("R%s:S%s" % (row_ex, row_ex))
+        sheet["R%s" % row_ex] = "X"
+        sheet["R%s" % row_ex].alignment = ald_center
+
+        sheet.merge_cells("T%s:U%s" % (row_ex, row_ex))
+        sheet["T%s" % row_ex] = all_nds
+        sheet["T%s" % row_ex].alignment = ald_right
+
+        sheet["V%s" % row_ex] = all_sum
+        sheet["V%s" % row_ex].alignment = ald_right
+
+        for row in sheet.iter_rows(min_row=row_ex, min_col=12, max_col=22):
+            for cell in row:
+                cell.border = border_all
+
+        row_ex += 1
+
+        # Формируем шапку
+        for row in sheet.iter_rows(min_row=18, max_col=22, max_row=20):
+            for cell in row:
+                    cell.border = border_all_big
+
+        for row in sheet.iter_rows(min_row=3, min_col=20, max_row=4):
+            for cell in row:
+                cell.border = border_all_big
+
+        for row in sheet.iter_rows(min_row=16, min_col=7, max_col=11):
+            for cell in row:
+                cell.border = border_all_big
+
+        for row in sheet.iter_rows(min_row=12, min_col=17, max_col=19, max_row=15):
+            for cell in row:
+                cell.border = border_all
+
+        # Формируем границы таблицы
+        for row in sheet.iter_rows(min_row=21, max_col=22, max_row=row_ex-2):
+            for cell in row:
+                cell.border = border_all
+
+        sheet2 = book['Низ']
+
+        for row in sheet2.iter_rows(min_row=1, max_col=22, max_row=17):
+            for cell in row:
+                sheet["%s%s" % (cell.column, row_ex)] = cell.value
+                sheet.row_dimensions[row_ex].height = sheet2.row_dimensions[cell.row].height
+                if cell.has_style:
+                    sheet["%s%s" % (cell.column, row_ex)].border = copy(cell.border)
+                    sheet["%s%s" % (cell.column, row_ex)].font = copy(cell.font)
+                    sheet["%s%s" % (cell.column, row_ex)].fill = wite
+
+            row_ex += 1
+
+        book.save(path[0] + ".xlsx")
+
 
 class Position(QDialog, position_class):
     def __init__(self):
@@ -907,7 +1114,24 @@ class TransportCompanyName(list.ListItems):
 
 
 class OrderDocList(QDialog, order_doc):
-    def __init__(self):
+    def __init__(self, main):
         super(OrderDocList, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+    def ui_double_click(self, item):
+        doc_name = item.text()
+
+        if doc_name == "Накладная с шапкой":
+            self.main.of_ex_torg12(head=True, article=False)
+        elif doc_name == "Накладная без шапки":
+            self.main.of_ex_torg12(head=False, article=False)
+        elif doc_name == "Накладная с шапкой + артикул":
+            self.main.of_ex_torg12(head=False, article=True)
+        elif doc_name == "Накладная без шапки + артикул":
+            self.main.of_ex_torg12(head=False, article=True)
+
+        self.close()
+        self.destroy()
