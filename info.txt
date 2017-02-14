@@ -69,5 +69,3 @@ for row, info in enumerate(sql_info):
 self.new_supply = MaterialSupply(self)
 self.new_supply.setWindowModality(Qt.ApplicationModal)
 self.new_supply.show()
-
-+
