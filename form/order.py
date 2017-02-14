@@ -821,7 +821,7 @@ class Order(QMainWindow, order_class):
                               end_color='ffffff',
                               fill_type='solid')
 
-        book = openpyxl.load_workbook(filename='%s\\Накладная 2.xlsx' % (getcwd() + "\\templates\\order",))
+        book = openpyxl.load_workbook(filename='%s/Накладная 2.xlsx' % (getcwd() + "/templates/order"))
         sheet = book['Отчет']
 
         sheet.oddHeader.left.text = "Продолжение накладной № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
@@ -974,7 +974,7 @@ class Order(QMainWindow, order_class):
             for cell in row:
                 cell.border = border_all_big
 
-        for row in sheet.iter_rows(min_row=16, min_col=7, max_col=11):
+        for row in sheet.iter_rows(min_row=16, min_col=7, max_col=10, max_row=16):
             for cell in row:
                 cell.border = border_all_big
 

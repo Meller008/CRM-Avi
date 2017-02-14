@@ -1,4 +1,4 @@
-from os import getcwd, path, mkdir, listdir, startfile
+from os import getcwd, path, mkdir, listdir
 from datetime import datetime
 from shutil import copy
 from form import staff
@@ -8,6 +8,8 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QDate
 from function import my_sql
 from form.templates import list
+import subprocess
+
 
 client_class = loadUiType(getcwd() + '/ui/client.ui')[0]
 client_adress_class = loadUiType(getcwd() + '/ui/client_adres.ui')[0]
@@ -116,13 +118,13 @@ class Client(QDialog, client_class):
         self.path = self.inspection_path(dir_name, 'Путь корень клиенты')
         if self.path:
             file_name = file.text()
-            startfile(r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\")))
+            subprocess.call([r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\"))], shell=True)
 
     def open_dir(self):  # Открываем выбраную папку
         dir_name = self.le_name.text()
         self.path = self.inspection_path(dir_name, 'Путь корень клиенты')
         if self.path:
-            startfile(self.path.replace("/", "\\"))
+            subprocess.call([self.path.replace("/", "\\")], shell=True)
 
     def add_file(self):  # Добавляем файлы
         info = staff.AddFile()

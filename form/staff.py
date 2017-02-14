@@ -1,4 +1,4 @@
-from os import getcwd, path, mkdir, listdir, startfile, rmdir
+from os import getcwd, path, mkdir, listdir, rmdir, name
 from shutil import copy
 from form.templates import list
 from PyQt5.uic import loadUiType
@@ -7,6 +7,8 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql
 import openpyxl
+import subprocess
+
 
 staff_list_class, staff_list_base_class = loadUiType(getcwd() + '/ui/staff.ui')
 one_staff_class, one_staff_base_class = loadUiType(getcwd() + '/ui/add_work.ui')
@@ -295,13 +297,13 @@ class OneStaff(QMainWindow, one_staff_class):
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             file_name = file.text()
-            startfile(r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\")))
+            subprocess.call([r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\"))], shell=True)
 
     def open_dir(self):  # Открываем выбраную папку
         dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
-            startfile(self.path.replace("/", "\\"))
+            subprocess.call([self.path.replace("/", "\\")], shell=True)
 
     def add_file(self):  # Добавляем файлы
         info = AddFile()
