@@ -1,5 +1,20 @@
-import num2t4ru
+import openpyxl
+from copy import copy
+from os import getcwd
+import tempfile
+
+t = tempfile.NamedTemporaryFile(dir=(getcwd() + "/temp/aaa.xlsx"))
+print(t)
 
 
-male_units = ((u'рубль', u'рубля', u'рублей'), 'f')
-print(num2t4ru.num2text(2, male_units))
+# book = openpyxl.load_workbook(filename='%s\\Накладная 2.xlsx' % (getcwd() + "\\templates\\order", ))
+#
+#
+# sheet = book['Отчет']
+#
+#
+# sheet.oddHeader.left.text = "Page &[Page] of &N"
+# sheet.oddHeader.left.size = 7
+#
+#
+# book.save(getcwd() + "/temp/")

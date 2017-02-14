@@ -15,6 +15,8 @@ from form.templates import table, list
 from form import clients, article
 import num2t4ru
 
+import tempfile
+
 position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
 order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
 order_doc = loadUiType(getcwd() + '/ui/order_doc_list.ui')[0]
@@ -806,7 +808,7 @@ class Order(QMainWindow, order_class):
 
     def of_ex_torg12(self, head=True, article=False):
 
-        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
 
@@ -1012,7 +1014,7 @@ class Order(QMainWindow, order_class):
         sheet["D%s" % (row_ex-12)] = num2t4ru.num2text(all_position)
         sheet["D%s" % (row_ex-8)] = num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
 
-        book.save(path[0] + ".xlsx")
+        book.save(path[0])
 
 
 class Position(QDialog, position_class):
