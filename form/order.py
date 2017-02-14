@@ -13,6 +13,7 @@ from copy import copy
 from function import my_sql, to_excel
 from form.templates import table, list
 from form import clients, article
+import num2t4ru
 
 position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
 order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
@@ -872,7 +873,9 @@ class Order(QMainWindow, order_class):
         all_no_nds = 0
         all_nds = 0
         all_sum = 0
+        all_position = 0
 
+        list_all = 1
         row_break = 11
         row_ex = 21
         for row in range(self.tw_position.rowCount()):
@@ -915,6 +918,7 @@ class Order(QMainWindow, order_class):
             sheet["T%s" % row_ex] = round(sum - sum_no_nds, 2)
             sheet["V%s" % row_ex] = sum
 
+            all_position += int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5))
             all_value += int(self.tw_position.item(row, 5).text())
             all_no_nds += sum_no_nds
             all_nds += round(sum - sum_no_nds, 2)
@@ -924,6 +928,7 @@ class Order(QMainWindow, order_class):
 
             if row_break == 25:
                 sheet.page_breaks.append(Break(row_ex))
+                list_all += 1
                 row_break = 0
 
             row_break += 1
@@ -956,7 +961,7 @@ class Order(QMainWindow, order_class):
         sheet["T%s" % row_ex] = all_nds
         sheet["T%s" % row_ex].alignment = ald_right
 
-        sheet["V%s" % row_ex] = all_sum
+        sheet["V%s" % row_ex] = round(all_sum, 2)
         sheet["V%s" % row_ex].alignment = ald_right
 
         for row in sheet.iter_rows(min_row=row_ex, min_col=12, max_col=22):
@@ -999,6 +1004,13 @@ class Order(QMainWindow, order_class):
                     sheet["%s%s" % (cell.column, row_ex)].fill = wite
 
             row_ex += 1
+
+        # Числа прописью
+        int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
+        exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
+        sheet["D%s" % (row_ex-15)] = num2t4ru.num2text(self.tw_position.rowCount())
+        sheet["D%s" % (row_ex-12)] = num2t4ru.num2text(all_position)
+        sheet["D%s" % (row_ex-8)] = num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
 
         book.save(path[0] + ".xlsx")
 
