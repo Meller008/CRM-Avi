@@ -1,6 +1,6 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog, QProgressDialog
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QIcon, QBrush, QColor
 import re
@@ -14,8 +14,6 @@ from function import my_sql, to_excel
 from form.templates import table, list
 from form import clients, article
 import num2t4ru
-
-import tempfile
 
 position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
 order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
@@ -164,7 +162,7 @@ class Order(QMainWindow, order_class):
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения информации о заказе", sql_info.msg, QMessageBox.Ok)
             return False
-        self.of_set_client(sql_info[0][0], sql_info[0][1])
+        self.of_list_clients([sql_info[0][0], sql_info[0][1]])
 
         find_index = self.cb_clients_vendor.findData(sql_info[0][2])
         if find_index >= 0:
@@ -248,7 +246,7 @@ class Order(QMainWindow, order_class):
             self.tw_position.setItem(row, 6, table_item)
 
     def ui_view_client(self):
-        self.client_list = clients.ClientsList(self, True)
+        self.client_list = clients.ClientList(self, True)
         self.client_list.setWindowModality(Qt.ApplicationModal)
         self.client_list.show()
 
@@ -734,7 +732,8 @@ class Order(QMainWindow, order_class):
 
         return True
 
-    def of_set_client(self, id_client, name_client):
+    def of_list_clients(self, item):
+        id_client, name_client = item
         self.le_client.setText(str(name_client))
         self.le_client.setWhatsThis(str(id_client))
 
@@ -806,11 +805,13 @@ class Order(QMainWindow, order_class):
         self.le_transport_company.setText(item[1])
         self.le_transport_company.setWhatsThis(str(item[0]))
 
-    def of_ex_torg12(self, head=True, article=False):
-
+    def of_ex_torg12(self, head, article, addres):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
+
+        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 8, self)
+        self.progress.setMinimumDuration(0)
 
         border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
         border_all_big = Border(left=Side(style='medium'), right=Side(style='medium'), top=Side(style='medium'), bottom=Side(style='medium'))
@@ -824,12 +825,14 @@ class Order(QMainWindow, order_class):
                               end_color='ffffff',
                               fill_type='solid')
 
+        self.progress.setValue(self.progress.value() + 1)
+
         book = openpyxl.load_workbook(filename='%s/Накладная 2.xlsx' % (getcwd() + "/templates/order"))
         sheet = book['Отчет']
 
         sheet.oddHeader.left.text = "Продолжение накладной № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
         sheet.oddHeader.left.size = 7
-
+        self.progress.setValue(self.progress.value() + 1)
 
         # заполнение шапки
         if not head:
@@ -841,10 +844,20 @@ class Order(QMainWindow, order_class):
             QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
             return False
 
+        if addres:
+            adr = sql_info[0][3]
+        else:
+            query = "SELECT Adres FROM clients_actual_address WHERE Id = %s"
+            sql_adr = my_sql.sql_select(query, (self.cb_clients_adress.currentData(),))
+            if "mysql.connector.errors" in str(type(sql_adr)):
+                QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_adr.msg, QMessageBox.Ok)
+                return False
+            adr = sql_adr[0][0]
+
         client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
         if sql_info[0][2]:
             client += " КПП " + str(sql_info[0][2])
-        client += ", " + sql_info[0][3] + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
+        client += ", " + adr + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
         sheet["C7"] = client
 
         client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
@@ -867,9 +880,13 @@ class Order(QMainWindow, order_class):
 
         # заполнение середины
         sheet["G16"] = self.le_number_doc.text()
+        sheet["T12"] = self.le_number_doc.text()
         sheet["I16"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
+        sheet["T13"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
         sheet["G16"].border = border_all_big
         sheet["I16"].border = border_all_big
+
+        self.progress.setValue(self.progress.value() + 1)
 
         all_value = 0
         all_no_nds = 0
@@ -881,6 +898,9 @@ class Order(QMainWindow, order_class):
         row_break = 11
         row_ex = 21
         for row in range(self.tw_position.rowCount()):
+
+            self.progress.setValue(self.progress.value()+1)
+
             query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
             sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
             if "mysql.connector.errors" in str(type(sql_info)):
@@ -938,10 +958,17 @@ class Order(QMainWindow, order_class):
 
         if row_break + 8 > 25:
             sheet.page_breaks.append(Break(row_ex-4))
+            list_all += 1
 
         # Заполняем сумму
-        sheet["K%s" % row_ex] = "Всего по накладной"
-        sheet["K%s" % row_ex].alignment = ald_right
+        sheet["I%s" % row_ex] = "Всего по накладной"
+        sheet["I%s" % row_ex].alignment = ald_right
+
+        sheet["J%s" % row_ex] = all_position
+        sheet["J%s" % row_ex].alignment = ald_center
+
+        sheet["K%s" % row_ex] = "X"
+        sheet["K%s" % row_ex].alignment = ald_center
 
         sheet.merge_cells("L%s:M%s" % (row_ex, row_ex))
         sheet["L%s" % row_ex] = all_value
@@ -966,7 +993,9 @@ class Order(QMainWindow, order_class):
         sheet["V%s" % row_ex] = round(all_sum, 2)
         sheet["V%s" % row_ex].alignment = ald_right
 
-        for row in sheet.iter_rows(min_row=row_ex, min_col=12, max_col=22):
+        self.progress.setValue(self.progress.value() + 1)
+
+        for row in sheet.iter_rows(min_row=row_ex, min_col=10, max_col=22):
             for cell in row:
                 cell.border = border_all
 
@@ -989,10 +1018,15 @@ class Order(QMainWindow, order_class):
             for cell in row:
                 cell.border = border_all
 
+        self.progress.setValue(self.progress.value()+1)
+
+
         # Формируем границы таблицы
         for row in sheet.iter_rows(min_row=21, max_col=22, max_row=row_ex-2):
             for cell in row:
                 cell.border = border_all
+
+        self.progress.setValue(self.progress.value() + 1)
 
         sheet2 = book['Низ']
 
@@ -1007,6 +1041,10 @@ class Order(QMainWindow, order_class):
 
             row_ex += 1
 
+        self.progress.setValue(self.progress.value() + 1)
+
+        sheet["I%s" % (row_ex - 17)] = list_all
+
         # Числа прописью
         int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
         exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
@@ -1014,7 +1052,368 @@ class Order(QMainWindow, order_class):
         sheet["D%s" % (row_ex-12)] = num2t4ru.num2text(all_position)
         sheet["D%s" % (row_ex-8)] = num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
 
+        self.progress.setValue(self.progress.value() + 1)
+
+        book.remove(sheet2)
+
         book.save(path[0])
+
+        self.progress.setValue(self.progress.value() + 1)
+
+    def of_ex_invoice(self, article, addres):
+        path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
+        if not path[0]:
+            return False
+
+        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 4, self)
+        self.progress.setMinimumDuration(0)
+
+        border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+
+        font_7 = Font(name="Arial", size=7)
+        alg_center = Alignment(horizontal="center")
+        wite = PatternFill(start_color='ffffff', end_color='ffffff', fill_type='solid')
+
+        book = openpyxl.load_workbook(filename='%s/фактура.xlsx' % (getcwd() + "/templates/order"))
+        sheet = book['Отчет']
+
+        sheet.oddHeader.right.text = "Продолжение счета-фактуры № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        sheet.oddHeader.right.size = 7
+        self.progress.setValue(self.progress.value() + 1)
+
+        sheet["A2"] = "Счет-фактура № %s от %s" % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
+
+        query = "SELECT Name, INN, KPP, Actual_Address, Legal_Address FROM clients WHERE Id = %s"
+        sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(),))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        if addres == "fact":
+            adr = sql_info[0][3]
+        elif addres == "adr list":
+            query = "SELECT Adres FROM clients_actual_address WHERE Id = %s"
+            sql_adr = my_sql.sql_select(query, (self.cb_clients_adress.currentData(),))
+            if "mysql.connector.errors" in str(type(sql_adr)):
+                QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_adr.msg, QMessageBox.Ok)
+                return False
+            adr = sql_adr[0][0]
+        else:
+            adr = sql_info[0][4]
+
+        sheet["A8"] = "Грузополучатель и его адрес: " + sql_info[0][0] + " " + adr
+        sheet["A10"] = "Покупатель: " + sql_info[0][0]
+        sheet["A11"] = "Адрес: " + sql_info[0][4]
+        sheet["A12"] = "ИНН/КПП покупателя: " + sql_info[0][1] + "/" + sql_info[0][2]
+
+        if self.cb_clients_vendor.currentData():
+            query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Client_Id = %s"
+            sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            base = "№ заказа " + self.le_number_order.text() + ", Номер поставщика " + str(sql_info[0][0])
+
+            sheet["A14"] = base
+
+        self.progress.setValue(self.progress.value() + 1)
+
+        all_no_nds = 0
+        all_nds = 0
+        all_sum = 0
+
+        list_all = 1
+        row_break = 12
+        row_ex = 19
+        for row in range(self.tw_position.rowCount()):
+
+            query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
+            sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
+                return False
+            if article:
+                name = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
+            else:
+                name = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+
+            nds = self.tw_position.item(row, 4).data(5)
+            no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
+                                 / (100 + float(nds)), 2)
+            sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
+            sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+
+            sheet.merge_cells("A%s:D%s" % (row_ex, row_ex))
+
+            sheet["A%s" % row_ex] = name
+            sheet["A%s" % row_ex].font = font_7
+            sheet["A%s" % row_ex].alignment = Alignment(wrapText=True)
+            sheet["G%s" % row_ex] = int(self.tw_position.item(row, 5).text())
+            sheet["H%s" % row_ex] = no_nds_price
+            sheet["I%s" % row_ex] = sum_no_nds
+            sheet["J%s" % row_ex] = "без акциза"
+            sheet["J%s" % row_ex].font = font_7
+            sheet["K%s" % row_ex] = nds
+            sheet["L%s" % row_ex] = round(sum - sum_no_nds, 2)
+            sheet["M%s" % row_ex] = sum
+            sheet["O%s" % row_ex] = "РФ"
+            sheet["O%s" % row_ex].alignment = alg_center
+
+            all_no_nds += sum_no_nds
+            all_nds += round(sum - sum_no_nds, 2)
+            all_sum += sum
+
+            sheet.row_dimensions[row_ex].height = 23
+
+            self.progress.setValue(self.progress.value() + 1)
+
+            if row_break == 25:
+                sheet.page_breaks.append(Break(row_ex))
+                list_all += 1
+                row_break = 0
+
+            row_break += 1
+            row_ex += 1
+
+        if row_break + 5 > 25:
+            sheet.page_breaks.append(Break(row_ex-4))
+            list_all += 1
+
+        # Формируем границы таблицы
+        for row in sheet.iter_rows(min_row=16, max_col=16, max_row=row_ex-1):
+            for cell in row:
+                cell.border = border_all
+
+        # Запишем итог
+        sheet.merge_cells("A%s:H%s" % (row_ex, row_ex))
+        sheet["A%s" % row_ex] = "ВСЕГО К ОПЛАТЕ"
+        sheet["I%s" % row_ex] = all_no_nds
+        sheet["J%s" % row_ex] = "X"
+        sheet["J%s" % row_ex].alignment = alg_center
+        sheet["K%s" % row_ex] = "X"
+        sheet["K%s" % row_ex].alignment = alg_center
+        sheet["L%s" % row_ex] = all_nds
+        sheet["M%s" % row_ex] = all_sum
+        for row in sheet.iter_rows(min_row=row_ex, max_col=13):
+            for cell in row:
+                cell.border = border_all
+
+        row_ex += 2
+        self.progress.setValue(self.progress.value() + 1)
+
+        sheet2 = book['низ']
+        for row in sheet2.iter_rows(min_row=1, max_col=16, max_row=7):
+            for cell in row:
+                sheet["%s%s" % (cell.column, row_ex)] = cell.value
+                sheet.row_dimensions[row_ex].height = sheet2.row_dimensions[cell.row].height
+                if cell.has_style:
+                    sheet["%s%s" % (cell.column, row_ex)].border = copy(cell.border)
+                    sheet["%s%s" % (cell.column, row_ex)].font = copy(cell.font)
+                    sheet["%s%s" % (cell.column, row_ex)].fill = wite
+
+            row_ex += 1
+
+        book.remove(sheet2)
+        self.progress.setValue(self.progress.value() + 1)
+
+        book.save(path[0])
+        self.progress.setValue(self.progress.value() + 1)
+
+    def of_ex_ttn(self, addres, article):
+        path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
+        if not path[0]:
+            return False
+
+        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 4, self)
+        self.progress.setMinimumDuration(0)
+
+        book = openpyxl.load_workbook(filename='%s/ТТН.xlsx' % (getcwd() + "/templates/order"))
+        sheet = book['Отчет']
+
+        border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+        ald_center_full = Alignment(horizontal="center", vertical="center", wrapText=True)
+        ald_center = Alignment(horizontal="center")
+        font_8 = Font(name="Arial", size=8)
+        wite = PatternFill(start_color='ffffff', end_color='ffffff', fill_type='solid')
+
+        self.progress.setValue(self.progress.value() + 1)
+
+        # строим первый лист
+        sheet["A4"] = "Срок доставки груза " + self.de_date_shipment.date().toString("dd.MM.yyyy")
+        sheet["AD3"] = self.le_number_doc.text()
+        query = "SELECT Details FROM order_transport_company WHERE Id = %s"
+        sql_info = my_sql.sql_select(query, (self.le_transport_company.whatsThis(),))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения информации транспортной компании", sql_info.msg, QMessageBox.Ok)
+            return False
+        sheet["B5"] = sql_info[0][0]
+
+        query = "SELECT Adres FROM clients_actual_address WHERE Id = %s"
+        sql_info = my_sql.sql_select(query, (self.cb_clients_adress.currentData(),))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_info.msg, QMessageBox.Ok)
+            return False
+        sheet["R16"] = sql_info[0][0]
+
+        for row in sheet.iter_rows(min_row=23, max_col=31, max_row=25):
+            for cell in row:
+                cell.border = border_all
+
+        for row in sheet.iter_rows(min_row=38, max_col=31, max_row=43):
+            for cell in row:
+                cell.border = border_all
+
+        for row in sheet.iter_rows(min_row=45, max_col=23, max_row=50):
+            for cell in row:
+                cell.border = border_all
+
+        for row in sheet.iter_rows(min_row=52, max_col=23, max_row=57):
+            for cell in row:
+                cell.border = border_all
+
+        # Заполняем шапку второго листа
+        sheet["B65"] = "ТОВАРНО-ТРАНСПОРТНАЯ НАКЛАДНАЯ № %s_____________________________________  №" % self.le_number_doc.text()
+        sheet["AC65"] = self.le_number_doc.text()
+        sheet["AC66"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
+
+        query = "SELECT Name, INN, KPP, Actual_Address, Legal_Address, Account, Bank, corres_Account, BIK FROM clients WHERE Id = %s"
+        sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(),))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
+        if sql_info[0][2]:
+            client += " КПП " + str(sql_info[0][2])
+        client += ", " + sql_info[0][4] + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
+        sheet["C11"] = client
+        sheet["E72"] = client
+
+        if addres == "fact":
+            adr = sql_info[0][3]
+        elif addres == "adr list":
+            query = "SELECT Adres FROM clients_actual_address WHERE Id = %s"
+            sql_adr = my_sql.sql_select(query, (self.cb_clients_adress.currentData(),))
+            if "mysql.connector.errors" in str(type(sql_adr)):
+                QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_adr.msg, QMessageBox.Ok)
+                return False
+            adr = sql_adr[0][0]
+        else:
+            adr = sql_info[0][4]
+        sheet["E70"] = adr
+
+        self.progress.setValue(self.progress.value() + 1)
+
+        all_no_nds = 0
+        all_mest = 0
+
+        list_all = 1
+        row_break = 11
+        row_ex = 78
+        for row in range(self.tw_position.rowCount()):
+
+            self.progress.setValue(self.progress.value()+1)
+
+            query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
+            sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
+                return False
+            if article:
+                name = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
+            else:
+                name = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+            nds = self.tw_position.item(row, 4).data(5)
+            no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
+                                 / (100 + float(nds)), 2)
+            sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
+            sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+
+            sheet.merge_cells("B%s:E%s" % (row_ex, row_ex))
+            sheet.merge_cells("F%s:I%s" % (row_ex, row_ex))
+            sheet.merge_cells("J%s:K%s" % (row_ex, row_ex))
+            sheet.merge_cells("L%s:M%s" % (row_ex, row_ex))
+            sheet.merge_cells("N%s:S%s" % (row_ex, row_ex))
+            sheet.merge_cells("U%s:V%s" % (row_ex, row_ex))
+            sheet.merge_cells("W%s:X%s" % (row_ex, row_ex))
+            sheet.merge_cells("Y%s:Z%s" % (row_ex, row_ex))
+            sheet.merge_cells("AA%s:AC%s" % (row_ex, row_ex))
+            sheet.merge_cells("AD%s:AE%s" % (row_ex, row_ex))
+
+            sheet["A%s" % row_ex] = sql_info[0][1]
+            sheet["F%s" % row_ex] = sql_info[0][1]
+            sheet["J%s" % row_ex] = int(self.tw_position.item(row, 5).text())
+            sheet["L%s" % row_ex] = no_nds_price
+            sheet["N%s" % row_ex] = name
+            sheet["T%s" % row_ex] = "шт."
+            sheet["U%s" % row_ex] = "Короб"
+            sheet["W%s" % row_ex] = int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
+            sheet["Y%s" % row_ex] = "---"
+            sheet["AA%s" % row_ex] = sum_no_nds
+
+            all_no_nds += sum_no_nds
+            all_mest += int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
+
+            sheet.row_dimensions[row_ex].height = 23
+
+        #     if row_break == 25:
+        #         sheet.page_breaks.append(Break(row_ex))
+        #         list_all += 1
+        #         row_break = 0
+
+            row_break += 1
+            row_ex += 1
+
+        # if row_break + 8 > 25:
+        #     sheet.page_breaks.append(Break(row_ex-4))
+        #     list_all += 1
+
+        for row in sheet.iter_rows(min_row=75, max_col=31, max_row=row_ex-1):
+            for cell in row:
+                cell.border = border_all
+                cell.alignment = ald_center_full
+                cell.font = font_8
+
+        # низ ТТН
+        self.progress.setValue(self.progress.value() + 1)
+        sheet2 = book['Низ']
+        for row in sheet2.iter_rows(min_row=1, max_col=31, max_row=20):
+            for cell in row:
+                sheet["%s%s" % (cell.column, row_ex)] = cell.value
+                sheet.row_dimensions[row_ex].height = sheet2.row_dimensions[cell.row].height
+                sheet["%s%s" % (cell.column, row_ex)].fill = wite
+                if cell.has_style:
+                    sheet["%s%s" % (cell.column, row_ex)].border = copy(cell.border)
+                    sheet["%s%s" % (cell.column, row_ex)].font = copy(cell.font)
+            row_ex += 1
+        book.remove(sheet2)
+        self.progress.setValue(self.progress.value() + 1)
+
+        sheet["M25"] = all_mest
+        sheet["H28"] = all_mest
+
+        sheet["U%s" % (row_ex-20)] = self.le_number_doc.text()
+        sheet["S%s" % (row_ex-19)] = list_all
+        sheet["AB%s" % (row_ex-18)] = all_no_nds
+
+        sheet["L%s" % (row_ex-18)] = num2t4ru.num2text(self.tw_position.rowCount()) + " позиций"
+        sheet["L%s" % (row_ex-18)].alignment = ald_center
+
+        sheet["F%s" % (row_ex-16)] = num2t4ru.num2text(self.tw_position.rowCount())
+        sheet["F%s" % (row_ex-16)].alignment = ald_center
+
+        sheet["F%s" % (row_ex-14)] = num2t4ru.num2text(all_mest)
+        sheet["F%s" % (row_ex-14)].alignment = ald_center
+
+        int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
+        exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
+        sheet["C%s" % (row_ex-10)] = num2t4ru.decimal2text(Decimal(str(all_no_nds)), int_units=int_units, exp_units=exp_units)
+
+        book.save(path[0])
+        self.progress.setValue(self.progress.value() + 1)
 
 
 class Position(QDialog, position_class):
@@ -1135,17 +1534,73 @@ class OrderDocList(QDialog, order_doc):
 
         self.main = main
 
-    def ui_double_click(self, item):
+    def ui_select_doc(self, item):
         doc_name = item.text()
 
-        if doc_name == "Накладная с шапкой":
-            self.main.of_ex_torg12(head=True, article=False)
-        elif doc_name == "Накладная без шапки":
-            self.main.of_ex_torg12(head=False, article=False)
-        elif doc_name == "Накладная с шапкой + артикул":
-            self.main.of_ex_torg12(head=False, article=True)
-        elif doc_name == "Накладная без шапки + артикул":
-            self.main.of_ex_torg12(head=False, article=True)
+        if doc_name == "Накладная":
+            self.sw_main.setCurrentIndex(1)
+        elif doc_name == "Счет фактура":
+            self.sw_main.setCurrentIndex(2)
+        elif doc_name == "ТТН":
+            self.sw_main.setCurrentIndex(3)
 
+    def ui_acc(self):
+        if self.lw_main.selectedItems()[0].text() == "Накладная":
+            if self.cb_head.isChecked():
+                head = True
+            else:
+                head = False
+
+            if self.rb_addres_1.isChecked():
+                addres = True
+            else:
+                addres = False
+
+            if self.rb_name_1.isChecked():
+                article = False
+            else:
+                article = True
+
+            self.main.of_ex_torg12(head, addres, article)
+            self.close()
+            self.destroy()
+
+        elif self.lw_main.selectedItems()[0].text() == "Счет фактура":
+            if self.rb_fact_addres_1.isChecked():
+                addres = "fact"
+            elif self.rb_fact_addres_2.isChecked():
+                addres = "adr list"
+            else:
+                addres = "legal"
+
+            if self.rb_fact_name_1.isChecked():
+                article = False
+            else:
+                article = True
+
+            self.main.of_ex_invoice(addres, article)
+            self.close()
+            self.destroy()
+
+        elif self.lw_main.selectedItems()[0].text() == "ТТН":
+            if self.rb_ttn_addres_1.isChecked():
+                addres = "fact"
+            elif self.rb_ttn_addres_2.isChecked():
+                addres = "adr list"
+            else:
+                addres = "legal"
+
+            if self.rb_ttn_name_1.isChecked():
+                article = False
+            else:
+                article = True
+
+            self.main.of_ex_ttn(addres, article)
+            self.close()
+            self.destroy()
+
+
+    def ui_can(self):
         self.close()
         self.destroy()
+

@@ -55,7 +55,7 @@ class ClientList(list.ListItems):
             self.ui_change_item(select_prov.data(3))
         else:
             item = (select_prov.data(3), select_prov.text())
-            self.m_class.of_list_insert(item)
+            self.m_class.of_list_clients(item)
             self.close()
             self.destroy()
 
