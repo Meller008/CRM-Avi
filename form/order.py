@@ -1238,6 +1238,9 @@ class Order(QMainWindow, order_class):
         font_8 = Font(name="Arial", size=8)
         wite = PatternFill(start_color='ffffff', end_color='ffffff', fill_type='solid')
 
+        sheet.oddHeader.right.text = "Продолжение товарно-транспортной накладной № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        sheet.oddHeader.right.size = 7
+
         self.progress.setValue(self.progress.value() + 1)
 
         # строим первый лист
@@ -1272,6 +1275,8 @@ class Order(QMainWindow, order_class):
         for row in sheet.iter_rows(min_row=52, max_col=23, max_row=57):
             for cell in row:
                 cell.border = border_all
+
+            sheet.page_breaks.append(Break(59))
 
         # Заполняем шапку второго листа
         sheet["B65"] = "ТОВАРНО-ТРАНСПОРТНАЯ НАКЛАДНАЯ № %s_____________________________________  №" % self.le_number_doc.text()
@@ -1359,17 +1364,17 @@ class Order(QMainWindow, order_class):
 
             sheet.row_dimensions[row_ex].height = 23
 
-        #     if row_break == 25:
-        #         sheet.page_breaks.append(Break(row_ex))
-        #         list_all += 1
-        #         row_break = 0
+            if row_break == 27:
+                sheet.page_breaks.append(Break(row_ex))
+                list_all += 1
+                row_break = 0
 
             row_break += 1
             row_ex += 1
 
-        # if row_break + 8 > 25:
-        #     sheet.page_breaks.append(Break(row_ex-4))
-        #     list_all += 1
+        if row_break + 9 > 27:
+            sheet.page_breaks.append(Break(row_ex-4))
+            list_all += 1
 
         for row in sheet.iter_rows(min_row=75, max_col=31, max_row=row_ex-1):
             for cell in row:
