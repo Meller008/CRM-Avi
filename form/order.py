@@ -830,8 +830,8 @@ class Order(QMainWindow, order_class):
         book = openpyxl.load_workbook(filename='%s/Накладная 2.xlsx' % (getcwd() + "/templates/order"))
         sheet = book['Отчет']
 
-        sheet.oddHeader.left.text = "Продолжение накладной № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
-        sheet.oddHeader.left.size = 7
+        sheet.oddHeader.right.text = "Продолжение накладной № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        sheet.oddHeader.right.size = 7
         self.progress.setValue(self.progress.value() + 1)
 
         # заполнение шапки
@@ -1402,7 +1402,7 @@ class Order(QMainWindow, order_class):
 
         sheet["U%s" % (row_ex-20)] = self.le_number_doc.text()
         sheet["S%s" % (row_ex-19)] = list_all
-        sheet["AB%s" % (row_ex-18)] = all_no_nds
+        sheet["AB%s" % (row_ex-20)] = all_no_nds
 
         sheet["L%s" % (row_ex-18)] = num2t4ru.num2text(self.tw_position.rowCount()) + " позиций"
         sheet["L%s" % (row_ex-18)].alignment = ald_center
