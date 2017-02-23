@@ -805,7 +805,7 @@ class Order(QMainWindow, order_class):
         self.le_transport_company.setText(item[1])
         self.le_transport_company.setWhatsThis(str(item[0]))
 
-    def of_ex_torg12(self, head, article, addres):
+    def of_ex_torg12(self,edo, head, article, addres):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -835,8 +835,13 @@ class Order(QMainWindow, order_class):
         self.progress.setValue(self.progress.value() + 1)
 
         # заполнение шапки
+        if edo:
+            sheet["C1"] = "   -   ЭДО   -   "
+            sheet["C1"].border = border_all_big
+            # sheet["C1"].font = Font(name="Arial", size=7)
+
         if not head:
-            sheet["A1"] = ""
+            sheet["A2"] = ""
 
         query = "SELECT Name,  INN, KPP, Actual_Address, Legal_Address, Account, Bank, corres_Account, BIK FROM clients WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
@@ -858,13 +863,13 @@ class Order(QMainWindow, order_class):
         if sql_info[0][2]:
             client += " КПП " + str(sql_info[0][2])
         client += ", " + adr + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
-        sheet["C7"] = client
+        sheet["C8"] = client
 
         client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
         if sql_info[0][2]:
             client += " КПП " + str(sql_info[0][2])
         client += ", " + sql_info[0][4] + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
-        sheet["C11"] = client
+        sheet["C12"] = client
 
         if self.cb_clients_vendor.currentData():
             query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Client_Id = %s"
@@ -876,15 +881,15 @@ class Order(QMainWindow, order_class):
             base = "№ заказа " + self.le_number_order.text() + ", Номер поставщика " + str(sql_info[0][0]) \
                    + " договор поставки № " + str(sql_info[0][1]) + " от " + sql_info[0][2].strftime("%d.%m.%Y")
 
-            sheet["C13"] = base
+            sheet["C14"] = base
 
         # заполнение середины
-        sheet["G16"] = self.le_number_doc.text()
-        sheet["T12"] = self.le_number_doc.text()
-        sheet["I16"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
-        sheet["T13"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
-        sheet["G16"].border = border_all_big
-        sheet["I16"].border = border_all_big
+        sheet["G17"] = self.le_number_doc.text()
+        sheet["T13"] = self.le_number_doc.text()
+        sheet["I17"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
+        sheet["T14"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
+        sheet["G17"].border = border_all_big
+        sheet["I17"].border = border_all_big
 
         self.progress.setValue(self.progress.value() + 1)
 
@@ -895,8 +900,8 @@ class Order(QMainWindow, order_class):
         all_position = 0
 
         list_all = 1
-        row_break = 11
-        row_ex = 21
+        row_break = 12
+        row_ex = 22
         for row in range(self.tw_position.rowCount()):
 
             self.progress.setValue(self.progress.value()+1)
@@ -1002,19 +1007,19 @@ class Order(QMainWindow, order_class):
         row_ex += 1
 
         # Формируем шапку
-        for row in sheet.iter_rows(min_row=18, max_col=22, max_row=20):
+        for row in sheet.iter_rows(min_row=19, max_col=22, max_row=21):
             for cell in row:
                     cell.border = border_all_big
 
-        for row in sheet.iter_rows(min_row=3, min_col=20, max_row=4):
+        for row in sheet.iter_rows(min_row=4, min_col=20, max_row=5):
             for cell in row:
                 cell.border = border_all_big
 
-        for row in sheet.iter_rows(min_row=16, min_col=7, max_col=10, max_row=16):
+        for row in sheet.iter_rows(min_row=17, min_col=7, max_col=10, max_row=17):
             for cell in row:
                 cell.border = border_all_big
 
-        for row in sheet.iter_rows(min_row=12, min_col=17, max_col=19, max_row=15):
+        for row in sheet.iter_rows(min_row=13, min_col=17, max_col=19, max_row=16):
             for cell in row:
                 cell.border = border_all
 
@@ -1022,7 +1027,7 @@ class Order(QMainWindow, order_class):
 
 
         # Формируем границы таблицы
-        for row in sheet.iter_rows(min_row=21, max_col=22, max_row=row_ex-2):
+        for row in sheet.iter_rows(min_row=22, max_col=22, max_row=row_ex-2):
             for cell in row:
                 cell.border = border_all
 
@@ -1551,6 +1556,11 @@ class OrderDocList(QDialog, order_doc):
 
     def ui_acc(self):
         if self.lw_main.selectedItems()[0].text() == "Накладная":
+            if self.cb_edo.isChecked():
+                edo = True
+            else:
+                edo = False
+
             if self.cb_head.isChecked():
                 head = True
             else:
@@ -1566,7 +1576,7 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            self.main.of_ex_torg12(head, addres, article)
+            self.main.of_ex_torg12(edo, head, addres, article)
             self.close()
             self.destroy()
 
