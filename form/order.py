@@ -810,7 +810,7 @@ class Order(QMainWindow, order_class):
         if not path[0]:
             return False
 
-        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 8, self)
+        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 8, self.position)
         self.progress.setMinimumDuration(0)
 
         border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
@@ -838,7 +838,6 @@ class Order(QMainWindow, order_class):
         if edo:
             sheet["C1"] = "   -   ЭДО   -   "
             sheet["C1"].border = border_all_big
-            # sheet["C1"].font = Font(name="Arial", size=7)
 
         if not head:
             sheet["A2"] = ""
@@ -921,6 +920,10 @@ class Order(QMainWindow, order_class):
                                  / (100 + float(nds)), 2)
             sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
             sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+            if int(self.tw_position.item(row, 5).data(5)):
+                mest = int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
+            else:
+                mest = 0
 
             sheet.merge_cells("B%s:D%s" % (row_ex, row_ex))
             sheet.merge_cells("L%s:M%s" % (row_ex, row_ex))
@@ -937,7 +940,7 @@ class Order(QMainWindow, order_class):
             sheet["G%s" % row_ex] = "796"
             sheet["H%s" % row_ex] = "кор."
             sheet["I%s" % row_ex] = self.tw_position.item(row, 5).data(5)
-            sheet["J%s" % row_ex] = int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
+            sheet["J%s" % row_ex] = mest
             sheet["L%s" % row_ex] = int(self.tw_position.item(row, 5).text())
             sheet["N%s" % row_ex] = no_nds_price
             sheet["P%s" % row_ex] = sum_no_nds
@@ -945,7 +948,7 @@ class Order(QMainWindow, order_class):
             sheet["T%s" % row_ex] = round(sum - sum_no_nds, 2)
             sheet["V%s" % row_ex] = sum
 
-            all_position += int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5))
+            all_position += mest
             all_value += int(self.tw_position.item(row, 5).text())
             all_no_nds += sum_no_nds
             all_nds += round(sum - sum_no_nds, 2)
@@ -1070,7 +1073,7 @@ class Order(QMainWindow, order_class):
         if not path[0]:
             return False
 
-        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 4, self)
+        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 4, self.position)
         self.progress.setMinimumDuration(0)
 
         border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
@@ -1231,7 +1234,7 @@ class Order(QMainWindow, order_class):
         if not path[0]:
             return False
 
-        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 4, self)
+        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 4, self.position)
         self.progress.setMinimumDuration(0)
 
         book = openpyxl.load_workbook(filename='%s/ТТН.xlsx' % (getcwd() + "/templates/order"))
@@ -1342,6 +1345,11 @@ class Order(QMainWindow, order_class):
             sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
             sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
 
+            if int(self.tw_position.item(row, 5).data(5)):
+                mest = int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
+            else:
+                mest = 0
+
             sheet.merge_cells("B%s:E%s" % (row_ex, row_ex))
             sheet.merge_cells("F%s:I%s" % (row_ex, row_ex))
             sheet.merge_cells("J%s:K%s" % (row_ex, row_ex))
@@ -1360,12 +1368,12 @@ class Order(QMainWindow, order_class):
             sheet["N%s" % row_ex] = name
             sheet["T%s" % row_ex] = "шт."
             sheet["U%s" % row_ex] = "Короб"
-            sheet["W%s" % row_ex] = int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
+            sheet["W%s" % row_ex] = mest
             sheet["Y%s" % row_ex] = "---"
             sheet["AA%s" % row_ex] = sum_no_nds
 
             all_no_nds += sum_no_nds
-            all_mest += int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
+            all_mest += mest
 
             sheet.row_dimensions[row_ex].height = 23
 
@@ -1421,6 +1429,128 @@ class Order(QMainWindow, order_class):
         int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
         exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
         sheet["C%s" % (row_ex-10)] = num2t4ru.decimal2text(Decimal(str(all_no_nds)), int_units=int_units, exp_units=exp_units)
+
+        book.save(path[0])
+        self.progress.setValue(self.progress.value() + 1)
+
+    def of_ex_score(self, article):
+        path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
+        if not path[0]:
+            return False
+
+        self.progress = QProgressDialog("Строим фаил", "Отмена", 0, self.tw_position.rowCount() + 4, self.position)
+        self.progress.setMinimumDuration(0)
+
+        book = openpyxl.load_workbook(filename='%s/Счет.xlsx' % (getcwd() + "/templates/order"))
+        sheet = book['Отчет']
+
+        font_7 = Font(name="Arial", size=7)
+        ald_center = Alignment(horizontal="center")
+        border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+        border_all_big = Border(left=Side(style='medium'), right=Side(style='medium'), top=Side(style='medium'), bottom=Side(style='medium'))
+
+        sheet["A5"] = "Счет № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        sheet["A6"] = "Плательщик: " + self.le_client.text()
+
+        for row in sheet.iter_rows(min_row=5, max_col=9, max_row=5):
+            for cell in row:
+                cell.border = Border(top=Side(style='medium'), bottom=Side(style='medium'))
+
+        self.progress.setValue(self.progress.value() + 1)
+
+        all_nds = 0
+        all_sum = 0
+
+        row_ex = 9
+        for row in range(self.tw_position.rowCount()):
+
+            query = "SELECT Barcode FROM product_article_parametrs WHERE Id = %s"
+            sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
+                return False
+            if article:
+                name = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
+            else:
+                name = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+
+            nds = self.tw_position.item(row, 4).data(5)
+            sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
+            sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+
+            sheet.merge_cells("D%s:E%s" % (row_ex, row_ex))
+            sheet.merge_cells("F%s:G%s" % (row_ex, row_ex))
+            sheet.merge_cells("H%s:I%s" % (row_ex, row_ex))
+
+            sheet["A%s" % row_ex] = row + 1
+            sheet["A%s" % row_ex].alignment = ald_center
+            sheet["B%s" % row_ex] = name
+            sheet["B%s" % row_ex].font = font_7
+            sheet["B%s" % row_ex].alignment = Alignment(wrapText=True)
+            sheet["C%s" % row_ex] = "шт."
+            sheet["D%s" % row_ex] = int(self.tw_position.item(row, 5).text())
+            sheet["F%s" % row_ex] = round(float(self.tw_position.item(row, 4).text()), 2)
+            sheet["H%s" % row_ex] = sum
+
+            all_nds += round(sum - sum_no_nds, 2)
+            all_sum += sum
+
+            sheet.row_dimensions[row_ex].height = 23
+
+            row_ex += 1
+            self.progress.setValue(self.progress.value() + 1)
+
+        for row in sheet.iter_rows(min_row=9, max_col=9, max_row=row_ex-1):
+            for cell in row:
+                cell.border = border_all
+
+        # сумма товаров
+        sheet.merge_cells("A%s:G%s" % (row_ex, row_ex))
+        sheet.merge_cells("H%s:I%s" % (row_ex, row_ex))
+        sheet["A%s" % row_ex] = "Итого:"
+        sheet["H%s" % row_ex] = all_sum
+        row_ex += 1
+
+        sheet.merge_cells("A%s:G%s" % (row_ex, row_ex))
+        sheet.merge_cells("H%s:I%s" % (row_ex, row_ex))
+        sheet["A%s" % row_ex] = "В том числе НДС:"
+        sheet["H%s" % row_ex] = all_nds
+        for row in sheet.iter_rows(min_row=row_ex-1, max_col=9, max_row=row_ex):
+            for cell in row:
+                cell.border = border_all_big
+        row_ex += 2
+        self.progress.setValue(self.progress.value() + 1)
+
+        # сумма прописью
+        int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
+        exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
+        sheet.merge_cells("A%s:I%s" % (row_ex, row_ex))
+        sheet["A%s" % row_ex] = "Сумма к оплате: " + num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
+        row_ex += 1
+
+        int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
+        exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
+        sheet.merge_cells("A%s:I%s" % (row_ex, row_ex))
+        sheet["A%s" % row_ex] = "В том числе НДС: " + num2t4ru.decimal2text(Decimal(str(all_nds)), int_units=int_units, exp_units=exp_units)
+        row_ex += 2
+        self.progress.setValue(self.progress.value() + 1)
+
+        # подписи
+        sheet["A%s" % row_ex] = "М.П."
+        sheet["A%s" % row_ex].alignment = Alignment(horizontal="center")
+        sheet.merge_cells("B%s:D%s" % (row_ex, row_ex))
+        sheet["B%s" % row_ex] = "Руководитель предприятия"
+        sheet["B%s" % row_ex].alignment = Alignment(horizontal="right")
+        row_ex += 1
+        sheet.merge_cells("B%s:D%s" % (row_ex, row_ex))
+        sheet["B%s" % row_ex] = "Главный бухгалтер"
+        sheet["B%s" % row_ex].alignment = Alignment(horizontal="right")
+
+        for row in sheet.iter_rows(min_row=row_ex-1, min_col=5, max_col=7, max_row=row_ex):
+            for cell in row:
+                cell.border = Border(bottom=Side(style='thin'))
+        self.progress.setValue(self.progress.value() + 1)
 
         book.save(path[0])
         self.progress.setValue(self.progress.value() + 1)
@@ -1553,6 +1683,8 @@ class OrderDocList(QDialog, order_doc):
             self.sw_main.setCurrentIndex(2)
         elif doc_name == "ТТН":
             self.sw_main.setCurrentIndex(3)
+        elif doc_name == "Счет":
+            self.sw_main.setCurrentIndex(4)
 
     def ui_acc(self):
         if self.lw_main.selectedItems()[0].text() == "Накладная":
@@ -1614,6 +1746,15 @@ class OrderDocList(QDialog, order_doc):
             self.close()
             self.destroy()
 
+        elif self.lw_main.selectedItems()[0].text() == "Счет":
+            if self.rb_score_name_1.isChecked():
+                article = False
+            else:
+                article = True
+
+            self.main.of_ex_score(article)
+            self.close()
+            self.destroy()
 
     def ui_can(self):
         self.close()

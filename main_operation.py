@@ -1,9 +1,9 @@
 import sys
 from os import getcwd
-from PyQt5.QtWidgets import QApplication, QLabel, QTableWidgetItem, QDialog, QMainWindow, QListWidgetItem
+from PyQt5.QtWidgets import QApplication, QLabel, QTableWidgetItem, QDialog, QMainWindow, QListWidgetItem, QMessageBox
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QBrush, QColor
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtCore import Qt, QDate, QTimer
 from function import my_sql
 import re
 
@@ -18,6 +18,10 @@ class MainWindowOperation(QMainWindow, main_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.show()
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.close_timer)
+        self.timer.start(900000)
 
         self.start_var()
         self.start_settings()
@@ -73,6 +77,7 @@ class MainWindowOperation(QMainWindow, main_class):
         self.tw_salary_history.horizontalHeader().resizeSection(8, 150)
 
     def ui_login(self):
+        self.timer.start(900000)
         query = """SELECT staff_worker_info.Id, staff_worker_info.First_Name, staff_worker_info.Last_Name
                       FROM staff_worker_login
                         LEFT JOIN staff_worker_info ON staff_worker_login.Worker_Info_Id = staff_worker_info.Id
@@ -104,6 +109,7 @@ class MainWindowOperation(QMainWindow, main_class):
             self.lb_login_error.setText('<html><head/><body><p align="center"><span style=" color:#ff0000;">Не верный логин ил пароль</span></p></body></html>')
 
     def ui_log_out(self):
+        self.timer.start(900000)
         self.start_var()
         self.start_settings()
         self.lb_f_name.setText("")
@@ -112,14 +118,17 @@ class MainWindowOperation(QMainWindow, main_class):
         self.sw_main.setCurrentIndex(0)
 
     def ui_add_operation(self):
+        self.timer.start(900000)
         self.le_cut_number.setFocus()
         self.sw_main.setCurrentIndex(2)
 
     def ui_cut_back(self):
+        self.timer.start(900000)
         self.le_cut_number.setText("")
         self.sw_main.setCurrentIndex(1)
 
     def ui_cut_next(self):
+        self.timer.start(900000)
         query = """SELECT COUNT(*) FROM cut WHERE Id = %s"""
         sql_info = my_sql.sql_select(query, (int(self.le_cut_number.text()), ))
         if "mysql.connector.errors" in str(type(sql_info)):
@@ -137,11 +146,13 @@ class MainWindowOperation(QMainWindow, main_class):
             self.le_cut_number.setText("")
 
     def ui_pack_back(self):
+        self.timer.start(900000)
         self.le_pack_number.setText("")
         self.le_cut_number.setFocus()
         self.sw_main.setCurrentIndex(2)
 
     def ui_pack_next(self):
+        self.timer.start(900000)
         query = """SELECT Id FROM pack WHERE Number = %s AND Cut_Id = %s"""
         sql_info = my_sql.sql_select(query, (int(self.le_pack_number.text()), self.cut["cut_id"]))
         if "mysql.connector.errors" in str(type(sql_info)):
@@ -161,6 +172,7 @@ class MainWindowOperation(QMainWindow, main_class):
             self.le_pack_number.setText("")
 
     def ui_operation_back(self):
+        self.timer.start(900000)
         self.le_operation_cut.setText("")
         self.le_operation_pack.setText("")
         self.le_operation_pack_value.setText("")
@@ -178,6 +190,7 @@ class MainWindowOperation(QMainWindow, main_class):
         self.sw_main.setCurrentIndex(3)
 
     def ui_operation_next(self):
+        self.timer.start(900000)
         try:
             id = int(self.tw_operation.item(self.tw_operation.currentRow(), 0).data(-2))
             open_operation = int(self.tw_operation.item(self.tw_operation.currentRow(), 0).data(-1))
@@ -223,9 +236,11 @@ class MainWindowOperation(QMainWindow, main_class):
         self.sw_main.setCurrentIndex(1)
 
     def ui_salary_menu(self):
+        self.timer.start(900000)
         self.sw_main.setCurrentIndex(5)
 
     def ui_salary_operation(self):
+        self.timer.start(900000)
         query = """SELECT cut.Id, pack.Number, product_article.Article, product_article_size.Size, pack_operation.Name, pack_operation.Price,
                         pack.Value_Pieces - pack.Value_Damage, pack_operation.Price * (pack.Value_Pieces - pack.Value_Damage ),
                         pack_operation.Date_make, pack_operation.Date_Input,
@@ -310,6 +325,7 @@ class MainWindowOperation(QMainWindow, main_class):
         self.sw_main.setCurrentIndex(6)
 
     def ui_salary_p_m(self):
+        self.timer.start(900000)
         query = """SELECT pay_reason.Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_worker.Note
                       FROM pay_worker LEFT JOIN pay_reason ON pay_worker.Reason_Id = pay_reason.Id
                       WHERE pay_worker.Worker_Id = %s AND pay_worker.Pay = 0"""
@@ -359,14 +375,17 @@ class MainWindowOperation(QMainWindow, main_class):
         self.sw_main.setCurrentIndex(7)
 
     def ui_salary_history(self):
+        self.timer.start(900000)
         self.date = SalaryDate(self, self.user["id"])
         self.date.setModal(True)
         self.date.show()
 
     def ui_salary_menu_back(self):
+        self.timer.start(900000)
         self.sw_main.setCurrentIndex(1)
 
     def ui_back_to_salary_menu(self):
+        self.timer.start(900000)
         self.tw_salary_operation.clearContents()
         self.tw_salary_operation.setRowCount(0)
 
@@ -572,7 +591,7 @@ class MainWindowOperation(QMainWindow, main_class):
         self.sw_main.setCurrentIndex(8)
 
     def ui_beika(self):
-
+        self.timer.start(900000)
         query = "SELECT Id, Name FROM accessories_name WHERE For_Beika = 1"
         sql_info = my_sql.sql_select(query)
         if "mysql.connector.errors" in str(type(sql_info)):
@@ -610,6 +629,7 @@ class MainWindowOperation(QMainWindow, main_class):
                 self.le_value.setText(text[:-1])
 
     def ui_beika_acc(self):
+        self.timer.start(900000)
         if self.le_value.text() == "":
             return False
         elif self.lw_material.currentRow() < 0:
@@ -631,6 +651,7 @@ class MainWindowOperation(QMainWindow, main_class):
         self.sw_main.setCurrentIndex(1)
 
     def ui_beika_back(self):
+        self.timer.start(900000)
         self.lw_material.clear()
         self.le_value.clear()
 
@@ -652,6 +673,10 @@ class MainWindowOperation(QMainWindow, main_class):
                 self.ui_beika_acc()
 
         event.accept()
+
+    def close_timer(self):
+        self.timer.stop()
+        self.close()
 
 
 class OperationAcc(QDialog, operation_acc):
@@ -730,7 +755,6 @@ class SalaryDate(QDialog, salary_date):
     def ui_can(self):
         self.close()
         self.destroy()
-
 
 
 app = QApplication(sys.argv)
