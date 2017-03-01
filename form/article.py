@@ -12,7 +12,6 @@ article_change_operation_class = loadUiType(getcwd() + '/ui/article_change_opera
 article_change_material_class = loadUiType(getcwd() + '/ui/article_change_material.ui')[0]
 article_copy_parametr = loadUiType(getcwd() + '/ui/article_copy_parametr.ui')[0]
 
-123
 
 class ArticleList(tree.TreeList):
     def set_settings(self):
