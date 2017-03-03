@@ -15,11 +15,11 @@ from form.templates import table, list
 from form import clients, article
 import num2t4ru
 
-need_article = loadUiType(getcwd() + '/ui/order_position.ui')[0]
+need_article = loadUiType(getcwd() + '/ui/report_need_article_order.ui')[0]
 
 
-class NeedArticleOrde(QMainWindow, need_article):
+class NeedArticleOrder(QMainWindow, need_article):
     def __init__(self):
-        super(NeedArticleOrde, self).__init__()
+        super(NeedArticleOrder, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))

@@ -301,7 +301,7 @@ class MainWindow(QMainWindow, main_class):
         self.sub_settings_access.show()
 
     def view_report_need_article_order(self):
-        self.report_need_article = settings_access.Access()
+        self.report_need_article = report_order.NeedArticleOrder()
         self.sub_report_need_article = QMdiSubWindow()
         self.sub_report_need_article.setWidget(self.report_need_article)
         self.mdi.addSubWindow(self.sub_report_need_article)
