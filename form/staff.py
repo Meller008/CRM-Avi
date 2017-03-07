@@ -231,7 +231,7 @@ class OneStaff(QMainWindow, one_staff_class):
                         ico = "xlsx"
                     elif "xml" in r[1][1:] or "docx" in r[1] or "doc" in r[1] or "docm" in r[1]:
                         ico = "xml"
-                    elif "png" in r[1] or "jpg" in r[1] or "jpeg" in r[1] or "jpe" in r[1] or "gif" in r[1] or "bmp" in r[1]:
+                    elif "png" in r[1].lower() or "jpg" in r[1] or "jpeg" in r[1] or "jpe" in r[1] or "gif" in r[1] or "bmp" in r[1]:
                         ico = "image"
                     elif "pdf" in r[1]:
                         ico = "pdf"

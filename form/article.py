@@ -881,6 +881,10 @@ class Article(QMainWindow, article_class):
     def ui_check_show(self):
         self.set_size_parametr()
 
+    def ui_change_curent(self, curent):
+        if curent == 2:
+            self.view_file_label()
+
     def key_up(self):
         index = self.cb_size.currentIndex()
         if index == 0:
@@ -1072,6 +1076,9 @@ class Article(QMainWindow, article_class):
 
         all_price = price_all_material + price_all_operations
         self.le_cost_price.setText(str(round(all_price, 4)))
+
+    def view_file_label(self):
+        pass
 
     def of_tree_select_operation(self, item):
         self.tw_operations.insertRow(self.tw_operations.rowCount())
