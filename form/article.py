@@ -1,8 +1,8 @@
-from os import getcwd
+from os import getcwd, path, mkdir, listdir
 from form.templates import tree
-from form import operation, supply_material, supply_accessories
+from form import operation, supply_material, supply_accessories, print_label
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut
+from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql
@@ -414,6 +414,8 @@ class Article(QMainWindow, article_class):
             self.select_parametr_id = False
         self.get_start_sql_info()
         self.set_size_parametr()
+        if self.tab_widget.currentIndex() == 2 and self.cb_parametrs.currentText() and self.cb_size.currentText():
+            self.view_file_label()
         self.save_change = []  # Переменная для запоминания изменений
 
         if not self.dc_select:
@@ -532,6 +534,8 @@ class Article(QMainWindow, article_class):
             self.select_parametr_id = False
         self.set_parametr_info()
         self.get_start_sql_info()
+        if self.tab_widget.currentIndex() == 2 and self.cb_parametrs.currentText() and self.cb_size.currentText():
+            self.view_file_label()
         self.save_change = []  # Переменная для запоминания изменений
 
     def ui_copy_parametr(self):
@@ -885,6 +889,22 @@ class Article(QMainWindow, article_class):
         if curent == 2:
             self.view_file_label()
 
+    def ui_print_label(self, item):
+        data = {"article": self.le_article.text(),
+                "article_size": self.cb_size.currentText(),
+                "article_parametr": self.cb_parametrs.currentText()}
+
+        query = 'SELECT `Values` FROM program_settings_path WHERE Name = "Путь корень бирки"'
+        info_sql = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(info_sql)):
+                    QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                    return False
+
+        path = info_sql[0][0] + "/" + self.le_article.text() + " " + self.cb_size.currentText() + " " + self.cb_parametrs.currentText() + "/" + item.text()
+        self.print_label = print_label.LabelSettings(path, data)
+        self.print_label.setWindowModality(True)
+        self.print_label.show()
+
     def key_up(self):
         index = self.cb_size.currentIndex()
         if index == 0:
@@ -1078,7 +1098,52 @@ class Article(QMainWindow, article_class):
         self.le_cost_price.setText(str(round(all_price, 4)))
 
     def view_file_label(self):
-        pass
+        if self.cb_parametrs.currentText() and self.cb_size.currentText():
+            dir_name = self.le_article.text() + " " + self.cb_size.currentText() + " " + self.cb_parametrs.currentText()
+            self.inspection_files(dir_name, "Путь корень бирки")
+
+    def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
+        if not hasattr(self, 'path_work'):
+            query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % sql_dir_name
+            info_sql = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        return False
+            self.path_wor = info_sql[0][0]
+            if not path.isdir("%s/%s" % (self.path_wor, dir_name)):
+                try:
+                    mkdir("%s/%s" % (self.path_wor, dir_name))
+                    return "%s/%s" % (self.path_wor, dir_name)
+                except:
+                    QMessageBox.critical(self, "Ошибка файлы", "Нет доступа к корневому диалогу, файлы недоступны", QMessageBox.Ok)
+                    return False
+            else:
+                return "%s/%s" % (self.path_wor, dir_name)
+
+    def inspection_files(self, dir_name, sql_dir_name):   # Проверяем файлы и даем иконки
+        self.path = self.inspection_path(dir_name, sql_dir_name)
+        if self.path:
+            self.lw_label.clear()
+            files = listdir("%s/%s" % (self.path_wor, dir_name))
+            for file in files:
+                if "~" not in file:
+                    r = path.splitext(file)  # Получаем название и расширение
+                    if "xlsx" in r[1][1:] or "xlsm" in r[1] or "xls" in r[1] or "xlt" in r[1]:
+                        ico = "xlsx"
+                    elif "xml" in r[1][1:] or "docx" in r[1] or "doc" in r[1] or "docm" in r[1]:
+                        ico = "xml"
+                    elif "png" in r[1].lower() or "jpg" in r[1] or "jpeg" in r[1] or "jpe" in r[1] or "gif" in r[1] or "bmp" in r[1]:
+                        ico = "image"
+                    elif "pdf" in r[1]:
+                        ico = "pdf"
+                    elif "btw" in r[1]:
+                        ico = "btw"
+                    else:
+                        ico = "other"
+
+                    list_item = QListWidgetItem(r[0] + r[1])
+                    list_item.setIcon(QIcon(getcwd() + "/images/%s.ico" % ico))
+                    self.lw_label.addItem(list_item)
 
     def of_tree_select_operation(self, item):
         self.tw_operations.insertRow(self.tw_operations.rowCount())

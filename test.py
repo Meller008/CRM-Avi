@@ -25,8 +25,7 @@ import socket, time
 conn = socket.socket()
 conn.connect( ("127.0.0.1", 6666) )
 
-conn.send(b'{"q": "088011"}')
-conn.send(b"session_ok")
+conn.send(b"data_ok")
 
 
 # в скрипте, читающем данные:

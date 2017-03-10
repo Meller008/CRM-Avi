@@ -977,7 +977,7 @@ border-color: rgb(170, 0, 0);
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -989,6 +989,13 @@ border-color: rgb(170, 0, 0);
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pushButton_4">
+         <property name="text">
+          <string>Печать бирок</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -1049,8 +1056,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_view_list_article()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>77</y>
+     <x>434</x>
+     <y>100</y>
     </hint>
     <hint type="destinationlabel">
      <x>401</x>
@@ -1065,8 +1072,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_size()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>634</x>
-     <y>73</y>
+     <x>652</x>
+     <y>100</y>
     </hint>
     <hint type="destinationlabel">
      <x>926</x>
@@ -1081,8 +1088,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_value_product()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>24</x>
-     <y>171</y>
+     <x>27</x>
+     <y>200</y>
     </hint>
     <hint type="destinationlabel">
      <x>-64</x>
@@ -1097,8 +1104,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_weight()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>632</x>
-     <y>162</y>
+     <x>653</x>
+     <y>200</y>
     </hint>
     <hint type="destinationlabel">
      <x>881</x>
@@ -1113,8 +1120,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_value_damage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>219</x>
-     <y>168</y>
+     <x>326</x>
+     <y>200</y>
     </hint>
     <hint type="destinationlabel">
      <x>260</x>
@@ -1129,8 +1136,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_add_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>34</x>
-     <y>219</y>
+     <x>37</x>
+     <y>251</y>
     </hint>
     <hint type="destinationlabel">
      <x>-209</x>
@@ -1145,8 +1152,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_change_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>96</x>
-     <y>219</y>
+     <x>126</x>
+     <y>251</y>
     </hint>
     <hint type="destinationlabel">
      <x>-64</x>
@@ -1162,7 +1169,7 @@ border-color: rgb(170, 0, 0);
    <hints>
     <hint type="sourcelabel">
      <x>183</x>
-     <y>228</y>
+     <y>251</y>
     </hint>
     <hint type="destinationlabel">
      <x>-125</x>
@@ -1177,8 +1184,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_view_client()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>308</x>
-     <y>102</y>
+     <x>307</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>859</x>
@@ -1193,8 +1200,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_view_order()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>621</x>
-     <y>102</y>
+     <x>622</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>738</x>
@@ -1209,8 +1216,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_del_client()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>327</x>
-     <y>100</y>
+     <x>338</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>334</x>
@@ -1225,8 +1232,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_del_order()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>646</x>
-     <y>102</y>
+     <x>653</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>940</x>
@@ -1241,8 +1248,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_add_accessories()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>12</x>
-     <y>223</y>
+     <x>15</x>
+     <y>250</y>
     </hint>
     <hint type="destinationlabel">
      <x>-76</x>
@@ -1257,8 +1264,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_change_accessories()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>223</y>
+     <x>126</x>
+     <y>250</y>
     </hint>
     <hint type="destinationlabel">
      <x>-31</x>
@@ -1289,8 +1296,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_note()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>71</x>
-     <y>131</y>
+     <x>97</x>
+     <y>153</y>
     </hint>
     <hint type="destinationlabel">
      <x>-149</x>
@@ -1305,8 +1312,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_date_make()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>620</x>
-     <y>34</y>
+     <x>653</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel">
      <x>617</x>
@@ -1321,8 +1328,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_date_make()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>585</x>
-     <y>52</y>
+     <x>652</x>
+     <y>72</y>
     </hint>
     <hint type="destinationlabel">
      <x>622</x>
@@ -1353,8 +1360,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_date_complete()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>515</x>
-     <y>50</y>
+     <x>525</x>
+     <y>72</y>
     </hint>
     <hint type="destinationlabel">
      <x>550</x>
@@ -1417,8 +1424,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_del_accessories()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>168</x>
-     <y>220</y>
+     <x>183</x>
+     <y>250</y>
     </hint>
     <hint type="destinationlabel">
      <x>-74</x>
@@ -1433,8 +1440,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_calc_pack()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>624</x>
-     <y>160</y>
+     <x>646</x>
+     <y>191</y>
     </hint>
     <hint type="destinationlabel">
      <x>765</x>
@@ -1449,8 +1456,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_clone_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>280</x>
-     <y>213</y>
+     <x>327</x>
+     <y>253</y>
     </hint>
     <hint type="destinationlabel">
      <x>280</x>
@@ -1471,6 +1478,22 @@ border-color: rgb(170, 0, 0);
     <hint type="destinationlabel">
      <x>771</x>
      <y>56</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_print_label()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>32</x>
+     <y>73</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-64</x>
+     <y>76</y>
     </hint>
    </hints>
   </connection>
@@ -1501,5 +1524,6 @@ border-color: rgb(170, 0, 0);
   <slot>ui_calc_pack()</slot>
   <slot>ui_clone_operation()</slot>
   <slot>ui_print_pack_passport()</slot>
+  <slot>ui_print_label()</slot>
  </slots>
 </ui>

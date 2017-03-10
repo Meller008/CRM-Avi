@@ -8,7 +8,7 @@ import re
 import codecs
 from decimal import *
 from classes import cut, print_qt
-from form import clients, article
+from form import clients, article, print_label
 from function import barcode, files, my_sql
 
 pack_class = loadUiType(getcwd() + '/ui/pack.ui')[0]
@@ -406,6 +406,17 @@ class PackBrows(QDialog, pack_class):
         self.print_class = print_qt.PrintHtml(self, html)
 
         files.del_temp_file(cod + ".svg")
+
+    def ui_print_label(self):
+        data = {
+                "article": self.pack.article(),
+                "article_size": self.pack.article_size(),
+                "article_parametr": self.pack.parametr_name(),
+                "article_barcode": self.pack.article_barcode(),
+                "pack_id": self.pack.id()}
+        self.print_label = print_label.LabelFile(self.pack.article_id(), "Путь корень бирки", data)
+        self.print_label.setModal(True)
+        self.print_label.show()
 
     def set_operation_name(self):
         operation_list = self.pack.operations()

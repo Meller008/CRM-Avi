@@ -1483,6 +1483,22 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lw_label</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print_label()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>420</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>719</x>
+     <y>371</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_size()</slot>
@@ -1515,5 +1531,6 @@ font: 8pt &quot;Tahoma&quot;;</string>
   <slot>ui_key_up()</slot>
   <slot>ui_calc_nds()</slot>
   <slot>ui_change_curent()</slot>
+  <slot>ui_print_label()</slot>
  </slots>
 </ui>
