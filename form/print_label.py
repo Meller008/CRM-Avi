@@ -16,7 +16,7 @@ IP_SERV_LABEL = "192.168.1.3"
 
 
 class LabelFile(QDialog, label_file):
-    def __init__(self, article_id, path_name, data=None):
+    def __init__(self, article_parametr_id, path_name, data=None):
         super(LabelFile, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
@@ -26,8 +26,8 @@ class LabelFile(QDialog, label_file):
         query = """SELECT product_article.Article, product_article_size.Size, product_article_parametrs.Name
                       FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
                       LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
-                      WHERE product_article.Id = %s"""
-        info_sql = my_sql.sql_select(query, (article_id, ))
+                      WHERE product_article_parametrs.Id = %s"""
+        info_sql = my_sql.sql_select(query, (article_parametr_id, ))
         if "mysql.connector.errors" in str(type(info_sql)):
                 QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
 
@@ -102,7 +102,10 @@ class LabelSettings(QDialog, label_settings):
                            "article_size": "None",
                            "article_parametr": "None",
                            "article_barcode": "None",
-                           "pack_id": "None"}
+                           "pack_id": "None",
+                           "clients_vendor": "None",
+                           "date_order": "None",
+                           "number_order": "None"}
 
         self.le_label_path.setText(path)
 

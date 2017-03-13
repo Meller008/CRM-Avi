@@ -12,7 +12,7 @@ from openpyxl.worksheet.pagebreak import Break
 from copy import copy
 from function import my_sql, to_excel
 from form.templates import table, list
-from form import clients, article
+from form import clients, article, print_label
 import num2t4ru
 
 position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
@@ -130,6 +130,14 @@ class Order(QMainWindow, order_class):
         self.tw_position.horizontalHeader().resizeSection(5, 50)
         self.tw_position.horizontalHeader().resizeSection(6, 70)
 
+        self.tw_position_label.horizontalHeader().resizeSection(0, 70)
+        self.tw_position_label.horizontalHeader().resizeSection(1, 60)
+        self.tw_position_label.horizontalHeader().resizeSection(2, 120)
+        self.tw_position_label.horizontalHeader().resizeSection(3, 220)
+        self.tw_position_label.horizontalHeader().resizeSection(4, 60)
+        self.tw_position_label.horizontalHeader().resizeSection(5, 50)
+        self.tw_position_label.horizontalHeader().resizeSection(6, 70)
+
         if self.id:
             self.start_set_sql_info()
         else:
@@ -207,43 +215,75 @@ class Order(QMainWindow, order_class):
         for position in sql_info:
             row = self.tw_position.rowCount()
             self.tw_position.insertRow(row)
+            self.tw_position_label.insertRow(row)
             table_item = QTableWidgetItem(position[1])
             table_item.setData(-1, "set")
             table_item.setData(-2, position[0])
             self.tw_position.setItem(row, 0, table_item)
+            table_item = QTableWidgetItem(position[1])
+            table_item.setData(-1, "set")
+            table_item.setData(-2, position[0])
+            self.tw_position_label.setItem(row, 0, table_item)
 
             table_item = QTableWidgetItem(position[2])
             table_item.setData(-1, "set")
             table_item.setData(-2, position[0])
             self.tw_position.setItem(row, 1, table_item)
+            table_item = QTableWidgetItem(position[2])
+            table_item.setData(-1, "set")
+            table_item.setData(-2, position[0])
+            self.tw_position_label.setItem(row, 1, table_item)
 
             table_item = QTableWidgetItem(position[4])
             table_item.setData(-1, "set")
             table_item.setData(-2, position[0])
             table_item.setData(5, position[3])
             self.tw_position.setItem(row, 2, table_item)
+            table_item = QTableWidgetItem(position[4])
+            table_item.setData(-1, "set")
+            table_item.setData(-2, position[0])
+            table_item.setData(5, position[3])
+            self.tw_position_label.setItem(row, 2, table_item)
 
             table_item = QTableWidgetItem(str(position[5]))
             table_item.setData(-1, "set")
             table_item.setData(-2, position[0])
             self.tw_position.setItem(row, 3, table_item)
+            table_item = QTableWidgetItem(str(position[5]))
+            table_item.setData(-1, "set")
+            table_item.setData(-2, position[0])
+            self.tw_position_label.setItem(row, 3, table_item)
 
             table_item = QTableWidgetItem(str(position[6]))
             table_item.setData(-1, "set")
             table_item.setData(-2, position[0])
             table_item.setData(5, position[7])
             self.tw_position.setItem(row, 4, table_item)
+            table_item = QTableWidgetItem(str(position[6]))
+            table_item.setData(-1, "set")
+            table_item.setData(-2, position[0])
+            table_item.setData(5, position[7])
+            self.tw_position_label.setItem(row, 4, table_item)
 
             table_item = QTableWidgetItem(str(position[8]))
             table_item.setData(-1, "set")
             table_item.setData(-2, position[0])
             table_item.setData(5, position[9])
             self.tw_position.setItem(row, 5, table_item)
+            table_item = QTableWidgetItem(str(position[8]))
+            table_item.setData(-1, "set")
+            table_item.setData(-2, position[0])
+            table_item.setData(5, position[9])
+            self.tw_position_label.setItem(row, 5, table_item)
 
             table_item = QTableWidgetItem(str(position[10]))
             table_item.setData(-1, "set")
             table_item.setData(-2, position[0])
             self.tw_position.setItem(row, 6, table_item)
+            table_item = QTableWidgetItem(str(position[10]))
+            table_item.setData(-1, "set")
+            table_item.setData(-2, position[0])
+            self.tw_position_label.setItem(row, 6, table_item)
 
     def ui_view_client(self):
         self.client_list = clients.ClientList(self, True)
@@ -324,6 +364,7 @@ class Order(QMainWindow, order_class):
         table_item.setData(5, self.position.le_in_on_place.text())
         self.tw_position.setItem(row, 5, table_item)
         self.save_change_order_position = True
+        self.pb_doc.deleteLater()
         return True
 
     def ui_change_position(self, row_in=False):
@@ -448,6 +489,7 @@ class Order(QMainWindow, order_class):
         table_item.setData(5, self.position.le_in_on_place.text())
         self.tw_position.setItem(row, 5, table_item)
         self.save_change_order_position = True
+        self.pb_doc.deleteLater()
         return True
 
     def ui_double_click_position(self, row):
@@ -580,6 +622,19 @@ class Order(QMainWindow, order_class):
         self.position = OrderDocList(self)
         self.position.setModal(True)
         self.position.show()
+
+    def ui_view_label(self, row):
+        data = {
+                "article": self.tw_position_label.item(row, 0).text(),
+                "article_size": self.tw_position_label.item(row, 1).text(),
+                "article_parametr": self.tw_position_label.item(row, 2).text(),
+                "clients_vendor": self.cb_clients_vendor.currentText(),
+                "date_order": self.de_date_order.date().toString("dd.MM.yyyy"),
+                "number_order": self.le_number_order.text()}
+
+        self.print_label = print_label.LabelFile(self.tw_position_label.item(row, 2).data(5), "Путь корень бирки", data)
+        self.print_label.setModal(True)
+        self.print_label.show()
 
     def ui_acc(self):
         if self.save_sql():

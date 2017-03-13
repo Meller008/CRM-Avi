@@ -819,7 +819,7 @@ class Pack:
         query = """SELECT pack.Id, pack.Article_Parametr_Id, pack.Cut_Id, pack.Order_Id, pack.Number, pack.Value_Pieces, pack.Value_Damage,
                         pack.Weight, pack.Note, pack.Size, pack.Client_Id, clients.Name, pack.Date_Make, pack.Date_Coplete, cut.Material_Id, product_article.Article,
                         product_article_size.Size, product_article_parametrs.Name, cut.Date_Cut, product_article.Name,
-                        product_article_parametrs.Barcode, product_article.Id
+                        product_article_parametrs.Barcode, product_article.Id, product_article_parametrs.Id
                       FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
                       LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                       LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
@@ -856,6 +856,7 @@ class Pack:
         self.__article_name = sql_info[0][19]
         self.__article_barcode = sql_info[0][20]
         self.__article_id = sql_info[0][21]
+        self.__article_parametr_id = sql_info[0][22]
 
         self.__value_all = self.__value_pieces - self.__value_damage
         self.__value_all_sql = self.__value_all
@@ -1858,6 +1859,9 @@ class Pack:
 
     def parametr_name(self):
         return self.__article_parametr_name
+
+    def parametr_id(self):
+        return self.__article_parametr_id
 
     def weight(self):
         return self.__weight

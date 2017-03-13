@@ -5,7 +5,7 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
-from function import my_sql
+from function import my_sql, to_excel
 import openpyxl
 import subprocess
 
@@ -303,7 +303,8 @@ class OneStaff(QMainWindow, one_staff_class):
         dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
-            subprocess.call([self.path.replace("/", "\\")], shell=True)
+            # subprocess.Popen(['explorer "' + self.path.replace("/", "\\") + '"'])
+            subprocess.Popen('explorer "%s"' % self.path.replace("/", "\\"))
 
     def add_file(self):  # Добавляем файлы
         info = AddFile()
@@ -860,9 +861,9 @@ class OneStaff(QMainWindow, one_staff_class):
             info = InfoDate(self.de_info_recruitment.date())
             if info.exec() == 0:
                 return False
-            book = openpyxl.load_workbook(filename='%s/notif_in.xlsx' % self.path_templates)
+            book = openpyxl.load_workbook(filename='%s/staff/notif_in.xlsx' % self.path_templates)
         elif option == "out":
-            book = openpyxl.load_workbook(filename='%s/notif_out.xlsx' % self.path_templates)
+            book = openpyxl.load_workbook(filename='%s/staff/notif_out.xlsx' % self.path_templates)
         sheet = book['s1']
 
         col = ("Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX",
@@ -1229,14 +1230,16 @@ class OneStaff(QMainWindow, one_staff_class):
             sheet['%s%s' % (col[i], 50)] = t
             i += 1
 
-        self.path = self.inspection_path()
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю")
             if option == "in":
                 book.save('%s/%s' % (self.path, "Уведомление о приеме на работу.xlsx"))
             elif option == "out":
                 book.save('%s/%s' % (self.path, "Уведомление о увольнении.xlsx"))
-            self.inspection_files()
+            dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+            self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
             self.statusBar().showMessage("Готово")
         else:
             self.statusBar().showMessage("Ошибка сохранения")
@@ -1430,7 +1433,8 @@ class OneStaff(QMainWindow, one_staff_class):
             sheet['%s%s' % (col[i], 50)] = t
             i += 1
 
-        self.path = self.inspection_path()
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
             book.save('%s/%s' % (self.path, "Уведомление для регистрации.xlsx"))

@@ -346,6 +346,88 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Бирки</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QTableWidget" name="tw_position_label">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderDefaultSectionSize">
+           <number>20</number>
+          </attribute>
+          <attribute name="verticalHeaderMinimumSectionSize">
+           <number>18</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Артикул</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Размер</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Параметр</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Имя</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Цена</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Кол-во</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Сумма</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tab_10">
        <attribute name="title">
         <string>Подсчет заказа</string>
@@ -455,8 +537,8 @@
    <slot>ui_view_transport_company()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>566</x>
-     <y>113</y>
+     <x>554</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>553</x>
@@ -471,8 +553,8 @@
    <slot>ui_add_position()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>22</x>
-     <y>181</y>
+     <x>30</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -487,8 +569,8 @@
    <slot>ui_change_position()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>182</y>
+     <x>151</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>-66</x>
@@ -503,8 +585,8 @@
    <slot>ui_del_position()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>158</x>
-     <y>179</y>
+     <x>214</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>-9</x>
@@ -519,8 +601,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>370</x>
-     <y>56</y>
+     <x>555</x>
+     <y>76</y>
     </hint>
     <hint type="destinationlabel">
      <x>350</x>
@@ -583,8 +665,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>641</x>
-     <y>103</y>
+     <x>650</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>640</x>
@@ -615,8 +697,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>126</y>
+     <x>212</x>
+     <y>156</y>
     </hint>
     <hint type="destinationlabel">
      <x>-115</x>
@@ -663,8 +745,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>302</x>
-     <y>54</y>
+     <x>315</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>302</x>
@@ -679,8 +761,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>551</x>
-     <y>104</y>
+     <x>554</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>507</x>
@@ -711,8 +793,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>686</x>
-     <y>133</y>
+     <x>756</x>
+     <y>155</y>
     </hint>
     <hint type="destinationlabel">
      <x>930</x>
@@ -727,8 +809,8 @@
    <slot>ui_check_warehouse()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>240</x>
-     <y>176</y>
+     <x>345</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>254</x>
@@ -743,8 +825,8 @@
    <slot>ui_change_date_shipment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>596</x>
-     <y>103</y>
+     <x>650</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>942</x>
@@ -759,8 +841,8 @@
    <slot>ui_export()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>338</x>
-     <y>178</y>
+     <x>407</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>337</x>
@@ -784,6 +866,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tw_position_label</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_view_label()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-18</x>
+     <y>255</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_client()</slot>
@@ -799,5 +897,6 @@
   <slot>ui_change_date_shipment()</slot>
   <slot>ui_export()</slot>
   <slot>ui_document_list()</slot>
+  <slot>ui_view_label()</slot>
  </slots>
 </ui>
