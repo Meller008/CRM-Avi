@@ -1,38 +1,15 @@
-import socket, time
+f = open("C:\\Users\\Meller\\Desktop\\petition_out.xml", "r", -1, "utf-8")
+xml = f.read()
+f.close()
 
+xml = xml.replace("?ФИО", "Рублев Александр Александрович")
+xml = xml.replace("?СЕРИЯ", "4513")
+xml = xml.replace("?НОМЕР", "206684")
+xml = xml.replace("?ВЫДАН", "Отдел УФМС России по гор Москве в ЗАО")
+xml = xml.replace("?ДАТАВЫД", "21.10.2013")
+xml = xml.replace("?ДАТАЗАЯВ", "16.03.2017")
+xml = xml.replace("?ДАТАУВОЛЬН", "18.03.2017")
 
-# sock = socket.socket()
-# sock.bind( ("", 6666) )
-# sock.listen(5)
-#
-# try:
-#     while 1: # работаем постоянно
-#         conn, addr = sock.accept()
-#         print("New connection from " + addr[0])
-#         try:
-#             data = conn.recv(16384)
-#             udata = data.decode("utf-8")
-#             print("Data: " + udata)
-#         except:
-#             print("err")
-#         finally:
-#             # так при любой ошибке
-#             # сокет закроем корректно
-#             conn.close()
-# finally: sock.close()
-
-
-conn = socket.socket()
-conn.connect( ("127.0.0.1", 6666) )
-
-conn.send(b"data_ok")
-
-
-# в скрипте, читающем данные:
-try: data = conn.recv(1024)
-except socket.error: # данных нет
-    pass # тут ставим код выхода
-else: # данные есть
-    print(data)
-    # если в блоке except вы выходите,
-    # ставить else и отступ не нужно
+f = open('%s/%s' % ("C:\\Users\\Meller\\Desktop", "123.doc"), "w", -1, "utf-8")
+f.write(xml)
+f.close()

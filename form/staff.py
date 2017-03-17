@@ -7,6 +7,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql, to_excel
 import openpyxl
+from openpyxl.drawing.image import Image
 import subprocess
 
 
@@ -836,17 +837,26 @@ class OneStaff(QMainWindow, one_staff_class):
                 self.m.set_info()
                 self.destroy()
 
-    def build_exel_in(self):
-        self.new_exel("in")
+    def exel_in(self):
+        self.build_new_exel("in")
 
-    def build_exel_out(self):
-        self.new_exel("out")
+    def exel_out(self):
+        self.build_new_exel("out")
 
-    def new_exel(self, option):
+    def exel_petition_in(self):
+        self.build_word_petition("in")
+
+    def exel_petition_out(self):
+        self.build_word_petition("out")
+
+    # Уведомление о заключении трудового договора
+    def build_new_exel(self, option):
         # Уведомление о заключении трудового договора
         # row = (17, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 53, 55, 57, 59, 61, 63, 65)
         # col = ("A", "D", "G", "j", "M", "P", "S", "V", "Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX",
         #       "CA", "CD", "CG", "CJ", "CM", "CP", "CS", "CV", "CY", "DB", "DE", "DH", "DK", "DN", "DQ", "DT", "DW")
+
+        to_excel.patch_worksheet()
 
         if not hasattr(self, 'path_templates'):
             query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
@@ -1245,6 +1255,7 @@ class OneStaff(QMainWindow, one_staff_class):
             self.statusBar().showMessage("Ошибка сохранения")
             return False
 
+    # Уведомление о регистрации
     def build_exel_registration(self):
         if not hasattr(self, 'path_templates'):
             query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
@@ -1254,11 +1265,13 @@ class OneStaff(QMainWindow, one_staff_class):
                         return False
             self.path_templates = info_sql[0][0]
 
+        to_excel.patch_worksheet()
+
         info = ExelInfo(self.le_info_birthplace.text())
         if info.exec() == 0:
             return False
         self.statusBar().showMessage("Открываю шаблон")
-        book = openpyxl.load_workbook(filename='%s/registration.xlsx' % self.path_templates)
+        book = openpyxl.load_workbook(filename='%s/staff/registration.xlsx' % self.path_templates)
         sheet = book["s1"]
         col = ("N", "Q", "T", "W", "Z", "AC", "AF", "AI", "AL", "AO", "AR", "AU", "AX", "BA", "BD", "BG", "BJ", "BM", "BP", "BS", "BV", "BY", "CB", "CE", "CH", "CK",
                "CN", "CQ", "CT", "CW", "CZ", "DC", "DF", "DI", "DL")
@@ -1433,17 +1446,42 @@ class OneStaff(QMainWindow, one_staff_class):
             sheet['%s%s' % (col[i], 50)] = t
             i += 1
 
+        # Вставляем черные квадраты
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'E7')
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'DJ7')
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'E96')
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'CO96')
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'DJ96')
+
+        sheet = book["s2"]
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'E3')
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'DJ3')
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'E79')
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'CO79')
+        img = Image('%s/staff/square.png' % self.path_templates)
+        sheet.add_image(img, 'DJ79')
+
         dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
             book.save('%s/%s' % (self.path, "Уведомление для регистрации.xlsx"))
-            self.inspection_files()
+            self.inspection_files(dir_name, 'Путь корень рабочие')
             self.statusBar().showMessage("Готово")
         else:
             self.statusBar().showMessage("Ошибка сохранения")
             return False
 
+    # Договор на работу
     def build_word_in(self):
         if not hasattr(self, 'path_templates'):
             query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
@@ -1477,7 +1515,7 @@ class OneStaff(QMainWindow, one_staff_class):
         patent = my_sql.sql_select("SELECT Patent FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
 
         self.statusBar().showMessage("Открываю шаблон")
-        f = open('%s/prod_registration.xml' % self.path_templates, "r", -1, "utf-8")
+        f = open('%s/staff/prod_registration.xml' % self.path_templates, "r", -1, "utf-8")
         xml = f.read()
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
@@ -1501,7 +1539,7 @@ class OneStaff(QMainWindow, one_staff_class):
         else:
             xml = xml.replace("ВРЕМЯ", "неопределенный срок.")
             xml = xml.replace("ПАТЕНТ", "")
-        xml = xml.replace("ДР", self.de_info_birth.date().toString("dd.MM.yyyy"))
+        xml = xml.replace("ДАТРОЖ", self.de_info_birth.date().toString("dd.MM.yyyy"))
         xml = xml.replace("ГРАЖДАНСТВО", self.cb_info_country.currentText())
         xml = xml.replace("ПАССПОРТ", self.le_passport_series.text().upper() + " " + self.le_passport_number.text().upper())
         if patent == 1:
@@ -1512,10 +1550,11 @@ class OneStaff(QMainWindow, one_staff_class):
             xml = xml.replace("СТРАХОВКА", "")
             xml = xml.replace("?ПА", "")
 
-        self.path = self.inspection_path()
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
-            f = open('%s/%s' % (self.path, "Заявление о приеме на работу.xml"), "w", -1, "utf-8")
+            f = open('%s/%s' % (self.path, "Трудовой договор.doc"), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             query = "INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)"
@@ -1525,7 +1564,64 @@ class OneStaff(QMainWindow, one_staff_class):
                 QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
                 return False
             self.statusBar().showMessage("Готово")
-            self.inspection_files()
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
+
+    # Заявления на прием и увольнение
+    def build_word_petition(self, option):
+        if not hasattr(self, 'path_templates'):
+            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
+            info_sql = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        return False
+            self.path_templates = info_sql[0][0]
+
+        if option == "out":
+            info = InfoDate(QDate().currentDate())
+            info.label.setText("Дата увольнения")
+            if info.exec() == 0:
+                return False
+
+        if not self.id_info:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
+            return False
+
+        self.statusBar().showMessage("Открываю шаблон")
+        if option == "out":
+            f = open('%s/staff/petition_out.xml' % self.path_templates, "r", -1, "utf-8")
+        else:
+            f = open('%s/staff/petition_in.xml' % self.path_templates, "r", -1, "utf-8")
+        xml = f.read()
+        self.statusBar().showMessage("Закрываю шаблон")
+        f.close()
+        self.statusBar().showMessage("Создаю документ")
+
+        xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
+        xml = xml.replace("?СЕРИЯ", self.le_passport_series.text().upper())
+        xml = xml.replace("?НОМЕР", self.le_passport_number.text().upper())
+        xml = xml.replace("?ВЫДАН", self.le_passport_issued.text())
+        xml = xml.replace("?ДАТАВЫД", self.de_passport_issued.date().toString("dd.MM.yyyy"))
+        xml = xml.replace("?ДАТАЗАЯВ", QDate().currentDate().toString("dd.MM.yyyy"))
+        if option == "out":
+            xml = xml.replace("?ДАТАУВОЛЬН", info.de_in.date().toString("dd.MM.yyyy"))
+        else:
+            xml = xml.replace("?ДОЛЖНОСТЬ", self.cb_info_position.currentText())
+
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю фаил")
+            if option == "out":
+                f = open('%s/%s' % (self.path, "Заявление об увольнении.doc"), "w", -1, "utf-8")
+            else:
+                f = open('%s/%s' % (self.path, "Заявление о приеме на работу.doc"), "w", -1, "utf-8")
+            f.write(xml)
+            f.close()
+            self.statusBar().showMessage("Готово")
+            self.inspection_files(dir_name, 'Путь корень рабочие')
         else:
             self.statusBar().showMessage("Ошибка сохранения")
             return False
