@@ -1,4 +1,5 @@
 from os import getcwd, path, mkdir, listdir, rmdir, name
+from datetime import datetime
 from shutil import copy
 from form.templates import list
 from PyQt5.uic import loadUiType
@@ -1501,16 +1502,25 @@ class OneStaff(QMainWindow, one_staff_class):
 
         # Проверяем нужный номер документа
         self.statusBar().showMessage("проверяю SQL")
-        query = "SELECT IFNULL(MAX(Number), 'No Number') FROM staff_worker_doc_number WHERE YEAR(Date) = %s AND Name = %s"
-        doc_number = my_sql.sql_select(query, (QDate.currentDate().year(), "труд.дог."))[0][0]
-        if "mysql.connector.errors" in str(type(doc_number)):
-            QMessageBox.critical(self, "Ошибка sql", doc_number.msg, QMessageBox.Ok)
+        doc_date_new = False
+        query = "SELECT IFNULL(MAX(Number), 'No Number'), Date FROM staff_worker_doc_number WHERE Worker_Info_Id = %s AND Name = %s"
+        doc_number_sql = my_sql.sql_select(query, (self.id_info, "труд.дог."))
+        if "mysql.connector.errors" in str(type(doc_number_sql)):
+            QMessageBox.critical(self, "Ошибка sql", doc_number_sql.msg, QMessageBox.Ok)
 
-        if "No Number" not in doc_number:
-            doc_number = int(doc_number) + 1
+        if "No Number" in doc_number_sql[0]:
+            doc_date_new = True
+            query = "SELECT IFNULL(MAX(Number)+1, 'No Number'), NOW() FROM staff_worker_doc_number WHERE YEAR(Date) = %s AND Name = %s"
+            doc_number_sql = my_sql.sql_select(query, (QDate.currentDate().year(), "труд.дог."))
+            if "mysql.connector.errors" in str(type(doc_number_sql)):
+                QMessageBox.critical(self, "Ошибка sql", doc_number_sql.msg, QMessageBox.Ok)
+
+        if "No Number" not in doc_number_sql[0]:
+            doc_number = doc_number_sql[0][0]
+            doc_date = doc_number_sql[0][1]
         else:
             doc_number = 1
-
+            doc_date = datetime.today()
         # Нужен ли патент
         patent = my_sql.sql_select("SELECT Patent FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
 
@@ -1521,9 +1531,9 @@ class OneStaff(QMainWindow, one_staff_class):
         f.close()
         self.statusBar().showMessage("Создаю документ")
         if patent == 1:
-            number_xml = "0" + str(doc_number) + "/" + QDate.currentDate().toString("yy")
+            number_xml = "0" + str(doc_number) + "/" + doc_date.strftime("%y")
         else:
-            number_xml = str(doc_number) + "/" + QDate.currentDate().toString("yy")
+            number_xml = str(doc_number) + "/" + doc_date.strftime("%y")
 
         xml = xml.replace("НОМЕР", number_xml)
         xml = xml.replace("ДАТА", info.de_in.date().toString("dd.MM.yyyy"))
@@ -1557,12 +1567,13 @@ class OneStaff(QMainWindow, one_staff_class):
             f = open('%s/%s' % (self.path, "Трудовой договор.doc"), "w", -1, "utf-8")
             f.write(xml)
             f.close()
-            query = "INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)"
-            parametrs = (self.id_info, "труд.дог.", doc_number, QDate.currentDate().toString(Qt.ISODate))
-            info_sql = my_sql.sql_change(query, parametrs)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                return False
+            if doc_date_new:
+                query = "INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)"
+                parametrs = (self.id_info, "труд.дог.", doc_number, QDate.currentDate().toString(Qt.ISODate))
+                info_sql = my_sql.sql_change(query, parametrs)
+                if "mysql.connector.errors" in str(type(info_sql)):
+                    QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                    return False
             self.statusBar().showMessage("Готово")
             self.inspection_files(dir_name, 'Путь корень рабочие')
         else:
@@ -1753,17 +1764,29 @@ class OneStaff(QMainWindow, one_staff_class):
                         return False
             self.path_templates = info_sql[0][0]
 
+        if not self.id_info:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
+            return False
+
         # Проверяем нужный номер документа
         self.statusBar().showMessage("проверяю SQL")
         query = "SELECT IFNULL(MAX(Number), 'No Number') FROM staff_worker_doc_number WHERE Name = %s"
-        doc_number = my_sql.sql_select(query, ("ходатайство"))[0][0]
+        doc_number = my_sql.sql_select(query, ("ходатайство", ))
         if "mysql.connector.errors" in str(type(doc_number)):
             QMessageBox.critical(self, "Ошибка sql", doc_number.msg, QMessageBox.Ok)
+        doc_number = doc_number[0][0]
 
         if "No Number" not in doc_number:
             doc_number = int(doc_number) + 1
         else:
             doc_number = 1
+
+        # Узнаем номер договора
+        query = "SELECT IFNULL(MAX(Number), 'No Number'), Date FROM staff_worker_doc_number WHERE Name = %s AND Worker_Info_Id = %s"
+        contract_number = my_sql.sql_select(query, ("труд.дог.", self.id_info))
+        if "mysql.connector.errors" in str(type(doc_number)):
+            QMessageBox.critical(self, "Ошибка sql", contract_number.msg, QMessageBox.Ok)
+            return False
 
         # Нужен ли патент
         patent = my_sql.sql_select("SELECT Patent FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
@@ -1785,11 +1808,15 @@ class OneStaff(QMainWindow, one_staff_class):
         xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
         xml = xml.replace("?ДАТАРОЖ", self.de_info_birth.date().toString("dd.MM.yyyy"))
         xml = xml.replace("?ПАССПОРТ", self.le_passport_series.text().upper() + " " + self.le_passport_number.text().upper())
-        xml = xml.replace("?ДАТАВЬЕЗД", "123")
-        xml = xml.replace("?РЕГИСТРАЦИЯДО", self.de_registration_validity_to.date().toString("dd.MM.yyyy"))
-        xml = xml.replace("?АДРЕСРЕГИСТРАЦИИ", self.le_registration_address.text())
+        xml = xml.replace("?ДАТАВЬЕЗД", self.de_migration.text())
+        if contract_number[0][0] != 'No Number':
+            xml = xml.replace("?ТРУДДОГ", "№ " + contract_number[0][0] + "/" + contract_number[0][1].strftime("%y") + " от " + contract_number[0][1].strftime("%d.%m.%Y"))
+        else:
+            xml = xml.replace("?ТРУДДОГ", "договор не найден")
+        xml = xml.replace("?РЕГДО", self.de_registration_validity_to.date().toString("dd.MM.yyyy"))
+        xml = xml.replace("?РАДР", self.le_registration_address.text())
         if patent == 1:
-            xml = xml.replace("?ПАТЕНТ", "-патент на работу " + self.le_patent_serial.text() + " № " + self.le_patent_number.text() + ", действительный до " + self.de_patent_ending.date.toString("dd.MM.yyyy"))
+            xml = xml.replace("?ПАТЕНТ", "-патент на работу " + self.le_patent_serial.text() + " № " + self.le_patent_number.text() + ", действительный до " + self.de_patent_ending.date().toString("dd.MM.yyyy"))
         else:
             xml = xml.replace("?ПАТЕНТ", " ")
 
@@ -1800,6 +1827,12 @@ class OneStaff(QMainWindow, one_staff_class):
             f = open('%s/%s' % (self.path, "Ходатайство.doc"), "w", -1, "utf-8")
             f.write(xml)
             f.close()
+            query = "INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)"
+            parametrs = (self.id_info, "ходатайство", doc_number, QDate.currentDate().toString(Qt.ISODate))
+            info_sql = my_sql.sql_change(query, parametrs)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                return False
             self.statusBar().showMessage("Готово")
             self.inspection_files(dir_name, 'Путь корень рабочие')
         else:
