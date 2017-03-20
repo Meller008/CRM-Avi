@@ -1515,7 +1515,7 @@ class OneStaff(QMainWindow, one_staff_class):
         patent = my_sql.sql_select("SELECT Patent FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
 
         self.statusBar().showMessage("Открываю шаблон")
-        f = open('%s/staff/prod_registration.xml' % self.path_templates, "r", -1, "utf-8")
+        f = open('%s/staff/contract.xml' % self.path_templates, "r", -1, "utf-8")
         xml = f.read()
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
@@ -1618,6 +1618,186 @@ class OneStaff(QMainWindow, one_staff_class):
                 f = open('%s/%s' % (self.path, "Заявление об увольнении.doc"), "w", -1, "utf-8")
             else:
                 f = open('%s/%s' % (self.path, "Заявление о приеме на работу.doc"), "w", -1, "utf-8")
+            f.write(xml)
+            f.close()
+            self.statusBar().showMessage("Готово")
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
+
+    # Довереность на ЗП
+    def build_word_proxy(self):
+        if not hasattr(self, 'path_templates'):
+            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
+            info_sql = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        return False
+            self.path_templates = info_sql[0][0]
+
+        if not self.id_info:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
+            return False
+
+        self.statusBar().showMessage("Открываю шаблон")
+        f = open('%s/staff/proxy.xml' % self.path_templates, "r", -1, "utf-8")
+        xml = f.read()
+        self.statusBar().showMessage("Закрываю шаблон")
+        f.close()
+        self.statusBar().showMessage("Создаю документ")
+
+        xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
+        xml = xml.replace("?СЕРИЯ", self.le_passport_series.text().upper())
+        xml = xml.replace("?НОМЕР", self.le_passport_number.text().upper())
+        xml = xml.replace("?ДАТАЗАЯВ", QDate().currentDate().toString("dd.MM.yyyy"))
+
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю фаил")
+            f = open('%s/%s' % (self.path, "Доверенность на ЗП.doc"), "w", -1, "utf-8")
+            f.write(xml)
+            f.close()
+            self.statusBar().showMessage("Готово")
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
+
+    # Временный пропуск
+    def build_word_pass(self):
+        if not hasattr(self, 'path_templates'):
+            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
+            info_sql = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        return False
+            self.path_templates = info_sql[0][0]
+
+        if not self.id_info:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
+            return False
+
+        self.statusBar().showMessage("Открываю шаблон")
+        f = open('%s/staff/pass.xml' % self.path_templates, "r", -1, "utf-8")
+        xml = f.read()
+        self.statusBar().showMessage("Закрываю шаблон")
+        f.close()
+        self.statusBar().showMessage("Создаю документ")
+
+        xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
+
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю фаил")
+            f = open('%s/%s' % (self.path, "Временный пропуск.doc"), "w", -1, "utf-8")
+            f.write(xml)
+            f.close()
+            self.statusBar().showMessage("Готово")
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
+
+    # Справка о приеме уведомления
+    def build_word_admission_notice(self):
+        if not hasattr(self, 'path_templates'):
+            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
+            info_sql = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        return False
+            self.path_templates = info_sql[0][0]
+
+        info = InfoDate(QDate().currentDate())
+        info.label.setText("Дата приема уведомления")
+        if info.exec() == 0:
+            return False
+
+        if not self.id_info:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
+            return False
+
+        self.statusBar().showMessage("Открываю шаблон")
+        f = open('%s/staff/admission_notice.xml' % self.path_templates, "r", -1, "utf-8")
+        xml = f.read()
+        self.statusBar().showMessage("Закрываю шаблон")
+        f.close()
+        self.statusBar().showMessage("Создаю документ")
+
+        xml = xml.replace("?ФИ", self.le_info_last_name.text() + " " + self.le_info_first_name.text())
+        xml = xml.replace("?ДАТА", info.de_in.date().toString("dd.MM.yyyy"))
+
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю фаил")
+            f = open('%s/%s' % (self.path, "Справка о приеме уведомления.doc"), "w", -1, "utf-8")
+            f.write(xml)
+            f.close()
+            self.statusBar().showMessage("Готово")
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
+
+    # Ходотайство о продлении регистрации
+    def build_word_hodataistvo(self):
+        if not hasattr(self, 'path_templates'):
+            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
+            info_sql = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        return False
+            self.path_templates = info_sql[0][0]
+
+        # Проверяем нужный номер документа
+        self.statusBar().showMessage("проверяю SQL")
+        query = "SELECT IFNULL(MAX(Number), 'No Number') FROM staff_worker_doc_number WHERE Name = %s"
+        doc_number = my_sql.sql_select(query, ("ходатайство"))[0][0]
+        if "mysql.connector.errors" in str(type(doc_number)):
+            QMessageBox.critical(self, "Ошибка sql", doc_number.msg, QMessageBox.Ok)
+
+        if "No Number" not in doc_number:
+            doc_number = int(doc_number) + 1
+        else:
+            doc_number = 1
+
+        # Нужен ли патент
+        patent = my_sql.sql_select("SELECT Patent FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
+
+        if not self.id_info:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
+            return False
+
+        self.statusBar().showMessage("Открываю шаблон")
+        f = open('%s/staff/hodataistvo.xml' % self.path_templates, "r", -1, "utf-8")
+        xml = f.read()
+        self.statusBar().showMessage("Закрываю шаблон")
+        f.close()
+        self.statusBar().showMessage("Создаю документ")
+
+        xml = xml.replace("?НОМЕРДОК", str(doc_number))
+        xml = xml.replace("?ДАТАДОК", QDate().currentDate().toString("dd.MM.yyyy"))
+        xml = xml.replace("?РЕСПУБЛИКА", self.cb_info_country.currentText())
+        xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
+        xml = xml.replace("?ДАТАРОЖ", self.de_info_birth.date().toString("dd.MM.yyyy"))
+        xml = xml.replace("?ПАССПОРТ", self.le_passport_series.text().upper() + " " + self.le_passport_number.text().upper())
+        xml = xml.replace("?ДАТАВЬЕЗД", "123")
+        xml = xml.replace("?РЕГИСТРАЦИЯДО", self.de_registration_validity_to.date().toString("dd.MM.yyyy"))
+        xml = xml.replace("?АДРЕСРЕГИСТРАЦИИ", self.le_registration_address.text())
+        if patent == 1:
+            xml = xml.replace("?ПАТЕНТ", "-патент на работу " + self.le_patent_serial.text() + " № " + self.le_patent_number.text() + ", действительный до " + self.de_patent_ending.date.toString("dd.MM.yyyy"))
+        else:
+            xml = xml.replace("?ПАТЕНТ", " ")
+
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю фаил")
+            f = open('%s/%s' % (self.path, "Ходатайство.doc"), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             self.statusBar().showMessage("Готово")
