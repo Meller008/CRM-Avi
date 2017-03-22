@@ -299,7 +299,7 @@ class OneStaff(QMainWindow, one_staff_class):
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             file_name = file.text()
-            subprocess.call([r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\"))], shell=True)
+            subprocess.Popen(r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\")), shell=True)
 
     def open_dir(self):  # Открываем выбраную папку
         dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
@@ -1492,10 +1492,6 @@ class OneStaff(QMainWindow, one_staff_class):
                         return False
             self.path_templates = info_sql[0][0]
 
-        info = InfoDate(self.de_info_recruitment.date())
-        if info.exec() == 0:
-            return False
-
         if not self.id_info:
             QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
             return False
@@ -1520,7 +1516,17 @@ class OneStaff(QMainWindow, one_staff_class):
             doc_date = doc_number_sql[0][1]
         else:
             doc_number = 1
-            doc_date = datetime.today()
+            doc_date = self.de_info_recruitment.date().toPyDate()
+
+        info = InfoDate(doc_date)
+        if info.exec() == 0:
+            self.statusBar().showMessage("Отмена")
+            return False
+
+        if info.de_in.date().toPyDate() != doc_date:
+            doc_date = info.de_in.date().toPyDate()
+            doc_date_new = True
+
         # Нужен ли патент
         patent = my_sql.sql_select("SELECT Patent FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
 
@@ -1568,8 +1574,9 @@ class OneStaff(QMainWindow, one_staff_class):
             f.write(xml)
             f.close()
             if doc_date_new:
-                query = "INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)"
-                parametrs = (self.id_info, "труд.дог.", doc_number, QDate.currentDate().toString(Qt.ISODate))
+                query = """INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)
+                            ON DUPLICATE KEY UPDATE Date = %s"""
+                parametrs = (self.id_info, "труд.дог.", doc_number, doc_date, doc_date)
                 info_sql = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(info_sql)):
                     QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
@@ -1827,8 +1834,9 @@ class OneStaff(QMainWindow, one_staff_class):
             f = open('%s/%s' % (self.path, "Ходатайство.doc"), "w", -1, "utf-8")
             f.write(xml)
             f.close()
-            query = "INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)"
-            parametrs = (self.id_info, "ходатайство", doc_number, QDate.currentDate().toString(Qt.ISODate))
+            query = """INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE Number = %s, Date = %s"""
+            parametrs = (self.id_info, "ходатайство", doc_number, QDate.currentDate().toString(Qt.ISODate), doc_number, QDate.currentDate().toString(Qt.ISODate))
             info_sql = my_sql.sql_change(query, parametrs)
             if "mysql.connector.errors" in str(type(info_sql)):
                 QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
