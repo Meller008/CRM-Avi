@@ -2165,11 +2165,21 @@
     <index id="490" parent="52" name="FK_S_W_D_N_1_idx">
       <ColNames>Worker_Info_Id</ColNames>
     </index>
-    <key id="491" parent="52" name="PRIMARY">
+    <index id="491" parent="52" name="Worker_Info_Id_UNIQUE">
+      <ColNames>Worker_Info_Id
+Name</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="492" parent="52" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="492" parent="52" name="FK_S_W_D_N_1">
+    <key id="493" parent="52" name="Worker_Info_Id_UNIQUE">
+      <ColNames>Worker_Info_Id
+Name</ColNames>
+      <UnderlyingIndexName>Worker_Info_Id_UNIQUE</UnderlyingIndexName>
+    </key>
+    <foreign-key id="494" parent="52" name="FK_S_W_D_N_1">
       <ColNames>Worker_Info_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_worker_info</RefTableName>
@@ -2178,96 +2188,96 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <column id="493" parent="53" name="Id">
+    <column id="495" parent="53" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="494" parent="53" name="First_Name">
+    <column id="496" parent="53" name="First_Name">
       <Position>2</Position>
       <DataType>varchar(40)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="495" parent="53" name="Last_Name">
+    <column id="497" parent="53" name="Last_Name">
       <Position>3</Position>
       <DataType>varchar(40)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="496" parent="53" name="Middle_Name">
+    <column id="498" parent="53" name="Middle_Name">
       <Position>4</Position>
       <DataType>varchar(40)|0</DataType>
     </column>
-    <column id="497" parent="53" name="Sex">
+    <column id="499" parent="53" name="Sex">
       <Position>5</Position>
       <DataType>varchar(1)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="498" parent="53" name="Date_Birth">
+    <column id="500" parent="53" name="Date_Birth">
       <Position>6</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="499" parent="53" name="Date_Recruitment">
+    <column id="501" parent="53" name="Date_Recruitment">
       <Position>7</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="500" parent="53" name="Leave">
+    <column id="502" parent="53" name="Leave">
       <Position>8</Position>
       <DataType>int(1)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="501" parent="53" name="Date_Leave">
+    <column id="503" parent="53" name="Date_Leave">
       <Position>9</Position>
       <DataType>date|0</DataType>
     </column>
-    <column id="502" parent="53" name="Country_Id">
+    <column id="504" parent="53" name="Country_Id">
       <Position>10</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="503" parent="53" name="Phone">
+    <column id="505" parent="53" name="Phone">
       <Position>11</Position>
       <DataType>varchar(17)|0</DataType>
     </column>
-    <column id="504" parent="53" name="Address">
+    <column id="506" parent="53" name="Address">
       <Position>12</Position>
       <DataType>varchar(80)|0</DataType>
     </column>
-    <column id="505" parent="53" name="Position_Id">
+    <column id="507" parent="53" name="Position_Id">
       <Position>13</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="506" parent="53" name="INN">
+    <column id="508" parent="53" name="INN">
       <Position>14</Position>
       <DataType>varchar(13)|0</DataType>
     </column>
-    <column id="507" parent="53" name="SNILS">
+    <column id="509" parent="53" name="SNILS">
       <Position>15</Position>
       <DataType>varchar(12)|0</DataType>
     </column>
-    <column id="508" parent="53" name="Note">
+    <column id="510" parent="53" name="Note">
       <Position>16</Position>
       <DataType>tinytext|0</DataType>
     </column>
-    <column id="509" parent="53" name="Birthplace">
+    <column id="511" parent="53" name="Birthplace">
       <Position>17</Position>
       <DataType>varchar(78)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="510" parent="53" name="FK_S_W_I_1_idx">
+    <index id="512" parent="53" name="FK_S_W_I_1_idx">
       <ColNames>Country_Id</ColNames>
     </index>
-    <index id="511" parent="53" name="FK_S_W_I_2_idx">
+    <index id="513" parent="53" name="FK_S_W_I_2_idx">
       <ColNames>Position_Id</ColNames>
     </index>
-    <key id="512" parent="53" name="PRIMARY">
+    <key id="514" parent="53" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="513" parent="53" name="FK_S_W_I_1">
+    <foreign-key id="515" parent="53" name="FK_S_W_I_1">
       <ColNames>Country_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_country</RefTableName>
@@ -2276,7 +2286,7 @@
       <OnUpdate>no-action</OnUpdate>
       <OnDelete>no-action</OnDelete>
     </foreign-key>
-    <foreign-key id="514" parent="53" name="FK_S_W_I_2">
+    <foreign-key id="516" parent="53" name="FK_S_W_I_2">
       <ColNames>Position_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_position</RefTableName>
@@ -2285,40 +2295,40 @@
       <OnUpdate>no-action</OnUpdate>
       <OnDelete>no-action</OnDelete>
     </foreign-key>
-    <column id="515" parent="54" name="Id">
+    <column id="517" parent="54" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="516" parent="54" name="Worker_Info_Id">
+    <column id="518" parent="54" name="Worker_Info_Id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="517" parent="54" name="Number">
+    <column id="519" parent="54" name="Number">
       <Position>3</Position>
       <DataType>varchar(25)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="518" parent="54" name="Company">
+    <column id="520" parent="54" name="Company">
       <Position>4</Position>
       <DataType>varchar(30)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="519" parent="54" name="Date">
+    <column id="521" parent="54" name="Date">
       <Position>5</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="520" parent="54" name="FK_S_W_IN_1_idx">
+    <index id="522" parent="54" name="FK_S_W_IN_1_idx">
       <ColNames>Worker_Info_Id</ColNames>
     </index>
-    <key id="521" parent="54" name="PRIMARY">
+    <key id="523" parent="54" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="522" parent="54" name="FK_S_W_IN_1">
+    <foreign-key id="524" parent="54" name="FK_S_W_IN_1">
       <ColNames>Worker_Info_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_worker_info</RefTableName>
@@ -2327,25 +2337,25 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <column id="523" parent="55" name="Worker_Info_Id">
+    <column id="525" parent="55" name="Worker_Info_Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="524" parent="55" name="Login">
+    <column id="526" parent="55" name="Login">
       <Position>2</Position>
       <DataType>varchar(20)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="525" parent="55" name="Password">
+    <column id="527" parent="55" name="Password">
       <Position>3</Position>
       <DataType>varchar(20)|0</DataType>
     </column>
-    <key id="526" parent="55" name="PRIMARY">
+    <key id="528" parent="55" name="PRIMARY">
       <ColNames>Worker_Info_Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="527" parent="55" name="FK_S_W_LO_1">
+    <foreign-key id="529" parent="55" name="FK_S_W_LO_1">
       <ColNames>Worker_Info_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_worker_info</RefTableName>
@@ -2354,55 +2364,55 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <column id="528" parent="56" name="Id">
+    <column id="530" parent="56" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="529" parent="56" name="Worker_Info_Id">
+    <column id="531" parent="56" name="Worker_Info_Id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="530" parent="56" name="Serial">
+    <column id="532" parent="56" name="Serial">
       <Position>3</Position>
       <DataType>varchar(5)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="531" parent="56" name="Number">
+    <column id="533" parent="56" name="Number">
       <Position>4</Position>
       <DataType>varchar(8)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="532" parent="56" name="KPP">
+    <column id="534" parent="56" name="KPP">
       <Position>5</Position>
       <DataType>varchar(15)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="533" parent="56" name="Date_Validity_From">
+    <column id="535" parent="56" name="Date_Validity_From">
       <Position>6</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="534" parent="56" name="Date_Validity_To">
+    <column id="536" parent="56" name="Date_Validity_To">
       <Position>7</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="535" parent="56" name="Date_migration">
+    <column id="537" parent="56" name="Date_migration">
       <Position>8</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="536" parent="56" name="FK_S_W_MI_1_idx">
+    <index id="538" parent="56" name="FK_S_W_MI_1_idx">
       <ColNames>Worker_Info_Id</ColNames>
     </index>
-    <key id="537" parent="56" name="PRIMARY">
+    <key id="539" parent="56" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="538" parent="56" name="FK_S_W_MI_1">
+    <foreign-key id="540" parent="56" name="FK_S_W_MI_1">
       <ColNames>Worker_Info_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_worker_info</RefTableName>
@@ -2411,25 +2421,25 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <column id="539" parent="57" name="Worker_Info_Id">
+    <column id="541" parent="57" name="Worker_Info_Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="540" parent="57" name="Note">
+    <column id="542" parent="57" name="Note">
       <Position>2</Position>
       <DataType>text|0</DataType>
     </column>
-    <column id="541" parent="57" name="Date">
+    <column id="543" parent="57" name="Date">
       <Position>3</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="542" parent="57" name="PRIMARY">
+    <key id="544" parent="57" name="PRIMARY">
       <ColNames>Worker_Info_Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="543" parent="57" name="FK_S_W_NO_1">
+    <foreign-key id="545" parent="57" name="FK_S_W_NO_1">
       <ColNames>Worker_Info_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_worker_info</RefTableName>
@@ -2438,49 +2448,49 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <column id="544" parent="58" name="Id">
+    <column id="546" parent="58" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="545" parent="58" name="Worker_Info_Id">
+    <column id="547" parent="58" name="Worker_Info_Id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="546" parent="58" name="Series">
+    <column id="548" parent="58" name="Series">
       <Position>3</Position>
       <DataType>varchar(6)|0</DataType>
     </column>
-    <column id="547" parent="58" name="Number">
+    <column id="549" parent="58" name="Number">
       <Position>4</Position>
       <DataType>varchar(12)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="548" parent="58" name="Issued">
+    <column id="550" parent="58" name="Issued">
       <Position>5</Position>
       <DataType>varchar(40)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="549" parent="58" name="Data_Issued">
+    <column id="551" parent="58" name="Data_Issued">
       <Position>6</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="550" parent="58" name="Date_Ending">
+    <column id="552" parent="58" name="Date_Ending">
       <Position>7</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="551" parent="58" name="FK_S_W_PA_1_idx">
+    <index id="553" parent="58" name="FK_S_W_PA_1_idx">
       <ColNames>Worker_Info_Id</ColNames>
     </index>
-    <key id="552" parent="58" name="PRIMARY">
+    <key id="554" parent="58" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="553" parent="58" name="FK_S_W_PA_1">
+    <foreign-key id="555" parent="58" name="FK_S_W_PA_1">
       <ColNames>Worker_Info_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_worker_info</RefTableName>
@@ -2489,55 +2499,55 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <column id="554" parent="59" name="Id">
+    <column id="556" parent="59" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="555" parent="59" name="Worker_Info_Id">
+    <column id="557" parent="59" name="Worker_Info_Id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="556" parent="59" name="Serial">
+    <column id="558" parent="59" name="Serial">
       <Position>3</Position>
       <DataType>varchar(4)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="557" parent="59" name="Number">
+    <column id="559" parent="59" name="Number">
       <Position>4</Position>
       <DataType>varchar(9)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="558" parent="59" name="Additional_Number">
+    <column id="560" parent="59" name="Additional_Number">
       <Position>5</Position>
       <DataType>varchar(10)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="559" parent="59" name="Issued">
+    <column id="561" parent="59" name="Issued">
       <Position>6</Position>
       <DataType>varchar(38)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="560" parent="59" name="Data_Issued">
+    <column id="562" parent="59" name="Data_Issued">
       <Position>7</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="561" parent="59" name="Date_Ending">
+    <column id="563" parent="59" name="Date_Ending">
       <Position>8</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="562" parent="59" name="FK_S_W_P_1_idx">
+    <index id="564" parent="59" name="FK_S_W_P_1_idx">
       <ColNames>Worker_Info_Id</ColNames>
     </index>
-    <key id="563" parent="59" name="PRIMARY">
+    <key id="565" parent="59" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="564" parent="59" name="FK_S_W_P_1">
+    <foreign-key id="566" parent="59" name="FK_S_W_P_1">
       <ColNames>Worker_Info_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_worker_info</RefTableName>
@@ -2546,42 +2556,42 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <column id="565" parent="60" name="Id">
+    <column id="567" parent="60" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="566" parent="60" name="Worker_Info_id">
+    <column id="568" parent="60" name="Worker_Info_id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="567" parent="60" name="Address">
+    <column id="569" parent="60" name="Address">
       <Position>3</Position>
       <DataType>varchar(90)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="568" parent="60" name="Date_Registration">
+    <column id="570" parent="60" name="Date_Registration">
       <Position>4</Position>
       <DataType>date|0</DataType>
     </column>
-    <column id="569" parent="60" name="Date_Validity_From">
+    <column id="571" parent="60" name="Date_Validity_From">
       <Position>5</Position>
       <DataType>date|0</DataType>
     </column>
-    <column id="570" parent="60" name="Date_Validity_To">
+    <column id="572" parent="60" name="Date_Validity_To">
       <Position>6</Position>
       <DataType>date|0</DataType>
     </column>
-    <index id="571" parent="60" name="FK_S_W_RE_1_idx">
+    <index id="573" parent="60" name="FK_S_W_RE_1_idx">
       <ColNames>Worker_Info_id</ColNames>
     </index>
-    <key id="572" parent="60" name="PRIMARY">
+    <key id="574" parent="60" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="573" parent="60" name="FK_S_W_RE_1">
+    <foreign-key id="575" parent="60" name="FK_S_W_RE_1">
       <ColNames>Worker_Info_id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>staff_worker_info</RefTableName>
@@ -2590,43 +2600,43 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <column id="574" parent="61" name="Id">
+    <column id="576" parent="61" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="575" parent="61" name="Supply_Balance_Id">
+    <column id="577" parent="61" name="Supply_Balance_Id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="576" parent="61" name="Balance">
+    <column id="578" parent="61" name="Balance">
       <Position>3</Position>
       <DataType>decimal(11,4)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="577" parent="61" name="Date">
+    <column id="579" parent="61" name="Date">
       <Position>4</Position>
       <DataType>datetime|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="578" parent="61" name="Note">
+    <column id="580" parent="61" name="Note">
       <Position>5</Position>
       <DataType>text|0</DataType>
     </column>
-    <column id="579" parent="61" name="Pack_Accessories_Id">
+    <column id="581" parent="61" name="Pack_Accessories_Id">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <index id="580" parent="61" name="FK_T_R_A_1_idx">
+    <index id="582" parent="61" name="FK_T_R_A_1_idx">
       <ColNames>Supply_Balance_Id</ColNames>
     </index>
-    <key id="581" parent="61" name="PRIMARY">
+    <key id="583" parent="61" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="582" parent="61" name="FK_T_R_A_1">
+    <foreign-key id="584" parent="61" name="FK_T_R_A_1">
       <ColNames>Supply_Balance_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>accessories_balance</RefTableName>
@@ -2634,50 +2644,50 @@
       <RefColNames>Id</RefColNames>
       <OnUpdate>update</OnUpdate>
     </foreign-key>
-    <column id="583" parent="62" name="Id">
+    <column id="585" parent="62" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="584" parent="62" name="Supply_Balance_Id">
+    <column id="586" parent="62" name="Supply_Balance_Id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="585" parent="62" name="Balance">
+    <column id="587" parent="62" name="Balance">
       <Position>3</Position>
       <DataType>decimal(11,4)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="586" parent="62" name="Date">
+    <column id="588" parent="62" name="Date">
       <Position>4</Position>
       <DataType>datetime|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="587" parent="62" name="Note">
+    <column id="589" parent="62" name="Note">
       <Position>5</Position>
       <DataType>text|0</DataType>
     </column>
-    <column id="588" parent="62" name="Cut_Material_Id">
+    <column id="590" parent="62" name="Cut_Material_Id">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="589" parent="62" name="Beika_Id">
+    <column id="591" parent="62" name="Beika_Id">
       <Position>7</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <index id="590" parent="62" name="FK_T_R_M_1_idx">
+    <index id="592" parent="62" name="FK_T_R_M_1_idx">
       <ColNames>Supply_Balance_Id</ColNames>
     </index>
-    <index id="591" parent="62" name="FK_T_R_M_2_idx">
+    <index id="593" parent="62" name="FK_T_R_M_2_idx">
       <ColNames>Beika_Id</ColNames>
     </index>
-    <key id="592" parent="62" name="PRIMARY">
+    <key id="594" parent="62" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="593" parent="62" name="FK_T_R_M_1">
+    <foreign-key id="595" parent="62" name="FK_T_R_M_1">
       <ColNames>Supply_Balance_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>material_balance</RefTableName>
@@ -2685,46 +2695,46 @@
       <RefColNames>Id</RefColNames>
       <OnUpdate>update</OnUpdate>
     </foreign-key>
-    <foreign-key id="594" parent="62" name="FK_T_R_M_2">
+    <foreign-key id="596" parent="62" name="FK_T_R_M_2">
       <ColNames>Beika_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>beika</RefTableName>
       <RefColNames>Id</RefColNames>
       <OnUpdate>update</OnUpdate>
     </foreign-key>
-    <column id="595" parent="63" name="Id">
+    <column id="597" parent="63" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="596" parent="63" name="Cut_Id">
+    <column id="598" parent="63" name="Cut_Id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="597" parent="63" name="Date">
+    <column id="599" parent="63" name="Date">
       <Position>3</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="598" parent="63" name="Balance">
+    <column id="600" parent="63" name="Balance">
       <Position>4</Position>
       <DataType>decimal(11,4)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="599" parent="63" name="Note">
+    <column id="601" parent="63" name="Note">
       <Position>5</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="600" parent="63" name="FK_T_R_R_1_idx">
+    <index id="602" parent="63" name="FK_T_R_R_1_idx">
       <ColNames>Cut_Id</ColNames>
     </index>
-    <key id="601" parent="63" name="PRIMARY">
+    <key id="603" parent="63" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="602" parent="63" name="FK_T_R_R_1">
+    <foreign-key id="604" parent="63" name="FK_T_R_R_1">
       <ColNames>Cut_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>cut</RefTableName>
@@ -2732,39 +2742,39 @@
       <OnUpdate>update</OnUpdate>
       <OnDelete>set-null</OnDelete>
     </foreign-key>
-    <column id="603" parent="64" name="Id">
+    <column id="605" parent="64" name="Id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="604" parent="64" name="Article_Parametr_Id">
+    <column id="606" parent="64" name="Article_Parametr_Id">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="605" parent="64" name="Date">
+    <column id="607" parent="64" name="Date">
       <Position>3</Position>
       <DataType>date|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="606" parent="64" name="Note">
+    <column id="608" parent="64" name="Note">
       <Position>5</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="607" parent="64" name="Balance">
+    <column id="609" parent="64" name="Balance">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="608" parent="64" name="FK_T_R_W_1_idx">
+    <index id="610" parent="64" name="FK_T_R_W_1_idx">
       <ColNames>Article_Parametr_Id</ColNames>
     </index>
-    <key id="609" parent="64" name="PRIMARY">
+    <key id="611" parent="64" name="PRIMARY">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="610" parent="64" name="FK_T_R_W_1">
+    <foreign-key id="612" parent="64" name="FK_T_R_W_1">
       <ColNames>Article_Parametr_Id</ColNames>
       <RefSchemaName>avi_crm</RefSchemaName>
       <RefTableName>product_article_warehouse</RefTableName>

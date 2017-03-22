@@ -859,22 +859,14 @@ class OneStaff(QMainWindow, one_staff_class):
 
         to_excel.patch_worksheet()
 
-        if not hasattr(self, 'path_templates'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
-            info_sql = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
-            self.path_templates = info_sql[0][0]
-
         self.statusBar().showMessage("Открываю шаблон")
         if option == "in":
             info = InfoDate(self.de_info_recruitment.date())
             if info.exec() == 0:
                 return False
-            book = openpyxl.load_workbook(filename='%s/staff/notif_in.xlsx' % self.path_templates)
+            book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_in.xlsx')
         elif option == "out":
-            book = openpyxl.load_workbook(filename='%s/staff/notif_out.xlsx' % self.path_templates)
+            book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_out.xlsx')
         sheet = book['s1']
 
         col = ("Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX",
@@ -1258,13 +1250,6 @@ class OneStaff(QMainWindow, one_staff_class):
 
     # Уведомление о регистрации
     def build_exel_registration(self):
-        if not hasattr(self, 'path_templates'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
-            info_sql = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
-            self.path_templates = info_sql[0][0]
 
         to_excel.patch_worksheet()
 
@@ -1272,7 +1257,7 @@ class OneStaff(QMainWindow, one_staff_class):
         if info.exec() == 0:
             return False
         self.statusBar().showMessage("Открываю шаблон")
-        book = openpyxl.load_workbook(filename='%s/staff/registration.xlsx' % self.path_templates)
+        book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/registration.xlsx')
         sheet = book["s1"]
         col = ("N", "Q", "T", "W", "Z", "AC", "AF", "AI", "AL", "AO", "AR", "AU", "AX", "BA", "BD", "BG", "BJ", "BM", "BP", "BS", "BV", "BY", "CB", "CE", "CH", "CK",
                "CN", "CQ", "CT", "CW", "CZ", "DC", "DF", "DI", "DL")
@@ -1484,13 +1469,6 @@ class OneStaff(QMainWindow, one_staff_class):
 
     # Договор на работу
     def build_word_in(self):
-        if not hasattr(self, 'path_templates'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
-            info_sql = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
-            self.path_templates = info_sql[0][0]
 
         if not self.id_info:
             QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
@@ -1531,7 +1509,7 @@ class OneStaff(QMainWindow, one_staff_class):
         patent = my_sql.sql_select("SELECT Patent FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
 
         self.statusBar().showMessage("Открываю шаблон")
-        f = open('%s/staff/contract.xml' % self.path_templates, "r", -1, "utf-8")
+        f = open(getcwd() + '/templates/staff/contract.xml', "r", -1, "utf-8")
         xml = f.read()
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
@@ -1589,13 +1567,6 @@ class OneStaff(QMainWindow, one_staff_class):
 
     # Заявления на прием и увольнение
     def build_word_petition(self, option):
-        if not hasattr(self, 'path_templates'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
-            info_sql = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
-            self.path_templates = info_sql[0][0]
 
         if option == "out":
             info = InfoDate(QDate().currentDate())
@@ -1609,9 +1580,9 @@ class OneStaff(QMainWindow, one_staff_class):
 
         self.statusBar().showMessage("Открываю шаблон")
         if option == "out":
-            f = open('%s/staff/petition_out.xml' % self.path_templates, "r", -1, "utf-8")
+            f = open(getcwd() + '/templates/staff/petition_out.xml', "r", -1, "utf-8")
         else:
-            f = open('%s/staff/petition_in.xml' % self.path_templates, "r", -1, "utf-8")
+            f = open(getcwd() + '/templates/staff/petition_in.xml', "r", -1, "utf-8")
         xml = f.read()
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
@@ -1646,20 +1617,13 @@ class OneStaff(QMainWindow, one_staff_class):
 
     # Довереность на ЗП
     def build_word_proxy(self):
-        if not hasattr(self, 'path_templates'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
-            info_sql = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
-            self.path_templates = info_sql[0][0]
 
         if not self.id_info:
             QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
             return False
 
         self.statusBar().showMessage("Открываю шаблон")
-        f = open('%s/staff/proxy.xml' % self.path_templates, "r", -1, "utf-8")
+        f = open(getcwd() + '/templates/staff/proxy.xml', "r", -1, "utf-8")
         xml = f.read()
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
@@ -1685,20 +1649,13 @@ class OneStaff(QMainWindow, one_staff_class):
 
     # Временный пропуск
     def build_word_pass(self):
-        if not hasattr(self, 'path_templates'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
-            info_sql = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
-            self.path_templates = info_sql[0][0]
 
         if not self.id_info:
             QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
             return False
 
         self.statusBar().showMessage("Открываю шаблон")
-        f = open('%s/staff/pass.xml' % self.path_templates, "r", -1, "utf-8")
+        f = open(getcwd() + '/templates/staff/pass.xml', "r", -1, "utf-8")
         xml = f.read()
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
@@ -1721,13 +1678,6 @@ class OneStaff(QMainWindow, one_staff_class):
 
     # Справка о приеме уведомления
     def build_word_admission_notice(self):
-        if not hasattr(self, 'path_templates'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
-            info_sql = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
-            self.path_templates = info_sql[0][0]
 
         info = InfoDate(QDate().currentDate())
         info.label.setText("Дата приема уведомления")
@@ -1739,7 +1689,7 @@ class OneStaff(QMainWindow, one_staff_class):
             return False
 
         self.statusBar().showMessage("Открываю шаблон")
-        f = open('%s/staff/admission_notice.xml' % self.path_templates, "r", -1, "utf-8")
+        f = open(getcwd() + '/templates/staff/admission_notice.xml', "r", -1, "utf-8")
         xml = f.read()
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
@@ -1763,13 +1713,6 @@ class OneStaff(QMainWindow, one_staff_class):
 
     # Ходотайство о продлении регистрации
     def build_word_hodataistvo(self):
-        if not hasattr(self, 'path_templates'):
-            query = "SELECT `Values` FROM program_settings_path WHERE Name = 'Путь шаблон рабочие'"
-            info_sql = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
-            self.path_templates = info_sql[0][0]
 
         if not self.id_info:
             QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
@@ -1803,7 +1746,7 @@ class OneStaff(QMainWindow, one_staff_class):
             return False
 
         self.statusBar().showMessage("Открываю шаблон")
-        f = open('%s/staff/hodataistvo.xml' % self.path_templates, "r", -1, "utf-8")
+        f = open(getcwd() + '/templates/staff/hodataistvo.xml', "r", -1, "utf-8")
         xml = f.read()
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()

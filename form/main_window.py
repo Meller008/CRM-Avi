@@ -1,6 +1,7 @@
 from os import getcwd
-from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow
+from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow, QLabel
 from PyQt5.uic import loadUiType
+from function import my_sql
 from form import login_window, provider, comparing, staff, program_settings, notification, \
     clients, operation, other, audit, warehouse_material, warehouse_accessories
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
@@ -20,6 +21,7 @@ class MainWindow(QMainWindow, main_class):
         self.setupUi(self)
         self.mdi.setBackground(QBrush(QImage(getcwd() + "/images/logo.png")))
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+        self.beika_no_finished()
         self.show()
         self.setDisabled(True)
         self.login = login_window.LoginWindow(self)
@@ -313,6 +315,16 @@ class MainWindow(QMainWindow, main_class):
         self.setEnabled(True)
         self.setFocus()
         self.access()
+
+    def beika_no_finished(self):
+        query = """SELECT COUNT(*) FROM beika WHERE Finished = 0"""
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            beika_txt = "error sql"
+        else:
+            beika_txt = "Не зкарыто бейки: " + str(sql_info[0][0])
+        beika = QLabel(beika_txt)
+        self.statusBar().addPermanentWidget(beika)
 
     def closeEvent(self, e):
         e.accept()

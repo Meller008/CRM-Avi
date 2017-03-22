@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QLineEdit, QSizePolicy, QWidget
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QBrush, QColor, QIcon
 from PyQt5.QtCore import Qt, QDate
@@ -16,6 +16,12 @@ supply_material_position = loadUiType(getcwd() + '/ui/supply_material_position.u
 
 class MaterialSupplyList(table.TableList):
     def set_settings(self):
+        line = QLineEdit()
+        line.setMaximumWidth(150)
+        dummy = QWidget()
+        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        self.toolBar.addWidget(dummy)
+        self.toolBar.addWidget(line)
 
         self.setWindowTitle("Приход материала")  # Имя окна
         self.resize(750, 270)
