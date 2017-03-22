@@ -565,7 +565,6 @@ class SalaryList(QDialog, salary_list):
             to_excel.table_to_excel(self.tw_many, path[0])
 
 
-
 class SalaryInfo(QDialog, salary_work):
     def __init__(self, work):
         super(SalaryInfo, self).__init__()

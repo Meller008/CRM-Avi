@@ -12,6 +12,7 @@ import re
 
 supply_material = loadUiType(getcwd() + '/ui/supply_material.ui')[0]
 supply_material_position = loadUiType(getcwd() + '/ui/supply_material_position.ui')[0]
+operation_pack_filter = loadUiType(getcwd() + '/ui/supply_filter.ui')[0]
 
 
 class MaterialSupplyList(table.TableList):
@@ -23,6 +24,8 @@ class MaterialSupplyList(table.TableList):
         self.toolBar.addWidget(dummy)
         self.toolBar.addWidget(line)
 
+        self.filter = None
+
         self.setWindowTitle("Приход материала")  # Имя окна
         self.resize(750, 270)
         self.pb_copy.deleteLater()
@@ -31,6 +34,14 @@ class MaterialSupplyList(table.TableList):
 
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("№", 30), ("Дата", 70), ("Поставщик", 170), ("Вес", 100), ("Сумма", 100), ("Примечание", 240))
+
+        self.query_table_all = """SELECT material_supply.Id, material_supply.Id, material_supply.Data, material_provider.Name, SUM(material_supplyposition.Weight),
+                                                ROUND(IFNULL(SUM(material_supplyposition.Weight * material_supplyposition.Price), 0) +
+                                                  IFNULL((SELECT SUM(comparing_supplyposition.Value * comparing_supplyposition.Price)
+                                                   FROM comparing_supplyposition WHERE comparing_supplyposition.Material_SupplyId = material_supply.Id), 0), 4), material_supply.Note
+                                              FROM material_supply LEFT JOIN material_supplyposition ON material_supply.Id = material_supplyposition.Material_SupplyId
+                                                LEFT JOIN material_provider ON material_supply.Material_ProviderId = material_provider.Id
+                                              GROUP BY material_supply.Id"""
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT material_supply.Id, material_supply.Id, material_supply.Data, material_provider.Name, SUM(material_supplyposition.Weight),
@@ -129,6 +140,18 @@ class MaterialSupplyList(table.TableList):
             my_sql.sql_commit_transaction(sql_connect_transaction)
 
             self.set_table_info()
+
+    def ui_filter(self):
+        if self.filter is None:
+            self.filter = MaterialSupplyFilter(self)
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(Qt.ApplicationModal)
+        self.filter.show()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+
+        self.ui_update()
 
 
 class MaterialSupply(QMainWindow, supply_material):
@@ -858,6 +881,67 @@ class MaterialSupplyPosition(QDialog, supply_material_position):
     def of_tree_select_material_name(self, item):
         self.le_name_material.setWhatsThis(str(item[1]))
         self.le_name_material.setText(item[0])
+
+
+class MaterialSupplyFilter(QDialog, operation_pack_filter):
+    def __init__(self, main):
+        super(MaterialSupplyFilter, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+    def ui_view_provider(self):
+        self.provider = provider.ProviderMaterial(self, True)
+        self.provider.setWindowModality(Qt.ApplicationModal)
+        self.provider.show()
+
+    def ui_del_provider(self):
+        self.le_provider.setWhatsThis("")
+        self.le_provider.setText("")
+
+    def ui_acc(self):
+        where = ""
+
+        # Блок  условий выбора поставщика
+        if self.le_provider.whatsThis() != '':
+            where = self.add_filter(where, "(material_supply.Material_ProviderId = %s)" % self.le_provider.whatsThis())
+
+        # Блок  условий даты прихода
+        if self.gb_date_supply.isChecked():
+            sql_date = "(material_supply.Data >= '%s' AND material_supply.Data <= '%s')" % \
+                       (self.de_date_supply_from.date().toString(Qt.ISODate), self.de_date_supply_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        # Делаем замену так как Were должно быть перед Group by
+        if where:
+            self.sql_query_all = self.sql_query_all.replace("GROUP BY", " WHERE " + where + "GROUP BY")
+
+        self.main.of_set_filter(self.sql_query_all)
+
+        self.close()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
+
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where
+
+    def of_set_sql_query(self, sql):
+        self.sql_query_all = sql
+
+    def of_list_reason_provider_material(self, item):
+        self.le_provider.setWhatsThis(str(item[0]))
+        self.le_provider.setText(item[1])
 
 
 class MaterialNameAndWarehouse(table.TableList):
