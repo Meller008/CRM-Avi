@@ -12,7 +12,7 @@ import re
 
 supply_material = loadUiType(getcwd() + '/ui/supply_material.ui')[0]
 supply_material_position = loadUiType(getcwd() + '/ui/supply_material_position.ui')[0]
-operation_pack_filter = loadUiType(getcwd() + '/ui/supply_filter.ui')[0]
+supply_material_filter = loadUiType(getcwd() + '/ui/supply_filter.ui')[0]
 
 
 class MaterialSupplyList(table.TableList):
@@ -883,7 +883,7 @@ class MaterialSupplyPosition(QDialog, supply_material_position):
         self.le_name_material.setText(item[0])
 
 
-class MaterialSupplyFilter(QDialog, operation_pack_filter):
+class MaterialSupplyFilter(QDialog, supply_material_filter):
     def __init__(self, main):
         super(MaterialSupplyFilter, self).__init__()
         self.setupUi(self)

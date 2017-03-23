@@ -13,6 +13,7 @@ from form.templates import table, list
 from classes.my_class import User
 
 brows_pay = loadUiType(getcwd() + '/ui/pay_plus_minus.ui')[0]
+pay_filter = loadUiType(getcwd() + '/ui/pay_plus_minus_filter.ui')[0]
 
 
 class PayList(table.TableList):
@@ -27,6 +28,21 @@ class PayList(table.TableList):
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Кому", 100), ("Сумма", 65), ("Д. исполнения", 100), ("Причина", 205), ("Замтка", 180),
                                   ("Кто назначил", 100), ("Добавлено", 70), ("В ЗП", 35))
+
+        self.filter = None
+        self.query_table_all = """SELECT pay_worker.Id, work.Last_Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_reason.Name,
+                                                pay_worker.Note, admin.Last_Name, pay_worker.Date_Input,
+                                                CASE
+                                                  WHEN pay_worker.Pay = 0
+                                                    THEN 'Нет'
+                                                  WHEN pay_worker.Pay = 1
+                                                    THEN 'Да'
+                                                END
+                                              FROM pay_worker
+                                                LEFT JOIN staff_worker_info AS work ON pay_worker.Worker_Id = work.Id
+                                                LEFT JOIN staff_worker_info AS admin ON pay_worker.Worker_Id_Insert = admin.Id
+                                                LEFT JOIN pay_reason ON pay_worker.Reason_Id = pay_reason.Id
+                                              ORDER BY pay_worker.Date_Input DESC , pay_worker.Date_In_Pay DESC """
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT pay_worker.Id, work.Last_Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_reason.Name,
@@ -52,6 +68,8 @@ class PayList(table.TableList):
                 return False
 
         if not self.table_items:
+            self.table_widget.clearContents()
+            self.table_widget.setRowCount(0)
             return False
 
         self.table_widget.clearContents()
@@ -95,6 +113,18 @@ class PayList(table.TableList):
         self.new_pay = PayBrows(self, item_id)
         self.new_pay.setWindowModality(Qt.ApplicationModal)
         self.new_pay.show()
+
+    def ui_filter(self):
+        if self.filter is None:
+            self.filter = PayFilter(self)
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(Qt.ApplicationModal)
+        self.filter.show()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+
+        self.ui_update()
 
 
 class PayBrows(QDialog, brows_pay):
@@ -423,6 +453,140 @@ class PayBrows(QDialog, brows_pay):
             self.le_reason_minus.setWhatsThis(str(item[0]))
             self.le_reason_minus.setText(item[1])
         self.button = None
+
+
+class PayFilter(QDialog, pay_filter):
+    def __init__(self, main):
+        super(PayFilter, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+    def ui_view_work(self):
+        self.button = "работник"
+        self.worker_list = staff.Staff(self, True)
+        self.worker_list.setWindowModality(Qt.ApplicationModal)
+        self.worker_list.show()
+
+    def ui_view_reason_plus(self):
+        self.reason_list = PayReasonPlus(self, True)
+        self.reason_list.setWindowModality(Qt.ApplicationModal)
+        self.reason_list.show()
+
+    def ui_view_reason_minus(self):
+        self.reason_list = PayReasonMinus(self, True)
+        self.reason_list.setWindowModality(Qt.ApplicationModal)
+        self.reason_list.show()
+
+    def ui_view_worker_insert(self):
+        self.button = "начальник"
+        self.worker_list = staff.Staff(self, True)
+        self.worker_list.setWindowModality(Qt.ApplicationModal)
+        self.worker_list.show()
+
+    def ui_del_work(self):
+        self.le_work.setWhatsThis("")
+        self.le_work.setText("")
+
+    def ui_del_reason_plus(self):
+        self.le_reason_plus.setWhatsThis("")
+        self.le_reason_plus.setText("")
+
+    def ui_del_reason_minus(self):
+        self.le_reason_minus.setWhatsThis("")
+        self.le_reason_minus.setText("")
+
+    def ui_del_worker_insert(self):
+        self.le_worker_insert.setWhatsThis("")
+        self.le_worker_insert.setText("")
+
+    def ui_acc(self):
+        where = ""
+
+        # Блок  условий доплата или вычет
+        where_item = ""
+        if self.cb_plus.isChecked():
+            where_item = self.add_filter(where_item, "pay_worker.Balance > 0", False)
+
+        if self.cb_minus.isChecked():
+            where_item = self.add_filter(where_item, "pay_worker.Balance < 0", False)
+
+        if where_item:
+            where_item = "(" + where_item + ")"
+            where = self.add_filter(where, where_item)
+
+        # Блок  условий выбора работника
+        if self.le_work.whatsThis() != '':
+            where = self.add_filter(where, "(pay_worker.Worker_Id = %s)" % self.le_work.whatsThis())
+
+        # Блок  условий выбора причины плюса
+        if self.le_reason_plus.whatsThis() != '':
+            where = self.add_filter(where, "(pay_worker.Reason_Id = %s)" % self.le_reason_plus.whatsThis())
+
+        # Блок  условий выбора причины минуса
+        if self.le_reason_minus.whatsThis() != '':
+            where = self.add_filter(where, "(pay_worker.Reason_Id = %s)" % self.le_reason_minus.whatsThis())
+
+        # Блок  условий выбора работника который назначил
+        if self.le_worker_insert.whatsThis() != '':
+            where = self.add_filter(where, "(pay_worker.Worker_Id_Insert = %s)" % self.le_worker_insert.whatsThis())
+
+        # Блок  условий даты внесения
+        if self.gb_date_in.isChecked():
+            sql_date = "(pay_worker.Date_Input >= '%s' AND pay_worker.Date_Input <= '%s')" % \
+                       (self.de_date_in_from.date().toString(Qt.ISODate), self.de_date_in_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        # Блок  условий даты вступления в силу
+        if self.gb_date_pay.isChecked():
+            sql_date = "(pay_worker.Date_In_Pay >= '%s' AND pay_worker.Date_In_Pay <= '%s')" % \
+                       (self.de_date_pay_from.date().toString(Qt.ISODate), self.de_date_pay_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        # Делаем замену так как Were должно быть перед ORDER BY
+        if where:
+            self.sql_query_all = self.sql_query_all.replace("ORDER BY", " WHERE " + where + " ORDER BY")
+
+        self.main.of_set_filter(self.sql_query_all)
+
+        self.close()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
+
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where
+
+    def of_set_sql_query(self, sql):
+        self.sql_query_all = sql
+
+    def of_list_worker(self, item):
+        if self.button == "работник":
+            self.le_work.setWhatsThis(str(item[0]))
+            self.le_work.setText(item[1])
+        else:
+            self.le_worker_insert.setWhatsThis(str(item[0]))
+            self.le_worker_insert.setText(item[1])
+
+    def of_list_reason_plus(self, item):
+        self.le_reason_plus.setWhatsThis(str(item[0]))
+        self.le_reason_plus.setText(item[1])
+        self.ui_del_reason_minus()
+
+    def of_list_reason_minus(self, item):
+        self.le_reason_minus.setWhatsThis(str(item[0]))
+        self.le_reason_minus.setText(item[1])
+        self.ui_del_reason_plus()
 
 
 class PayReasonPlus(list.ListItems):

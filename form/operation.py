@@ -8,6 +8,7 @@ from PyQt5.QtCore import Qt
 from function import my_sql
 
 operation_class = loadUiType(getcwd() + '/ui/operation_change.ui')[0]
+operation_filter = loadUiType(getcwd() + '/ui/operation_filter.ui')[0]
 
 
 class OperationList(tree.TreeList):
@@ -22,6 +23,10 @@ class OperationList(tree.TreeList):
         self.query_tree_add = "INSERT INTO operation_tree (Parent_Id, Name) VALUES (%s, %s)"
         self.query_tree_change = "UPDATE operation_tree SET Name = %s WHERE Id = %s"
         self.query_tree_del = "DELETE FROM operation_tree WHERE Id = %s"
+
+        self.filter = None
+        self.query_table_all = "SELECT operations.Id, operations.Tree_Id, operations.Name, operations.Price, sewing_machine.Name  " \
+                                  "FROM operations LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id"
 
         #  нулевой элемент должен быть ID а первый Parent_ID (ID категории)
         self.query_table_select = "SELECT operations.Id, operations.Tree_Id, operations.Name, operations.Price, sewing_machine.Name  " \
@@ -92,6 +97,18 @@ class OperationList(tree.TreeList):
             self.close()
             self.destroy()
 
+    def ui_filter_table(self):
+        if self.filter is None:
+            self.filter = OperationFilter(self)
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(Qt.ApplicationModal)
+        self.filter.show()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+
+        self.ui_update_table()
+
 
 class Operation(QDialog, operation_class):
     def __init__(self, main, id=False, tree_id=False):
@@ -153,6 +170,64 @@ class Operation(QDialog, operation_class):
         if result == 16384:
             self.close()
             self.destroy()
+
+
+class OperationFilter(QDialog, operation_filter):
+    def __init__(self, main):
+        super(OperationFilter, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+    def ui_view_machine(self):
+        self.machine = MachineName(self, True)
+        self.machine.setWindowModality(Qt.ApplicationModal)
+        self.machine.show()
+
+    def ui_del_machine(self):
+        self.le_machine.setWhatsThis("")
+        self.le_machine.setText("")
+
+    def ui_acc(self):
+        where = ""
+
+        # Блок условий названия операции
+        if self.le_name.text() != '':
+            where = self.add_filter(where, "(operations.Name LIKE '%s')" % ("%" + self.le_name.text() + "%",))
+
+        # Блок  условий выбора машинки
+        if self.le_machine.whatsThis() != '':
+            where = self.add_filter(where, "(operations.Sewing_Machine_Id = %s)" % self.le_machine.whatsThis())
+
+        if where:
+            self.sql_query_all = self.sql_query_all + " WHERE " + where
+
+        self.main.of_set_filter(self.sql_query_all)
+
+        self.close()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
+
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where
+
+    def of_set_sql_query(self, sql):
+        self.sql_query_all = sql
+
+    def of_list_insert(self, item):
+        self.le_machine.setText(item[1])
+        self.le_machine.setWhatsThis(str(item[0]))
 
 
 class MachineName(list.ListItems):

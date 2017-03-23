@@ -11,10 +11,14 @@ article_class = loadUiType(getcwd() + '/ui/article.ui')[0]
 article_change_operation_class = loadUiType(getcwd() + '/ui/article_change_operation.ui')[0]
 article_change_material_class = loadUiType(getcwd() + '/ui/article_change_material.ui')[0]
 article_copy_parametr = loadUiType(getcwd() + '/ui/article_copy_parametr.ui')[0]
+article_filter = loadUiType(getcwd() + '/ui/article_filter.ui')[0]
 
 
 class ArticleList(tree.TreeList):
     def set_settings(self):
+
+        self.filter = None
+
         self.setWindowTitle("Список артикулов")  # Имя окна
         self.toolBar.setStyleSheet("background-color: rgb(167, 183, 255);")  # Цвет бара
 
@@ -25,6 +29,11 @@ class ArticleList(tree.TreeList):
         self.query_tree_add = "INSERT INTO product_tree (Parent_Id, Name) VALUES (%s, %s)"
         self.query_tree_change = "UPDATE product_tree SET Name = %s WHERE Id = %s"
         self.query_tree_del = "DELETE FROM product_tree WHERE Id = %s"
+
+        self.query_table_all = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
+                                            GROUP_CONCAT(product_article_size.Size ORDER BY product_article_size.Size) FROM product_article
+                                            LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
+                                            GROUP BY product_article.Article ORDER BY product_article.Article"""
 
         #  нулевой элемент должен быть ID а первый Parent_ID (ID категории)
         self.query_table_select = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
@@ -96,6 +105,18 @@ class ArticleList(tree.TreeList):
             self.new_operation = Article(self.main, item_id, dc_select=True)
             self.new_operation.setWindowModality(QtCore.Qt.ApplicationModal)
             self.new_operation.show()
+
+    def ui_filter_table(self):
+        if self.filter is None:
+            self.filter = ArticleFilter(self)
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.filter.show()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+
+        self.ui_update_table()
 
 
 class Article(QMainWindow, article_class):
@@ -1237,6 +1258,57 @@ class Article(QMainWindow, article_class):
         item.setBackground(QBrush(QColor(252, 163, 255, 255)))
         self.tw_materials.setItem(self.tw_materials.rowCount() - 1, 3, item)
         self.calc()
+
+
+class ArticleFilter(QDialog, article_filter):
+    def __init__(self, main):
+        super(ArticleFilter, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+    def ui_acc(self):
+        where = ""
+
+        # Блок условий артикула
+        if self.le_article.text() != '':
+            where = self.add_filter(where, "(product_article.Article LIKE '%s')" % ("%" + self.le_article.text() + "%", ))
+
+        # Блок условий названия артикула
+        if self.le_article_name.text() != '':
+            where = self.add_filter(where, "(product_article.Name LIKE '%s')" % ("%" + self.le_article_name.text() + "%",))
+
+        # Блок условий цены
+        # if self.le_article_price.isChecked():
+        #     sql_date = "(product_article_parametrs.Price >= '%s' AND product_article_parametrs.Price <= '%s')" % \
+        #                (self.le_article_price_from.text(), self.le_article_price_to.text())
+        #     where = self.add_filter(where, sql_date)
+
+        if where:
+            self.sql_query_all = self.sql_query_all.replace("GROUP BY", " WHERE " + where + " GROUP BY")
+
+        self.main.of_set_filter(self.sql_query_all)
+
+        self.close()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
+
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where
+
+    def of_set_sql_query(self, sql):
+        self.sql_query_all = sql
 
 
 class ChangeOperation(QDialog, article_change_operation_class):

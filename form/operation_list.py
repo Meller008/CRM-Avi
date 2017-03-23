@@ -145,7 +145,8 @@ class PayListFilter(QDialog, operation_pack_filter):
         if self.le_work.whatsThis() != '':
             where = self.add_filter(where, "(pack_operation.Worker_Id = %s)" % self.le_work.whatsThis())
 
-        self.sql_query_all = self.sql_query_all + " WHERE " + where
+        if where:
+            self.sql_query_all = self.sql_query_all + " WHERE " + where
 
         self.main.of_set_filter(self.sql_query_all)
 

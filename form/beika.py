@@ -1,8 +1,8 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QListWidgetItem
+from PyQt5.QtWidgets import QDialog, QMessageBox, QListWidgetItem
 from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtGui import QIcon
 from decimal import Decimal
 from math import fabs
 
@@ -29,17 +29,17 @@ class BeikaList(table.TableList):
         self.toolBar.setStyleSheet("background-color: rgb(255, 203, 219);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("№", 40), ("Швея", 170), ("Материал", 100), ("Кол-во", 80), ("Дата", 80), ("Одобрено", 70))
+        self.table_header_name = (("№", 40), ("Швея", 170), ("Материал", 190), ("Кол-во", 80), ("Дата", 80), ("Одобрено", 70))
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT beika.Id, beika.Id, CONCAT(w.Last_Name, w.First_Name), material_name.Name, beika.Value, beika.Date, beika.Finished
+        self.query_table_select = """SELECT beika.Id, beika.Id, CONCAT(w.Last_Name, ' ', w.First_Name), material_name.Name, beika.Value, beika.Date,
+                                        IF(beika.Finished = 1, 'Да', 'Нет')
                                       FROM beika LEFT JOIN material_name ON beika.Material_Id = material_name.Id
                                         LEFT JOIN staff_worker_info AS w ON beika.Worker_Id = w.Id"""
 
         self.query_table_dell = "DELETE FROM beika WHERE Id = %s"
 
     def ui_add_table_item(self):  # Добавить предмет
-        id = False
         self.beika = Beika(self)
         self.beika.setModal(True)
         self.beika.show()

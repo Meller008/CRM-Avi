@@ -18,6 +18,7 @@ import num2t4ru
 position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
 order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
 order_doc = loadUiType(getcwd() + '/ui/order_doc_list.ui')[0]
+order_filter = loadUiType(getcwd() + '/ui/order_filter.ui')[0]
 
 
 class OrderList(table.TableList):
@@ -32,6 +33,13 @@ class OrderList(table.TableList):
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Клиент", 120), ("Пункт разгрузки", 170), ("Дата заказ.", 75), ("Дата отгр.", 70), ("№ док.", 50), ("Стоймость", 105),
                                   ("Примечание", 230), ("Отгр.", 40))
+
+        self.filter = None
+        self.query_table_all = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc,
+                                    SUM(order_position.Value * order_position.Price), `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да')
+                                      FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                                        LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                                        LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc,
@@ -103,6 +111,18 @@ class OrderList(table.TableList):
                 item.setData(5, table_typle[0])
                 item.setBackground(color)
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 1, item)
+
+    def ui_filter(self):
+        if self.filter is None:
+            self.filter = OrderFilter(self)
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(Qt.ApplicationModal)
+        self.filter.show()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+
+        self.ui_update()
 
 
 class Order(QMainWindow, order_class):
@@ -1609,6 +1629,112 @@ class Order(QMainWindow, order_class):
 
         book.save(path[0])
         self.progress.setValue(self.progress.value() + 1)
+
+
+class OrderFilter(QDialog, order_filter):
+    def __init__(self, main):
+        super(OrderFilter, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+    def ui_view_client(self):
+        self.client_list = clients.ClientList(self, True)
+        self.client_list.setWindowModality(Qt.ApplicationModal)
+        self.client_list.show()
+
+    def ui_del_client(self):
+        self.le_client.setWhatsThis("")
+        self.le_client.setText("")
+
+    def ui_acc(self):
+        where = ""
+
+        # Блок  условий выбора клиента
+        if self.le_client.whatsThis() != '':
+            where = self.add_filter(where, "(`order`.Client_Id = %s)" % self.le_client.whatsThis())
+
+        # Блок  условий состояния отгрузки заказа
+        where_item = ""
+        if self.cb_shipped.isChecked():
+            where_item = self.add_filter(where_item, "`order`.Shipped = 1", False)
+
+        if self.cb_no_shipped.isChecked():
+            where_item = self.add_filter(where_item, "`order`.Shipped = 0", False)
+
+        if where_item:
+            where_item = "(" + where_item + ")"
+            where = self.add_filter(where, where_item)
+
+        # Блок  условий проверки заказа НДС или без
+        where_item = ""
+        if self.cb_nds.isChecked():
+            where_item = self.add_filter(where_item, "clients.No_Nds = 0", False)
+
+        if self.cb_no_nds.isChecked():
+            where_item = self.add_filter(where_item, "clients.No_Nds = 1", False)
+
+        if where_item:
+            where_item = "(" + where_item + ")"
+            where = self.add_filter(where, where_item)
+
+        # Блок условий номера заказа
+        if self.le_order_number.text() != '':
+            where = self.add_filter(where, "(`order`.Number_Order LIKE '%s')" % ("%" + self.le_order_number.text() + "%", ))
+
+        # Блок условий номера документа
+        if self.le_order_doc.text() != '':
+            where = self.add_filter(where, "(`order`.Number_Doc LIKE '%s')" % ("%" + self.le_order_doc.text() + "%", ))
+
+        # Блок  условий суммы заказа
+        if self.gp_sum.isChecked():
+            sql_date = "(SUM(order_position.Value * order_position.Price) BETWEEN %s AND %s)" % \
+                       (self.le_sum_from.text(), self.le_sum_to.text())
+            where = self.add_filter(where, sql_date)
+
+        # Блок  условий даты закза
+        if self.gp_date_order.isChecked():
+            sql_date = "(`order`.Date_Order >= '%s' AND `order`.Date_Order <= '%s')" % \
+                       (self.de_date_order_from.date().toString(Qt.ISODate), self.de_date_order_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        # Блок  условий даты отгрузки
+        if self.gp_date_shipped.isChecked():
+            sql_date = "(`order`.Date_Shipment >= '%s' AND `order`.Date_Shipment <= '%s')" % \
+                       (self.de_date_shipped_from.date().toString(Qt.ISODate), self.de_date_shipped_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        # Делаем замену так как Were должно быть перед Group by
+        if where:
+            self.sql_query_all = self.sql_query_all.replace("GROUP BY", " WHERE " + where + " GROUP BY")
+
+        self.main.of_set_filter(self.sql_query_all)
+
+        self.close()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
+
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where
+
+    def of_set_sql_query(self, sql):
+        self.sql_query_all = sql
+
+    def of_list_clients(self, item):
+        id_client, name_client = item
+        self.le_client.setText(str(name_client))
+        self.le_client.setWhatsThis(str(id_client))
 
 
 class Position(QDialog, position_class):
