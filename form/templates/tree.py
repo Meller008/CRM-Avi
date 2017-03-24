@@ -64,11 +64,12 @@ class TreeList(QMainWindow, tree_class):
                 QMessageBox.critical(self, "Ошибка sql получение таблицы", self.table_items.msg, QMessageBox.Ok)
                 return False
 
+        self.table_widget.clearContents()
+        self.table_widget.setRowCount(0)
+
         if not self.table_items:
             return False
 
-        self.table_widget.clearContents()
-        self.table_widget.setRowCount(0)
         for table_typle in self.table_items:
             self.table_widget.insertRow(self.table_widget.rowCount())
             for column in range(2, len(table_typle)):

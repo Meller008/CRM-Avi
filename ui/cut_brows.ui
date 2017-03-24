@@ -300,6 +300,32 @@
           </property>
          </spacer>
         </item>
+        <item>
+         <widget class="QLineEdit" name="le_pack_number_filter">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="placeholderText">
+           <string>Номер пачки</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="toolButton_4">
+          <property name="text">
+           <string>Поиск</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item row="2" column="0">
@@ -322,12 +348,18 @@
           <property name="text">
            <string>Принять</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_2">
           <property name="text">
            <string>Отмена</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -427,6 +459,29 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>toolButton_4</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>le_number_cut</tabstop>
+  <tabstop>de_cut_date</tabstop>
+  <tabstop>le_material_cut</tabstop>
+  <tabstop>le_material_price</tabstop>
+  <tabstop>le_worker_cut</tabstop>
+  <tabstop>le_weight_cut</tabstop>
+  <tabstop>le_weight_rest_cut</tabstop>
+  <tabstop>le_all_weight_cut</tabstop>
+  <tabstop>le_rest_cut</tabstop>
+  <tabstop>le_note_cut</tabstop>
+  <tabstop>bu_pack_add</tabstop>
+  <tabstop>bu_pack_change</tabstop>
+  <tabstop>bu_pack_del</tabstop>
+  <tabstop>toolButton_3</tabstop>
+  <tabstop>tw_pack</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>le_pack_number_filter</tabstop>
+  <tabstop>toolButton_2</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -548,8 +603,8 @@
    <slot>ui_add_pack()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>23</x>
-     <y>127</y>
+     <x>27</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -580,8 +635,8 @@
    <slot>ui_edit_pack()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>127</y>
+     <x>127</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -596,8 +651,8 @@
    <slot>ui_del_pack()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>140</x>
-     <y>124</y>
+     <x>184</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -612,8 +667,8 @@
    <slot>ui_edit_width_cut()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>37</x>
-     <y>81</y>
+     <x>41</x>
+     <y>103</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -653,6 +708,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>toolButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_fast_filter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>655</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>686</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_pack_number_filter</sender>
+   <signal>editingFinished()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_fast_filter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>575</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>568</x>
+     <y>-76</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_edit_number_cut()</slot>
@@ -670,5 +757,6 @@
   <slot>ui_del_pack()</slot>
   <slot>ui_acc()</slot>
   <slot>ui_can()</slot>
+  <slot>ui_fast_filter()</slot>
  </slots>
 </ui>

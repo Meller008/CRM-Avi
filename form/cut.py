@@ -2,7 +2,7 @@ from os import getcwd
 from form import order, staff
 from datetime import datetime
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QObject
 from form.supply_material import MaterialName
@@ -13,6 +13,7 @@ from classes import cut
 
 cut_list_class = loadUiType(getcwd() + '/ui/cut_list.ui')[0]
 cut_brows_class = loadUiType(getcwd() + '/ui/cut_brows.ui')[0]
+cut_filter = loadUiType(getcwd() + '/ui/cut_filter.ui')[0]
 
 cut_list_mission_class = loadUiType(getcwd() + '/ui/cut_list_mission.ui')[0]
 new_cut_mission_class = loadUiType(getcwd() + '/ui/cut_new_mission.ui')[0]
@@ -25,8 +26,26 @@ class CutList(QMainWindow, cut_list_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        self.filter = None
+        self.query_table_all = """SELECT cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
+                                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                                      LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
+                                      GROUP BY cut.Id
+                                      ORDER BY Cut_Id DESC"""
+        self.query_table_select = self.query_table_all
+
         self.set_size_table()
         self.set_cut_table()
+
+        # Быстрый фильтр
+        self.le_fast_filter = QLineEdit()
+        self.le_fast_filter.setPlaceholderText("Номер кроя")
+        self.le_fast_filter.setMaximumWidth(150)
+        self.le_fast_filter.editingFinished.connect(self.fast_filter)
+        dummy = QWidget()
+        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        self.toolBar.addWidget(dummy)
+        self.toolBar.addWidget(self.le_fast_filter)
 
     def ui_add_cut(self):
         self.cut_window = CutBrows(self)
@@ -35,12 +54,13 @@ class CutList(QMainWindow, cut_list_class):
 
     def set_size_table(self):
         self.tw_cut_list.horizontalHeader().resizeSection(0, 35)
-        self.tw_cut_list.horizontalHeader().resizeSection(1, 80)
+        self.tw_cut_list.horizontalHeader().resizeSection(1, 70)
         self.tw_cut_list.horizontalHeader().resizeSection(2, 80)
         self.tw_cut_list.horizontalHeader().resizeSection(3, 80)
-        self.tw_cut_list.horizontalHeader().resizeSection(4, 55)
-        self.tw_cut_list.horizontalHeader().resizeSection(5, 140)
-        self.tw_cut_list.horizontalHeader().resizeSection(6, 220)
+        self.tw_cut_list.horizontalHeader().resizeSection(4, 80)
+        self.tw_cut_list.horizontalHeader().resizeSection(5, 55)
+        self.tw_cut_list.horizontalHeader().resizeSection(6, 100)
+        self.tw_cut_list.horizontalHeader().resizeSection(7, 200)
 
     def ui_double_table(self, table_item):
         self.cut_window = CutBrows(self, table_item.data(-2))
@@ -67,13 +87,15 @@ class CutList(QMainWindow, cut_list_class):
         else:
             return False
 
+    def ui_filter(self):
+        if self.filter is None:
+            self.filter = CutFilter(self)
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(Qt.ApplicationModal)
+        self.filter.show()
+
     def set_cut_table(self):
-        query = """SELECT cut.Id, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
-                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
-                      LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
-                      GROUP BY cut.Id
-                      ORDER BY Cut_Id DESC"""
-        sql_info = my_sql.sql_select(query)
+        sql_info = my_sql.sql_select(self.query_table_select)
         if "mysql.connector.errors" in str(type(sql_info)):
             print("Не смог получить список кроя")
             return False
@@ -88,7 +110,7 @@ class CutList(QMainWindow, cut_list_class):
             new_table_item.setData(-2, cut[0])
             self.tw_cut_list.setItem(row, 0, new_table_item)
 
-            new_table_item = QTableWidgetItem(str(cut[1]))
+            new_table_item = QTableWidgetItem(cut[1].strftime("%d.%m.%Y"))
             new_table_item.setData(-2, cut[0])
             self.tw_cut_list.setItem(row, 1, new_table_item)
 
@@ -96,13 +118,13 @@ class CutList(QMainWindow, cut_list_class):
             new_table_item.setData(-2, cut[0])
             self.tw_cut_list.setItem(row, 2, new_table_item)
 
-            rest = cut[2] if cut[2] is not None else 0
-            weight = cut[1] if cut[1] is not None else 0
-            new_table_item = QTableWidgetItem(str(rest + weight))
+            new_table_item = QTableWidgetItem(str(cut[3]))
             new_table_item.setData(-2, cut[0])
             self.tw_cut_list.setItem(row, 3, new_table_item)
 
-            new_table_item = QTableWidgetItem(str(cut[3]))
+            rest = cut[3] if cut[3] is not None else 0
+            weight = cut[2] if cut[2] is not None else 0
+            new_table_item = QTableWidgetItem(str(rest + weight))
             new_table_item.setData(-2, cut[0])
             self.tw_cut_list.setItem(row, 4, new_table_item)
 
@@ -114,7 +136,26 @@ class CutList(QMainWindow, cut_list_class):
             new_table_item.setData(-2, cut[0])
             self.tw_cut_list.setItem(row, 6, new_table_item)
 
+            new_table_item = QTableWidgetItem(str(cut[6]))
+            new_table_item.setData(-2, cut[0])
+            self.tw_cut_list.setItem(row, 7, new_table_item)
+
+    def fast_filter(self):
+        # Блок условий номер кроя
+        if self.le_fast_filter.text() != '':
+            q_filter = " WHERE (cut.Id = %s)" % self.le_fast_filter.text()
+            self.query_table_select = self.query_table_all.replace("GROUP BY", q_filter + " GROUP BY")
+        else:
+            self.query_table_select = self.query_table_all
+
+        self.set_cut_table()
+
     def of_change_cut_complete(self):
+        self.set_cut_table()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+
         self.set_cut_table()
 
 
@@ -270,6 +311,67 @@ class CutBrows(QDialog, cut_brows_class):
             self.pack_win.setModal(True)
             self.pack_win.show()
 
+    def ui_fast_filter(self):
+        if self.le_pack_number_filter.text():
+            try:
+                filter_pack = int(self.le_pack_number_filter.text())
+            except:
+                return False
+
+            self.tw_pack.clearContents()
+            self.tw_pack.setRowCount(0)
+
+            if not self.cut.pack_list():
+                return False
+            pack_list = self.cut.pack_list()
+            row = 0
+
+            for pack_id, pack in pack_list.items():
+                if pack.number_pack() == filter_pack:
+                    self.tw_pack.insertRow(row)
+
+                    new_table_item = QTableWidgetItem(str(pack.number_pack()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 0, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.article()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 1, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.size()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 2, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.parametr_name()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 3, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.value()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 4, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.value_damage()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 5, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.weight()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 6, new_table_item)
+
+                    date_make = pack.date_make().strftime("%d.%m.%Y") if pack.date_make() is not None else ""
+                    new_table_item = QTableWidgetItem(date_make)
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 7, new_table_item)
+
+                    date_complete = pack.date_complete().strftime("%d.%m.%Y") if pack.date_complete() is not None else ""
+                    new_table_item = QTableWidgetItem(date_complete)
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 8, new_table_item)
+                    break
+
+        else:
+            self.set_pack()
+
     def ui_acc(self):
         if self.cut.error_material():
             result = QMessageBox.question(self, "Сохранить?", "Что то не так с весом обрези.\nМогу сохранить без веса обрези!", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -312,8 +414,9 @@ class CutBrows(QDialog, cut_brows_class):
 
         pack_list = self.cut.pack_list()
         row = 0
-        while need_set_pack != 0:
+        while need_set_pack > 0:
             for pack_id, pack in pack_list.items():
+
                 if pack.number_pack() == pack_number_table:
                     self.tw_pack.insertRow(row)
 
@@ -360,7 +463,7 @@ class CutBrows(QDialog, cut_brows_class):
                     need_set_pack -= 1
                     break
             else:
-                    pack_number_table += 1
+                pack_number_table += 1
 
     def set_width_all(self):
         self.le_all_weight_cut.setText(str(self.cut.weight_all()))
@@ -405,6 +508,88 @@ class CutBrows(QDialog, cut_brows_class):
         self.cut.take_material_price()
         self.set_width_all()
         self.cut.set_material_id_old(self.cut.material_id())
+
+
+class CutFilter(QDialog, cut_filter):
+    def __init__(self, main):
+        super(CutFilter, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+    def ui_view_material(self):
+        self.material_name = MaterialName(self, True)
+        self.material_name.setWindowModality(Qt.ApplicationModal)
+        self.material_name.show()
+
+    def ui_view_worker(self):
+        self.worker_list = staff.Staff(self, True)
+        self.worker_list.setWindowModality(Qt.ApplicationModal)
+        self.worker_list.show()
+
+    def ui_del_material(self):
+        self.le_material.setWhatsThis("")
+        self.le_material.setText("")
+
+    def ui_del_worker(self):
+        self.le_work.setWhatsThis("")
+        self.le_work.setText("")
+
+    def ui_acc(self):
+        where = ""
+
+        # Блок условий номер кроя
+        if self.le_number_cut.text() != '':
+            where = self.add_filter(where, "(cut.Id = %s)" % self.le_number_cut.text())
+
+        # Блок  условий выбора ткани
+        if self.le_material.whatsThis() != '':
+            where = self.add_filter(where, "(cut.Material_Id = %s)" % self.le_material.whatsThis())
+
+        # Блок  условий выбора закройщика
+        if self.le_work.whatsThis() != '':
+            where = self.add_filter(where, "(cut.Worker_Id = %s)" % self.le_work.whatsThis())
+
+        # Блок  условий даты коря
+        if self.gb_date_cut.isChecked():
+            sql_date = "(cut.Date_Cut >= '%s' AND cut.Date_Cut <= '%s')" % \
+                       (self.de_date_cut_from.date().toString(Qt.ISODate), self.de_date_cut_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        # Делаем замену так как Were должно быть перед Group by
+        if where:
+            self.sql_query_all = self.sql_query_all.replace("GROUP BY", " WHERE " + where + " GROUP BY")
+
+        self.main.of_set_filter(self.sql_query_all)
+
+        self.close()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
+
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where
+
+    def of_set_sql_query(self, sql):
+        self.sql_query_all = sql
+
+    def of_list_material_name(self, item):
+        self.le_material.setWhatsThis(str(item[0]))
+        self.le_material.setText(item[1])
+
+    def of_list_worker(self, item):
+        self.le_work.setWhatsThis(str(item[0]))
+        self.le_work.setText(item[1])
 
 
 class CutListMission(QMainWindow, cut_list_mission_class):

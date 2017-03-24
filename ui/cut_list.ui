@@ -66,6 +66,11 @@
       </column>
       <column>
        <property name="text">
+        <string>Дата кроя</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Вес пачек</string>
        </property>
       </column>
@@ -117,6 +122,7 @@
    <addaction name="new_cut"/>
    <addaction name="pb_edit_cut"/>
    <addaction name="pb_del_cut"/>
+   <addaction name="pb_filter"/>
   </widget>
   <action name="new_cut">
    <property name="text">
@@ -131,6 +137,11 @@
   <action name="pb_del_cut">
    <property name="text">
     <string>Удалить</string>
+   </property>
+  </action>
+  <action name="pb_filter">
+   <property name="text">
+    <string>Фильтр</string>
    </property>
   </action>
  </widget>
@@ -184,10 +195,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_filter</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_filter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>372</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_cut()</slot>
   <slot>ui_double_table()</slot>
   <slot>ui_del_cut()</slot>
+  <slot>ui_filter()</slot>
  </slots>
 </ui>

@@ -1,9 +1,8 @@
-from os import getcwd, path, mkdir, listdir, rmdir, name
-from datetime import datetime
+from os import getcwd, path, mkdir, listdir, rmdir
 from shutil import copy
 from form.templates import list
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql, to_excel
@@ -12,13 +11,14 @@ from openpyxl.drawing.image import Image
 import subprocess
 
 
-staff_list_class, staff_list_base_class = loadUiType(getcwd() + '/ui/staff.ui')
-one_staff_class, one_staff_base_class = loadUiType(getcwd() + '/ui/add_work.ui')
-country_class, country_base_class = loadUiType(getcwd() + '/ui/country.ui')
-position_class, position_base_class = loadUiType(getcwd() + '/ui/staff_position.ui')
-exel_info_class, exel_info_base_class = loadUiType(getcwd() + '/ui/exel_info.ui')
-info_date_class, info_date_base_class = loadUiType(getcwd() + '/ui/exel_info_date.ui')
-add_file_date_class, add_file_base_class = loadUiType(getcwd() + '/ui/work_add_file.ui')
+staff_list_class = loadUiType(getcwd() + '/ui/staff.ui')[0]
+one_staff_class = loadUiType(getcwd() + '/ui/add_work.ui')[0]
+country_class = loadUiType(getcwd() + '/ui/country.ui')[0]
+position_class = loadUiType(getcwd() + '/ui/staff_position.ui')[0]
+exel_info_class = loadUiType(getcwd() + '/ui/exel_info.ui')[0]
+info_date_class = loadUiType(getcwd() + '/ui/exel_info_date.ui')[0]
+add_file_date_class = loadUiType(getcwd() + '/ui/work_add_file.ui')[0]
+staff_filter = loadUiType(getcwd() + '/ui/staff_filter.ui')[0]
 
 
 class Staff(QMainWindow, staff_list_class):
@@ -28,8 +28,23 @@ class Staff(QMainWindow, staff_list_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main
         self.dc_select = dc_select
+        self.filter = None
+        self.query_table_all = """SELECT staff_worker_info.Id, First_Name, Last_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'), `Leave`, Date_Leave, staff_position.Name
+                                    FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id"""
+        self.query_table_select = self.query_table_all
+
         self.set_settings()
         self.set_info()
+
+        # Быстрый фильтр
+        self.le_fast_filter = QLineEdit()
+        self.le_fast_filter.setPlaceholderText("Номер кроя")
+        self.le_fast_filter.setMaximumWidth(150)
+        self.le_fast_filter.editingFinished.connect(self.fast_filter)
+        dummy = QWidget()
+        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        self.toolBar.addWidget(dummy)
+        self.toolBar.addWidget(self.le_fast_filter)
 
     def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
         if not hasattr(self, 'path_work'):
@@ -61,9 +76,7 @@ class Staff(QMainWindow, staff_list_class):
         if "mysql.connector.errors" in str(type(self.staff_positions)):
             QMessageBox.critical(self, "Ошибка sql", self.staff_positions.msg, QMessageBox.Ok)
             return False
-        query = """SELECT staff_worker_info.Id, First_Name, Last_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'), `Leave`, Date_Leave, staff_position.Name
-                FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id"""
-        self.staff_workers = my_sql.sql_select(query)
+        self.staff_workers = my_sql.sql_select(self.query_table_select)
         if "mysql.connector.errors" in str(type(self.staff_workers)):
             QMessageBox.critical(self, "Ошибка sql", self.staff_workers.msg, QMessageBox.Ok)
             return False
@@ -192,6 +205,28 @@ class Staff(QMainWindow, staff_list_class):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
+
+    def ui_filter(self):
+        if self.filter is None:
+            self.filter = StaffFilter(self)
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(Qt.ApplicationModal)
+        self.filter.show()
+
+    def fast_filter(self):
+        # Блок условий артикула
+        if self.le_fast_filter.text() != '':
+            q_filter = "(staff_worker_info.Last_Name LIKE '%s')" % ("%" + self.le_fast_filter.text() + "%", )
+            self.query_table_select = self.query_table_all + " WHERE " + q_filter
+        else:
+            self.query_table_select = self.query_table_all
+
+        self.set_info()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+
+        self.set_info()
 
 
 class OneStaff(QMainWindow, one_staff_class):
@@ -1804,6 +1839,103 @@ class OneStaff(QMainWindow, one_staff_class):
         else:
 
             e.accept()
+
+
+class StaffFilter(QDialog, staff_filter):
+    def __init__(self, main):
+        super(StaffFilter, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+        # заполняем страны
+        query = "SELECT Country_name, Id FROM staff_country"
+        self.country = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(self.country)):
+            raise RuntimeError("Не смог получить страны")
+        self.cb_info_country.addItem("", "")
+        for country in self.country:
+            self.cb_info_country.addItem(country[0], country[1])
+
+    def ui_enabled_date(self, en):
+        self.de_info_birth.setEnabled(en)
+
+    def ui_acc(self):
+        where = ""
+
+        # Блок условий имя
+        if self.le_info_first_name.text() != '':
+            where = self.add_filter(where, "(staff_worker_info.First_Name LIKE '%s')" % ("%" + self.le_info_first_name.text() + "%", ))
+
+        # Блок условий фамилия
+        if self.le_info_last_name.text() != '':
+            where = self.add_filter(where, "(staff_worker_info.Last_Name LIKE '%s')" % ("%" + self.le_info_last_name.text() + "%", ))
+
+        # Блок условий отчество
+        if self.le_info_middle_name.text() != '':
+            where = self.add_filter(where, "(staff_worker_info.Middle_Name LIKE '%s')" % ("%" + self.le_info_middle_name.text() + "%", ))
+
+        # Блок условий табельный номер
+        if self.le_info_id.text() != '':
+            where = self.add_filter(where, "(staff_worker_info.Id = %s)" % self.le_info_id.text())
+
+        # Блок условий страна
+        if self.cb_info_country.currentData() != '':
+            where = self.add_filter(where, "(staff_worker_info.Country_Id = %s)" % self.cb_info_country.currentData())
+
+        # Блок  условий мужчина или женщина
+        where_item = ""
+        if self.cb_sex_m.isChecked():
+            where_item = self.add_filter(where_item, "staff_worker_info.Sex = 'M'", False)
+
+        if self.cb_sex_f.isChecked():
+            where_item = self.add_filter(where_item, "staff_worker_info.Sex = 'F'", False)
+
+        if where_item:
+            where_item = "(" + where_item + ")"
+            where = self.add_filter(where, where_item)
+
+        # Блок  условий даты рождения
+        if self.cb_date.isChecked():
+            where = self.add_filter(where_item, "staff_worker_info.Date_Birth = '%s'" % self.de_info_birth.date().toString(Qt.ISODate))
+
+        # Блок  условий даты приема
+        if self.gp_date_recruitment.isChecked():
+            sql_date = "(staff_worker_info.Date_Recruitment >= '%s' AND staff_worker_info.Date_Recruitment <= '%s')" % \
+                       (self.de_date_recruitment_from.date().toString(Qt.ISODate), self.de_date_recruitment_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        # Блок  условий даты увольнения
+        if self.gp_date_leave.isChecked():
+            sql_date = "(staff_worker_info.`Leave` = 1 AND staff_worker_info.Date_Leave >= '%s' AND staff_worker_info.Date_Leave <= '%s')" % \
+                       (self.de_date_leave_from.date().toString(Qt.ISODate), self.de_date_leave_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        if where:
+            self.sql_query_all = self.sql_query_all + " WHERE " + where
+
+        self.main.of_set_filter(self.sql_query_all)
+
+        self.close()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
+
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where
+
+    def of_set_sql_query(self, sql):
+        self.sql_query_all = sql
 
 
 class Country(list.ListItems):

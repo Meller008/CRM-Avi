@@ -110,6 +110,7 @@
    <addaction name="pb_add"/>
    <addaction name="pb_change"/>
    <addaction name="pb_dell"/>
+   <addaction name="pb_filter"/>
   </widget>
   <action name="pb_add">
    <property name="text">
@@ -124,6 +125,11 @@
   <action name="pb_dell">
    <property name="text">
     <string>Удалить</string>
+   </property>
+  </action>
+  <action name="pb_filter">
+   <property name="text">
+    <string>Фильтр</string>
    </property>
   </action>
  </widget>
@@ -209,6 +215,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_filter</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_filter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add()</slot>
@@ -216,5 +238,6 @@
   <slot>sorting()</slot>
   <slot>change()</slot>
   <slot>delete()</slot>
+  <slot>ui_filter()</slot>
  </slots>
 </ui>

@@ -17,12 +17,7 @@ supply_material_filter = loadUiType(getcwd() + '/ui/supply_filter.ui')[0]
 
 class MaterialSupplyList(table.TableList):
     def set_settings(self):
-        line = QLineEdit()
-        line.setMaximumWidth(150)
-        dummy = QWidget()
-        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
-        self.toolBar.addWidget(dummy)
-        self.toolBar.addWidget(line)
+
 
         self.filter = None
 

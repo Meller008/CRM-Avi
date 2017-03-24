@@ -2,7 +2,7 @@ from os import getcwd, path, mkdir, listdir
 from form.templates import tree
 from form import operation, supply_material, supply_accessories, print_label
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem
+from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql
@@ -18,6 +18,8 @@ class ArticleList(tree.TreeList):
     def set_settings(self):
 
         self.filter = None
+
+        self.resize(850, 400)
 
         self.setWindowTitle("Список артикулов")  # Имя окна
         self.toolBar.setStyleSheet("background-color: rgb(167, 183, 255);")  # Цвет бара
@@ -54,6 +56,16 @@ class ArticleList(tree.TreeList):
 
         self.pb_table_double.deleteLater()
         self.pb_other.deleteLater()
+
+        # Быстрый фильтр
+        self.le_fast_filter = QLineEdit()
+        self.le_fast_filter.setPlaceholderText("Номер кроя")
+        self.le_fast_filter.setMaximumWidth(150)
+        self.le_fast_filter.editingFinished.connect(self.fast_filter)
+        dummy = QWidget()
+        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        self.toolBar.addWidget(dummy)
+        self.toolBar.addWidget(self.le_fast_filter)
 
     def ui_add_table_item(self):  # Добавить предмет
         try:
@@ -112,6 +124,16 @@ class ArticleList(tree.TreeList):
         self.filter.of_set_sql_query(self.query_table_all)
         self.filter.setWindowModality(QtCore.Qt.ApplicationModal)
         self.filter.show()
+
+    def fast_filter(self):
+        # Блок условий артикула
+        if self.le_fast_filter.text() != '':
+            q_filter = " WHERE (product_article.Article LIKE '%s')" % ("%" + self.le_fast_filter.text() + "%", )
+            self.query_table_select = self.query_table_all.replace("GROUP BY", q_filter + " GROUP BY")
+        else:
+            self.query_table_select = self.query_table_all
+
+        self.ui_update_table()
 
     def of_set_filter(self, sql):
         self.query_table_select = sql
