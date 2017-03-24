@@ -17,8 +17,6 @@ class LoginWindow(QDialog, login_class):
         self.setModal(True)
         self.show()
 
-        self.check_login()
-
     def check_login(self):
 
             query = """SELECT staff_worker_login.Worker_Info_Id

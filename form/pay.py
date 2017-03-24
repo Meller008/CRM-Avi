@@ -141,6 +141,18 @@ class PayBrows(QDialog, brows_pay):
 
         self.start_settings()
         self.set_size_table()
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def start_settings(self):
         if self.id is None:

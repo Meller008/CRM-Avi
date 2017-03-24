@@ -9,9 +9,9 @@ class ComparingName(list.ListItems):
 
         self.sql_list = "SELECT comparing_name.Id, comparing_name.Name FROM comparing_name ORDER BY comparing_name.Name"
         self.sql_add = "INSERT INTO comparing_name (Name, Information) VALUES (%s, %s)"
-        self.sql_change_select = "SELECT comparing_name.Name, comparing_name.Information FROM comparing_name WHERE  Name = %s"
-        self.sql_update_select = 'UPDATE comparing_name SET comparing_name.Name = %s, comparing_name.Information = %s WHERE comparing_name.Name = %s'
-        self.sql_dell = "DELETE FROM comparing_name WHERE comparing_name.Name = %s"
+        self.sql_change_select = "SELECT comparing_name.Name, comparing_name.Information FROM comparing_name WHERE Id = %s"
+        self.sql_update_select = 'UPDATE comparing_name SET comparing_name.Name = %s, comparing_name.Information = %s WHERE comparing_name.Id = %s'
+        self.sql_dell = "DELETE FROM comparing_name WHERE comparing_name.Id = %s"
 
         self.set_new_win = {"WinTitle": "Расход",
                             "WinColor": "(170, 255, 127)",

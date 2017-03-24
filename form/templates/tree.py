@@ -3,6 +3,8 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QFileDialog
 from PyQt5.QtGui import QIcon
 from function import my_sql, to_excel
+from function import my_sql
+from classes.my_class import User
 
 tree_class = loadUiType(getcwd() + '/ui/templates ui/tree.ui')[0]
 change_tree_item_class = loadUiType(getcwd() + '/ui/templates ui/add_tree_item.ui')[0]
@@ -16,10 +18,22 @@ class TreeList(QMainWindow, tree_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main_class
         self.dc_select = dc_select
+        self.access()
         self.set_settings()
         self.set_table_header()
         self.set_table_info()
         self.set_tree_info()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def set_settings(self):
         self.setWindowTitle("Список")  # Имя окна

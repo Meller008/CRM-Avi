@@ -9,6 +9,7 @@ from function import my_sql, to_excel
 import openpyxl
 from openpyxl.drawing.image import Image
 import subprocess
+from classes.my_class import User
 
 
 staff_list_class = loadUiType(getcwd() + '/ui/staff.ui')[0]
@@ -38,13 +39,25 @@ class Staff(QMainWindow, staff_list_class):
 
         # Быстрый фильтр
         self.le_fast_filter = QLineEdit()
-        self.le_fast_filter.setPlaceholderText("Номер кроя")
+        self.le_fast_filter.setPlaceholderText("Фамилия")
         self.le_fast_filter.setMaximumWidth(150)
         self.le_fast_filter.editingFinished.connect(self.fast_filter)
         dummy = QWidget()
         dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
         self.toolBar.addWidget(dummy)
         self.toolBar.addWidget(self.le_fast_filter)
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
         if not hasattr(self, 'path_work'):
@@ -237,6 +250,18 @@ class OneStaff(QMainWindow, one_staff_class):
         self.change = change  # Запоминаем это добаление работника или изменение
         self.m = main
         self.alert = []  # Массив для запоминания изменений
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
         if not hasattr(self, 'path_work'):
@@ -627,6 +652,31 @@ class OneStaff(QMainWindow, one_staff_class):
         self.alert = []
         return True
 
+    def check_login(self):
+        query = "SELECT COUNT(*) FROM staff_worker_login WHERE Login = %s"
+        info_sql = my_sql.sql_select(query, (self.le_login_login.text(), ))
+        if "mysql.connector.errors" in str(type(info_sql)):
+            QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+            return False
+        if info_sql[0][0] > 0:
+            QMessageBox.critical(self, "Занято", "Этот логин занят", QMessageBox.Ok)
+        else:
+            QMessageBox.information(self, "Свободно", "Этот логин свободен", QMessageBox.Ok)
+
+    def free_login(self):
+        query = """SELECT (staff_worker_login.Login+1) as `login`
+                    FROM staff_worker_login
+                    WHERE ( SELECT 1 FROM staff_worker_login as `st` WHERE `st`.Login = (staff_worker_login.Login + 1) ) IS NULL
+                    ORDER BY staff_worker_login.Login LIMIT 1"""
+        info_sql = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(info_sql)):
+            QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+            return False
+
+        text = "Логин: %s свободен" % str(int(info_sql[0][0]))
+        QMessageBox.information(self, "Логин", text, QMessageBox.Ok)
+
+
     def acc(self):  # Добаление информации в базу
         if self.change:  # Если мы изменяем а не добавляем работника
             if self.input_check():  # Проверка заполнености полей
@@ -768,14 +818,17 @@ class OneStaff(QMainWindow, one_staff_class):
                         query = """DELETE FROM staff_worker_login WHERE Worker_Info_Id = %s"""
                         parametrs = (self.id_info, )
                 elif not self.cb_info_leave.isChecked():  # Если логин надо добавить
-                    if not self.cb_notification.isChecked():
-                        query = "INSERT INTO staff_worker_login (Worker_Info_Id, Login, Password) VALUES (%s, %s, %s)"
-                        parametrs = (self.id_info, self.le_login_login.text(), self.le_login_password.text())
+                    query = "INSERT INTO staff_worker_login (Worker_Info_Id, Login, Password) VALUES (%s, %s, %s)"
+                    parametrs = (self.id_info, self.le_login_login.text(), self.le_login_password.text())
                 try:
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
+                        if info_sql.errno == 1062:
+                            QMessageBox.critical(self, "Ошибка sql", "Такой логин уже есть он не сохраниться!", QMessageBox.Ok)
+                            return False
+                        else:
+                            QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                            return False
                 except:
                     pass
                 self.alert = []  # Обнуляем массив для запоминания изменений
@@ -2042,74 +2095,73 @@ class ChangeCountry(QDialog, country_class):  # Ввод и изменение �
             pass
 
 
-class StaffPosition(Country):
+class StaffPosition(list.ListItems):
     def set_settings(self):
-        self.setWindowTitle("Настройка должностей")
-        self.toolBar.setStyleSheet("background-color: rgb(129, 66, 255);")
+        self.setWindowTitle("должностей")  # Имя окна
+        self.toolBar.setStyleSheet("background-color: rgb(129, 66, 255);")  # Цвет бара
+        self.title_new_window = "Должность"  # Имя вызываемых окон
 
-    def set_sql_query(self):
-        self.sql_list = "SELECT staff_position.Name FROM staff_position"
-        self.sql_add = "INSERT INTO staff_position(Name, Number) VALUES (%s, %s)"
-        self.sql_change_select = "SELECT Name, Number FROM staff_position WHERE Name = %s"
-        self.sql_update_select = "UPDATE staff_position SET Name = %s, Number = %s WHERE Name = %s"
-        self.sql_dell = "DELETE FROM staff_position WHERE Name = %s"
+        self.sql_list = "SELECT Id, staff_position.Name FROM staff_position"
+        self.sql_add = ""
+        self.sql_change_select = ""
+        self.sql_update_select = ""
+        self.sql_dell = "DELETE FROM staff_position WHERE Id = %s"
 
-    def add_provider(self):
-        self.add_country = ChangePosition(self)
-        self.add_country.show()
+    def ui_add_item(self):
+        self.add_position = ChangePosition(self)
+        self.add_position.setModal(True)
+        self.add_position.show()
 
-    def change_provider(self):
-        select = self.lw_provider.selectedItems()
-        if select:
-            self.change_country = ChangePosition(self)
-            self.change_country.set_info(select[0].text())
-            self.change_country.show()
-
-    def double_click_provider(self, select_prov):
-        pass
-        if not self.dc_select:
-            self.change_country = ChangePosition(self)
-            self.change_country.set_info(select_prov.text())
-            self.change_country.show()
+    def ui_change_item(self, id=False):
+        if id:
+            id_select = id
         else:
-            pass
+            try:
+                id_select = self.lw_list.selectedItems()[0].data(3)
+            except:
+                QMessageBox.critical(self, "Ошибка", "Выберете элемент", QMessageBox.Ok)
+                return False
+        self.change_provider = ChangePosition(self, id_select)
+        self.change_provider.setModal(True)
+        self.change_provider.show()
 
 
 class ChangePosition(QDialog, position_class):
-    def __init__(self, *args):
+    def __init__(self, main, id=None):
         super(ChangePosition, self).__init__()
-        self.main = args[0]
+        self.main = main
+        self.id = id
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
-        self.setModal(True)
         self.change_on = False
 
-    def set_info(self, position_name_change):
+        if id:
+            self.set_info()
+
+    def set_info(self):
         self.change_on = True
-        self.country_name_change = position_name_change
-        par = (position_name_change,)
-        sql_ret = my_sql.sql_select(self.main.sql_change_select, par)
+        sql_ret = my_sql.sql_select("SELECT Name, Number FROM staff_position WHERE Id = %s", (self.id,))
         if "mysql.connector.errors" in str(type(sql_ret)):
             QMessageBox.critical(self, "Ошибка sql", sql_ret.msg, QMessageBox.Ok)
             return False
-        else:
-            self.le_name.setText(sql_ret[0][0])
-            if str(sql_ret[0][1]) != "None":
-                self.le_number.setText(sql_ret[0][1])
+
+        self.le_name.setText(sql_ret[0][0])
+        if str(sql_ret[0][1]) != "None":
+            self.le_number.setText(sql_ret[0][1])
 
     def acc(self):
         name = self.le_name.text()
         number = self.le_number.text()
         if self.change_on:
-            par = (name, number, self.country_name_change)
-            sql_ret = my_sql.sql_change(self.main.sql_update_select, par)
+            par = (name, number, self.id)
+            sql_ret = my_sql.sql_change("UPDATE staff_position SET Name = %s, Number = %s WHERE Id = %s", par)
         else:
             par = (name, number)
-            sql_ret = my_sql.sql_change(self.main.sql_add, par)
+            sql_ret = my_sql.sql_change("INSERT INTO staff_position(Name, Number) VALUES (%s, %s)", par)
         if "mysql.connector.errors" in str(type(sql_ret)):
             QMessageBox.critical(self, "Ошибка sql", sql_ret.msg, QMessageBox.Ok)
             return False
-        self.main.list_provider()
+        self.main.sql_set_list()
         self.close()
         self.destroy()
 

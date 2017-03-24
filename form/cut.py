@@ -10,6 +10,7 @@ from form.pack import PackBrows
 import re
 from function import my_sql
 from classes import cut
+from classes.my_class import User
 
 cut_list_class = loadUiType(getcwd() + '/ui/cut_list.ui')[0]
 cut_brows_class = loadUiType(getcwd() + '/ui/cut_brows.ui')[0]
@@ -171,6 +172,18 @@ class CutBrows(QDialog, cut_brows_class):
 
         self.set_start_info()
         self.set_size_table()
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def set_start_info(self):
         if self.cut.number() is None:

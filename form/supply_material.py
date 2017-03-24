@@ -982,7 +982,7 @@ class MaterialNameAndWarehouse(table.TableList):
 
 class MaterialName(list.ListItems):
     def set_settings(self):
-        self.setWindowTitle("Ткани")  # Имя окна
+        self.setWindowTitle("Ткань")  # Имя окна
         self.toolBar.setStyleSheet("background-color: rgb(0, 170, 255);")  # Цвет бара
         self.title_new_window = "Ткань"  # Имя вызываемых окон
 

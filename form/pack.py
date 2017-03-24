@@ -10,6 +10,7 @@ from decimal import *
 from classes import cut, print_qt
 from form import clients, article, print_label
 from function import barcode, files, my_sql
+from classes.my_class import User
 
 pack_class = loadUiType(getcwd() + '/ui/pack.ui')[0]
 pack_operation_class = loadUiType(getcwd() + '/ui/pack_operation.ui')[0]
@@ -32,6 +33,18 @@ class PackBrows(QDialog, pack_class):
 
         self.set_start_info()
         self.set_size_table()
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def set_start_info(self):
 

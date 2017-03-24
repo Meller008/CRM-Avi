@@ -74,6 +74,7 @@ class ListItems(QMainWindow, list_class):
             QMessageBox.critical(self, "Ошибка sql получение предмета", sql_result.msg, QMessageBox.Ok)
             return False
         change_item = item_2.Item2()
+        change_item.set_settings(self.set_new_win)
         change_item.le_name.setText(sql_result[0][0])
         change_item.pe_note.appendPlainText(sql_result[0][1])
         change_item.setModal(True)
@@ -87,15 +88,17 @@ class ListItems(QMainWindow, list_class):
         self.sql_set_list()
 
     def ui_dell_item(self):
-        try:
-            id_select = self.lw_list.selectedItems()[0].data(3)
-            sql_result = my_sql.sql_change(self.sql_dell, (id_select, ))
-            if "mysql.connector.errors" in str(type(sql_result)):
-                QMessageBox.critical(self, "Ошибка sql удаление предмета", sql_result.msg, QMessageBox.Ok)
-                return False
-            self.sql_set_list()
-        except:
-            QMessageBox.critical(self, "Ошибка", "Выберете элемент", QMessageBox.Ok)
+        result = QMessageBox.question(self, "Удаление", "Точно удалить элемент?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            try:
+                id_select = self.lw_list.selectedItems()[0].data(3)
+                sql_result = my_sql.sql_change(self.sql_dell, (id_select, ))
+                if "mysql.connector.errors" in str(type(sql_result)):
+                    QMessageBox.critical(self, "Ошибка sql удаление предмета", sql_result.msg, QMessageBox.Ok)
+                    return False
+                self.sql_set_list()
+            except:
+                QMessageBox.critical(self, "Ошибка", "Выберете элемент", QMessageBox.Ok)
 
     def ui_double_click_item(self, select_prov):
         if not self.dc_select:

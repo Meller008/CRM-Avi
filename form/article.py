@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTa
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql
+from classes.my_class import User
 
 article_class = loadUiType(getcwd() + '/ui/article.ui')[0]
 article_change_operation_class = loadUiType(getcwd() + '/ui/article_change_operation.ui')[0]
@@ -15,6 +16,7 @@ article_filter = loadUiType(getcwd() + '/ui/article_filter.ui')[0]
 
 
 class ArticleList(tree.TreeList):
+
     def set_settings(self):
 
         self.filter = None
@@ -157,8 +159,19 @@ class Article(QMainWindow, article_class):
         self.pb_down.setIcon(QIcon(getcwd() + "/images/down.ico"))
         self.set_start_settings()
         self.show_complete = True  # Переменная показывает что страница загружена
+        self.access()
 
-    # noinspection PyUnresolvedReferences
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
+
     def set_start_settings(self):
         # Ширина материалов
         self.tw_materials.horizontalHeader().resizeSection(0, 240)
@@ -1289,6 +1302,18 @@ class ArticleFilter(QDialog, article_filter):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def ui_acc(self):
         where = ""
@@ -1339,6 +1364,19 @@ class ChangeOperation(QDialog, article_change_operation_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
+
     def ui_view_list_operation(self):
         self.operation_name = operation.OperationList(self, True)
         self.operation_name.setWindowModality(QtCore.Qt.ApplicationModal)
@@ -1367,6 +1405,19 @@ class ChangeMaterial(QDialog, article_change_material_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.variant = variant
+
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def ui_view_list_material(self):
         if self.variant == "material":
@@ -1405,6 +1456,19 @@ class CopyParametr(QDialog, article_copy_parametr):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main
         self.set_size_parametr()
+
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                a(item["value"])
+            else:
+                a()
 
     def set_size_parametr(self):
         self.cb_size.clear()

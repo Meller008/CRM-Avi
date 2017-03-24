@@ -41,7 +41,7 @@ class ProviderAccessories(list.ListItems):
         self.sql_dell = "DELETE FROM accessories_provider WHERE Id = %s"
 
         self.set_new_win = {"WinTitle": "Поставщик",
-                            "WinColor": "(255, 170, 0)",
+                            "WinColor": "(255, 255, 127)",
                             "lb_name": "Название",
                             "lb_note": "Информация"}
 
