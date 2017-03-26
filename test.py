@@ -1,15 +1,9 @@
-f = open("C:\\Users\\Meller\\Desktop\\petition_out.xml", "r", -1, "utf-8")
-xml = f.read()
-f.close()
+import subprocess
+from datetime import datetime
 
-xml = xml.replace("?ФИО", "Рублев Александр Александрович")
-xml = xml.replace("?СЕРИЯ", "4513")
-xml = xml.replace("?НОМЕР", "206684")
-xml = xml.replace("?ВЫДАН", "Отдел УФМС России по гор Москве в ЗАО")
-xml = xml.replace("?ДАТАВЫД", "21.10.2013")
-xml = xml.replace("?ДАТАЗАЯВ", "16.03.2017")
-xml = xml.replace("?ДАТАУВОЛЬН", "18.03.2017")
+date = datetime.today()
+date_str = date.strftime("%d-%m-%y_%H-%M")
 
-f = open('%s/%s' % ("C:\\Users\\Meller\\Desktop", "123.doc"), "w", -1, "utf-8")
-f.write(xml)
-f.close()
+subprocess.call('C:\\Program Files\\MySQL\\MySQL Server 5.7\\bin\\mysqldump.exe -uroot -p088011 --single-transaction avi_crm -r C:\\Users\\Alexandr\\Desktop\\bacup_sql\\dump_%s.sql'
+                % date_str)
+subprocess.call('rar a -ep1 C:\\Users\\Alexandr\\Desktop\\rarDump_%s.rar C:\\Users\\Alexandr\\Desktop\\bacup_sql\\dump_%s.sql' % (date_str, date_str))
