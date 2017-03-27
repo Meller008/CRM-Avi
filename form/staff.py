@@ -1601,10 +1601,7 @@ class OneStaff(QMainWindow, one_staff_class):
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
         self.statusBar().showMessage("Создаю документ")
-        if patent == 1:
-            number_xml = "0" + str(doc_number) + "/" + doc_date.strftime("%y")
-        else:
-            number_xml = str(doc_number) + "/" + doc_date.strftime("%y")
+        number_xml = str(doc_number) + "/" + doc_date.strftime("%y")
 
         xml = xml.replace("НОМЕР", number_xml)
         xml = xml.replace("ДАТА", info.de_in.date().toString("dd.MM.yyyy"))
