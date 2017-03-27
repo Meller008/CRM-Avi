@@ -9,6 +9,11 @@ def ex(t, v, tb):
         file.write("\n---===Error===---\n")
         file.write("Time = %s" % datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
         traceback.print_exception(t, v, tb, file=file)
+        input("ПАУЗА5")
+        input("ПАУЗА4")
+        input("ПАУЗА3")
+        input("ПАУЗА2")
+        input("ПАУЗА1")
 
 sys.excepthook = ex
 
