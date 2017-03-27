@@ -465,6 +465,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_can()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>571</x>
+     <y>378</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>569</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_provider()</slot>
@@ -475,5 +491,6 @@
   <slot>ui_del_position()</slot>
   <slot>ui_acc()</slot>
   <slot>ui_change_info()</slot>
+  <slot>ui_can()</slot>
  </slots>
 </ui>
