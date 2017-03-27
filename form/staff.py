@@ -1,4 +1,4 @@
-from os import getcwd, path, mkdir, listdir, rmdir
+from os import getcwd, path, mkdir, listdir, rmdir, rename
 from shutil import copy
 from form.templates import list
 from PyQt5.uic import loadUiType
@@ -551,6 +551,11 @@ class OneStaff(QMainWindow, one_staff_class):
         self.le_info_note.appendPlainText(sql_reply[0][15])
         leave = sql_reply[0][7]
 
+        #Запомним имя фамилию дату для проверки изменения дирректории
+        self.sql_f_name = sql_reply[0][1]
+        self.sql_l_name = sql_reply[0][2]
+        self.sql_r_date = sql_reply[0][6]
+
         # Заполняем паспорт
         query = "SELECT Series, Number, Issued, Data_Issued, Date_Ending FROM staff_worker_passport WHERE Worker_Info_Id = %s"
         sql_reply = my_sql.sql_select(query, (id_worker,))
@@ -680,6 +685,24 @@ class OneStaff(QMainWindow, one_staff_class):
         if self.change:  # Если мы изменяем а не добавляем работника
             if self.input_check():  # Проверка заполнености полей
                 if "info" in self.alert:  # Добаление основной информации
+
+                    # Если изменилось имя или фамилия или дата приема то переименовываем папку
+                    if self.le_info_last_name.text() != self.sql_l_name or self.le_info_first_name.text() != self.sql_f_name\
+                            or self.de_info_recruitment.date().toPyDate() != self.sql_r_date:
+                        try:
+                            query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % 'Путь корень рабочие'
+                            info_sql = my_sql.sql_select(query)
+                            if "mysql.connector.errors" in str(type(info_sql)):
+                                QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                                return False
+                            self.path_wor = info_sql[0][0]
+                            old_dir_name = self.path_wor + "/" + self.sql_l_name + " " + self.sql_f_name + " " + self.sql_r_date.strftime("%d.%m.%Y")
+                            new_dir_name = self.path_wor + "/" + self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + \
+                                           self.de_info_recruitment.date().toString("dd.MM.yyyy")
+                            rename(old_dir_name, new_dir_name)
+                        except:
+                            QMessageBox.critical(self, "Ошибка папок", "Я не смог изменить папку. Придется сделать вам самим! Не забудьте!", QMessageBox.Ok)
+
                     if self.rb_sex_m.isChecked():  # Узнаем пол работника
                         self.sex = "M"
                     elif self.rb_sex_f.isChecked():
