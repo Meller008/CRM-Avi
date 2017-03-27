@@ -24,7 +24,8 @@ class MainWindow(QMainWindow, main_class):
         self.beika_no_finished()
         self.show()
         self.setDisabled(True)
-        self.login = login_window.LoginWindow(self)
+        # self.login = login_window.LoginWindow(self)
+        self.admin_login()
 
     def access(self):
         for item in User().access_list(self.__class__.__name__):
@@ -311,6 +312,12 @@ class MainWindow(QMainWindow, main_class):
         self.sub_report_need_article.show()
 
     def login_access(self):
+        self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())
+        self.setEnabled(True)
+        self.setFocus()
+        self.access()
+
+    def admin_login(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())
         self.setEnabled(True)
         self.setFocus()

@@ -18,18 +18,17 @@ class LoginWindow(QDialog, login_class):
         self.show()
 
     def check_login(self):
+        query = """SELECT staff_worker_login.Worker_Info_Id
+                  FROM staff_worker_login
+                  WHERE staff_worker_login.Login = %s AND BINARY staff_worker_login.Password = %s"""
+        login = self.le_login.text()
+        password = self.le_password.text()
+        sql_result = my_sql.sql_select(query, (login, password))
 
-            query = """SELECT staff_worker_login.Worker_Info_Id
-                      FROM staff_worker_login
-                      WHERE staff_worker_login.Login = %s AND BINARY staff_worker_login.Password = %s"""
-            login = self.le_login.text()
-            password = self.le_password.text()
-            sql_result = my_sql.sql_select(query, (login, password))
-
-            if not sql_result:
-                QMessageBox.information(self, "Что то не так", "Не верный логин или пароль", QMessageBox.Ok)
-            else:
-                User().set_id(sql_result[0][0])
-                self.main.login_access()
-                self.close()
-                self.destroy()
+        if not sql_result:
+            QMessageBox.information(self, "Что то не так", "Не верный логин или пароль", QMessageBox.Ok)
+        else:
+            User().set_id(sql_result[0][0])
+            self.main.login_access()
+            self.close()
+            self.destroy()
