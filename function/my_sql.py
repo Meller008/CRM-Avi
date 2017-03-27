@@ -35,6 +35,9 @@ def sql_select(query, parametr=tuple()):
 
     except mysql.connector.Error as error:
         print(error)
+        connect.rollback()
+        cursor.close()
+        connect.close()
         return error
 
 
@@ -52,6 +55,9 @@ def sql_change(query, parametr=tuple()):
 
     except mysql.connector.Error as error:
         print(error)
+        connect.rollback()
+        cursor.close()
+        connect.close()
         return error
 
 
@@ -69,6 +75,9 @@ def sql_many(query, parametr=tuple()):
 
     except mysql.connector.Error as error:
         print(error)
+        connect.rollback()
+        cursor.close()
+        connect.close()
         return error
 
 
@@ -83,6 +92,9 @@ def sql_start_transaction():
     except mysql.connector.Error as error:
         print("SQL - Ошибка открытия транзакции")
         print(error)
+        connect.rollback()
+        cursor.close()
+        connect.close()
         return error
 
 
