@@ -676,7 +676,6 @@ class OneStaff(QMainWindow, one_staff_class):
         text = "Логин: %s свободен" % str(int(info_sql[0][0]))
         QMessageBox.information(self, "Логин", text, QMessageBox.Ok)
 
-
     def acc(self):  # Добаление информации в базу
         if self.change:  # Если мы изменяем а не добавляем работника
             if self.input_check():  # Проверка заполнености полей
@@ -698,7 +697,7 @@ class OneStaff(QMainWindow, one_staff_class):
                                  self.id_info)
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        QMessageBox.critical(self, "Ошибка sql i", info_sql.msg, QMessageBox.Ok)
                         return False
 
                 if "passport" in self.alert and "passport" in self.alert2:
@@ -715,7 +714,7 @@ class OneStaff(QMainWindow, one_staff_class):
                                      self.de_passport_issued.date().toString(Qt.ISODate), self.de_passport_ending.date().toString(Qt.ISODate))
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        QMessageBox.critical(self, "Ошибка sql p", info_sql.msg, QMessageBox.Ok)
                         return False
 
                 if "migration" in self.alert and "migration" in self.alert2:
@@ -736,7 +735,7 @@ class OneStaff(QMainWindow, one_staff_class):
                                      self.de_migration_validity_to.date().toString(Qt.ISODate))
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        QMessageBox.critical(self, "Ошибка sql m", info_sql.msg, QMessageBox.Ok)
                         return False
 
                 if "registration" in self.alert and "registration" in self.alert2:
@@ -754,7 +753,7 @@ class OneStaff(QMainWindow, one_staff_class):
                                      self.de_registration_validity_from.date().toString(Qt.ISODate), self.de_registration_validity_to.date().toString(Qt.ISODate))
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        QMessageBox.critical(self, "Ошибка sql r", info_sql.msg, QMessageBox.Ok)
                         return False
 
                 if "patent" in self.alert and "patent" in self.alert2:
@@ -774,7 +773,7 @@ class OneStaff(QMainWindow, one_staff_class):
                                      self.de_patent_ending.date().toString(Qt.ISODate))
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        QMessageBox.critical(self, "Ошибка sql pt", info_sql.msg, QMessageBox.Ok)
                         return False
 
                 if "insurance" in self.alert and "insurance" in self.alert2:
@@ -790,7 +789,7 @@ class OneStaff(QMainWindow, one_staff_class):
                         parametrs = (self.id_info, self.le_insurance_number.text(), self.le_insurance_company.text(), self.de_insurance_date.date().toString(Qt.ISODate))
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        QMessageBox.critical(self, "Ошибка sql is", info_sql.msg, QMessageBox.Ok)
                         return False
 
                 if "notification" in self.alert:
@@ -807,7 +806,7 @@ class OneStaff(QMainWindow, one_staff_class):
                             parametrs = (self.id_info, self.le_notofication.toPlainText(), self.de_notification.date().toString(Qt.ISODate))
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        QMessageBox.critical(self, "Ошибка sql nt", info_sql.msg, QMessageBox.Ok)
                         return False
 
                 if "login" in self.update_sql:  # Если логин надо обновить
@@ -827,7 +826,7 @@ class OneStaff(QMainWindow, one_staff_class):
                             QMessageBox.critical(self, "Ошибка sql", "Такой логин уже есть он не сохраниться!", QMessageBox.Ok)
                             return False
                         else:
-                            QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                            QMessageBox.critical(self, "Ошибка sql lg", info_sql.msg, QMessageBox.Ok)
                             return False
                 except:
                     pass
@@ -907,7 +906,7 @@ class OneStaff(QMainWindow, one_staff_class):
 
                 if "insurance" in self.alert and "insurance" in self.alert2:
                     query = "INSERT INTO staff_worker_insurance (Worker_Info_Id, Number, Company, Date) VALUES (%s, %s, %s, %s)"
-                    parametrs = (self.le_insurance_number.text(), self.le_insurance_company.text(), self.de_insurance_date.date().toString(Qt.ISODate))
+                    parametrs = (self.id_info, self.le_insurance_number.text(), self.le_insurance_company.text(), self.de_insurance_date.date().toString(Qt.ISODate))
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
                         QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
