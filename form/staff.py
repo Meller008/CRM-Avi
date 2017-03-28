@@ -833,13 +833,13 @@ class OneStaff(QMainWindow, one_staff_class):
                         return False
 
                 if "login" in self.update_sql:  # Если логин надо обновить
-                    if not self.cb_info_leave.isChecked() and "login" in self.alert and "login" not in self.delete and self.le_login_login.text:
+                    if not self.cb_info_leave.isChecked() and "login" in self.alert and "login" not in self.delete and self.le_login_login.text():
                         query = """UPDATE staff_worker_login SET Login = %s, Password = %s WHERE Worker_Info_Id = %s"""
                         parametrs = (self.le_login_login.text(), self.le_login_password.text(), self.id_info)
                     else:
                         query = """DELETE FROM staff_worker_login WHERE Worker_Info_Id = %s"""
                         parametrs = (self.id_info, )
-                elif not self.cb_info_leave.isChecked() and self.le_login_login.text:  # Если логин надо добавить
+                elif not self.cb_info_leave.isChecked() and self.le_login_login.text():  # Если логин надо добавить
                     query = "INSERT INTO staff_worker_login (Worker_Info_Id, Login, Password) VALUES (%s, %s, %s)"
                     parametrs = (self.id_info, self.le_login_login.text(), self.le_login_password.text())
                 try:
