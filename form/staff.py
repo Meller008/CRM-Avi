@@ -636,7 +636,7 @@ class OneStaff(QMainWindow, one_staff_class):
             self.cb_notification.setChecked(True)
             self.le_notofication.setEnabled(True)
             self.de_notification.setDate(sql_reply[0][0])
-            self.le_insurance_number.setText(sql_reply[0][1])
+            self.le_notofication.setPlainText(sql_reply[0][1])
 
         # Заполняем список файлов
         dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
@@ -819,7 +819,7 @@ class OneStaff(QMainWindow, one_staff_class):
                     if "notification" in self.update_sql:  # Если напоминания надо обновить
                         if self.cb_notification.isChecked():
                             query = """UPDATE staff_worker_notification SET Date = %s, Note = %s WHERE Worker_Info_Id = %s"""
-                            parametrs = (self.de_notification.date().toString(Qt.ISODate, self.le_notofication.toPlainText()), self.id_info)
+                            parametrs = (self.de_notification.date().toString(Qt.ISODate), self.le_notofication.toPlainText(), self.id_info)
                         else:
                             query = """DELETE FROM staff_worker_notification WHERE Worker_Info_Id = %s"""
                             parametrs = (self.id_info, )
