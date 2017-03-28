@@ -80,7 +80,7 @@ class OperationList(tree.TreeList):
         result = QMessageBox.question(self, "Дублирование", "Точно хотите дублировать операцию?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
             query = "INSERT INTO operations (Tree_Id, Name, Price, Sewing_Machine_Id, Note) " \
-                    "(SELECT Tree_Id, Name, Price, Sewing_Machine_Id, Note FROM operations WHERE Id = %s)"
+                    "(SELECT Tree_Id, CONCAT(Name, '-К'), Price, Sewing_Machine_Id, Note FROM operations WHERE Id = %s)"
             sql_info = my_sql.sql_change(query, (item_id, ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql дублирование строки", sql_info.msg, QMessageBox.Ok)

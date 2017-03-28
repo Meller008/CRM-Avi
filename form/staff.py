@@ -1628,6 +1628,7 @@ class OneStaff(QMainWindow, one_staff_class):
 
         xml = xml.replace("НОМЕР", number_xml)
         xml = xml.replace("ДАТА", info.de_in.date().toString("dd.MM.yyyy"))
+        xml = xml.replace("ПРОФЕССИЯ", self.cb_info_position.currentText())
         xml = xml.replace("ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
         if self.rb_sex_m.isChecked():  # Узнаем пол работника
             xml = xml.replace("ЫЙ/АЯ", "ый")
