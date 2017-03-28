@@ -152,7 +152,7 @@ class TreeList(QMainWindow, tree_class):
         if info.exec() == 0:
             return False
         if info.rb_new.isChecked():
-            sql_tree =  my_sql.sql_change(self.query_tree_add, (0, info.le_name.text()))
+            sql_tree =  my_sql.sql_change(self.query_tree_add, (0, info.le_name.text(), info.le_position.text()))
             if "mysql.connector.errors" in str(type(sql_tree)):
                 QMessageBox.critical(self, "Ошибка sql добавления корневого итема в дерево", sql_tree.msg, QMessageBox.Ok)
                 return False
@@ -160,7 +160,7 @@ class TreeList(QMainWindow, tree_class):
         elif info.rb_old.isChecked():
             try:
                 parent_id = self.tree_widget.selectedItems()[0].data(0, 5)
-                sql_tree = my_sql.sql_change(self.query_tree_add, (parent_id, info.le_name.text()))
+                sql_tree = my_sql.sql_change(self.query_tree_add, (parent_id, info.le_name.text(), info.le_position.text()))
                 if "mysql.connector.errors" in str(type(sql_tree)):
                     QMessageBox.critical(self, "Ошибка sql добавления итема в дерево", sql_tree.msg, QMessageBox.Ok)
                     return False
@@ -180,7 +180,7 @@ class TreeList(QMainWindow, tree_class):
             info.le_name.setText(parent_name)
             if info.exec() == 0:
                 return False
-            sql_tree = my_sql.sql_change(self.query_tree_change, (info.le_name.text(), parent_id))
+            sql_tree = my_sql.sql_change(self.query_tree_change, (info.le_name.text(), info.le_position.text(), parent_id))
             if "mysql.connector.errors" in str(type(sql_tree)):
                 QMessageBox.critical(self, "Ошибка sql изменения итема в дереве", sql_tree.msg, QMessageBox.Ok)
                 return False
