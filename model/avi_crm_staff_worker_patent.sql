@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,9 +27,9 @@ DROP TABLE IF EXISTS `staff_worker_patent`;
 CREATE TABLE `staff_worker_patent` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Worker_Info_Id` int(11) NOT NULL,
-  `Serial` varchar(4) NOT NULL,
-  `Number` varchar(9) NOT NULL,
-  `Additional_Number` varchar(10) NOT NULL,
+  `Serial` varchar(6) NOT NULL,
+  `Number` varchar(12) NOT NULL,
+  `Additional_Number` varchar(12) NOT NULL,
   `Issued` varchar(38) NOT NULL,
   `Data_Issued` date NOT NULL,
   `Date_Ending` date NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `staff_worker_patent` (
 
 LOCK TABLES `staff_worker_patent` WRITE;
 /*!40000 ALTER TABLE `staff_worker_patent` DISABLE KEYS */;
-INSERT INTO `staff_worker_patent` VALUES (1,17,'','','','','2016-05-26','2016-05-26'),(3,27,'dfd','fdf','dfdfdf','dfdf','2016-05-26','2016-05-26'),(4,11,'88','99','00','00','2016-05-27','2016-05-27'),(5,32,'77','15464271','РК 1590585','ОВТМ УФМС РОССИИ ПО Г МОСКВЕ','2015-12-24','2016-06-18');
+INSERT INTO `staff_worker_patent` VALUES (1,2,'77','1603400508','РМ 1049039','ОВТМ УФМС России по г. Москве','2016-10-26','2017-10-26'),(4,4,'77','170066693','РМ 0359933','ОВТМ УВМ ГУ МВД России по г.Москве','2017-03-20','2018-03-20'),(5,6,'77','1601730204','РК 0690432','ОВТМ УФМС России по г. Москве ','2016-06-08','2017-06-08');
 /*!40000 ALTER TABLE `staff_worker_patent` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:30
+-- Dump completed on 2017-03-29 15:21:56

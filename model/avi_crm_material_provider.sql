@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +30,7 @@ CREATE TABLE `material_provider` (
   `Information` text,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Name_UNIQUE` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `material_provider` (
 
 LOCK TABLES `material_provider` WRITE;
 /*!40000 ALTER TABLE `material_provider` DISABLE KEYS */;
-INSERT INTO `material_provider` VALUES (3,'Саша','Быстро едет'),(4,'Паша','Фил-бул 41 41\n8-916-396-16-68'),(5,'даша','1\n2\n'),(6,'ООО \"Траст\"','Дешего'),(7,'Декна (Бриз,Удар,МадиТек,Ал-Лог,Олимп,Галан,ТД Те)','Любимые\nЛучшие');
+INSERT INTO `material_provider` VALUES (1,'Мадио Декна ООО',''),(2,'Сим текс','');
 /*!40000 ALTER TABLE `material_provider` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:29
+-- Dump completed on 2017-03-29 15:21:45

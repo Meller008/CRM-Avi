@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,7 @@ CREATE TABLE `transaction_records_rest` (
   PRIMARY KEY (`Id`),
   KEY `FK_T_R_R_1_idx` (`Cut_Id`),
   CONSTRAINT `FK_T_R_R_1` FOREIGN KEY (`Cut_Id`) REFERENCES `cut` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,6 @@ CREATE TABLE `transaction_records_rest` (
 
 LOCK TABLES `transaction_records_rest` WRITE;
 /*!40000 ALTER TABLE `transaction_records_rest` DISABLE KEYS */;
-INSERT INTO `transaction_records_rest` VALUES (1,27,'2017-01-29',5.0000,'27 - Увеличение обрези в крое'),(2,27,'2017-01-30',-5.0000,'27 - Уменьшение обрези в крое'),(3,27,'2017-01-30',5.0000,'27 - Увеличение обрези в крое'),(4,27,'2017-01-30',-5.0000,'27 - Уменьшение обрези в крое'),(5,27,'2017-01-30',5.0000,'27 - Увеличение обрези в крое'),(6,27,'2017-01-30',-5.0000,'27 - Уменьшение обрези в крое'),(7,NULL,'2017-01-30',50.0000,'28 - Увеличение обрези в крое'),(8,NULL,'2017-01-30',50.0000,'29 - Увеличение обрези в крое'),(9,NULL,'2017-01-30',50.0000,'29 - Удаление кроя'),(10,27,'2017-01-31',0.5484,'27 - Увеличение обрези в крое'),(11,25,'2017-01-31',0.8545,'25 - Увеличение обрези в крое'),(12,NULL,'2017-01-31',-1.0000,'Test 1'),(13,NULL,'2017-01-31',1.0000,'T'),(14,NULL,'2017-01-31',1.0000,''),(15,NULL,'2017-01-31',1.0000,''),(16,NULL,'2017-01-31',1.0000,''),(17,NULL,'2017-01-31',-1.4029,''),(18,NULL,'2017-01-31',-1.0000,'');
 /*!40000 ALTER TABLE `transaction_records_rest` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:31
+-- Dump completed on 2017-03-29 15:22:00

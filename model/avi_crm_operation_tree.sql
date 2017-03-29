@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,9 +27,10 @@ DROP TABLE IF EXISTS `operation_tree`;
 CREATE TABLE `operation_tree` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Parent_Id` int(11) NOT NULL,
-  `Name` varchar(20) NOT NULL,
+  `Name` varchar(35) NOT NULL,
+  `Position` tinyint(2) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +39,7 @@ CREATE TABLE `operation_tree` (
 
 LOCK TABLES `operation_tree` WRITE;
 /*!40000 ALTER TABLE `operation_tree` DISABLE KEYS */;
-INSERT INTO `operation_tree` VALUES (21,0,'Без категории'),(22,0,'Упаковка'),(23,21,'7135'),(24,22,'7135'),(25,21,'7143'),(27,22,'7143'),(28,21,'7122'),(29,0,'тест'),(30,21,'7121'),(32,21,'7113');
+INSERT INTO `operation_tree` VALUES (3,0,'ОПЕРАЦИИ ОБЩИЕ',0),(4,0,'ТРУСЫ ЭКОНОМ',0),(5,4,'Женские',0),(6,4,'Девочка',0),(7,4,'Мальчик',0),(8,4,'Мужские',0),(9,0,'МАЙКИ, ФУТБ, КОМП. ЭКОНОМ',0),(10,9,'Женские',0),(11,9,'Девочка',0),(12,9,'Мальчик',0),(13,9,'Мужское',0),(14,0,'ОДЕЖДА ДЛЯ ДОМА ЭКОНОМ',0),(15,14,'Женское',0),(16,14,'Девочка',0),(17,14,'Мальчик',0),(18,14,'Мужское',0),(19,0,'ЯСЕЛЬКА ЭКОНОМ',0);
 /*!40000 ALTER TABLE `operation_tree` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:31
+-- Dump completed on 2017-03-29 15:22:01

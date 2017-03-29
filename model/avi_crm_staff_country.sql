@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -31,7 +31,7 @@ CREATE TABLE `staff_country` (
   `Act` text,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Country_name_UNIQUE` (`Country_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `staff_country` (
 
 LOCK TABLES `staff_country` WRITE;
 /*!40000 ALTER TABLE `staff_country` DISABLE KEYS */;
-INSERT INTO `staff_country` VALUES (4,'Россия',0,''),(5,'Беларуссия',1,''),(7,'Киргизия',0,'Федерального закона от 13.07.2015 № 219 ФЗ\nо ратификации договора о присоединении\nкыргызской республики к договору о\nевразийском экономическом союзе\nот 29 мая 2014 года'),(8,'Узбекистан',1,'');
+INSERT INTO `staff_country` VALUES (1,'Россия',0,''),(2,'узбекистан',1,''),(3,'республика Кыргызстан',0,'федерального закона от 13.07.2015 №219 фз о\nратификации договора о присоединении\nкыргызской республики к договору о \nевразийском экономическом союзе от 29 мая\n2014 года'),(4,'Таджикистан',1,''),(5,'Украина',1,'');
 /*!40000 ALTER TABLE `staff_country` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:29
+-- Dump completed on 2017-03-29 15:21:45

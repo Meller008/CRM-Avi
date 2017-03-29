@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,7 @@ CREATE TABLE `staff_worker_insurance` (
   PRIMARY KEY (`Id`),
   KEY `FK_S_W_IN_1_idx` (`Worker_Info_Id`),
   CONSTRAINT `FK_S_W_IN_1` FOREIGN KEY (`Worker_Info_Id`) REFERENCES `staff_worker_info` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='Страховка';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `staff_worker_insurance` (
 
 LOCK TABLES `staff_worker_insurance` WRITE;
 /*!40000 ALTER TABLE `staff_worker_insurance` DISABLE KEYS */;
-INSERT INTO `staff_worker_insurance` VALUES (1,32,'A12477-0000546705','ВТБ страхование','2016-03-19'),(2,11,'fffff','dfdf','2016-06-09');
+INSERT INTO `staff_worker_insurance` VALUES (1,2,'81-00017552/2016','АО \"СК ПАРИ\"','2016-10-12'),(3,4,'ВАВ 130000014385','ИНГОССТРАХ','2017-03-27'),(4,6,'1111','\"ИНГОССТРАХ\"','2016-05-21');
 /*!40000 ALTER TABLE `staff_worker_insurance` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:31
+-- Dump completed on 2017-03-29 15:22:00

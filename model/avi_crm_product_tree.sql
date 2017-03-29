@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,9 +27,10 @@ DROP TABLE IF EXISTS `product_tree`;
 CREATE TABLE `product_tree` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Parent_Id` int(11) NOT NULL,
-  `Name` varchar(20) NOT NULL,
+  `Name` varchar(35) NOT NULL,
+  `Position` tinyint(2) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +39,7 @@ CREATE TABLE `product_tree` (
 
 LOCK TABLES `product_tree` WRITE;
 /*!40000 ALTER TABLE `product_tree` DISABLE KEYS */;
-INSERT INTO `product_tree` VALUES (8,0,'Эконом'),(9,8,'Детский'),(10,9,'Детский'),(11,0,'Без категории'),(13,0,'тест');
+INSERT INTO `product_tree` VALUES (1,0,'ТРУСЫ ЭКОНОМ',1),(2,1,'Женские',1),(3,0,'МАЙКИ, ФУТБ, КОМП. ЭКОНОМ',3),(4,1,'Девочка',2),(6,1,'Мальчик',3),(7,1,'Мужские',4),(8,3,'Женские',0),(9,0,'ЯСЕЛЬКА ЭКОНОМ',20),(10,0,'ОДЕЖДА ДЛЯ ДОМА ЭКОНОМ',2),(11,3,'Девочка',0),(12,3,'Мальчик',0),(13,3,'Мужские',0),(14,10,'Женское',0),(15,10,'Девочка',0),(16,10,'Мальчик',0),(17,10,'Мужское',0);
 /*!40000 ALTER TABLE `product_tree` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:32
+-- Dump completed on 2017-03-29 15:22:01

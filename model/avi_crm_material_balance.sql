@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -31,7 +31,7 @@ CREATE TABLE `material_balance` (
   PRIMARY KEY (`Id`),
   KEY `ForeginKey1_idx` (`Material_SupplyPositionId`),
   CONSTRAINT `M_B_FK1` FOREIGN KEY (`Material_SupplyPositionId`) REFERENCES `material_supplyposition` (`Id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,6 @@ CREATE TABLE `material_balance` (
 
 LOCK TABLES `material_balance` WRITE;
 /*!40000 ALTER TABLE `material_balance` DISABLE KEYS */;
-INSERT INTO `material_balance` VALUES (55,55,3620.5922),(56,56,318.8335),(57,57,47.4000),(58,58,4140.9000),(59,59,109.5000),(60,60,25.4000),(61,61,144.0000),(62,62,81.8076),(63,63,191.0000);
 /*!40000 ALTER TABLE `material_balance` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:31
+-- Dump completed on 2017-03-29 15:22:00

@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -36,7 +36,7 @@ CREATE TABLE `staff_worker_migration` (
   PRIMARY KEY (`Id`),
   KEY `FK_S_W_MI_1_idx` (`Worker_Info_Id`),
   CONSTRAINT `FK_S_W_MI_1` FOREIGN KEY (`Worker_Info_Id`) REFERENCES `staff_worker_info` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `staff_worker_migration` (
 
 LOCK TABLES `staff_worker_migration` WRITE;
 /*!40000 ALTER TABLE `staff_worker_migration` DISABLE KEYS */;
-INSERT INTO `staff_worker_migration` VALUES (3,25,'dfdf','dfdfd','dfdfdf','2016-05-26','2016-05-26','2015-12-01'),(4,26,'dfdf','dfdfd','dfdfdf','2016-05-26','2016-05-26','2015-12-01'),(5,27,'dfdf','dfdfd','dfdfdf','2016-05-26','2016-05-26','2015-12-01'),(6,11,'44','55','66','2016-05-27','2016-05-27','2015-12-01'),(8,32,'4521','2549947','Московский КПП','2016-05-31','2017-05-11','2015-12-01');
+INSERT INTO `staff_worker_migration` VALUES (1,2,'4516','0526505','Внуково','2016-10-08','2017-04-26','2016-10-08'),(4,3,'4617','7153927','0','2017-03-10','2017-06-07','2017-03-10'),(5,4,'4616','3664669','Домодедово','2017-02-23','2017-05-23','2017-02-23'),(6,6,'1416','0320260','Нехотеевка','2017-01-15','2017-04-14','2017-03-28');
 /*!40000 ALTER TABLE `staff_worker_migration` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:29
+-- Dump completed on 2017-03-29 15:21:45

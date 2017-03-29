@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -34,7 +34,7 @@ CREATE TABLE `staff_worker_registraton` (
   PRIMARY KEY (`Id`),
   KEY `FK_S_W_RE_1_idx` (`Worker_Info_id`),
   CONSTRAINT `FK_S_W_RE_1` FOREIGN KEY (`Worker_Info_id`) REFERENCES `staff_worker_info` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `staff_worker_registraton` (
 
 LOCK TABLES `staff_worker_registraton` WRITE;
 /*!40000 ALTER TABLE `staff_worker_registraton` DISABLE KEYS */;
-INSERT INTO `staff_worker_registraton` VALUES (1,16,'sdsadasd','2016-05-26','2016-05-26','2016-05-26'),(2,26,'dfdfdf','2016-05-25','2016-05-26','2016-05-27'),(3,27,'dfdfdf','2016-05-26','2016-05-26','2016-05-26'),(4,11,'77','2016-05-27','2016-05-27','2016-07-07'),(5,32,'Москва Кутузовский проезд дом 16 строение 15','2015-12-04','2002-08-08','2016-05-31');
+INSERT INTO `staff_worker_registraton` VALUES (1,2,'Кутузовский проезд 16, строение 15','2017-03-23','2016-10-08','2017-04-26'),(4,3,'Кутузовский проезд 16, строение15','2017-03-13','2017-03-10','2017-06-07'),(5,4,'Кутузовский проезд 16, строение 15','2017-02-28','2017-02-23','2017-05-23'),(6,6,'Кутузовский проезд 16, строение 15','2017-01-17','2017-03-26','2017-03-29'),(7,1,'Филевский бульвар, дом 40, кв.157','1998-10-13','1998-10-13','1998-10-13');
 /*!40000 ALTER TABLE `staff_worker_registraton` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:29
+-- Dump completed on 2017-03-29 15:21:45

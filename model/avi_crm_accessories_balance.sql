@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -31,7 +31,7 @@ CREATE TABLE `accessories_balance` (
   PRIMARY KEY (`Id`),
   KEY `A_B_FK1_idx` (`Accessories_SupplyPositionId`),
   CONSTRAINT `A_B_FK1` FOREIGN KEY (`Accessories_SupplyPositionId`) REFERENCES `accessories_supplyposition` (`Id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `accessories_balance` (
 
 LOCK TABLES `accessories_balance` WRITE;
 /*!40000 ALTER TABLE `accessories_balance` DISABLE KEYS */;
-INSERT INTO `accessories_balance` VALUES (7,7,6968676.0200),(8,8,39700.9000),(9,9,95221.0000),(10,10,997048.0000),(11,11,500000.0000),(12,14,0.0000),(13,15,0.0000),(14,16,0.0000),(15,17,18274.0000),(16,18,98680.0000),(17,19,254755.5000);
+INSERT INTO `accessories_balance` VALUES (2,7,12000.0000);
 /*!40000 ALTER TABLE `accessories_balance` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:30
+-- Dump completed on 2017-03-29 15:21:59

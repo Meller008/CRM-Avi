@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -43,7 +43,7 @@ CREATE TABLE `clients` (
   `No_Nds` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Name_UNIQUE` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,7 +52,6 @@ CREATE TABLE `clients` (
 
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES (1,'ООО \"АШАН\"','141014, Московская облась, Мытищинский р-н, г.Мытищи, шоссе Осташковское, 1','141014, Московская облась, Мытищинский р-н, г.Мытищи, шоссе Осташковское, 1','7703270067','509950001','','40702810000000100268','ООО \"Эйч-Эс-Би-Си Банк\"','30101810400000000351','044525351','','','','',1),(7,'ИП Шагдарова И.В.','295022, РФ, Республика Крым,г.Симферополь,пр-т Победы, д.211Д, кв.19','670033 г.Улан-Удэ, ул.Шумяцкого , д.3А.','032500432033','','','40802810609160104387','В Бурятском ОСБ №8601 г.Улан -Удэ','30101810400000000604','048142604','','','','',0);
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -65,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:31
+-- Dump completed on 2017-03-29 15:22:01

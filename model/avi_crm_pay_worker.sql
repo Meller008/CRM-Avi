@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -42,7 +42,7 @@ CREATE TABLE `pay_worker` (
   CONSTRAINT `FK_P_W_1` FOREIGN KEY (`Worker_Id`) REFERENCES `staff_worker_info` (`Id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_P_W_2` FOREIGN KEY (`Worker_Id_Insert`) REFERENCES `staff_worker_info` (`Id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_P_W_3` FOREIGN KEY (`Reason_Id`) REFERENCES `pay_reason` (`Id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,6 @@ CREATE TABLE `pay_worker` (
 
 LOCK TABLES `pay_worker` WRITE;
 /*!40000 ALTER TABLE `pay_worker` DISABLE KEYS */;
-INSERT INTO `pay_worker` VALUES (10,11,32,1,150.0000,'2016-12-14','2017-01-12','',1,'2016-12-31'),(11,27,32,1,150.0000,'2016-12-20','2017-01-12','',1,'2016-12-31'),(12,11,32,2,-50.0000,'2016-12-23','2017-01-12','',1,'2016-12-31'),(13,34,32,2,-150.0000,'2016-12-07','2017-01-12','',1,'2016-12-31');
 /*!40000 ALTER TABLE `pay_worker` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -64,4 +63,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:31
+-- Dump completed on 2017-03-29 15:21:59

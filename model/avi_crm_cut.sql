@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `cut` (
   KEY `FK_CUT_2_idx` (`Material_Id`),
   CONSTRAINT `FK_CUT_1` FOREIGN KEY (`Worker_Id`) REFERENCES `staff_worker_info` (`Id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_CUT_2` FOREIGN KEY (`Material_Id`) REFERENCES `material_name` (`Id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,6 @@ CREATE TABLE `cut` (
 
 LOCK TABLES `cut` WRITE;
 /*!40000 ALTER TABLE `cut` DISABLE KEYS */;
-INSERT INTO `cut` VALUES (24,'2016-12-12',17,25.0000,'тест 1',14,354.0000),(25,'2016-11-16',16,15.8545,'Тест 2',15,388.0000),(26,'2016-11-08',17,15.0000,NULL,14,354.0000),(27,'2016-12-13',16,25.5484,NULL,28,415.0000);
 /*!40000 ALTER TABLE `cut` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:29
+-- Dump completed on 2017-03-29 15:21:45

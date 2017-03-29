@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,7 @@ CREATE TABLE `product_article` (
   UNIQUE KEY `Article_UNIQUE` (`Article`),
   KEY `FK_P_A_1_idx` (`Tree_Id`),
   CONSTRAINT `FK_P_A_1` FOREIGN KEY (`Tree_Id`) REFERENCES `product_tree` (`Id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `product_article` (
 
 LOCK TABLES `product_article` WRITE;
 /*!40000 ALTER TABLE `product_article` DISABLE KEYS */;
-INSERT INTO `product_article` VALUES (54,'7515f','Кофточка ясельная',10),(56,'7515','Кофточка ясельная',10),(58,'7127','Боксеры для мальчика',11),(59,'7002','Майка д/дев. на резинке',11),(60,'7142','Майка детская белая широк. брет.',11),(61,'7135','Майка д/дев.(набивная)',11),(62,'7143','Майка для мальчика (с набивкой)',11),(63,'7122','Трусы для девочки (набивка)',11),(70,'7121','Трусы для дев. пришивн.',11),(71,'7113','Трусы для мальчика плавки',11);
+INSERT INTO `product_article` VALUES (1,'1210','Трусы женские Белые',2);
 /*!40000 ALTER TABLE `product_article` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:30
+-- Dump completed on 2017-03-29 15:21:59

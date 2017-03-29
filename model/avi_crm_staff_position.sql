@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `avi_crm` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `avi_crm`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: avi_crm
+-- Host: 192.168.1.2    Database: avi_crm
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.13-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +30,7 @@ CREATE TABLE `staff_position` (
   `Number` varchar(6) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Name_UNIQUE` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `staff_position` (
 
 LOCK TABLES `staff_position` WRITE;
 /*!40000 ALTER TABLE `staff_position` DISABLE KEYS */;
-INSERT INTO `staff_position` VALUES (4,'Швея','19601'),(5,'Администратор','12563'),(8,'Закройщик',''),(10,'Курьер',''),(11,'Упаковщик',''),(12,'Сборщик','');
+INSERT INTO `staff_position` VALUES (1,'генеральный директор',''),(2,'комплектовщик','12837'),(3,'упаковщик ','39297'),(4,'швея','19601'),(5,'начальник цеха','25114'),(6,'менеджер по персоналу','24063'),(7,'менеджер','24075');
 /*!40000 ALTER TABLE `staff_position` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-07 22:27:30
+-- Dump completed on 2017-03-29 15:21:59
