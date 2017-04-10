@@ -19,7 +19,7 @@ class OperationList(tree.TreeList):
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Название", 300), ("Цена", 70), ("Машинка", 120))
 
-        self.query_tree_select = "SELECT Id, Parent_Id, Name FROM operation_tree ORDER BY Position"
+        self.query_tree_select = "SELECT Id, Parent_Id, Name FROM operation_tree ORDER BY Parent_Id, Position"
         self.query_tree_add = "INSERT INTO operation_tree (Parent_Id, Name, Position) VALUES (%s, %s, %s)"
         self.query_tree_change = "UPDATE operation_tree SET Name = %s, Position = %s WHERE Id = %s"
         self.query_tree_del = "DELETE FROM operation_tree WHERE Id = %s"

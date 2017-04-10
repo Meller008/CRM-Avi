@@ -29,7 +29,7 @@ class ArticleList(tree.TreeList):
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Артикул", 70), ("Название", 250), ("Размеры", 160))
 
-        self.query_tree_select = "SELECT Id, Parent_Id, Name FROM product_tree ORDER BY Position"
+        self.query_tree_select = "SELECT Id, Parent_Id, Name FROM product_tree ORDER BY Parent_Id, Position"
         self.query_tree_add = "INSERT INTO product_tree (Parent_Id, Name, Position) VALUES (%s, %s, %s)"
         self.query_tree_change = "UPDATE product_tree SET Name = %s, Position = %s WHERE Id = %s"
         self.query_tree_del = "DELETE FROM product_tree WHERE Id = %s"

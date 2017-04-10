@@ -98,19 +98,19 @@ class TreeList(QMainWindow, tree_class):
             return False
 
         self.tree_widget.clear()
-        i = 0
-        while self.tree and i < 10:
-            for item_tree in self.tree:
-                if item_tree[1] == 0:
-                    add_item = QTreeWidgetItem((item_tree[2], ))
-                    add_item.setData(0, 5, item_tree[0])
-                    self.tree_widget.addTopLevelItem(add_item)
-                    i += 1
-                    self.tree.remove(item_tree)
-                else:
-                    for n in range(self.tree_widget.topLevelItemCount()):
-                        item = self.tree_widget.topLevelItem(n)
-                        self.search(item, item_tree)
+        # i = 0
+        # while self.tree and i < 10:
+        for item_tree in self.tree:
+            if item_tree[1] == 0:
+                add_item = QTreeWidgetItem((item_tree[2], ))
+                add_item.setData(0, 5, item_tree[0])
+                self.tree_widget.addTopLevelItem(add_item)
+                # i += 1
+                # self.tree.remove(item_tree)
+            else:
+                for n in range(self.tree_widget.topLevelItemCount()):
+                    item = self.tree_widget.topLevelItem(n)
+                    self.search(item, item_tree)
 
         add_item = QTreeWidgetItem(("Показать всё", ))
         add_item.setData(0, 5, -1)
@@ -121,7 +121,7 @@ class TreeList(QMainWindow, tree_class):
             add_item = QTreeWidgetItem((search_tuple[2], ))
             add_item.setData(0, 5, search_tuple[0])
             item.addChild(add_item)
-            self.tree.remove(search_tuple)
+            # self.tree.remove(search_tuple)
             return True
         else:
             for number_child in range(item.childCount()):
