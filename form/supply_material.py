@@ -946,7 +946,6 @@ class MaterialNameAndWarehouse(table.TableList):
         self.resize(500, 270)
         self.pb_copy.deleteLater()
         self.pb_add.deleteLater()
-        self.pb_change.deleteLater()
         self.pb_dell.deleteLater()
         self.pb_filter.deleteLater()
         self.pb_other.setText("Изменить")
@@ -973,6 +972,11 @@ class MaterialNameAndWarehouse(table.TableList):
             self.main.of_tree_select_material_name(item)
             self.close()
             self.destroy()
+
+    def ui_change_table_item(self, id=False):  # изменить элемент
+        self.change_material = MaterialName()
+        self.change_material.setWindowModality(Qt.ApplicationModal)
+        self.change_material.show()
 
     def ui_other(self):
         self.material_name_settings = MaterialName(self, False)

@@ -554,11 +554,34 @@ class Article(QMainWindow, article_class):
 
         result = QMessageBox.question(self, "Удаление", "Точно удалить настройку???", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
-            query = "DELETE FROM product_article_parametrs WHERE Id = %s"
-            sql_info = my_sql.sql_change(query, (param_id,))
+
+            query = "SELECT Value_In_Warehouse FROM product_article_warehouse WHERE Id_Article_Parametr = %s"
+            sql_info = my_sql.sql_select(query, (param_id,))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql удаление параметра", sql_info.msg, QMessageBox.Ok)
                 return False
+
+            if sql_info[0][0] != 0:
+                QMessageBox.information(self, "Ошибка склада", "На складе есть этот артикул. Удалить невозможно!", QMessageBox.Ok)
+                return False
+
+            sql_connect_transaction = my_sql.sql_start_transaction()
+
+            query = "DELETE FROM product_article_warehouse WHERE Id_Article_Parametr = %s"
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (param_id,))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                QMessageBox.critical(self, "Ошибка sql удаление параметра", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            query = "DELETE FROM product_article_parametrs WHERE Id = %s"
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (param_id,))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                QMessageBox.critical(self, "Ошибка sql удаление параметра", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            my_sql.sql_commit_transaction(sql_connect_transaction)
             self.cb_parametrs.removeItem(curent_index)
             self.get_start_sql_info()
 
