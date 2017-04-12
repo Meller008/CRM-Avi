@@ -21,6 +21,7 @@ class MainWindow(QMainWindow, main_class):
         self.setupUi(self)
         self.mdi.setBackground(QBrush(QImage(getcwd() + "/images/logo.png")))
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+        self.menu_3.setEnabled(False)
         self.show()
         self.setDisabled(True)
         self.login = login_window.LoginWindow(self)
