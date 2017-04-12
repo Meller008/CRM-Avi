@@ -38,7 +38,7 @@ class Access(QDialog, access):
         self.worker_list.setWindowModality(Qt.ApplicationModal)
         self.worker_list.show()
 
-    def ui_select_position(self, int):
+    def ui_select_position(self):
         query = """SELECT Id, Class, Atr1, Atr2, Atr_Value FROM access WHERE Staff_Position_Id = %s ORDER BY Class"""
         sql_info = my_sql.sql_select(query, (self.cb_position.currentData(),))
         if "mysql.connector.errors" in str(type(sql_info)):

@@ -33,7 +33,11 @@ class MainWindow(QMainWindow, main_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                try:
+                    val = int(item["value"])
+                except:
+                    val = item["value"]
+                a(val)
             else:
                 a()
 

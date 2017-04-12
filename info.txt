@@ -72,3 +72,6 @@ self.new_supply = MaterialSupply(self)
 self.new_supply.setWindowModality(Qt.ApplicationModal)
 self.new_supply.show()
 
+
+Управление доступами!
+- отключение общего меню в баре = self.menu_3.setEnabled(False)
