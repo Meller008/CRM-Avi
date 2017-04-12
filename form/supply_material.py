@@ -36,7 +36,7 @@ class MaterialSupplyList(table.TableList):
                                                    FROM comparing_supplyposition WHERE comparing_supplyposition.Material_SupplyId = material_supply.Id), 0), 4), material_supply.Note
                                               FROM material_supply LEFT JOIN material_supplyposition ON material_supply.Id = material_supplyposition.Material_SupplyId
                                                 LEFT JOIN material_provider ON material_supply.Material_ProviderId = material_provider.Id
-                                              GROUP BY material_supply.Id"""
+                                              GROUP BY material_supply.Id ORDER BY material_supply.Data DESC """
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT material_supply.Id, material_supply.Id, material_supply.Data, material_provider.Name, SUM(material_supplyposition.Weight),
@@ -45,7 +45,7 @@ class MaterialSupplyList(table.TableList):
                                            FROM comparing_supplyposition WHERE comparing_supplyposition.Material_SupplyId = material_supply.Id), 0), 4), material_supply.Note
                                       FROM material_supply LEFT JOIN material_supplyposition ON material_supply.Id = material_supplyposition.Material_SupplyId
                                         LEFT JOIN material_provider ON material_supply.Material_ProviderId = material_provider.Id
-                                      GROUP BY material_supply.Id"""
+                                      GROUP BY material_supply.Id ORDER BY material_supply.Data DESC """
 
         self.query_table_dell = ""
 

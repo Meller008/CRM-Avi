@@ -21,11 +21,10 @@ class MainWindow(QMainWindow, main_class):
         self.setupUi(self)
         self.mdi.setBackground(QBrush(QImage(getcwd() + "/images/logo.png")))
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
-        self.beika_no_finished()
         self.show()
         self.setDisabled(True)
-        # self.login = login_window.LoginWindow(self)
-        self.admin_login()
+        self.login = login_window.LoginWindow(self)
+        # self.admin_login()
 
     def access(self):
         for item in User().access_list(self.__class__.__name__):

@@ -35,7 +35,7 @@ class AccessoriesSupplyList(table.TableList):
                                                    FROM comparing_supplyposition WHERE comparing_supplyposition.Accessories_SupplyId = accessories_supply.Id), 0), 4), accessories_supply.Note
                                               FROM accessories_supply LEFT JOIN accessories_supplyposition ON accessories_supply.Id = accessories_supplyposition.Accessories_SupplyId
                                                 LEFT JOIN accessories_provider ON accessories_supply.Accessories_ProviderId = accessories_provider.Id
-                                              GROUP BY accessories_supply.Id"""
+                                              GROUP BY accessories_supply.Id ORDER BY accessories_supply.Data DESC"""
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT accessories_supply.Id, accessories_supply.Id, accessories_supply.Data, accessories_provider.Name, SUM(accessories_supplyposition.Value),
@@ -44,7 +44,7 @@ class AccessoriesSupplyList(table.TableList):
                                            FROM comparing_supplyposition WHERE comparing_supplyposition.Accessories_SupplyId = accessories_supply.Id), 0), 4), accessories_supply.Note
                                       FROM accessories_supply LEFT JOIN accessories_supplyposition ON accessories_supply.Id = accessories_supplyposition.Accessories_SupplyId
                                         LEFT JOIN accessories_provider ON accessories_supply.Accessories_ProviderId = accessories_provider.Id
-                                      GROUP BY accessories_supply.Id"""
+                                      GROUP BY accessories_supply.Id ORDER BY accessories_supply.Data DESC"""
 
         self.query_table_dell = ""
 

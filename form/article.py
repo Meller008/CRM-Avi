@@ -884,8 +884,10 @@ class Article(QMainWindow, article_class):
         self.change_operation.setModal(True)
         self.change_operation.show()
         id = self.change_operation.exec()
-        if id <= 0 or id == item.data(5):
+        if id <= 0:
             return False
+        elif id == item.data(5):
+            item.setText(self.change_operation.new_operation[1])
         else:
             sql_id = item.data(-2)
             if item.data(-1) == "new":
