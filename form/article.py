@@ -920,7 +920,7 @@ class Article(QMainWindow, article_class):
             self.save_sql()
             self.close()
             self.destroy()
-            self.main.ui_update_table()
+            self.main.set_table_info()
         else:
             if self.rb_nds_1.isChecked():
                 nds = 18
