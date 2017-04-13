@@ -144,16 +144,23 @@ class Operation(QDialog, operation_class):
         self.le_machine.setWhatsThis(str(item[0]))
 
     def ui_add(self):
+        if self.le_name.text() == "" or self.le_machine.text() == "" or self.le_price.text() == "":
+            QMessageBox.critical(self, "Ошибка сохранения", "Не заполнены обязательные поля.", QMessageBox.Ok)
+            return False
+        try:
+            price = float(self.le_price.text().replace(",", "."))
+        except:
+            QMessageBox.critical(self, "Ошибка цены", "Не правильно введена цена.", QMessageBox.Ok)
+            return False
+
         if self.id:
             query = "UPDATE operations SET Name = %s, Sewing_Machine_Id = %s, Price = %s, Note = %s WHERE Id = %s"
-            price = float(self.le_price.text().replace(",", "."))
             sql_info = my_sql.sql_change(query, (self.le_name.text(), self.le_machine.whatsThis(), price, self.pe_note.toPlainText(), self.id))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql обновление информации", sql_info.msg, QMessageBox.Ok)
                 return False
         elif self.tree_id:
             query = "INSERT INTO operations (Tree_Id, Name, Price, Sewing_Machine_Id, Note) VALUES (%s, %s, %s, %s, %s)"
-            price = float(self.le_price.text().replace(",", "."))
             sql_info = my_sql.sql_change(query, (self.tree_id, self.le_name.text(), price, self.le_machine.whatsThis(), self.pe_note.toPlainText()))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql добавление информации", sql_info.msg, QMessageBox.Ok)

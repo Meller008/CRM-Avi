@@ -11,7 +11,7 @@ change_tree_item_class = loadUiType(getcwd() + '/ui/templates ui/add_tree_item.u
 transfer_class = loadUiType(getcwd() + '/ui/templates ui/tree_transfer.ui')[0]
 
 
-class TreeList(QMainWindow, tree_class):
+class     TreeList(QMainWindow, tree_class):
     def __init__(self, main_class=0, dc_select=False):
         super(TreeList, self).__init__()
         self.setupUi(self)
@@ -90,6 +90,12 @@ class TreeList(QMainWindow, tree_class):
                 item = QTableWidgetItem(str(table_typle[column]))
                 item.setData(5, table_typle[0])
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 2, item)
+
+        try:
+            item = self.tree_widget.currentItem()
+            self.ui_sorting(item)
+        except:
+            pass
 
     def set_tree_info(self):  # заполняем девево
         self.tree = my_sql.sql_select(self.query_tree_select)
@@ -254,7 +260,7 @@ class TreeList(QMainWindow, tree_class):
                     return False
 
             self.set_table_info()
-            self.set_tree_info()
+            # self.set_tree_info()
 
     def ui_filter_table(self):
         pass
