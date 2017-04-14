@@ -93,7 +93,8 @@ class     TreeList(QMainWindow, tree_class):
 
         try:
             item = self.tree_widget.currentItem()
-            self.ui_sorting(item)
+            if item.data(0, 5) >= 0:  # Проверка не выбрано ли показать все!
+                self.ui_sorting(item)
         except:
             pass
 

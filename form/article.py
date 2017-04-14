@@ -243,7 +243,7 @@ class Article(QMainWindow, article_class):
                 product_article_parametrs.Price, product_article_parametrs.Product_Note, product_article_parametrs.Cut_Note, product_article_parametrs.`Show`,
                 product_article_parametrs.NDS FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
                 LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id WHERE product_article.Id = %s
-                order by FIELD(product_article_parametrs.Name, 'Обычный') desc"""
+                order by product_article_parametrs.Name"""
         sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения настроек", sql_info.msg, QMessageBox.Ok)
