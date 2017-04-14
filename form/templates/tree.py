@@ -11,7 +11,7 @@ change_tree_item_class = loadUiType(getcwd() + '/ui/templates ui/add_tree_item.u
 transfer_class = loadUiType(getcwd() + '/ui/templates ui/tree_transfer.ui')[0]
 
 
-class     TreeList(QMainWindow, tree_class):
+class TreeList(QMainWindow, tree_class):
     def __init__(self, main_class=0, dc_select=False):
         super(TreeList, self).__init__()
         self.setupUi(self)
