@@ -642,6 +642,19 @@ class OneStaff(QMainWindow, one_staff_class):
         dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
         self.inspection_files(dir_name, 'Путь корень рабочие')
 
+        self.pushButton.setEnabled(True)
+        self.pushButton_4.setEnabled(True)
+        self.pushButton_5.setEnabled(True)
+        self.pushButton_10.setEnabled(True)
+        self.pushButton_6.setEnabled(True)
+        self.pushButton_12.setEnabled(True)
+        self.pushButton_9.setEnabled(True)
+        self.pushButton_13.setEnabled(True)
+        self.pushButton_7.setEnabled(True)
+        self.pushButton_14.setEnabled(True)
+        self.pushButton_8.setEnabled(True)
+        self.pushButton_15.setEnabled(True)
+
         # Заполняем логин
         if leave == 0:
             query = "SELECT Login, Password FROM staff_worker_login WHERE Worker_Info_Id = %s"
