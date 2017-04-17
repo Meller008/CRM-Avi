@@ -278,7 +278,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>0</number>
       </property>
       <property name="usesScrollButtons">
        <bool>true</bool>
@@ -1039,6 +1039,9 @@
         </property>
         <item row="1" column="1">
          <widget class="QLineEdit" name="le_login_password">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
@@ -1066,6 +1069,9 @@
         </item>
         <item row="1" column="0">
          <widget class="QLineEdit" name="le_login_login">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
@@ -1109,14 +1115,14 @@
     <item row="12" column="1" colspan="3">
      <widget class="QComboBox" name="cb_info_position">
       <property name="editable">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="8" column="1" colspan="3">
      <widget class="QComboBox" name="cb_info_country">
       <property name="editable">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -1275,8 +1281,8 @@
    <slot>acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>582</x>
-     <y>454</y>
+     <x>626</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>275</x>
@@ -1883,8 +1889,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>663</x>
-     <y>454</y>
+     <x>707</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>620</x>
@@ -1947,8 +1953,8 @@
    <slot>build_exel_registration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>500</x>
-     <y>341</y>
+     <x>529</x>
+     <y>368</y>
     </hint>
     <hint type="destinationlabel">
      <x>664</x>
@@ -2027,8 +2033,8 @@
    <slot>select_file()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>13</x>
-     <y>308</y>
+     <x>16</x>
+     <y>470</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2075,8 +2081,8 @@
    <slot>alter_notification()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>465</x>
-     <y>289</y>
+     <x>695</x>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2203,8 +2209,8 @@
    <slot>exel_petition_out()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>658</x>
-     <y>341</y>
+     <x>702</x>
+     <y>368</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2219,8 +2225,8 @@
    <slot>build_word_proxy()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>628</x>
-     <y>386</y>
+     <x>702</x>
+     <y>436</y>
     </hint>
     <hint type="destinationlabel">
      <x>767</x>
@@ -2235,8 +2241,8 @@
    <slot>build_word_pass()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>636</x>
-     <y>405</y>
+     <x>702</x>
+     <y>470</y>
     </hint>
     <hint type="destinationlabel">
      <x>731</x>
@@ -2251,8 +2257,8 @@
    <slot>build_word_admission_notice()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>640</x>
-     <y>361</y>
+     <x>702</x>
+     <y>402</y>
     </hint>
     <hint type="destinationlabel">
      <x>716</x>
@@ -2267,8 +2273,8 @@
    <slot>build_word_hodataistvo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>449</x>
-     <y>359</y>
+     <x>529</x>
+     <y>402</y>
     </hint>
     <hint type="destinationlabel">
      <x>726</x>

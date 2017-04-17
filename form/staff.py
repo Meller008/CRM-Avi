@@ -654,6 +654,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.pushButton_14.setEnabled(True)
         self.pushButton_8.setEnabled(True)
         self.pushButton_15.setEnabled(True)
+        self.le_login_login.setEnabled(True)
+        self.le_login_password.setEnabled(True)
 
         # Заполняем логин
         if leave == 0:
@@ -894,13 +896,14 @@ class OneStaff(QMainWindow, one_staff_class):
                         QMessageBox.critical(self, "Ошибка sql", self.id_info.msg, QMessageBox.Ok)
                         return False
 
-                    if not self.cb_info_leave.isChecked():
-                        query = "INSERT INTO staff_worker_login (Worker_Info_Id, Login, Password) VALUES (%s, %s, %s)"
-                        parametrs = (self.id_info, self.id_info, "")
-                        info_sql = my_sql.sql_change(query, parametrs)
-                        if "mysql.connector.errors" in str(type(info_sql)):
-                            QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                            return False
+                    # Авто выдача логина. Пока не знаю надо ли при добавлении работника!
+                    # if not self.cb_info_leave.isChecked():
+                    #     query = "INSERT INTO staff_worker_login (Worker_Info_Id, Login, Password) VALUES (%s, %s, %s)"
+                    #     parametrs = (self.id_info, self.id_info, "")
+                    #     info_sql = my_sql.sql_change(query, parametrs)
+                    #     if "mysql.connector.errors" in str(type(info_sql)):
+                    #         QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                    #         return False
 
                 if "passport" in self.alert and "passport" in self.alert2:
                     query = "INSERT INTO staff_worker_passport (Worker_Info_Id, Series, Number, Issued, Data_Issued, Date_Ending) VALUES (%s, %s, %s, %s, %s, %s)"
