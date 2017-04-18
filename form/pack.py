@@ -563,12 +563,21 @@ class PackBrows(QDialog, pack_class):
 
             price = float(dict["price"]) if dict["price"] is not None else 0
             value = float(dict["value"]) if dict["value"] is not None else 0
-            new_table_item = QTableWidgetItem(str(round(price * value, 4)))
+            value_thing = float(dict["value_thing"]) if dict["value_thing"] is not None else 0
+
+            new_table_item = QTableWidgetItem(str(round(price * value_thing, 4)))
             new_table_item.setData(-2, dict["id"])
             if color is not None:
                 new_table_item.setBackground(color)
                 new_table_item.setToolTip(note)
             self.tw_accessories.setItem(row, 5, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(price * (value * value_thing), 4)))
+            new_table_item.setData(-2, dict["id"])
+            if color is not None:
+                new_table_item.setBackground(color)
+                new_table_item.setToolTip(note)
+            self.tw_accessories.setItem(row, 6, new_table_item)
 
             row += 1
 
