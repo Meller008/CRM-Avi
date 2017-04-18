@@ -163,7 +163,7 @@ class PackBrows(QDialog, pack_class):
             self.set_operation_name()
 
     def ui_view_client(self):
-        self.client_list = clients.ClientsList(self, True)
+        self.client_list = clients.ClientList(self, True)
         self.client_list.setWindowModality(Qt.ApplicationModal)
         self.client_list.show()
 
@@ -593,10 +593,10 @@ class PackBrows(QDialog, pack_class):
             self.pack.take_article_accessories()
             self.set_accessories_name()
 
-    def of_set_client(self, id_client, name_client):
-        self.le_client.setText(str(name_client))
-        self.le_client.setWhatsThis(str(id_client))
-        self.pack.set_client(id_client)
+    def of_list_clients(self, client):
+        self.le_client.setText(client[1])
+        self.le_client.setWhatsThis(str(client[0]))
+        self.pack.set_client(int(client[0]))
 
     def of_tree_select_order(self, order):
         self.le_order.setText(str(order[0]))
