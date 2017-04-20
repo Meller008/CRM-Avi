@@ -199,53 +199,55 @@ class AccessoriesSupply(QMainWindow, supply_accessories):
             self.tw_position.clearContents()
             self.tw_position.setRowCount(0)
 
-            row_material = len(sql_info)
+            if sql_info[0][0] is not None:
 
-            for row, info in enumerate(sql_info):
-                self.tw_position.insertRow(row)
-                if info[3] == info[6]:
-                    color = QBrush(QColor(251, 110, 255, 50))
-                elif info[6] == 0:
-                    color = QBrush(QColor(252, 141, 141, 255))
-                else:
-                    color = QBrush(QColor(255, 255, 127, 255))
+                row_material = len(sql_info)
 
-                new_table_item = QTableWidgetItem(str(info[2]))
-                new_table_item.setData(-1, info[0])
-                new_table_item.setData(-2, "set")
-                new_table_item.setData(-3, "material")
-                new_table_item.setData(5, info[1])
-                new_table_item.setBackground(color)
-                self.tw_position.setItem(row, 0, new_table_item)
+                for row, info in enumerate(sql_info):
+                    self.tw_position.insertRow(row)
+                    if info[3] == info[6]:
+                        color = QBrush(QColor(251, 110, 255, 50))
+                    elif info[6] == 0:
+                        color = QBrush(QColor(252, 141, 141, 255))
+                    else:
+                        color = QBrush(QColor(255, 255, 127, 255))
 
-                new_table_item = QTableWidgetItem(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(info[3], 4))))
-                new_table_item.setData(-1, info[0])
-                new_table_item.setData(-2, "set")
-                new_table_item.setData(-3, "material")
-                new_table_item.setData(5, info[3])
-                new_table_item.setBackground(color)
-                self.tw_position.setItem(row, 1, new_table_item)
+                    new_table_item = QTableWidgetItem(str(info[2]))
+                    new_table_item.setData(-1, info[0])
+                    new_table_item.setData(-2, "set")
+                    new_table_item.setData(-3, "material")
+                    new_table_item.setData(5, info[1])
+                    new_table_item.setBackground(color)
+                    self.tw_position.setItem(row, 0, new_table_item)
 
-                new_table_item = QTableWidgetItem(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(info[4], 4))))
-                new_table_item.setData(-1, info[0])
-                new_table_item.setData(-2, "set")
-                new_table_item.setData(-3, "material")
-                new_table_item.setBackground(color)
-                self.tw_position.setItem(row, 2, new_table_item)
+                    new_table_item = QTableWidgetItem(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(info[3], 4))))
+                    new_table_item.setData(-1, info[0])
+                    new_table_item.setData(-2, "set")
+                    new_table_item.setData(-3, "material")
+                    new_table_item.setData(5, info[3])
+                    new_table_item.setBackground(color)
+                    self.tw_position.setItem(row, 1, new_table_item)
 
-                new_table_item = QTableWidgetItem(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(info[5], 4))))
-                new_table_item.setData(-1, info[0])
-                new_table_item.setData(-2, "set")
-                new_table_item.setData(-3, "material")
-                new_table_item.setBackground(color)
-                self.tw_position.setItem(row, 3, new_table_item)
+                    new_table_item = QTableWidgetItem(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(info[4], 4))))
+                    new_table_item.setData(-1, info[0])
+                    new_table_item.setData(-2, "set")
+                    new_table_item.setData(-3, "material")
+                    new_table_item.setBackground(color)
+                    self.tw_position.setItem(row, 2, new_table_item)
 
-                new_table_item = QTableWidgetItem(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(info[6], 4))))
-                new_table_item.setData(-1, info[0])
-                new_table_item.setData(-2, "set")
-                new_table_item.setData(-3, "material")
-                new_table_item.setBackground(color)
-                self.tw_position.setItem(row, 4, new_table_item)
+                    new_table_item = QTableWidgetItem(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(info[5], 4))))
+                    new_table_item.setData(-1, info[0])
+                    new_table_item.setData(-2, "set")
+                    new_table_item.setData(-3, "material")
+                    new_table_item.setBackground(color)
+                    self.tw_position.setItem(row, 3, new_table_item)
+
+                    new_table_item = QTableWidgetItem(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(info[6], 4))))
+                    new_table_item.setData(-1, info[0])
+                    new_table_item.setData(-2, "set")
+                    new_table_item.setData(-3, "material")
+                    new_table_item.setBackground(color)
+                    self.tw_position.setItem(row, 4, new_table_item)
 
                 query = """SELECT comparing_supplyposition.Id, comparing_name.Id, comparing_name.Name, comparing_supplyposition.Value, comparing_supplyposition.Price,
                                 ROUND(comparing_supplyposition.Price * comparing_supplyposition.Value, 4), ''
