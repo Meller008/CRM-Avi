@@ -660,6 +660,11 @@ class PackOperation(QDialog, pack_operation_class):
             self.le_value.setReadOnly(True)
 
     def ui_acc(self):
+
+        if self.le_value.text() == "New" or self.le_value.text() == "" or self.le_value.text() == "0":
+            QMessageBox.information(self, "Кол-во", "Введите кол-во операций", QMessageBox.Ok)
+            return False
+
         if self.le_operation.text() != "" and self.le_operation.text() != "None":
             self.operation["operation_id"] = int(self.le_operation.whatsThis())
             self.operation["name"] = self.le_name.text()
