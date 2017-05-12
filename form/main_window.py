@@ -6,6 +6,7 @@ from form import login_window, provider, comparing, staff, program_settings, not
     clients, operation, other, audit, warehouse_material, warehouse_accessories
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
     warehouse_rest, supply_material, supply_accessories, scan_pack, settings_access
+from form import staff_traffic
 from form import report_order
 from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
@@ -130,6 +131,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_staff_calendar)
         self.sub_staff_calendar.resize(self.staff_calendar.size())
         self.sub_staff_calendar.show()
+
+    def view_staff_card(self):
+        self.staff_card = staff_traffic.StaffCardList()
+        self.sub_staff_card = QMdiSubWindow()
+        self.sub_staff_card.setWidget(self.staff_card)
+        self.mdi.addSubWindow(self.sub_staff_card)
+        self.sub_staff_card.resize(self.staff_card.size())
+        self.sub_staff_card.show()
 
     def view_settings_path(self):
         self.sett_path = program_settings.SettingsPath()

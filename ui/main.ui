@@ -70,7 +70,7 @@
      <x>0</x>
      <y>0</y>
      <width>1059</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -112,9 +112,17 @@
      <addaction name="ma_staff_position"/>
      <addaction name="ma_staff_country"/>
     </widget>
+    <widget class="QMenu" name="menu_14">
+     <property name="title">
+      <string>Посещаемость</string>
+     </property>
+     <addaction name="action_3"/>
+     <addaction name="ma_staff_card"/>
+    </widget>
     <addaction name="ma_staff"/>
     <addaction name="ma_staff_calendar"/>
     <addaction name="menu_2"/>
+    <addaction name="menu_14"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -357,6 +365,16 @@
   <action name="ma_report_need_article_order">
    <property name="text">
     <string>Недостающая продукция</string>
+   </property>
+  </action>
+  <action name="ma_staff_card">
+   <property name="text">
+    <string>Список карт</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>Посещмемость</string>
    </property>
   </action>
  </widget>
@@ -906,6 +924,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_staff_card</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_staff_card()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -942,5 +976,6 @@
   <slot>view_scan_pack()</slot>
   <slot>view_settings_access()</slot>
   <slot>view_report_need_article_order()</slot>
+  <slot>view_staff_card()</slot>
  </slots>
 </ui>
