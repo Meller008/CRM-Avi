@@ -8,9 +8,10 @@ from PyQt5.QtCore import Qt, QDate, QObject
 from form.supply_material import MaterialName
 from form.pack import PackBrows
 import re
-from function import my_sql
-from classes import cut
+from function import my_sql, barcode, files
+from classes import cut, print_qt
 from classes.my_class import User
+import codecs
 
 cut_list_class = loadUiType(getcwd() + '/ui/cut_list.ui')[0]
 cut_brows_class = loadUiType(getcwd() + '/ui/cut_brows.ui')[0]
@@ -19,6 +20,7 @@ cut_filter = loadUiType(getcwd() + '/ui/cut_filter.ui')[0]
 cut_list_mission_class = loadUiType(getcwd() + '/ui/cut_list_mission.ui')[0]
 new_cut_mission_class = loadUiType(getcwd() + '/ui/cut_new_mission.ui')[0]
 edit_cut_mission_class = loadUiType(getcwd() + '/ui/cut_edit_mission.ui')[0]
+cut_print_passport = loadUiType(getcwd() + '/ui/cut_print_passport.ui')[0]
 
 
 class CutList(QMainWindow, cut_list_class):
@@ -324,6 +326,11 @@ class CutBrows(QDialog, cut_brows_class):
             self.pack_win.setModal(True)
             self.pack_win.show()
 
+    def ui_print_passport(self):
+        self.cut_passport = CutPassport(self, self.cut)
+        self.cut_passport.setModal(True)
+        self.cut_passport.show()
+
     def ui_fast_filter(self):
         if self.le_pack_number_filter.text():
             try:
@@ -603,6 +610,207 @@ class CutFilter(QDialog, cut_filter):
     def of_list_worker(self, item):
         self.le_work.setWhatsThis(str(item[0]))
         self.le_work.setText(item[1])
+
+
+class CutPassport(QDialog, cut_print_passport):
+    def __init__(self, main, cut):
+        super(CutPassport, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+        self.cut = cut
+
+        self.set_size_table()
+        self.set_pack()
+
+    def set_size_table(self):
+        self.tw_pack.horizontalHeader().resizeSection(0, 20)
+        self.tw_pack.horizontalHeader().resizeSection(1, 35)
+        self.tw_pack.horizontalHeader().resizeSection(2, 65)
+        self.tw_pack.horizontalHeader().resizeSection(3, 55)
+        self.tw_pack.horizontalHeader().resizeSection(4, 200)
+
+    def set_pack(self):
+        self.tw_pack.clearContents()
+        self.tw_pack.setRowCount(0)
+
+        if not self.cut.pack_list():
+            return False
+
+        need_set_pack = len(self.cut.pack_list())
+        pack_number_table = 1
+
+        pack_list = self.cut.pack_list()
+        row = 0
+
+        while need_set_pack > 0:
+            for pack_id, pack in pack_list.items():
+
+                if pack.number_pack() == pack_number_table:
+                    self.tw_pack.insertRow(row)
+
+                    new_table_item = QTableWidgetItem()
+                    new_table_item.setData(-2, pack_id)
+                    new_table_item.setCheckState(Qt.Unchecked)
+                    self.tw_pack.setItem(row, 0, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.number_pack()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 1, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.article()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 2, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.size()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 3, new_table_item)
+
+                    new_table_item = QTableWidgetItem(str(pack.parametr_name()))
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 4, new_table_item)
+
+                    row += 1
+                    pack_number_table += 1
+                    need_set_pack -= 1
+                    break
+            else:
+                pack_number_table += 1
+
+    def ui_check_all(self):
+        for row in range(self.tw_pack.rowCount()):
+            self.tw_pack.item(row, 0).setCheckState(Qt.Checked)
+
+    def ui_uncheck_all(self):
+        for row in range(self.tw_pack.rowCount()):
+            self.tw_pack.item(row, 0).setCheckState(Qt.Unchecked)
+
+    def ui_acc(self):
+        select_pack = []
+        for row in range(self.tw_pack.rowCount()):
+            if self.tw_pack.item(row, 0).checkState() == Qt.Checked:
+                select_pack.append(self.tw_pack.item(row, 0).data(-2))
+
+        if not select_pack:
+            QMessageBox.information(self, "Ошибка", "Выберите хотя бы одну пачку", QMessageBox.Ok)
+            return False
+
+
+        #  Начинаем перебор выбраных пачек
+        pack_html = """    <div style="display: inline-block; width: 100%">
+                            <table style="height: 150px; border-color: black; margin-left: auto; margin-right: auto;" border="1" width="100%" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;">Артикул</td>
+                            <td style="width: 50; height: 10px; text-align: center; vertical-align: middle;">Размер</td>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;">Крой</td>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;">Пачка</td>
+                            <td style="width: 100; height: 10px; text-align: center; vertical-align: middle;">Дата</td>
+                            <td style="width: 160; height: 10px; text-align: center; vertical-align: middle;">ID пачки</td>
+                            </tr>
+                            <tr>
+                            <td style="height: 10px; font-size: 15pt; text-align: center; vertical-align: middle;"><strong>#art#</strong></td>
+                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#size#</strong></td>
+                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#cut#</strong></td>
+                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#pack#</strong></td>
+                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#data#</strong></td>
+                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;" rowspan="3"><strong><img src="#pac_barcode_src#" alt="lorem" width="150" height="70" /></strong></td>
+                            </tr>
+                            <tr>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;">Название</td>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;">кол-во</td>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="2">Клиент</td>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;">Штрих код</td>
+                            </tr>
+                            <tr>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;"><strong>#art_name#</strong></td>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;"><strong>#pack_value#</strong></td>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="2"><strong>#client#</strong></td>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;"><strong>#art_barcode#</strong></td>
+                            </tr>
+                            <tr>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="6">Примечание</td>
+                            </tr>
+                            <tr>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="6"><strong>#note#</strong></td>
+                            </tr>
+                            </tbody>
+                            </table>
+                            <p></p>
+                            <table style="height: 78px; border-color: black; margin-left: auto; margin-right: auto;" border="1" width="100%" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr>
+                            <td style="text-align: center; vertical-align: middle;">№</td>
+                            <td style="width: 300px; text-align: center; vertical-align: middle;">Операция</td>
+                            <td style="width: 150px; text-align: center; vertical-align: middle;">Машинка</td>
+                            <td style="width: 70px; text-align: center; vertical-align: middle;">Кол-во</td>
+                            <td style="text-align: center; vertical-align: middle;">Фамилия</td>
+                            <td style="text-align: center; vertical-align: middle;">Дата</td>
+                            </tr>
+                            #o_table#
+                            </tbody>
+                            </table>
+                            <p style="text-align: center;">Приемка на склад ___.___._____г</p>
+                            </div>"""
+        row_operation_html = """<tr>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;"><strong>#o_number#</strong></td>
+                        <td style="height: 30px; text-align: left; vertical-align: middle;"><strong>#o_name#</strong></td>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;"><strong>#o_sw#</strong></td>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        </tr>"""
+        all_pack_html = ""
+        cod = []
+
+        for pack_id in select_pack:
+            pack = self.cut.pack(pack_id)
+            pack.take_operation_pack()
+            cod.append(str(pack.id()).zfill(7))
+            operation_table = ""
+
+            # Перебор операций пачки
+            for operation in pack.operations():
+                query = "SELECT sewing_machine.Name FROM operations LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id WHERE operations.Id = %s"
+                sql_info = my_sql.sql_select(query, (operation["operation_id"],))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    print("Не смог получить данные пачки")
+                    return False
+                new_row_html = row_operation_html.replace("#o_number#", str(operation["position"]))
+                new_row_html = new_row_html.replace("#o_name#", str(operation["name"]))
+                new_row_html = new_row_html.replace("#o_sw#", sql_info[0][0])
+                operation_table = operation_table + "\n" + new_row_html
+
+            barcode.generate(cod[-1])
+            html = pack_html
+            html = html.replace("#art#", str(pack.article_name()))
+            html = html.replace("#size#", str(pack.size()))
+            html = html.replace("#cut#", str(pack.number_cut()))
+            html = html.replace("#pack#", str(pack.number_pack()))
+            html = html.replace("#data#", pack.cut_date().strftime("%d.%m.%Y"))
+            html = html.replace("#pac_barcode_src#", "%s.%s" % (cod[-1], "svg"))
+            html = html.replace("#art_name#", str(pack.article_product_name()))
+            html = html.replace("#pack_value#", str(pack.value()))
+            html = html.replace("#client#", str(pack.client_name()))
+            html = html.replace("#art_barcode#", str(pack.article_barcode()))
+            html = html.replace("#note#", str(pack.note()))
+            html = html.replace("#o_table#", operation_table)
+            all_pack_html = all_pack_html + html + "\n"
+
+        all_html = codecs.open(getcwd() + "/templates/pack/cut_passport.html", encoding='utf-8').read()
+        all_html = all_html.replace("#o_pack#", all_pack_html)
+        self.print_class = print_qt.PrintHtml(self, all_html)
+
+        for del_cod in cod:
+            files.del_temp_file(del_cod + ".svg")
+
+        self.close()
+        self.destroy()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
 
 
 class CutListMission(QMainWindow, cut_list_mission_class):

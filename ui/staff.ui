@@ -76,12 +76,12 @@
       </column>
       <column>
        <property name="text">
-        <string>Имя</string>
+        <string>Фамилия</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Фамилия</string>
+        <string>Имя</string>
        </property>
       </column>
       <column>

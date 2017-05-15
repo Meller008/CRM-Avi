@@ -93,10 +93,13 @@ class PackBrows(QDialog, pack_class):
 
             self.insert_values_sql = False
 
+            self.tw_accessories_operation.setCurrentIndex(0)
+
         else:
             # Пачка новая
             self.de_date_complete.setDate(QDate.currentDate())
             self.de_date_make.setDate(QDate.currentDate())
+            self.tw_accessories_operation.setCurrentIndex(1)
 
     def set_size_table(self):
         self.tw_operation.horizontalHeader().resizeSection(0, 175)
@@ -189,6 +192,7 @@ class PackBrows(QDialog, pack_class):
 
     def ui_add_operation(self):
         self.one_operation_window = PackOperation()
+        self.one_operation_window.le_value.setText(str(self.pack.value_all()))  # Выставить кол-во в новой операции
         self.one_operation_window.setModal(True)
         self.one_operation_window.show()
         if self.one_operation_window.exec() <= 0:
@@ -661,7 +665,7 @@ class PackOperation(QDialog, pack_operation_class):
 
     def ui_acc(self):
 
-        if self.le_value.text() == "New" or self.le_value.text() == "" or self.le_value.text() == "0":
+        if self.le_value.text() == "New" or self.le_value.text() == "" or self.le_value.text() == "0" or self.le_value.text() == "None":
             QMessageBox.information(self, "Кол-во", "Введите кол-во операций", QMessageBox.Ok)
             return False
 

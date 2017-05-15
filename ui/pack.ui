@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item row="2" column="0">
-    <widget class="QTabWidget" name="tabWidget_2">
+    <widget class="QTabWidget" name="tw_accessories_operation">
      <property name="currentIndex">
       <number>1</number>
      </property>

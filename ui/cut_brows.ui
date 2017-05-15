@@ -276,6 +276,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QToolButton" name="toolButton_5">
+          <property name="text">
+           <string>Печать пасспортов</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QToolButton" name="toolButton_3">
           <property name="font">
            <font>
@@ -603,8 +610,8 @@
    <slot>ui_add_pack()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>27</x>
-     <y>149</y>
+     <x>31</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -636,7 +643,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>127</x>
-     <y>149</y>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -652,7 +659,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>184</x>
-     <y>149</y>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -667,8 +674,8 @@
    <slot>ui_edit_width_cut()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>41</x>
-     <y>103</y>
+     <x>45</x>
+     <y>93</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -715,8 +722,8 @@
    <slot>ui_fast_filter()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>655</x>
-     <y>141</y>
+     <x>668</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>686</x>
@@ -740,6 +747,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>toolButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_print_passport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>247</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>245</x>
+     <y>-27</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_edit_number_cut()</slot>
@@ -758,5 +781,6 @@
   <slot>ui_acc()</slot>
   <slot>ui_can()</slot>
   <slot>ui_fast_filter()</slot>
+  <slot>ui_print_passport()</slot>
  </slots>
 </ui>

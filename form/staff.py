@@ -30,8 +30,8 @@ class Staff(QMainWindow, staff_list_class):
         self.main = main
         self.dc_select = dc_select
         self.filter = None
-        self.query_table_all = """SELECT staff_worker_info.Id, First_Name, Last_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'), `Leave`, Date_Leave, staff_position.Name
-                                    FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id"""
+        self.query_table_all = """SELECT staff_worker_info.Id, Last_Name, First_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'), `Leave`, Date_Leave, staff_position.Name
+                                    FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id ORDER BY Last_Name"""
         self.query_table_select = self.query_table_all
 
         self.set_settings()
