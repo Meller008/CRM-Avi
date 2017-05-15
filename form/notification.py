@@ -70,6 +70,15 @@ class WorkCalendar(QDialog, work_notif_calendar_class):
         self.paint_date(notif_1, (0, 255, 255))
         self.set_table(notif_1, (0, 255, 255))
 
+        query = "SELECT staff_worker_info.Id, CONCAT(staff_worker_info.Last_Name, ' ', staff_worker_info.First_Name), 'ДР', staff_worker_info.Date_Birth " \
+                "FROM staff_worker_info WHERE Date_Birth <= %s AND Date_Birth >= %s"
+        notif_1 = my_sql.sql_select(query, notif_date)
+        if "mysql.connector.errors" in str(type(notif_1)):
+            QMessageBox.critical(self, "Ошибка sql", notif_1.msg, QMessageBox.Ok)
+            return False
+        self.paint_date(notif_1, (255, 167, 167))
+        self.set_table(notif_1, (255, 167, 167))
+
     def paint_date(self, date, color):
         color = QColor(color[0], color[1], color[2], 255)
         brush = QBrush()
