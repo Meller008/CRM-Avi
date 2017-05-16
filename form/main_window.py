@@ -140,6 +140,14 @@ class MainWindow(QMainWindow, main_class):
         self.sub_staff_card.resize(self.staff_card.size())
         self.sub_staff_card.show()
 
+    def view_staff_traffic(self):
+        self.staff_traffic = staff_traffic.StaffTraffic()
+        self.sub_staff_traffic = QMdiSubWindow()
+        self.sub_staff_traffic.setWidget(self.staff_traffic)
+        self.mdi.addSubWindow(self.sub_staff_traffic)
+        self.sub_staff_traffic.resize(self.staff_traffic.size())
+        self.sub_staff_traffic.show()
+
     def view_settings_path(self):
         self.sett_path = program_settings.SettingsPath()
         self.sub_sett_path = QMdiSubWindow()

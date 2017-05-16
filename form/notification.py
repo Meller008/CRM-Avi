@@ -123,7 +123,3 @@ class WorkCalendar(QDialog, work_notif_calendar_class):
         if self.one_staff.insert_info(id):
             self.one_staff.setWindowModality(Qt.ApplicationModal)
             self.one_staff.show()
-        
-
-
-

@@ -7,7 +7,8 @@
 
 date.strftime("%d.%m.%Y")
 date.strftime("%d.%m.%Y %H:%M:%S")
-date..toPyDate()
+date.toPyDate()
+dateTine.toPyDateTime()
 .toString("dd.MM.yyyy")
 
 

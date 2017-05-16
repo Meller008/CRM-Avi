@@ -230,7 +230,7 @@ class Staff(QMainWindow, staff_list_class):
         # Блок условий артикула
         if self.le_fast_filter.text() != '':
             q_filter = "(staff_worker_info.Last_Name LIKE '%s')" % ("%" + self.le_fast_filter.text() + "%", )
-            self.query_table_select = self.query_table_all + " WHERE " + q_filter
+            self.query_table_select = self.query_table_all.replace("ORDER BY", " WHERE " + q_filter + " ORDER BY")
         else:
             self.query_table_select = self.query_table_all
 
@@ -2002,7 +2002,7 @@ class StaffFilter(QDialog, staff_filter):
             where = self.add_filter(where, sql_date)
 
         if where:
-            self.sql_query_all = self.sql_query_all + " WHERE " + where
+            self.sql_query_all = self.sql_query_all.replace("ORDER BY", " WHERE " + where + " ORDER BY")
 
         self.main.of_set_filter(self.sql_query_all)
 
