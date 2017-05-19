@@ -406,9 +406,9 @@ class Article(QMainWindow, article_class):
                 else:
                     accessories_price = accessories[5] if (accessories[5] is not None) else 0
                     new_item = QTableWidgetItem(str(round(accessories[4] * accessories_price, 4)))
-                    new_item.setData(5, material[2])
+                    new_item.setData(5, accessories[2])
                     new_item.setData(-1, status_sql)
-                    new_item.setData(-2, material[1])
+                    new_item.setData(-2, accessories[1])
                     new_item.setBackground(QBrush(QColor(252, 163, 255, 255)))
                     self.tw_materials.setItem(self.tw_materials.rowCount() - 1, 3, new_item)
         self.calc()
