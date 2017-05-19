@@ -642,6 +642,7 @@ class PackOperation(QDialog, pack_operation_class):
             self.set_info()
 
     def set_info(self):
+
         self.le_operation.setWhatsThis(str(self.operation["operation_id"]))
         self.le_operation.setText(str(self.operation["name"]))
         self.le_name.setText(str(self.operation["name"]))
@@ -662,6 +663,13 @@ class PackOperation(QDialog, pack_operation_class):
 
             self.le_price.setReadOnly(True)
             self.le_value.setReadOnly(True)
+            self.le_name.setReadOnly(True)
+            self.de_make.setReadOnly(True)
+            self.de_input.setReadOnly(True)
+
+            self.toolButton.setEnabled(False)
+            self.toolButton_2.setEnabled(False)
+            self.toolButton_3.setEnabled(False)
 
     def ui_acc(self):
 
