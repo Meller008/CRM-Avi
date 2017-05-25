@@ -905,7 +905,7 @@ class Article(QMainWindow, article_class):
 
     def ui_calc_nds(self):
         try:
-            price = float(self.le_price.text())
+            price = float(self.le_price.text().replace(",", "."))
         except:
             price = 0
         if self.rb_nds_1.isChecked():
