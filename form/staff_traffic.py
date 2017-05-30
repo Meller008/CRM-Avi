@@ -91,6 +91,19 @@ class StaffTraffic(QDialog, staff_traffic):
                 QMessageBox.critical(self, "Ошибка sql получения записей", self.sql_traffic.msg, QMessageBox.Ok)
                 return False
 
+            # Очистим цветные метки
+            if self.select_data:
+                color = (255, 255, 255)
+                color = QColor(color[0], color[1], color[2], 255)
+                brush = QBrush()
+                brush.setColor(color)
+                fomat = QTextCharFormat()
+                fomat.setBackground(brush)
+                for day in range(1, self.select_data.daysInMonth()):
+                    d = QDate(self.select_data.year(), self.select_data.month(), day)
+                    self.calendarWidget.setDateTextFormat(d, fomat)
+
+            # Выставим цветные метки
             color = (79, 255, 185)
             color = QColor(color[0], color[1], color[2], 200)
             brush = QBrush()
@@ -101,6 +114,7 @@ class StaffTraffic(QDialog, staff_traffic):
                 self.calendarWidget.setDateTextFormat(data[2], fomat)
 
         if self.calendarWidget.selectedDate() != self.select_data or self.last_id != id or update:
+
             self.last_id = id
             self.select_data = self.calendarWidget.selectedDate()
             self.tw_traffic.clearContents()
@@ -123,7 +137,8 @@ class StaffTraffic(QDialog, staff_traffic):
                     self.tw_traffic.setItem(self.tw_traffic.rowCount()-1, 2, new_table_item)
 
     def ui_select_date(self):
-        self.set_work_traffic(int(self.le_worker.whatsThis()))
+        if self.le_worker.text():
+            self.set_work_traffic(int(self.le_worker.whatsThis()))
 
     def ui_add_date(self):
         self.cut_passport = StaffTrafficData(self, int(self.le_worker.whatsThis()))
