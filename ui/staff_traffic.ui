@@ -90,13 +90,6 @@
      <item row="3" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="text">
-          <string>Распечатать</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -110,12 +103,9 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButton_2">
          <property name="text">
-          <string>Принять</string>
-         </property>
-         <property name="autoDefault">
-          <bool>false</bool>
+          <string>Расчитать</string>
          </property>
         </widget>
        </item>
@@ -228,22 +218,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>ui_acc()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>521</x>
-     <y>232</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>582</x>
-     <y>250</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>calendarWidget</sender>
    <signal>selectionChanged()</signal>
    <receiver>Dialog</receiver>
@@ -291,12 +265,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_calc_traffic()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>350</x>
+     <y>235</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>350</x>
+     <y>298</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_list_worker()</slot>
-  <slot>ui_acc()</slot>
   <slot>ui_select_date()</slot>
   <slot>ui_add_date()</slot>
   <slot>ui_change_date()</slot>
+  <slot>ui_calc_traffic()</slot>
  </slots>
 </ui>

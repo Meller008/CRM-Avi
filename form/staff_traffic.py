@@ -1,18 +1,18 @@
 from os import getcwd
-from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QLineEdit, QSizePolicy, QWidget
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDialog
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QBrush, QColor, QIcon, QTextCharFormat
 from PyQt5.QtCore import Qt, QDate, QDateTime
 from function import my_sql
-from form import provider, comparing, staff
-from form.templates import table, list
-from decimal import Decimal
-import re
-
+from form import staff
+from form.templates import table
+from datetime import timedelta
+from function import to_excel
 
 staff_card = loadUiType(getcwd() + '/ui/staff_card.ui')[0]
 staff_traffic = loadUiType(getcwd() + '/ui/staff_traffic.ui')[0]
 staff_traffic_data = loadUiType(getcwd() + '/ui/staff_traffic_data.ui')[0]
+staff_traffic_calc = loadUiType(getcwd() + '/ui/staff_traffic_calc.ui')[0]
 
 
 class StaffCardList(table.TableList):
@@ -161,9 +161,13 @@ class StaffTraffic(QDialog, staff_traffic):
         self.worker_list.setWindowModality(Qt.ApplicationModal)
         self.worker_list.show()
 
-    def ui_acc(self):
-        self.close()
-        self.destroy()
+    def ui_calc_traffic(self):
+        try:
+            self.traffic_calc = StaffTrafficCalc(self, int(self.le_worker.whatsThis()), self.calendarWidget.selectedDate())
+            self.traffic_calc.setModal(True)
+            self.traffic_calc.show()
+        except:
+            pass
 
     def of_list_worker(self, item):
         self.le_worker.setWhatsThis(str(item[0]))
@@ -288,3 +292,81 @@ class ChangeCard(QDialog, staff_card):
     def of_list_worker(self, item):
         self.le_worker.setWhatsThis(str(item[0]))
         self.le_worker.setText(item[1])
+
+
+class StaffTrafficCalc(QDialog, staff_traffic_calc):
+    def __init__(self, main, id, date):
+        super(StaffTrafficCalc, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+        self.main = main
+        self.id = id
+        self.date = date
+        self.set_table_size()
+        self.calc()
+
+    def set_table_size(self):
+        self.tw_calc_traffic.horizontalHeader().resizeSection(0, 40)
+        self.tw_calc_traffic.horizontalHeader().resizeSection(1, 110)
+        self.tw_calc_traffic.horizontalHeader().resizeSection(2, 110)
+        self.tw_calc_traffic.horizontalHeader().resizeSection(3, 60)
+
+    def calc(self):
+        query = """SELECT staff_worker_traffic.Table_Data
+                          FROM staff_worker_traffic LEFT JOIN staff_worker_info ON staff_worker_traffic.Worker_Id = staff_worker_info.Id
+                          WHERE staff_worker_traffic.Worker_Id = %s AND DATE_FORMAT(staff_worker_traffic.Data, '%Y%m') = %s
+                          ORDER BY staff_worker_traffic.Data"""
+        sql_param = (self.id, self.date.toString("yyyyMM"))
+        sql_traffic = my_sql.sql_select(query, sql_param)
+        if "mysql.connector.errors" in str(type(sql_traffic)):
+            QMessageBox.critical(self, "Ошибка sql получения записей", sql_traffic.msg, QMessageBox.Ok)
+            return False
+
+        first_date = None
+        all_work_time = []
+        day = 0
+        for date in sql_traffic:
+
+            if not first_date:  # Берем одну дату как первую
+                first_date = date[0]
+                continue
+
+            self.tw_calc_traffic.insertRow(self.tw_calc_traffic.rowCount())
+            last_date = date[0]
+
+            day += 1
+            new_table_item = QTableWidgetItem(str(day))
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(first_date.strftime("%d.%m.%Y %H:%M:%S"))
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(last_date.strftime("%d.%m.%Y %H:%M:%S"))
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 2, new_table_item)
+
+            work_time = last_date.replace(second=0, microsecond=0) - first_date.replace(second=0, microsecond=0)
+            all_work_time.append(work_time)
+            new_table_item = QTableWidgetItem(str(work_time))
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 3, new_table_item)
+
+            first_date = None
+
+        else:
+            self.tw_calc_traffic.insertRow(self.tw_calc_traffic.rowCount())
+            all_time = timedelta(0)
+            for time in all_work_time:
+                all_time += time
+
+            new_table_item = QTableWidgetItem(str(all_time.total_seconds()/3600))
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 3, new_table_item)
+
+    def ui_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tw_calc_traffic, path[0])
+
+    def ui_acc(self):
+        self.close()
+        self.destroy()
+
+

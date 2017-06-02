@@ -14,8 +14,11 @@ def table_to_excel(table, path):
 
         for row in range(table.rowCount()):
             for col in range(table.columnCount()):
-                head = table.item(row, col).text()
-                ws["%s%s" % (COLUMN_EXCEL[col], row+2)] = str(head)
+                if table.item(row, col):
+                    txt = table.item(row, col).text()
+                else:
+                    txt = ''
+                ws["%s%s" % (COLUMN_EXCEL[col], row+2)] = str(txt)
 
     wb.save(path + ".xlsx")
 
