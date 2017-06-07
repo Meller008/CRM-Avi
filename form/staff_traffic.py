@@ -169,6 +169,21 @@ class StaffTraffic(QDialog, staff_traffic):
         except:
             pass
 
+    def ui_del(self):
+        result = QMessageBox.question(self, "Удаление", "Точно удалить запись?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            try:
+                id_item = self.tw_traffic.selectedItems()
+            except:
+                QMessageBox.critical(self, "Ошибка Удаления", "Выделите запись который хотите удалить", QMessageBox.Ok)
+                return False
+            for id in id_item:
+                query = """DELETE FROM staff_worker_traffic WHERE staff_worker_traffic.Id = %s"""
+                sql_info = my_sql.sql_change(query, (id.data(-2), ))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    QMessageBox.critical(self, "Ошибка sql удаления записи посещения", sql_info.msg, QMessageBox.Ok)
+                    return False
+
     def of_list_worker(self, item):
         self.le_worker.setWhatsThis(str(item[0]))
         self.le_worker.setText(item[1])

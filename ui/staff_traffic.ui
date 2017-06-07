@@ -272,12 +272,28 @@
    <slot>ui_calc_traffic()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>350</x>
-     <y>235</y>
+     <x>578</x>
+     <y>245</y>
     </hint>
     <hint type="destinationlabel">
      <x>350</x>
      <y>298</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bu_pack_del</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_del()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>455</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>-37</y>
     </hint>
    </hints>
   </connection>
@@ -288,5 +304,6 @@
   <slot>ui_add_date()</slot>
   <slot>ui_change_date()</slot>
   <slot>ui_calc_traffic()</slot>
+  <slot>ui_del()</slot>
  </slots>
 </ui>
