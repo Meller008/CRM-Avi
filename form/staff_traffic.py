@@ -104,13 +104,27 @@ class StaffTraffic(QDialog, staff_traffic):
                     self.calendarWidget.setDateTextFormat(d, fomat)
 
             # Выставим цветные метки
-            color = (79, 255, 185)
-            color = QColor(color[0], color[1], color[2], 200)
-            brush = QBrush()
-            brush.setColor(color)
-            fomat = QTextCharFormat()
-            fomat.setBackground(brush)
+            color_green = QColor(79, 255, 185, 200)
+            color_yellow = QColor(230, 245, 95, 200)
+            color_red = QColor(245, 110, 95, 200)
+
             for data in self.sql_traffic:
+                if self.calendarWidget.dateTextFormat(data[2]).background().color() == color_yellow:
+                    brush = QBrush()
+                    brush.setColor(color_green)
+                    fomat = QTextCharFormat()
+                    fomat.setBackground(brush)
+                elif self.calendarWidget.dateTextFormat(data[2]).background().color() == color_green:
+                    brush = QBrush()
+                    brush.setColor(color_red)
+                    fomat = QTextCharFormat()
+                    fomat.setBackground(brush)
+                else:
+                    brush = QBrush()
+                    brush.setColor(color_yellow)
+                    fomat = QTextCharFormat()
+                    fomat.setBackground(brush)
+
                 self.calendarWidget.setDateTextFormat(data[2], fomat)
 
         if self.calendarWidget.selectedDate() != self.select_data or self.last_id != id or update:
@@ -183,6 +197,8 @@ class StaffTraffic(QDialog, staff_traffic):
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql удаления записи посещения", sql_info.msg, QMessageBox.Ok)
                     return False
+
+            self.set_work_traffic(self.le_worker.whatsThis(), True)
 
     def of_list_worker(self, item):
         self.le_worker.setWhatsThis(str(item[0]))
