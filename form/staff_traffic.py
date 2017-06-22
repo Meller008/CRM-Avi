@@ -2,7 +2,7 @@ from os import getcwd
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDialog
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QBrush, QColor, QIcon, QTextCharFormat
-from PyQt5.QtCore import Qt, QDate, QDateTime
+from PyQt5.QtCore import Qt, QDate, QDateTime, QTime
 from function import my_sql
 from form import staff
 from form.templates import table
@@ -155,9 +155,13 @@ class StaffTraffic(QDialog, staff_traffic):
             self.set_work_traffic(int(self.le_worker.whatsThis()))
 
     def ui_add_date(self):
-        self.cut_passport = StaffTrafficData(self, int(self.le_worker.whatsThis()))
-        self.cut_passport.setModal(True)
-        self.cut_passport.show()
+        if self.le_worker.whatsThis():
+            self.cut_passport = StaffTrafficData(self, int(self.le_worker.whatsThis()), date=self.calendarWidget.selectedDate())
+            self.cut_passport.setModal(True)
+            self.cut_passport.show()
+        else:
+            QMessageBox.information(self, "Ошибка", "выберите работника", QMessageBox.Ok)
+            return False
 
     def ui_change_date(self):
         try:
@@ -207,7 +211,7 @@ class StaffTraffic(QDialog, staff_traffic):
 
 
 class StaffTrafficData(QDialog, staff_traffic_data):
-    def __init__(self, main, worker_id, traffic_id=None):
+    def __init__(self, main, worker_id, traffic_id=None, date=None):
         super(StaffTrafficData, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
@@ -215,6 +219,7 @@ class StaffTrafficData(QDialog, staff_traffic_data):
         self.main = main
         self.worker = worker_id
         self.traffic_id = traffic_id
+        self.select_date = date
 
         self.set_settings()
 
@@ -237,13 +242,16 @@ class StaffTrafficData(QDialog, staff_traffic_data):
                     tab_date = sql_traffic[0][1].replace(minute=30)
                 else:
                     tab_date = sql_traffic[0][1].replace(minute=0)
-                    tab_date = tab_date(hour=(sql_traffic[0][1].hour+1))
+                    hour_up = sql_traffic[0][1].hour + 1
+                    tab_date = tab_date.replace(hour=hour_up)
 
                 self.dt_tabel_date.setDateTime(tab_date)
 
         else:
-            self.dt_date.setDateTime(QDateTime.currentDateTime())
-            self.dt_tabel_date.setDateTime(QDateTime.currentDateTime())
+            date = self.select_date or QDateTime.currentDateTime()
+            datetime = QDateTime(date, QTime.currentTime())
+            self.dt_date.setDateTime(datetime)
+            self.dt_tabel_date.setDateTime(datetime)
 
     def ui_acc(self):
         if self.traffic_id:
