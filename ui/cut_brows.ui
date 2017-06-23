@@ -283,7 +283,17 @@
          </widget>
         </item>
         <item>
+         <widget class="QToolButton" name="toolButton_6">
+          <property name="text">
+           <string>Печать кроя</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QToolButton" name="toolButton_3">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <pointsize>8</pointsize>
@@ -763,6 +773,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>toolButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_print_cut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>349</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>754</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_edit_number_cut()</slot>
@@ -782,5 +808,6 @@
   <slot>ui_can()</slot>
   <slot>ui_fast_filter()</slot>
   <slot>ui_print_passport()</slot>
+  <slot>ui_print_cut()</slot>
  </slots>
 </ui>

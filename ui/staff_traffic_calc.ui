@@ -87,6 +87,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Печать</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButton_2">
        <property name="text">
         <string>Экспорт</string>
@@ -141,9 +148,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>194</x>
+     <y>415</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>193</x>
+     <y>482</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_export()</slot>
   <slot>ui_acc()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>

@@ -382,12 +382,12 @@ class PackBrows(QDialog, pack_class):
     def ui_print_pack_passport(self):
         cod = str(self.pack.id()).zfill(7)
         row_html = """<tr>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;"><strong>#o_number#</strong></td>
-                        <td style="height: 30px; text-align: left; vertical-align: middle;"><strong>#o_name#</strong></td>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;"><strong>#o_sw#</strong></td>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="width: 30px; height: 30px; text-align: center; vertical-align: middle;"><strong>#o_number#</strong></td>
+                        <td style="width: 500px; height: 30px; text-align: left; vertical-align: middle;"><strong>#o_name#</strong></td>
+                        <td style="width: 120px; font-size: 10pt; height: 30px; text-align: center; vertical-align: middle;"><strong>#o_sw#</strong></td>
+                        <td style="width: 70px; height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="width: 150px; height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="width: 120px; height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
                         </tr>"""
 
         operation_table = ""

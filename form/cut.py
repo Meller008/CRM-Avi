@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QDate, QObject
 from form.supply_material import MaterialName
 from form.pack import PackBrows
 import re
-from function import my_sql, barcode, files
+from function import my_sql, barcode, files, table_to_html
 from classes import cut, print_qt
 from classes.my_class import User
 import codecs
@@ -96,6 +96,11 @@ class CutList(QMainWindow, cut_list_class):
         self.filter.of_set_sql_query(self.query_table_all)
         self.filter.setWindowModality(Qt.ApplicationModal)
         self.filter.show()
+
+    def ui_print(self):
+        head = "Список кроев"
+        html = table_to_html.tab_html(self.tw_cut_list, table_head=head)
+        self.print_class = print_qt.PrintHtml(self, html)
 
     def set_cut_table(self):
         sql_info = my_sql.sql_select(self.query_table_select)
@@ -330,6 +335,46 @@ class CutBrows(QDialog, cut_brows_class):
         self.cut_passport = CutPassport(self, self.cut)
         self.cut_passport.setModal(True)
         self.cut_passport.show()
+
+    def ui_print_cut(self):
+        head = "Крой №%s" % self.cut.id()
+
+        up_html = """
+          <table>
+          <caption>#caption#</caption>
+          <tr>
+          <th>Крой</th><th>Дата кроя</th><th>Вид ткани</th><th>Цена ткани</th><th>Раскладчик</th>
+          </tr>
+          <tr>
+          <td>#id_cut#</td><td>#cut_date#</td><td>#cut_material#</td><td>#material_price#</td><td>#worker#</td>
+          </tr>
+          <tr>
+          </table>
+          <table>
+          <th>Вес пачек</th><th>Вес обрези</th><th>Вес итого</th><th>% обрези</th><th>Заметка</th>
+          </tr>
+          <tr>
+          <td>#weight_pack#</td><td>#weight_rest#</td><td>#weight_all#</td><td>#percent_rest#</td><td>#note#</td>
+          </tr>
+          </table>
+          """
+
+        up_html = up_html.replace("#caption#", head)
+        up_html = up_html.replace("#id_cut#", str(self.cut.id()))
+        up_html = up_html.replace("#cut_date#", str(self.cut.date().strftime("%d.%m.%Y")))
+        up_html = up_html.replace("#cut_material#", str(self.cut.material_name()))
+        up_html = up_html.replace("#material_price#", str(self.cut.material_price()))
+        up_html = up_html.replace("#worker#", str(self.cut.worker_name()))
+
+        up_html = up_html.replace("#weight_pack#", str(self.cut.weight()))
+        up_html = up_html.replace("#weight_rest#", str(self.cut.weight_rest()))
+        up_html = up_html.replace("#weight_all#", str(self.cut.weight_all()))
+        up_html = up_html.replace("#percent_rest#", str(self.cut.percent_rest()))
+        up_html = up_html.replace("#note#", str(self.cut.note()))
+
+
+        html = table_to_html.tab_html(self.tw_pack, up_template=up_html)
+        self.print_class = print_qt.PrintHtml(self, html)
 
     def ui_fast_filter(self):
         if self.le_pack_number_filter.text():
@@ -703,31 +748,31 @@ class CutPassport(QDialog, cut_print_passport):
                             <tbody>
                             <tr>
                             <td style="height: 10px; text-align: center; vertical-align: middle;">Артикул</td>
-                            <td style="width: 50; height: 10px; text-align: center; vertical-align: middle;">Размер</td>
-                            <td style="height: 10px; text-align: center; vertical-align: middle;">Крой</td>
-                            <td style="height: 10px; text-align: center; vertical-align: middle;">Пачка</td>
-                            <td style="width: 100; height: 10px; text-align: center; vertical-align: middle;">Дата</td>
-                            <td style="width: 160; height: 10px; text-align: center; vertical-align: middle;">ID пачки</td>
+                            <td style="width: 60px; height: 10px; text-align: center; vertical-align: middle;">Размер</td>
+                            <td style="width: 60px; height: 10px; text-align: center; vertical-align: middle;">Крой</td>
+                            <td style="width: 60px; height: 10px; text-align: center; vertical-align: middle;">Пачка</td>
+                            <td style="width: 130px; height: 10px; text-align: center; vertical-align: middle;">Дата</td>
+                            <td style="width: 160px; height: 10px; text-align: center; vertical-align: middle;">ID пачки</td>
                             </tr>
                             <tr>
                             <td style="height: 10px; font-size: 15pt; text-align: center; vertical-align: middle;"><strong>#art#</strong></td>
-                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#size#</strong></td>
-                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#cut#</strong></td>
-                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#pack#</strong></td>
-                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#data#</strong></td>
-                            <td style="height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;" rowspan="3"><strong><img src="#pac_barcode_src#" alt="lorem" width="150" height="70" /></strong></td>
+                            <td style="width: 60px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#size#</strong></td>
+                            <td style="width: 60px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#cut#</strong></td>
+                            <td style="width: 60px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#pack#</strong></td>
+                            <td style="width: 130px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#data#</strong></td>
+                            <td style="width: 160px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;" rowspan="3"><strong><img src="#pac_barcode_src#" alt="lorem" width="150" height="70" /></strong></td>
                             </tr>
                             <tr>
                             <td style="height: 10px; text-align: center; vertical-align: middle;">Название</td>
-                            <td style="height: 10px; text-align: center; vertical-align: middle;">кол-во</td>
-                            <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="2">Клиент</td>
-                            <td style="height: 10px; text-align: center; vertical-align: middle;">Штрих код</td>
+                            <td style="width: 60px; height: 10px; text-align: center; vertical-align: middle;">кол-во</td>
+                            <td style="width: 120px; height: 10px; text-align: center; vertical-align: middle;" colspan="2">Клиент</td>
+                            <td style="width: 130px; height: 10px; text-align: center; vertical-align: middle;">Штрих код</td>
                             </tr>
                             <tr>
                             <td style="height: 10px; text-align: center; vertical-align: middle;"><strong>#art_name#</strong></td>
-                            <td style="height: 10px; text-align: center; vertical-align: middle;"><strong>#pack_value#</strong></td>
-                            <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="2"><strong>#client#</strong></td>
-                            <td style="height: 10px; text-align: center; vertical-align: middle;"><strong>#art_barcode#</strong></td>
+                            <td style="width: 60px; height: 10px; text-align: center; vertical-align: middle;"><strong>#pack_value#</strong></td>
+                            <td style="width: 120px; height: 10px; text-align: center; vertical-align: middle;" colspan="2"><strong>#client#</strong></td>
+                            <td style="width: 130px; height: 10px; text-align: center; vertical-align: middle;"><strong>#art_barcode#</strong></td>
                             </tr>
                             <tr>
                             <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="6">Примечание</td>
@@ -741,12 +786,12 @@ class CutPassport(QDialog, cut_print_passport):
                             <table style="height: 78px; border-color: black; margin-left: auto; margin-right: auto;" border="1" width="100%" cellspacing="0" cellpadding="0">
                             <tbody>
                             <tr>
-                            <td style="text-align: center; vertical-align: middle;">№</td>
-                            <td style="width: 300px; text-align: center; vertical-align: middle;">Операция</td>
-                            <td style="width: 150px; text-align: center; vertical-align: middle;">Машинка</td>
+                            <td style="width: 30px; text-align: center; vertical-align: middle;">№</td>
+                            <td style="width: 500px; text-align: center; vertical-align: middle;">Операция</td>
+                            <td style="width: 120px; text-align: center; vertical-align: middle;">Машинка</td>
                             <td style="width: 70px; text-align: center; vertical-align: middle;">Кол-во</td>
-                            <td style="text-align: center; vertical-align: middle;">Фамилия</td>
-                            <td style="text-align: center; vertical-align: middle;">Дата</td>
+                            <td style="width: 150px; text-align: center; vertical-align: middle;">Фамилия</td>
+                            <td style="width: 120px; text-align: center; vertical-align: middle;">Дата</td>
                             </tr>
                             #o_table#
                             </tbody>
@@ -754,12 +799,12 @@ class CutPassport(QDialog, cut_print_passport):
                             <p style="text-align: center;">Приемка на склад ___.___._____г</p>
                             </div>"""
         row_operation_html = """<tr>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;"><strong>#o_number#</strong></td>
-                        <td style="height: 30px; text-align: left; vertical-align: middle;"><strong>#o_name#</strong></td>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;"><strong>#o_sw#</strong></td>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
-                        <td style="height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="width: 30px; height: 30px; text-align: center; vertical-align: middle;"><strong>#o_number#</strong></td>
+                        <td style="width: 500px; height: 30px; text-align: left; vertical-align: middle;"><strong>#o_name#</strong></td>
+                        <td style="width: 120px; font-size: 10pt; height: 30px; text-align: center; vertical-align: middle;"><strong>#o_sw#</strong></td>
+                        <td style="width: 70px; height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="width: 150px; height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
+                        <td style="width: 120px; height: 30px; text-align: center; vertical-align: middle;">&nbsp;</td>
                         </tr>"""
         all_pack_html = ""
         cod = []

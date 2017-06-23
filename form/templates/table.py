@@ -2,7 +2,8 @@ from os import getcwd
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
 from PyQt5.QtGui import QIcon
-from function import my_sql, to_excel
+from function import my_sql, to_excel, table_to_html
+from classes import print_qt
 from decimal import Decimal
 import datetime
 import re
@@ -123,6 +124,11 @@ class TableList(QMainWindow, table_list_class):
 
     def ui_other(self):
         pass
+
+    def ui_print(self):
+        head = self.windowTitle()
+        html = table_to_html.tab_html(self.table_widget, table_head=head)
+        self.print_class = print_qt.PrintHtml(self, html)
 
     def ui_export(self):
         path = QFileDialog.getSaveFileName(self, "Сохранение")

@@ -1,13 +1,14 @@
 from os import getcwd
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDialog
 from PyQt5.uic import loadUiType
-from PyQt5.QtGui import QBrush, QColor, QIcon, QTextCharFormat
+from PyQt5.QtGui import QBrush, QColor, QIcon, QTextCharFormat, QTextDocument
 from PyQt5.QtCore import Qt, QDate, QDateTime, QTime
-from function import my_sql
+from function import my_sql, table_to_html
 from form import staff
 from form.templates import table
 from datetime import timedelta
 from function import to_excel
+from classes import print_qt
 
 staff_card = loadUiType(getcwd() + '/ui/staff_card.ui')[0]
 staff_traffic = loadUiType(getcwd() + '/ui/staff_traffic.ui')[0]
@@ -403,6 +404,17 @@ class StaffTrafficCalc(QDialog, staff_traffic_calc):
         path = QFileDialog.getSaveFileName(self, "Сохранение")
         if path[0]:
             to_excel.table_to_excel(self.tw_calc_traffic, path[0])
+
+    def ui_print(self):
+        query = """SELECT Last_Name, First_Name FROM staff_worker_info WHERE Id = %s"""
+        sql_info = my_sql.sql_select(query, (self.id, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения имени работника", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        head = "Часы работника " + sql_info[0][0] + " " + sql_info[0][1]
+        html = table_to_html.tab_html(self.tw_calc_traffic, table_head=head)
+        self.print_class = print_qt.PrintHtml(self, html)
 
     def ui_acc(self):
         self.close()

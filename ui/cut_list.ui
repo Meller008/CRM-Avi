@@ -123,6 +123,7 @@
    <addaction name="pb_edit_cut"/>
    <addaction name="pb_del_cut"/>
    <addaction name="pb_filter"/>
+   <addaction name="pb_print"/>
   </widget>
   <action name="new_cut">
    <property name="text">
@@ -142,6 +143,11 @@
   <action name="pb_filter">
    <property name="text">
     <string>Фильтр</string>
+   </property>
+  </action>
+  <action name="pb_print">
+   <property name="text">
+    <string>Печать</string>
    </property>
   </action>
  </widget>
@@ -211,11 +217,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_print</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>372</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_cut()</slot>
   <slot>ui_double_table()</slot>
   <slot>ui_del_cut()</slot>
   <slot>ui_filter()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>
