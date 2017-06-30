@@ -100,7 +100,7 @@ class StaffTraffic(QDialog, staff_traffic):
                 brush.setColor(color)
                 fomat = QTextCharFormat()
                 fomat.setBackground(brush)
-                for day in range(1, self.select_data.daysInMonth()):
+                for day in range(1, self.select_data.daysInMonth() + 1):
                     d = QDate(self.select_data.year(), self.select_data.month(), day)
                     self.calendarWidget.setDateTextFormat(d, fomat)
 
