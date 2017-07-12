@@ -270,6 +270,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QToolButton" name="pb_edi">
+            <property name="text">
+             <string>Импорт EDI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -537,8 +544,8 @@
    <slot>ui_view_transport_company()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>554</x>
-     <y>127</y>
+     <x>576</x>
+     <y>113</y>
     </hint>
     <hint type="destinationlabel">
      <x>553</x>
@@ -553,8 +560,8 @@
    <slot>ui_add_position()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>30</x>
-     <y>210</y>
+     <x>38</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -569,8 +576,8 @@
    <slot>ui_change_position()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>151</x>
-     <y>210</y>
+     <x>132</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>-66</x>
@@ -585,8 +592,8 @@
    <slot>ui_del_position()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
-     <y>210</y>
+     <x>189</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>-9</x>
@@ -601,8 +608,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>555</x>
-     <y>76</y>
+     <x>577</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>350</x>
@@ -665,8 +672,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>650</x>
-     <y>127</y>
+     <x>663</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
      <x>640</x>
@@ -697,8 +704,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>212</x>
-     <y>156</y>
+     <x>292</x>
+     <y>141</y>
     </hint>
     <hint type="destinationlabel">
      <x>-115</x>
@@ -745,8 +752,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>315</x>
-     <y>77</y>
+     <x>328</x>
+     <y>68</y>
     </hint>
     <hint type="destinationlabel">
      <x>302</x>
@@ -761,8 +768,8 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>554</x>
-     <y>127</y>
+     <x>576</x>
+     <y>113</y>
     </hint>
     <hint type="destinationlabel">
      <x>507</x>
@@ -794,7 +801,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>756</x>
-     <y>155</y>
+     <y>139</y>
     </hint>
     <hint type="destinationlabel">
      <x>930</x>
@@ -809,8 +816,8 @@
    <slot>ui_check_warehouse()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>345</x>
-     <y>210</y>
+     <x>302</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>254</x>
@@ -825,8 +832,8 @@
    <slot>ui_change_date_shipment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>650</x>
-     <y>127</y>
+     <x>663</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
      <x>942</x>
@@ -841,8 +848,8 @@
    <slot>ui_export()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>407</x>
-     <y>210</y>
+     <x>357</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>337</x>
@@ -882,6 +889,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_edi</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_import_edi()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>417</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>-55</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_client()</slot>
@@ -898,5 +921,6 @@
   <slot>ui_export()</slot>
   <slot>ui_document_list()</slot>
   <slot>ui_view_label()</slot>
+  <slot>ui_import_edi()</slot>
  </slots>
 </ui>

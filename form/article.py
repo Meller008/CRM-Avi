@@ -932,7 +932,8 @@ class Article(QMainWindow, article_class):
                             "parametr_id": self.cb_parametrs.currentData(),
                             "price": self.le_price.text(),
                             "in on place": self.le_in_on_place.text(),
-                            "nds": nds}
+                            "nds": nds,
+                            "client_Name": self.le_client_name.text()}
             self.main.of_tree_select_article(article_info)
             self.close()
             self.destroy()

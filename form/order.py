@@ -1,9 +1,9 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog, QProgressDialog
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog, QProgressDialog, QPushButton
+from PyQt5.QtCore import Qt, QDate, QDateTime, QObject
 from PyQt5.QtGui import QIcon, QBrush, QColor
-import re
+import re, requests, xml.etree.cElementTree as xml_pars
 from decimal import Decimal
 import datetime
 import openpyxl
@@ -19,6 +19,7 @@ position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
 order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
 order_doc = loadUiType(getcwd() + '/ui/order_doc_list.ui')[0]
 order_filter = loadUiType(getcwd() + '/ui/order_filter.ui')[0]
+import_edi = loadUiType(getcwd() + '/ui/order_import_edi.ui')[0]
 
 
 class OrderList(table.TableList):
@@ -165,6 +166,8 @@ class Order(QMainWindow, order_class):
             self.pb_change_position.setEnabled(False)
             self.pb_dell_position.setEnabled(False)
             self.pb_check_warehouse.setEnabled(False)
+            self.pb_check_warehouse.setEnabled(False)
+            self.pb_edi.setEnabled(False)
 
             self.sql_shipped = False
 
@@ -637,6 +640,11 @@ class Order(QMainWindow, order_class):
         path = QFileDialog.getSaveFileName(self, "Сохранение")
         if path[0]:
             to_excel.table_to_excel(self.table_widget, path[0])
+
+    def ui_import_edi(self):
+        self.position = ImportEDI(self)
+        self.position.setModal(True)
+        self.position.show()
 
     def ui_document_list(self):
         self.position = OrderDocList(self)
@@ -1940,4 +1948,327 @@ class OrderDocList(QDialog, order_doc):
     def ui_can(self):
         self.close()
         self.destroy()
+
+
+class ImportEDI(QDialog, import_edi):
+    def __init__(self, main):
+        super(ImportEDI, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.login = {'Name': '4607191149998EC', 'Password': '3NxK8bAyG'}
+        self.main = main
+        self.set_size_table()
+        self.start_edi()
+
+    def set_size_table(self):
+        self.tw_edi_1.horizontalHeader().resizeSection(0, 150)
+        self.tw_edi_1.horizontalHeader().resizeSection(1, 130)
+        self.tw_edi_1.horizontalHeader().resizeSection(2, 410)
+
+        self.tw_edi_2.horizontalHeader().resizeSection(0, 90)
+        self.tw_edi_2.horizontalHeader().resizeSection(1, 95)
+        self.tw_edi_2.horizontalHeader().resizeSection(2, 130)
+
+        self.tw_edi_3.horizontalHeader().resizeSection(0, 240)
+        self.tw_edi_3.horizontalHeader().resizeSection(1, 90)
+        self.tw_edi_3.horizontalHeader().resizeSection(2, 70)
+        self.tw_edi_3.horizontalHeader().resizeSection(3, 45)
+        self.tw_edi_3.horizontalHeader().resizeSection(4, 45)
+        self.tw_edi_3.horizontalHeader().resizeSection(5, 40)
+        self.tw_edi_3.horizontalHeader().resizeSection(6, 60)
+        self.tw_edi_3.horizontalHeader().resizeSection(7, 60)
+        self.tw_edi_3.horizontalHeader().resizeSection(8, 200)
+        self.tw_edi_3.horizontalHeader().resizeSection(9, 40)
+
+    def start_edi(self):
+        url = "https://www.ecod.pl/webserv2/EDIservice.asmx/Relationships"
+        values = self.login
+        values.update( {"Timeout": 2000} )
+        req = requests.get(url, params=values)
+
+        text = req.text.replace("&lt;", "<")
+        text = text.replace("&gt;", ">")
+
+        tree = xml_pars.fromstring(text)
+
+        if tree[0].text != "00000000":
+            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+            self.close()
+            self.destroy()
+            return False
+
+        self.tw_edi_1.setRowCount(0)
+        for relation in tree[1][0]:
+            if relation[3].text == "IN" and relation[4].text == "ORDER":
+                info = {"PartnerIln": relation[1].text,
+                        "DocumentType": relation[4].text,
+                        "DocumentVersion": relation[5].text,
+                        "DocumentStandard": relation[6].text,
+                        "DocumentTest": relation[7].text
+                        }
+
+                self.tw_edi_1.insertRow(self.tw_edi_1.rowCount())
+
+                item = QTableWidgetItem(str(relation[2].text))
+                item.setData(5, info)
+                self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 0, item)
+
+                item = QTableWidgetItem(str(relation[4].text))
+                self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 1, item)
+
+                item = QTableWidgetItem(str(relation[8].text))
+                self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 2, item)
+
+    def ui_edi1_acc(self):
+        try:
+            item_info = self.tw_edi_1.selectedItems()[0].data(5)
+        except:
+            QMessageBox.critical(self, "Ошибка ", "Выделите клиента", QMessageBox.Ok)
+            return False
+
+        url = "https://www.ecod.pl/webserv2/EDIservice.asmx/ListMBEx"
+        item_info.update(self.login)
+        item_info.update({'DocumentStatus': 'A', 'Timeout': 3000, "DateFrom": "", "DateTo": "", "ItemFrom": "", "ItemTo": 30})
+        req = requests.get(url, params=item_info)
+
+        text = req.text.replace("&lt;", "<")
+        text = text.replace("&gt;", ">")
+
+        tree = xml_pars.fromstring(text)
+
+        if tree[0].text != "00000000":
+            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+            self.close()
+            self.destroy()
+            return False
+
+        self.tw_edi_2.setRowCount(0)
+        for relation in tree[1][0]:
+            info = {"PartnerIln": relation[0].text,
+                    "DocumentType": relation[2].text,
+                    "DocumentStandard": relation[4].text,
+                    "TrackingId": relation[1].text
+                    }
+
+            self.tw_edi_2.insertRow(self.tw_edi_2.rowCount())
+
+            item = QTableWidgetItem(str(relation[7].text))
+            item.setData(5, info)
+            self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 0, item)
+
+            item = QTableWidgetItem(QDate.fromString(relation[8].text, Qt.ISODate).toString("dd.MM.yyyy"))
+            self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 1, item)
+
+            item = QTableWidgetItem(QDateTime.fromString(relation[10].text, "yyyy-MM-dd HH:mm:ss").toString("dd.MM.yyyy HH:mm:ss"))
+            self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 2, item)
+
+        self.sw_main.setCurrentIndex(1)
+
+    def ui_edi2_to_edi1(self):
+        self.start_edi()
+        self.sw_main.setCurrentIndex(0)
+
+    def ui_edi2_acc(self):
+        try:
+            item_info = self.tw_edi_2.selectedItems()[0].data(5)
+        except:
+            QMessageBox.critical(self, "Ошибка ", "Выделите заказ", QMessageBox.Ok)
+            return False
+
+        url = "https://www.ecod.pl/webserv2/EDIservice.asmx/Receive"
+        item_info.update(self.login)
+        item_info.update({'ChangeDocumentStatus': 'R', 'Timeout': 5000})
+        req = requests.get(url, params=item_info)
+
+        text = req.text.replace("&lt;", "<")
+        text = text.replace("&gt;", ">")
+
+        tree = xml_pars.fromstring(text)
+
+        if tree[0].text != "00000000":
+            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+            self.close()
+            self.destroy()
+            return False
+
+        self.tw_edi_3.setRowCount(0)
+        color = QBrush(QColor(252, 141, 141, 255))
+
+        for element in tree.iter('{http://www.comarch.com/}OrderNumber'):
+            self.lb_order_number.setText(element.text)
+
+        for element in tree.iter('{http://www.comarch.com/}OrderDate'):
+            self.le_order_date.setText(element.text)
+
+        for element in tree.iter('{http://www.comarch.com/}TotalLines'):
+            self.le_order_position.setText(element.text)
+
+        for element in tree.iter('{http://www.comarch.com/}TotalOrderedAmount'):
+            self.le_order_value.setText(element.text)
+
+        for element in tree.iter('{http://www.comarch.com/}Line-Item'):
+
+            query = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
+                            product_article_parametrs.Client_Name, product_article_parametrs.Price, product_article_parametrs.NDS, product_article_parametrs.In_On_Place
+                          FROM product_article_parametrs
+                            LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                            LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                          WHERE product_article_parametrs.Client_code = %s"""
+            sql_info = my_sql.sql_select(query, (element.find('{http://www.comarch.com/}BuyerItemCode').text.lstrip("0"),))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения артикула", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            self.tw_edi_3.insertRow(self.tw_edi_3.rowCount())
+
+            item = QTableWidgetItem(element.find('{http://www.comarch.com/}ItemDescription').text)
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 0, item)
+
+            item = QTableWidgetItem(element.find('{http://www.comarch.com/}EAN').text)
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 1, item)
+
+            item = QTableWidgetItem(element.find('{http://www.comarch.com/}BuyerItemCode').text)
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 2, item)
+
+            OrderedQuantity = element.find('{http://www.comarch.com/}OrderedQuantity').text
+            item = QTableWidgetItem(OrderedQuantity)
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 3, item)
+
+            OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+            item = QTableWidgetItem(OrderedUnitPacksize)
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
+
+            item = QTableWidgetItem(str(int(OrderedQuantity) / int(OrderedUnitPacksize)))
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
+
+            item = QTableWidgetItem(element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text)
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 6, item)
+
+            if sql_info:
+                if len(sql_info) == 1:  # Одно совпадение
+
+                    price = round(sql_info[0][5] - (sql_info[0][5] * sql_info[0][6]) / (100 + sql_info[0][6]), 2)
+
+                    item_product = QTableWidgetItem(sql_info[0][1] + " " + sql_info[0][2] + " " + sql_info[0][3])
+                    item_product.setData(5, {"article": sql_info[0][1],
+                                             "size": sql_info[0][2],
+                                             "parametr": sql_info[0][2],
+                                             "parametr_id": sql_info[0][0],
+                                             "client_Name": sql_info[0][4],
+                                             "price": sql_info[0][5]})
+
+                    if str(price) == element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text:
+                        item_price = QTableWidgetItem(str(price))
+                        item_price.setData(5, sql_info[0][6])
+                    else:
+                        item_price = QTableWidgetItem(str(price))
+                        item_price.setData(5, sql_info[0][6])
+                        item_price.setBackground(color)
+                else:  # Несколько совпадений
+                    item_product = QTableWidgetItem("Несколько совпадений")
+                    item_price = QTableWidgetItem("")
+            else:  # Нет совпадений
+                item_product = QTableWidgetItem("Нет совпадений")
+                item_price = QTableWidgetItem("")
+
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 8, item_product)
+            self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 7, item_price)
+
+            butt = QPushButton("Изм.")
+            butt.setProperty("row", self.tw_edi_3.rowCount()-1)
+            butt.clicked.connect(self.change_material_name)
+            self.tw_edi_3.setCellWidget(self.tw_edi_3.rowCount()-1, 9, butt)
+
+        self.sw_main.setCurrentIndex(2)
+
+    def ui_edi3_to_edi2(self):
+        self.sw_main.setCurrentIndex(1)
+
+    def ui_edi3_acc(self):
+        for row in range(self.tw_edi_3.rowCount()):
+            if self.tw_edi_3.item(row, 8).data(5):
+                row_main = self.main.tw_position.rowCount()
+
+                article = self.tw_edi_3.item(row, 8).data(5)
+
+                self.main.tw_position.insertRow(row_main)
+
+                table_item = QTableWidgetItem(article["article"])
+                table_item.setData(-1, "new")
+                self.main.tw_position.setItem(row_main, 0, table_item)
+
+                table_item = QTableWidgetItem(article["size"])
+                table_item.setData(-1, "new")
+                self.main.tw_position.setItem(row_main, 1, table_item)
+
+                table_item = QTableWidgetItem(article["parametr"])
+                table_item.setData(-1, "new")
+                table_item.setData(5, article["parametr_id"])
+                self.main.tw_position.setItem(row_main, 2, table_item)
+
+                table_item = QTableWidgetItem(article["client_Name"])
+                table_item.setData(-1, "new")
+                self.main.tw_position.setItem(row_main, 3, table_item)
+
+                nds = self.tw_edi_3.item(row, 7).data(5)
+
+                if self.main.lb_client.whatsThis().find("no_nds") >= 0:
+                    price_no_nds = round(float(article["price"]) - (float(article["price"]) * int(nds)) / (100 + int(nds)), 4)
+                    table_item = QTableWidgetItem(str(price_no_nds))
+                    table_item.setData(-1, "new")
+                    table_item.setData(5, nds)
+                    self.main.tw_position.setItem(row, 4, table_item)
+
+                    table_item = QTableWidgetItem(str(round(price_no_nds * int(self.tw_edi_3.item(row, 3).text()), 4)))
+                    table_item.setData(-1, "new")
+                    table_item.setData(5, nds)
+                    self.main.tw_position.setItem(row, 6, table_item)
+                else:
+                    table_item = QTableWidgetItem(article["price"])
+                    table_item.setData(-1, "new")
+                    table_item.setData(5, nds)
+                    self.main.tw_position.setItem(row, 4, table_item)
+
+                    table_item = QTableWidgetItem(str(round(float(article["price"]) * int(self.tw_edi_3.item(row, 3).text()), 4)))
+                    table_item.setData(-1, "new")
+                    table_item.setData(5, nds)
+                    self.main.tw_position.setItem(row, 6, table_item)
+
+                table_item = QTableWidgetItem(self.tw_edi_3.item(row, 3).text())
+                table_item.setData(-1, "new")
+                table_item.setData(5, self.tw_edi_3.item(row, 4).text())
+                self.main.tw_position.setItem(row, 5, table_item)
+
+        self.main.save_change_order_position = True
+        self.main.pb_doc.deleteLater()
+        self.close()
+        self.destroy()
+        return True
+
+    def change_material_name(self):
+        butt = QObject.sender(self)
+        self.row_change_material = butt.property("row")
+        self.article_list = article.ArticleList(self, True)
+        self.article_list.setWindowModality(Qt.ApplicationModal)
+        self.article_list.show()
+
+    def of_tree_select_article(self, article):
+        self.article_list.close()
+        self.article_list.destroy()
+        item = QTableWidgetItem(article["article"] + " " + article["size"] + " " + article["parametr"])
+        item.setData(5, article)
+        self.tw_edi_3.setItem(self.row_change_material, 8, item)
+
+        price = round(float(article["price"]) - (float(article["price"]) * int(article["nds"])) / (100 + int(article["nds"])), 2)
+        item = QTableWidgetItem(str(price))
+        item.setData(5, article["nds"])
+        if str(price) == self.tw_edi_3.item(self.row_change_material, 6).text():
+            self.tw_edi_3.setItem(self.row_change_material, 7, item)
+        else:
+            color = QBrush(QColor(252, 141, 141, 255))
+            item.setBackground(color)
+            self.tw_edi_3.setItem(self.row_change_material, 7, item)
+
+
 
