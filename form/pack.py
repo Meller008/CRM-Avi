@@ -594,7 +594,11 @@ class PackBrows(QDialog, pack_class):
         self.le_article.setWhatsThis(str(article["parametr_id"]))
         str_article = str(article["article"]) + " (" + str(article["size"]) + ") [" + str(article["parametr"]) + "]"
         self.le_article.setText(str_article)
-        self.le_size.setText(article["size"])
+        try:
+            size = int(article["size"])
+            self.le_size.setText(size)
+        except ValueError:
+            pass
         self.pack.set_article(article["parametr_id"])
 
         if self.pack.id() is None:

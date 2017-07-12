@@ -1956,11 +1956,16 @@ class Pack:
 
     def set_size(self, size):
         if size != "":
-            if self.__size != int(size):
-                self.__size = int(size)
+            try:
+                if self.__size != int(size):
+                    self.__size = int(size)
 
-                if not self.__save_sql_info:
+                    if not self.__save_sql_info:
                         self.__save_sql_info = True
+
+                return True
+            except ValueError:
+                return False
 
     def set_article(self, id):
         if id != "":
