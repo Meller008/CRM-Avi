@@ -20,6 +20,7 @@ exel_info_class = loadUiType(getcwd() + '/ui/exel_info.ui')[0]
 info_date_class = loadUiType(getcwd() + '/ui/exel_info_date.ui')[0]
 add_file_date_class = loadUiType(getcwd() + '/ui/work_add_file.ui')[0]
 staff_filter = loadUiType(getcwd() + '/ui/staff_filter.ui')[0]
+info_date_number_class = loadUiType(getcwd() + '/ui/exel_info_date_and_number.ui')[0]
 
 
 class Staff(QMainWindow, staff_list_class):
@@ -1603,17 +1604,10 @@ class OneStaff(QMainWindow, one_staff_class):
         # Проверяем нужный номер документа
         self.statusBar().showMessage("проверяю SQL")
         doc_date_new = False
-        query = "SELECT IFNULL(MAX(Number), 'No Number'), Date FROM staff_worker_doc_number WHERE Worker_Info_Id = %s AND Name = %s"
+        query = "SELECT IFNULL(Number, 'No Number'), Date FROM staff_worker_doc_number WHERE Worker_Info_Id = %s AND Name = %s"
         doc_number_sql = my_sql.sql_select(query, (self.id_info, "труд.дог."))
         if "mysql.connector.errors" in str(type(doc_number_sql)):
             QMessageBox.critical(self, "Ошибка sql", doc_number_sql.msg, QMessageBox.Ok)
-
-        if "No Number" in doc_number_sql[0]:
-            doc_date_new = True
-            query = "SELECT IFNULL(MAX(Number)+1, 'No Number'), NOW() FROM staff_worker_doc_number WHERE YEAR(Date) = %s AND Name = %s"
-            doc_number_sql = my_sql.sql_select(query, (QDate.currentDate().year(), "труд.дог."))
-            if "mysql.connector.errors" in str(type(doc_number_sql)):
-                QMessageBox.critical(self, "Ошибка sql", doc_number_sql.msg, QMessageBox.Ok)
 
         if "No Number" not in doc_number_sql[0]:
             doc_number = doc_number_sql[0][0]
@@ -1622,13 +1616,14 @@ class OneStaff(QMainWindow, one_staff_class):
             doc_number = 1
             doc_date = self.de_info_recruitment.date().toPyDate()
 
-        info = InfoDate(doc_date)
+        info = InfoDateNumber(doc_date, doc_number)
         if info.exec() == 0:
             self.statusBar().showMessage("Отмена")
             return False
 
-        if info.de_in.date().toPyDate() != doc_date:
+        if info.de_in.date().toPyDate() != doc_date or info.le_number.text() != str(doc_number):
             doc_date = info.de_in.date().toPyDate()
+            doc_number = info.le_number.text()
             doc_date_new = True
 
         # Нужен ли патент
@@ -1677,8 +1672,8 @@ class OneStaff(QMainWindow, one_staff_class):
             f.close()
             if doc_date_new:
                 query = """INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)
-                            ON DUPLICATE KEY UPDATE Date = %s"""
-                parametrs = (self.id_info, "труд.дог.", doc_number, doc_date, doc_date)
+                            ON DUPLICATE KEY UPDATE Number = %s, Date = %s"""
+                parametrs = (self.id_info, "труд.дог.", doc_number, doc_date, doc_number, doc_date)
                 info_sql = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(info_sql)):
                     QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
@@ -1844,7 +1839,7 @@ class OneStaff(QMainWindow, one_staff_class):
 
         # Проверяем нужный номер документа
         self.statusBar().showMessage("проверяю SQL")
-        query = "SELECT IFNULL(MAX(Number), 'No Number') FROM staff_worker_doc_number WHERE Name = %s"
+        query = "SELECT IFNULL(MAX(CAST(Number AS SIGNED)), 'No Number') FROM staff_worker_doc_number WHERE Name = %s"
         doc_number = my_sql.sql_select(query, ("ходатайство", ))
         if "mysql.connector.errors" in str(type(doc_number)):
             QMessageBox.critical(self, "Ошибка sql", doc_number.msg, QMessageBox.Ok)
@@ -1856,7 +1851,7 @@ class OneStaff(QMainWindow, one_staff_class):
             doc_number = 1
 
         # Узнаем номер договора
-        query = "SELECT IFNULL(MAX(Number), 'No Number'), Date FROM staff_worker_doc_number WHERE Name = %s AND Worker_Info_Id = %s"
+        query = "SELECT IFNULL(MAX(CAST(Number AS SIGNED)), 'No Number'), Date FROM staff_worker_doc_number WHERE Name = %s AND Worker_Info_Id = %s"
         contract_number = my_sql.sql_select(query, ("труд.дог.", self.id_info))
         if "mysql.connector.errors" in str(type(doc_number)):
             QMessageBox.critical(self, "Ошибка sql", contract_number.msg, QMessageBox.Ok)
@@ -2228,6 +2223,17 @@ class InfoDate(QDialog, info_date_class):
         super(InfoDate, self).__init__()
         self.setupUi(self)
         self.de_in.setDate(date_in)
+        self.setModal(True)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+        self.show()
+
+
+class InfoDateNumber(QDialog, info_date_number_class):
+    def __init__(self, date_in, number):
+        super(InfoDateNumber, self).__init__()
+        self.setupUi(self)
+        self.de_in.setDate(date_in)
+        self.le_number.setText(str(number))
         self.setModal(True)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.show()
