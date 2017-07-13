@@ -367,6 +367,10 @@ class StaffTrafficCalc(QDialog, staff_traffic_calc):
         day = 0
         for date in sql_traffic:
 
+            if date[0] is None:
+                QMessageBox.critical(self, "Ошибка дат", "Скорее всего подтвержденны не все даты!", QMessageBox.Ok)
+                return False
+
             if not first_date:  # Берем одну дату как первую
                 first_date = date[0]
                 continue
