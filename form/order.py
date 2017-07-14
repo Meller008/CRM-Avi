@@ -10,7 +10,8 @@ import openpyxl
 from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
 from openpyxl.worksheet.pagebreak import Break
 from copy import copy
-from function import my_sql, to_excel
+from function import my_sql, to_excel, table_to_html
+from classes import print_qt
 from form.templates import table, list
 from form import clients, article, print_label
 import num2t4ru
@@ -663,6 +664,52 @@ class Order(QMainWindow, order_class):
         self.print_label = print_label.LabelFile(self.tw_position_label.item(row, 2).data(5), "Путь корень бирки", data)
         self.print_label.setModal(True)
         self.print_label.show()
+
+    def ui_print_order(self):
+        head = "Заказ"
+
+        up_html = """
+          <table>
+          <caption>#caption#</caption>
+          <tr>
+          <th>Клиент</th><th>Постащик</th><th>Дата заказа</th><th>№ Заказа</th>
+          </tr>
+          <tr>
+          <td>#client#</td><td>#clients_vendor#</td><td>#date_order#</td><td>#number_order#</td>
+          </tr>
+          <tr>
+          </table>
+          <table>
+          <th>Пункт разгрузки</th><th>Транспортная</th><th>Дата отгрузки</th><th>№ Документа</th>
+          </tr>
+          <tr>
+          <td>#clients_adress#</td><td>#transport_company#</td><td>#date_shipment#</td><td>#number_doc#</td>
+          </tr>
+          </table>
+          <table>
+          <th>Примечание</th>
+          </tr>
+          <tr>
+          <td>#note#</td>
+          </tr>
+          </table>
+          """
+
+        up_html = up_html.replace("#caption#", head)
+        up_html = up_html.replace("#client#", str(self.le_client.text()))
+        up_html = up_html.replace("#clients_vendor#", str(self.cb_clients_vendor.currentText()))
+        up_html = up_html.replace("#date_order#", self.de_date_order.date().toString("dd.MM.yyyy"))
+        up_html = up_html.replace("#number_order#", str(self.le_number_order.text()))
+
+        up_html = up_html.replace("#clients_adress#", str(self.cb_clients_adress.currentText()))
+        up_html = up_html.replace("#transport_company#", str(self.le_transport_company.text()))
+        up_html = up_html.replace("#date_shipment#", self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        up_html = up_html.replace("#number_doc#", str(self.le_number_doc.text()))
+
+        up_html = up_html.replace("#note#", str(self.le_note.text()))
+
+        html = table_to_html.tab_html(self.tw_position, up_template=up_html)
+        self.print_class = print_qt.PrintHtml(self, html)
 
     def ui_acc(self):
         if self.save_sql():

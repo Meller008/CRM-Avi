@@ -492,10 +492,16 @@
     <bool>false</bool>
    </attribute>
    <addaction name="pb_doc"/>
+   <addaction name="pb_print"/>
   </widget>
   <action name="pb_doc">
    <property name="text">
     <string>Документы</string>
+   </property>
+  </action>
+  <action name="pb_print">
+   <property name="text">
+    <string>Печать заказа</string>
    </property>
   </action>
  </widget>
@@ -905,6 +911,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_print</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print_order()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>381</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_client()</slot>
@@ -922,5 +944,6 @@
   <slot>ui_document_list()</slot>
   <slot>ui_view_label()</slot>
   <slot>ui_import_edi()</slot>
+  <slot>ui_print_order()</slot>
  </slots>
 </ui>

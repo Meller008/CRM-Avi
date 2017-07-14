@@ -372,7 +372,6 @@ class CutBrows(QDialog, cut_brows_class):
         up_html = up_html.replace("#percent_rest#", str(self.cut.percent_rest()))
         up_html = up_html.replace("#note#", str(self.cut.note()))
 
-
         html = table_to_html.tab_html(self.tw_pack, up_template=up_html)
         self.print_class = print_qt.PrintHtml(self, html)
 
