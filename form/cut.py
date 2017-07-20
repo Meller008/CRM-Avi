@@ -11,9 +11,9 @@ import re
 from function import my_sql, barcode, files, table_to_html
 from classes import cut, print_qt
 from classes.my_class import User
+from form.templates import table
 import codecs
 
-cut_list_class = loadUiType(getcwd() + '/ui/cut_list.ui')[0]
 cut_brows_class = loadUiType(getcwd() + '/ui/cut_brows.ui')[0]
 cut_filter = loadUiType(getcwd() + '/ui/cut_filter.ui')[0]
 
@@ -23,7 +23,90 @@ edit_cut_mission_class = loadUiType(getcwd() + '/ui/cut_edit_mission.ui')[0]
 cut_print_passport = loadUiType(getcwd() + '/ui/cut_print_passport.ui')[0]
 
 
-class CutList(QMainWindow, cut_list_class):
+class CutList(table.TableList):
+    def set_settings(self):
+
+        self.setWindowTitle("Кроя")  # Имя окна
+        self.resize(900, 270)
+        self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
+        self.toolBar.setStyleSheet("background-color: rgb(63, 173, 191);")  # Цвет бара
+
+        # Названия колонк (Имя, Длинна)
+        self.table_header_name = (("№", 35), ("Дата кроя", 70), ("Вес пачек", 80), ("Вес обрези", 80), ("Вес итого", 80), ("Пачек", 55),
+                                  ("Раскладчик", 100), ("Заметка", 200))
+
+        # Быстрый фильтр
+        self.le_fast_filter = QLineEdit()
+        self.le_fast_filter.setPlaceholderText("Номер кроя")
+        self.le_fast_filter.setMaximumWidth(150)
+        self.le_fast_filter.editingFinished.connect(self.fast_filter)
+        dummy = QWidget()
+        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        self.toolBar.addWidget(dummy)
+        self.toolBar.addWidget(self.le_fast_filter)
+
+        self.filter = None
+        self.query_table_all = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
+                                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                                      LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
+                                      GROUP BY cut.Id
+                                      ORDER BY Cut_Id DESC"""
+
+        #  нулевой элемент должен быть ID
+        self.query_table_select = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
+                                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                                      LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
+                                      GROUP BY cut.Id
+                                      ORDER BY Cut_Id DESC"""
+
+        #self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
+
+    def ui_add_table_item(self):  # Добавить предмет
+        self.cut_window = CutBrows(self)
+        self.cut_window.setModal(True)
+        self.cut_window.show()
+
+    def ui_change_table_item(self, id=False):  # изменить элемент
+        if id:
+            item_id = id
+        else:
+            try:
+                item_id = self.table_widget.selectedItems()[0].data(5)
+            except:
+                QMessageBox.critical(self, "Ошибка ", "Выделите элемент который хотите изменить", QMessageBox.Ok)
+                return False
+
+        self.cut_window = CutBrows(self, item_id)
+        self.cut_window.setModal(True)
+        self.cut_window.show()
+
+    def ui_filter(self):
+        if self.filter is None:
+            self.filter = CutFilter(self)
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(Qt.ApplicationModal)
+        self.filter.show()
+
+    def fast_filter(self):
+        # Блок условий номер кроя
+        if self.le_fast_filter.text() != '':
+            q_filter = " WHERE (cut.Id = %s)" % self.le_fast_filter.text()
+            self.query_table_select = self.query_table_all.replace("GROUP BY", q_filter + " GROUP BY")
+        else:
+            self.query_table_select = self.query_table_all
+
+        self.ui_update()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+        self.ui_update()
+
+    def of_change_cut_complete(self):
+        self.ui_update()
+
+'''
+class CutList0(QMainWindow, cut_list_class):
     def __init__(self):
         super(CutList, self).__init__()
         self.setupUi(self)
@@ -165,6 +248,7 @@ class CutList(QMainWindow, cut_list_class):
         self.query_table_select = sql
 
         self.set_cut_table()
+'''
 
 
 class CutBrows(QDialog, cut_brows_class):
