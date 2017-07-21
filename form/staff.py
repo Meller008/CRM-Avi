@@ -1604,12 +1604,12 @@ class OneStaff(QMainWindow, one_staff_class):
         # Проверяем нужный номер документа
         self.statusBar().showMessage("проверяю SQL")
         doc_date_new = False
-        query = "SELECT IFNULL(Number, 'No Number'), Date FROM staff_worker_doc_number WHERE Worker_Info_Id = %s AND Name = %s"
+        query = "SELECT Number, Date FROM staff_worker_doc_number WHERE Worker_Info_Id = %s AND Name = %s"
         doc_number_sql = my_sql.sql_select(query, (self.id_info, "труд.дог."))
         if "mysql.connector.errors" in str(type(doc_number_sql)):
             QMessageBox.critical(self, "Ошибка sql", doc_number_sql.msg, QMessageBox.Ok)
 
-        if "No Number" not in doc_number_sql[0]:
+        if doc_number_sql:
             doc_number = doc_number_sql[0][0]
             doc_date = doc_number_sql[0][1]
         else:
