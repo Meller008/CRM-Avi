@@ -666,6 +666,9 @@
          <property name="decimals">
           <number>4</number>
          </property>
+         <property name="maximum">
+          <double>500.990000000000009</double>
+         </property>
         </widget>
        </item>
       </layout>

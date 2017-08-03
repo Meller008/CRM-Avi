@@ -917,10 +917,10 @@ class Article(QMainWindow, article_class):
     def ui_acc(self):
 
         if not self.dc_select:
-            self.save_sql()
-            self.close()
-            self.destroy()
-            self.main.set_table_info()
+            if self.save_sql():
+                self.close()
+                self.destroy()
+                self.main.set_table_info()
         else:
             if self.rb_nds_1.isChecked():
                 nds = 18
@@ -1016,6 +1016,13 @@ class Article(QMainWindow, article_class):
             self.cb_parametrs.setCurrentIndex(index-1)
 
     def save_sql(self):
+
+        try:
+            float(self.le_in_on_place.text())
+        except ValueError:
+            QMessageBox.information(self, "Ошибка PCB", "Не верное значение поля 'В одном месте'", QMessageBox.Ok)
+            return False
+
         if "article" in self.save_change:
             query = """UPDATE product_article SET Article = %s, Name = %s WHERE Id = %s"""
             sql_info = my_sql.sql_change(query, (self.le_article.text(), self.le_name.text(), self.id))
@@ -1127,6 +1134,7 @@ class Article(QMainWindow, article_class):
                     return False
 
         self.save_change = []
+        return True
 
     def set_enabled(self, en_bool):
         self.le_client_name.setEnabled(en_bool)
