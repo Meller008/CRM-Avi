@@ -13,11 +13,12 @@ operation_filter = loadUiType(getcwd() + '/ui/operation_filter.ui')[0]
 
 class OperationList(tree.TreeList):
     def set_settings(self):
+        self.resize(900, 400)
         self.setWindowTitle("Список операций")  # Имя окна
         self.toolBar.setStyleSheet("background-color: rgb(85, 255, 255);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Название", 300), ("Цена", 70), ("Машинка", 120))
+        self.table_header_name = (("Название", 300), ("Цена", 70), ("Машинка", 120), ("Заметка", 150))
 
         self.query_tree_select = "SELECT Id, Parent_Id, Name FROM operation_tree ORDER BY Parent_Id, Position"
         self.query_tree_add = "INSERT INTO operation_tree (Parent_Id, Name, Position) VALUES (%s, %s, %s)"
@@ -25,11 +26,11 @@ class OperationList(tree.TreeList):
         self.query_tree_del = "DELETE FROM operation_tree WHERE Id = %s"
 
         self.filter = None
-        self.query_table_all = "SELECT operations.Id, operations.Tree_Id, operations.Name, operations.Price, sewing_machine.Name  " \
+        self.query_table_all = "SELECT operations.Id, operations.Tree_Id, operations.Name, operations.Price, sewing_machine.Name, operations.Note2  " \
                                   "FROM operations LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id"
 
         #  нулевой элемент должен быть ID а первый Parent_ID (ID категории)
-        self.query_table_select = "SELECT operations.Id, operations.Tree_Id, operations.Name, operations.Price, sewing_machine.Name  " \
+        self.query_table_select = "SELECT operations.Id, operations.Tree_Id, operations.Name, operations.Price, sewing_machine.Name, operations.Note2  " \
                                   "FROM operations LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id"
         self.query_transfer_item = "UPDATE operations SET Tree_Id = %s WHERE Id = %s"
         self.query_table_dell = "DELETE FROM operations WHERE Id = %s"
@@ -122,7 +123,7 @@ class Operation(QDialog, operation_class):
             self.set_sql_info()
 
     def set_sql_info(self):
-        query = """SELECT operations.Name, operations.Price, sewing_machine.Name, sewing_machine.Id, operations.Note
+        query = """SELECT operations.Name, operations.Price, sewing_machine.Name, sewing_machine.Id, operations.Note, operations.Note2
                     FROM operations LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id WHERE operations.Id = %s"""
         sql_info = my_sql.sql_select(query, (self.id, ))
         if "mysql.connector.errors" in str(type(sql_info)):
@@ -133,6 +134,7 @@ class Operation(QDialog, operation_class):
         self.le_machine.setText(sql_info[0][2])
         self.le_machine.setWhatsThis(str(sql_info[0][3]))
         self.pe_note.appendPlainText(sql_info[0][4])
+        self.le_note_2.setText(sql_info[0][5])
 
     def ui_view_machine(self):
         self.machine = MachineName(self, True)
@@ -154,14 +156,14 @@ class Operation(QDialog, operation_class):
             return False
 
         if self.id:
-            query = "UPDATE operations SET Name = %s, Sewing_Machine_Id = %s, Price = %s, Note = %s WHERE Id = %s"
-            sql_info = my_sql.sql_change(query, (self.le_name.text(), self.le_machine.whatsThis(), price, self.pe_note.toPlainText(), self.id))
+            query = "UPDATE operations SET Name = %s, Sewing_Machine_Id = %s, Price = %s, Note = %s, Note2 = %s WHERE Id = %s"
+            sql_info = my_sql.sql_change(query, (self.le_name.text(), self.le_machine.whatsThis(), price, self.pe_note.toPlainText(), self.le_note_2.text(), self.id))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql обновление информации", sql_info.msg, QMessageBox.Ok)
                 return False
         elif self.tree_id:
-            query = "INSERT INTO operations (Tree_Id, Name, Price, Sewing_Machine_Id, Note) VALUES (%s, %s, %s, %s, %s)"
-            sql_info = my_sql.sql_change(query, (self.tree_id, self.le_name.text(), price, self.le_machine.whatsThis(), self.pe_note.toPlainText()))
+            query = "INSERT INTO operations (Tree_Id, Name, Price, Sewing_Machine_Id, Note, Note2) VALUES (%s, %s, %s, %s, %s, %s)"
+            sql_info = my_sql.sql_change(query, (self.tree_id, self.le_name.text(), price, self.le_machine.whatsThis(), self.pe_note.toPlainText(), self.le_note_2.text()))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql добавление информации", sql_info.msg, QMessageBox.Ok)
                 return False
