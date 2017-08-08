@@ -76,3 +76,12 @@ self.new_supply.show()
 
 Управление доступами!
 - отключение общего меню в баре = self.menu_3.setEnabled(False)
+
+
+Диологовое окно с окошком подробностей. Исполльзую в операциях!
+msg = QMessageBox()
+msg.setIcon(QMessageBox.Information)
+msg.setWindowTitle("Совпадения")
+msg.setText("Найдено %s совпадений" % len(sql_art))
+msg.setDetailedText(text)
+msg.exec()

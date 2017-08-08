@@ -13,12 +13,13 @@ operation_filter = loadUiType(getcwd() + '/ui/operation_filter.ui')[0]
 
 class OperationList(tree.TreeList):
     def set_settings(self):
-        self.resize(900, 400)
+        self.resize(1050, 400)
         self.setWindowTitle("Список операций")  # Имя окна
         self.toolBar.setStyleSheet("background-color: rgb(85, 255, 255);")  # Цвет бара
+        self.pb_other.setText("Артикула")
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Название", 300), ("Цена", 70), ("Машинка", 120), ("Заметка", 150))
+        self.table_header_name = (("Название", 300), ("Цена", 70), ("Машинка", 120), ("Заметка", 300))
 
         self.query_tree_select = "SELECT Id, Parent_Id, Name FROM operation_tree ORDER BY Parent_Id, Position"
         self.query_tree_add = "INSERT INTO operation_tree (Parent_Id, Name, Position) VALUES (%s, %s, %s)"
@@ -104,6 +105,35 @@ class OperationList(tree.TreeList):
         self.filter.of_set_sql_query(self.query_table_all)
         self.filter.setWindowModality(Qt.ApplicationModal)
         self.filter.show()
+
+    def ui_other(self):
+        try:
+            item_id = self.table_widget.selectedItems()[0].data(5)
+        except:
+            QMessageBox.critical(self, "Ошибка ", "Выделите операцию", QMessageBox.Ok)
+            return False
+
+        query = """SELECT CONCAT(product_article.Article, ' ', product_article_size.Size, ' ', product_article_parametrs.Name) FROM operations
+                        LEFT JOIN product_article_operation ON operations.Id = product_article_operation.Operation_Id
+                        LEFT JOIN product_article_parametrs ON product_article_operation.Product_Article_Parametrs_Id = product_article_parametrs.Id
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                      WHERE operations.Id = %s"""
+        sql_art = my_sql.sql_select(query, (item_id, ))
+        if "mysql.connector.errors" in str(type(sql_art)):
+                QMessageBox.critical(self, "Ошибка sql получения зависимости", sql_art.msg, QMessageBox.Ok)
+                return False
+
+        text = ""
+        for art in sql_art:
+            text += art[0] + "\n"
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setWindowTitle("Совпадения")
+        msg.setText("Найдено %s совпадений" % len(sql_art))
+        msg.setDetailedText(text)
+        msg.exec()
 
     def of_set_filter(self, sql):
         self.query_table_select = sql
