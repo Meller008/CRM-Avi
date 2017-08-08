@@ -30,239 +30,68 @@
     <property name="spacing">
      <number>2</number>
     </property>
-    <item row="7" column="0">
-     <widget class="QLabel" name="label_4">
+    <item row="12" column="0">
+     <widget class="QLabel" name="label_23">
       <property name="text">
-       <string>Дата рождения</string>
+       <string>Должность</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="5">
-     <widget class="QLabel" name="label_34">
-      <property name="text">
-       <string>ИНН №</string>
+    <item row="12" column="1" colspan="3">
+     <widget class="QComboBox" name="cb_info_position">
+      <property name="editable">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
-    <item row="3" column="5">
-     <widget class="QLabel" name="label_8">
-      <property name="text">
-       <string>Дата приема</string>
-      </property>
-     </widget>
-    </item>
-    <item row="16" column="6">
-     <layout class="QHBoxLayout" name="horizontalLayout">
+    <item row="6" column="1" colspan="3">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QPushButton" name="pb_acc">
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>0</height>
-         </size>
-        </property>
+       <widget class="QRadioButton" name="rb_sex_m">
         <property name="text">
-         <string>Применить</string>
+         <string>Мужчина</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_11">
+       <widget class="QRadioButton" name="rb_sex_f">
         <property name="text">
-         <string>Отменить</string>
+         <string>Женщина</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
-    <item row="1" column="4" rowspan="12">
-     <widget class="Line" name="line_2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+    <item row="8" column="1" colspan="3">
+     <widget class="QComboBox" name="cb_info_country">
+      <property name="editable">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
-    <item row="3" column="1" colspan="3">
-     <widget class="QLineEdit" name="le_info_last_name">
-      <property name="maxLength">
-       <number>40</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="5">
-     <widget class="QLabel" name="label_10">
-      <property name="text">
-       <string>Стаж: новый</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="6">
-     <widget class="QCheckBox" name="cb_info_leave">
-      <property name="text">
-       <string>Уволен?</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Фамилия</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="6">
-     <widget class="QLineEdit" name="le_info_inn">
-      <property name="maxLength">
-       <number>12</number>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Гражданство</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="3">
-     <widget class="QLabel" name="lb_info_years">
-      <property name="text">
-       <string>Возраст: --</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="5">
-     <widget class="QLabel" name="label_9">
-      <property name="text">
-       <string>Дата увольнения</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="6">
-     <widget class="QDateEdit" name="de_info_recruitment">
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="0">
-     <widget class="QLabel" name="label_12">
-      <property name="text">
-       <string>Телефон</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="5">
-     <widget class="QLabel" name="label_40">
-      <property name="text">
-       <string>СНИЛС №</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_14">
-      <property name="text">
-       <string>Пол</string>
-      </property>
-     </widget>
-    </item>
-    <item row="13" column="0" colspan="7">
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="1" colspan="3">
-     <widget class="QLineEdit" name="le_info_address">
-      <property name="maxLength">
-       <number>80</number>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="0">
-     <widget class="QLabel" name="label_6">
-      <property name="text">
-       <string>Адрес регистр.</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="5" rowspan="2" colspan="2">
-     <widget class="QLabel" name="lb_info_id">
-      <property name="styleSheet">
-       <string notr="true">font: 10pt &quot;Tahoma&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Табельный номер: новый</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="6" rowspan="3">
-     <widget class="QPlainTextEdit" name="le_info_note"/>
-    </item>
-    <item row="4" column="1" colspan="3">
-     <widget class="QLineEdit" name="le_info_middle_name">
-      <property name="maxLength">
-       <number>40</number>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="6">
-     <widget class="QDateEdit" name="de_info_leave">
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="5" rowspan="3">
-     <widget class="QLabel" name="label_11">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Комментарий&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Отчество</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1" rowspan="2" colspan="3">
-     <widget class="QLineEdit" name="le_info_first_name">
-      <property name="maxLength">
-       <number>40</number>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" rowspan="2">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Имя</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="1" colspan="3">
-     <widget class="QLineEdit" name="le_info_phone">
+    <item row="8" column="6">
+     <widget class="QLineEdit" name="le_info_snils">
       <property name="maxLength">
        <number>13</number>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1" colspan="2">
-     <widget class="QDateEdit" name="de_info_birth">
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="1" colspan="3">
-     <widget class="QLineEdit" name="le_info_birthplace"/>
-    </item>
-    <item row="9" column="0">
-     <widget class="QLabel" name="label_7">
-      <property name="text">
-       <string>Место рождения</string>
       </property>
      </widget>
     </item>
@@ -1105,52 +934,266 @@
       </widget>
      </widget>
     </item>
-    <item row="8" column="6">
-     <widget class="QLineEdit" name="le_info_snils">
+    <item row="1" column="4" rowspan="12">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="5">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>Стаж: новый</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="6">
+     <widget class="QDateEdit" name="de_info_recruitment">
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="6">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="pb_acc">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Применить</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_11">
+        <property name="text">
+         <string>Отменить</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="7" column="3">
+     <widget class="QLabel" name="lb_info_years">
+      <property name="text">
+       <string>Возраст: --</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Дата рождения</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="5">
+     <widget class="QLabel" name="label_40">
+      <property name="text">
+       <string>СНИЛС №</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>Телефон</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Гражданство</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string>Пол</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="5">
+     <widget class="QLabel" name="label_34">
+      <property name="text">
+       <string>ИНН №</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Фамилия</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_last_name">
+      <property name="maxLength">
+       <number>40</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Дата приема</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="5">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Дата увольнения</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="6">
+     <widget class="QLineEdit" name="le_info_inn">
+      <property name="maxLength">
+       <number>12</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_middle_name">
+      <property name="maxLength">
+       <number>40</number>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="6">
+     <widget class="QDateEdit" name="de_info_leave">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1" colspan="2">
+     <widget class="QDateEdit" name="de_info_birth">
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="0" colspan="7">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="6" rowspan="3">
+     <widget class="QPlainTextEdit" name="le_info_note"/>
+    </item>
+    <item row="9" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_birthplace"/>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Место рождения</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" rowspan="2" colspan="3">
+     <widget class="QLineEdit" name="le_info_first_name">
+      <property name="maxLength">
+       <number>40</number>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_phone">
       <property name="maxLength">
        <number>13</number>
       </property>
      </widget>
     </item>
-    <item row="12" column="1" colspan="3">
-     <widget class="QComboBox" name="cb_info_position">
-      <property name="editable">
-       <bool>false</bool>
+    <item row="11" column="1" colspan="3">
+     <widget class="QLineEdit" name="le_info_address">
+      <property name="maxLength">
+       <number>80</number>
       </property>
      </widget>
     </item>
-    <item row="8" column="1" colspan="3">
-     <widget class="QComboBox" name="cb_info_country">
-      <property name="editable">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="0">
-     <widget class="QLabel" name="label_23">
+    <item row="10" column="5" rowspan="3">
+     <widget class="QLabel" name="label_11">
       <property name="text">
-       <string>Должность</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Комментарий&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="1" colspan="3">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item row="1" column="0" rowspan="2">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Имя</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Адрес регистр.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Отчество</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="5" rowspan="2" colspan="2">
+     <widget class="QLabel" name="lb_info_id">
+      <property name="styleSheet">
+       <string notr="true">font: 10pt &quot;Tahoma&quot;;</string>
+      </property>
+      <property name="text">
+       <string>Табельный номер: новый</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="6">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QRadioButton" name="rb_sex_m">
+       <widget class="QRadioButton" name="rb_not_employed">
         <property name="text">
-         <string>Мужчина</string>
+         <string>Не приянт</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="rb_sex_f">
+       <widget class="QRadioButton" name="rb_employed">
         <property name="text">
-         <string>Женщина</string>
+         <string>Принят</string>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
+       <widget class="QRadioButton" name="rb_leave">
+        <property name="text">
+         <string>Уволен</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -1190,7 +1233,6 @@
    <zorder>de_info_leave</zorder>
    <zorder>label_34</zorder>
    <zorder>label_9</zorder>
-   <zorder>cb_info_leave</zorder>
    <zorder>label_10</zorder>
    <zorder>de_info_recruitment</zorder>
    <zorder>label_8</zorder>
@@ -1201,6 +1243,7 @@
    <zorder>cb_info_position</zorder>
    <zorder>le_info_birthplace</zorder>
    <zorder>label_7</zorder>
+   <zorder>horizontalLayoutWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -1257,7 +1300,6 @@
   <tabstop>de_patent_issued</tabstop>
   <tabstop>de_patent_ending</tabstop>
   <tabstop>pb_acc</tabstop>
-  <tabstop>cb_info_leave</tabstop>
   <tabstop>pushButton_5</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>pushButton_6</tabstop>
@@ -1287,22 +1329,6 @@
     <hint type="destinationlabel">
      <x>275</x>
      <y>391</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cb_info_leave</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>de_info_leave</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>664</x>
-     <y>74</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>664</x>
-     <y>100</y>
     </hint>
    </hints>
   </connection>
@@ -1463,22 +1489,6 @@
     <hint type="destinationlabel">
      <x>373</x>
      <y>41</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cb_info_leave</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>alter_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>557</x>
-     <y>66</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>567</x>
-     <y>76</y>
     </hint>
    </hints>
   </connection>
@@ -1954,7 +1964,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>529</x>
-     <y>368</y>
+     <y>367</y>
     </hint>
     <hint type="destinationlabel">
      <x>664</x>
@@ -2033,8 +2043,8 @@
    <slot>select_file()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>16</x>
-     <y>470</y>
+     <x>19</x>
+     <y>466</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2210,7 +2220,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>702</x>
-     <y>368</y>
+     <y>367</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2226,7 +2236,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>702</x>
-     <y>436</y>
+     <y>433</y>
     </hint>
     <hint type="destinationlabel">
      <x>767</x>
@@ -2242,7 +2252,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>702</x>
-     <y>470</y>
+     <y>466</y>
     </hint>
     <hint type="destinationlabel">
      <x>731</x>
@@ -2258,7 +2268,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>702</x>
-     <y>402</y>
+     <y>400</y>
     </hint>
     <hint type="destinationlabel">
      <x>716</x>
@@ -2274,7 +2284,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>529</x>
-     <y>402</y>
+     <y>400</y>
     </hint>
     <hint type="destinationlabel">
      <x>726</x>
@@ -2343,6 +2353,70 @@
     <hint type="destinationlabel">
      <x>-56</x>
      <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_leave</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>de_info_leave</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>651</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>651</x>
+     <y>92</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_not_employed</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>504</x>
+     <y>66</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>503</x>
+     <y>-98</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_employed</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>592</x>
+     <y>68</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>585</x>
+     <y>-82</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_leave</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>alter_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>629</x>
+     <y>68</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>622</x>
+     <y>-54</y>
     </hint>
    </hints>
   </connection>

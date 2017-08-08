@@ -2,7 +2,7 @@ from os import getcwd, path, mkdir, listdir, rmdir, rename
 from shutil import copy
 from form.templates import list
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog, QLineEdit, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog, QLineEdit, QWidget, QSizePolicy, QButtonGroup
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql, to_excel
@@ -102,6 +102,7 @@ class Staff(QMainWindow, staff_list_class):
             self.lw_position.addItem("Уволеные в этом месяце")
             self.lw_position.addItem("Уволеные в этом году")
             self.lw_position.addItem("Уволеные")
+            self.lw_position.addItem("Не принятые")
             self.lw_position.addItem("Все работающие")
 
         self.tw_workers.clearContents()
@@ -192,6 +193,17 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
                 if self.staff_workers[row][4] == 1 and self.staff_workers[row][5].month == self.to_date.month() and self.staff_workers[row][5].year == self.to_date.year():
+                    self.tw_workers.insertRow(self.tw_workers.rowCount())
+                    for column in range(4):
+                        a = self.staff_workers[row][column]
+                        item = QTableWidgetItem(str(a))
+                        self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
+
+        elif self.select_position == "Не принятые":  # Вставляем уволеных
+            self.tw_workers.clearContents()
+            self.tw_workers.setRowCount(0)
+            for row in range(len(self.staff_workers)):
+                if self.staff_workers[row][4] == 2:
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
                     for column in range(4):
                         a = self.staff_workers[row][column]
@@ -306,9 +318,21 @@ class OneStaff(QMainWindow, one_staff_class):
                     self.lw_file.addItem(list_item)
 
     def set_add_settings(self):
+        # Создадим группы для радио кнопок
+        self.group_sex = QButtonGroup()
+        self.group_leave = QButtonGroup()
+
+        self.group_sex.addButton(self.rb_sex_m)
+        self.group_sex.addButton(self.rb_sex_f)
+
+        self.group_leave.addButton(self.rb_not_employed)
+        self.group_leave.addButton(self.rb_employed)
+        self.group_leave.addButton(self.rb_leave)
+
         # Начальные чеки
         self.de_info_leave.setEnabled(False)
         self.rb_sex_f.setChecked(True)
+        self.rb_not_employed.setChecked(True)
 
         # Выставляем даты
         self.to_date = QDate.currentDate()
@@ -391,7 +415,7 @@ class OneStaff(QMainWindow, one_staff_class):
         if self.de_info_birth.date() > self.to_date:
             QMessageBox.critical(self, "Ошибка ввода", "Не верная дата рождения", QMessageBox.Ok)
             return False
-        if self.cb_info_leave.isChecked() and self.de_info_leave.date() < self.de_info_recruitment.date():
+        if self.rb_leave.isChecked() and self.de_info_leave.date() < self.de_info_recruitment.date():
             QMessageBox.critical(self, "Ошибка ввода", "Не верная дата увольнения", QMessageBox.Ok)
             return False
         if self.le_info_birthplace.text() == "":
@@ -539,9 +563,14 @@ class OneStaff(QMainWindow, one_staff_class):
         self.le_info_birthplace.setText(sql_reply[0][16])
         self.de_info_birth.setDate(sql_reply[0][5])
         self.de_info_recruitment.setDate(sql_reply[0][6])
-        if sql_reply[0][7]:
-            self.cb_info_leave.setChecked(True)
+        if sql_reply[0][7] == 0:
+            self.rb_employed.setChecked(True)
+        elif sql_reply[0][7] == 2:
+            self.rb_not_employed.setChecked(True)
+        elif sql_reply[0][7] == 1:
+            self.rb_leave.setChecked(True)
             self.de_info_leave.setEnabled(True)
+
         self.de_info_leave.setDate(sql_reply[0][8])
         self.cb_info_country.setCurrentText(sql_reply[0][9])
         self.le_info_phone.setText(sql_reply[0][10])
@@ -723,6 +752,14 @@ class OneStaff(QMainWindow, one_staff_class):
                         self.sex = "M"
                     elif self.rb_sex_f.isChecked():
                         self.sex = "F"
+
+                    if self.rb_employed.isChecked():  # Узнаем принят уволен непринят
+                        self.leave = 0
+                    elif self.rb_leave.isChecked():
+                        self.leave = 1
+                    elif self.rb_not_employed.isChecked():
+                        self.leave = 2
+
                     id_country = my_sql.sql_select("SELECT Id FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
                     id_position = my_sql.sql_select("SELECT Id FROM staff_position WHERE Name = %s", (self.cb_info_position.currentText(),))[0][0]
 
@@ -731,7 +768,7 @@ class OneStaff(QMainWindow, one_staff_class):
                     parametrs = (self.le_info_first_name.text(), self.le_info_last_name.text(), self.le_info_middle_name.text(), self.sex,
                                  self.de_info_birth.date().toString(Qt.ISODate), self.le_info_birthplace.text(),
                                  self.de_info_recruitment.date().toString(Qt.ISODate),
-                                 self.cb_info_leave.isChecked(), self.de_info_leave.date().toString(Qt.ISODate), id_country, self.le_info_phone.text(),
+                                 self.leave, self.de_info_leave.date().toString(Qt.ISODate), id_country, self.le_info_phone.text(),
                                  self.le_info_address.text(), id_position, self.le_info_inn.text(), self.le_info_snils.text(), self.le_info_note.toPlainText(),
                                  self.id_info)
                     info_sql = my_sql.sql_change(query, parametrs)
@@ -855,7 +892,7 @@ class OneStaff(QMainWindow, one_staff_class):
                     elif "login" in self.delete:
                         query = """DELETE FROM staff_worker_login WHERE Worker_Info_Id = %s"""
                         parametrs = (self.id_info, )
-                elif not self.cb_info_leave.isChecked() and self.le_login_login.text():  # Если логин надо добавить
+                elif not self.rb_leave.isChecked() and self.le_login_login.text():  # Если логин надо добавить
                     query = "INSERT INTO staff_worker_login (Worker_Info_Id, Login, Password) VALUES (%s, %s, %s)"
                     parametrs = (self.id_info, self.le_login_login.text(), self.le_login_password.text())
                 try:
@@ -881,6 +918,14 @@ class OneStaff(QMainWindow, one_staff_class):
                         self.sex = "M"
                     elif self.rb_sex_f.isChecked():
                         self.sex = "F"
+
+                    if self.rb_employed.isChecked():  # Узнаем принят уволен непринят
+                        self.leave = 0
+                    elif self.rb_leave.isChecked():
+                        self.leave = 1
+                    elif self.rb_not_employed.isChecked():
+                        self.leave = 2
+
                     id_country = my_sql.sql_select("SELECT Id FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
                     id_position = my_sql.sql_select("SELECT Id FROM staff_position WHERE Name = %s", (self.cb_info_position.currentText(),))[0][0]
 
@@ -890,7 +935,7 @@ class OneStaff(QMainWindow, one_staff_class):
                     parametrs = (self.le_info_first_name.text(), self.le_info_last_name.text(), self.le_info_middle_name.text(), self.sex,
                                  self.de_info_birth.date().toString(Qt.ISODate), self.le_info_birthplace.text(),
                                  self.de_info_recruitment.date().toString(Qt.ISODate),
-                                 self.cb_info_leave.isChecked(), self.de_info_leave.date().toString(Qt.ISODate), id_country, self.le_info_phone.text(),
+                                 self.leave, self.de_info_leave.date().toString(Qt.ISODate), id_country, self.le_info_phone.text(),
                                  self.le_info_address.text(), id_position, self.le_info_inn.text(), self.le_info_snils.text(), self.le_info_note.toPlainText())
                     self.id_info = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(self.id_info)):
@@ -898,7 +943,7 @@ class OneStaff(QMainWindow, one_staff_class):
                         return False
 
                     # Авто выдача логина. Пока не знаю надо ли при добавлении работника!
-                    # if not self.cb_info_leave.isChecked():
+                    # if self.rb_employed.isChecked():
                     #     query = "INSERT INTO staff_worker_login (Worker_Info_Id, Login, Password) VALUES (%s, %s, %s)"
                     #     parametrs = (self.id_info, self.id_info, "")
                     #     info_sql = my_sql.sql_change(query, parametrs)
