@@ -365,19 +365,15 @@ class TreeTransfer(QDialog, transfer_class):
             return False
 
         self.tree_widget.clear()
-        i = 0
-        while self.tree and i < 10:
-            for item_tree in self.tree:
-                if item_tree[1] == 0:
-                    add_item = QTreeWidgetItem((item_tree[2], ))
-                    add_item.setData(0, 5, item_tree[0])
-                    self.tree_widget.addTopLevelItem(add_item)
-                    i += 1
-                    self.tree.remove(item_tree)
-                else:
-                    for n in range(self.tree_widget.topLevelItemCount()):
-                        item = self.tree_widget.topLevelItem(n)
-                        self.search(item, item_tree)
+        for item_tree in self.tree:
+            if item_tree[1] == 0:
+                add_item = QTreeWidgetItem((item_tree[2], ))
+                add_item.setData(0, 5, item_tree[0])
+                self.tree_widget.addTopLevelItem(add_item)
+            else:
+                for n in range(self.tree_widget.topLevelItemCount()):
+                    item = self.tree_widget.topLevelItem(n)
+                    self.search(item, item_tree)
 
     def search(self, item, search_tuple):  # Ищет кортеж в детях главных итемах дерева
         if item.data(0, 5) == search_tuple[1]:
