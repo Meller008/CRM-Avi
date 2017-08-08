@@ -327,7 +327,7 @@ class OneStaff(QMainWindow, one_staff_class):
 
         self.group_leave.addButton(self.rb_not_employed)
         self.group_leave.addButton(self.rb_employed)
-        self.group_leave.addButton(self.rb_leave)
+        self.group_leave.addButton(self.rb_not_employed)
 
         # Начальные чеки
         self.de_info_leave.setEnabled(False)
@@ -1405,6 +1405,13 @@ class OneStaff(QMainWindow, one_staff_class):
             sheet['%s%s' % (col[i], 50)] = t
             i += 1
 
+        # вставляем сегоднюшнюю дату
+        date_now = QDate.currentDate()
+        sheet['C60'] = date_now.toString("dd")
+        sheet['H60'] = date_now.toString("MM")
+        sheet['Z60'] = date_now.toString("yy")
+
+
         dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
@@ -1605,6 +1612,7 @@ class OneStaff(QMainWindow, one_staff_class):
             i += 1
 
         # Вставляем черные квадраты
+        self.path_templates = getcwd() + '/templates'
         img = Image('%s/staff/square.png' % self.path_templates)
         sheet.add_image(img, 'E7')
         img = Image('%s/staff/square.png' % self.path_templates)
