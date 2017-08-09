@@ -1611,6 +1611,16 @@ class OneStaff(QMainWindow, one_staff_class):
             sheet['%s%s' % (col[i], 50)] = t
             i += 1
 
+        sheet = book["s2"]
+
+        col = ("CH", "CK", "CT", "CW", "DC", "DF", "DI", "DL")
+        text = tuple(info.de_from.date().toString("ddMMyyyy"))
+        i = 0
+        for t in text:
+            self.statusBar().showMessage("Создаю %s" % i)
+            sheet['%s%s' % (col[i], 65)] = t
+            i += 1
+
         # Вставляем черные квадраты
         self.path_templates = getcwd() + '/templates'
         img = Image('%s/staff/square.png' % self.path_templates)
