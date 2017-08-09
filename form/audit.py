@@ -19,8 +19,6 @@ class AuditVerification(QMainWindow, verification_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.de_date.setDate(QDate.currentDate())
 
-        int("s")
-
     def ui_file_json(self):
         file_dir = QFileDialog.getOpenFileName(self, "Выберите базу", "C:/", "*.json")
         if file_dir[1] == "":
