@@ -886,6 +886,9 @@ class Article(QMainWindow, article_class):
         id = self.change_operation.exec()
         if id <= 0:
             return False
+        if not self.change_operation.new_operation:
+            return False
+
         elif id == item.data(5):
             item.setText(self.change_operation.new_operation[1])
         else:
@@ -1399,6 +1402,7 @@ class ChangeOperation(QDialog, article_change_operation_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.access()
+        self.new_operation = None
 
     def access(self):
         for item in User().access_list(self.__class__.__name__):
