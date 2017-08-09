@@ -327,7 +327,7 @@ class OneStaff(QMainWindow, one_staff_class):
 
         self.group_leave.addButton(self.rb_not_employed)
         self.group_leave.addButton(self.rb_employed)
-        self.group_leave.addButton(self.rb_not_employed)
+        self.group_leave.addButton(self.rb_leave)
 
         # Начальные чеки
         self.de_info_leave.setEnabled(False)
