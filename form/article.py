@@ -1412,7 +1412,7 @@ class ChangeOperation(QDialog, article_change_operation_class):
                 a()
 
     def ui_view_list_operation(self):
-        self.operation_name = operation.OperationList(self, True)
+        self.operation_name = operation.OperationList(self, True, int(self.le_operation.whatsThis()))
         self.operation_name.setWindowModality(QtCore.Qt.ApplicationModal)
         self.operation_name.show()
 

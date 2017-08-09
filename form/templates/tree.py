@@ -12,7 +12,7 @@ transfer_class = loadUiType(getcwd() + '/ui/templates ui/tree_transfer.ui')[0]
 
 
 class TreeList(QMainWindow, tree_class):
-    def __init__(self, main_class=0, dc_select=False):
+    def __init__(self, main_class=0, dc_select=False, open_id=None):
         super(TreeList, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
@@ -23,6 +23,8 @@ class TreeList(QMainWindow, tree_class):
         self.set_table_header()
         self.set_table_info()
         self.set_tree_info()
+        if open_id:
+            self.open_id(open_id)
 
     def access(self):
         for item in User().access_list(self.__class__.__name__):
@@ -131,6 +133,78 @@ class TreeList(QMainWindow, tree_class):
             for number_child in range(item.childCount()):
                 self.search(item.child(number_child), search_tuple)
             return False
+
+    def open_id(self, id):
+        select_item = None
+        for item in self.table_items:
+            if item[0] == id:
+                select_item = item
+                break
+
+        if not select_item:
+            return False
+
+        open_dir_id = []
+        search_tree_id = select_item[1]
+
+        def search(id):
+            for tree_item in self.tree:
+                if tree_item[0] == id:
+                    if tree_item[1] == 0:
+                        open_dir_id.append(tree_item[0])
+                        return True
+                    else:
+                        open_dir_id.append(tree_item[0])
+                        search(tree_item[1])
+                        return True
+
+        search(search_tree_id)
+
+        def search_tree_widget(search_tree_item):
+            t_item = None
+            for level in range(search_tree_item.childCount()):
+                t_item = search_tree_item.child(level)
+                if t_item.data(0, 5) in open_dir_id:
+                    self.tree_widget.expandItem(t_item)
+                    open_dir_id.remove(t_item.data(0, 5))
+                    break
+
+            if not tree_item:
+                return False
+
+            if tree_item.childCount() > 0 and open_dir_id:
+                search_tree_widget(t_item)
+                return True
+            else:
+                self.tree_widget.setCurrentItem(t_item)
+                return True
+
+        tree_item = None
+        for level_tree in range(self.tree_widget.topLevelItemCount()):
+            tree_item = self.tree_widget.topLevelItem(level_tree)
+            if tree_item.data(0, 5) in open_dir_id:
+                self.tree_widget.expandItem(tree_item)
+                open_dir_id.remove(tree_item.data(0, 5))
+                break
+
+        if not tree_item:
+            return False
+
+        if tree_item.childCount() > 0 and open_dir_id:
+            search_tree_widget(tree_item)
+        else:
+            self.tree_widget.setCurrentItem(tree_item)
+
+        self.ui_sorting(self.tree_widget.currentItem())
+
+        for row in range(self.table_widget.rowCount()):
+            if self.table_widget.item(row, 0).data(5) == id:
+                self.table_widget.setCurrentCell(row, self.table_widget.columnCount()-1)
+                self.table_widget.setFocus()
+                break
+
+        return True
+
 
     def ui_sorting(self, select_tree):
         tree_id = select_tree.data(0, 5)
