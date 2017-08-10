@@ -165,6 +165,7 @@ class Staff(QMainWindow, staff_list_class):
     def sorting(self, select_position):
         self.select_position = select_position  # Запоменаем выбраную должность
         self.to_date = QDate.currentDate()
+        self.tw_workers.setSortingEnabled(False)
 
         if self.select_position == "Уволеные":  # Вставляем уволеных
             self.tw_workers.clearContents()
@@ -231,6 +232,8 @@ class Staff(QMainWindow, staff_list_class):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
+
+        self.tw_workers.setSortingEnabled(True)
 
     def ui_filter(self):
         if self.filter is None:

@@ -205,12 +205,12 @@ class TreeList(QMainWindow, tree_class):
 
         return True
 
-
     def ui_sorting(self, select_tree):
         tree_id = select_tree.data(0, 5)
         if not self.table_items:
             return False
 
+        self.table_widget.setSortingEnabled(False)
         if tree_id == -1:
             self.set_table_info()
         else:
@@ -223,6 +223,8 @@ class TreeList(QMainWindow, tree_class):
                         item = QTableWidgetItem(str(table_typle[column]))
                         item.setData(5, table_typle[0])
                         self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 2, item)
+
+        self.table_widget.setSortingEnabled(True)
 
     def ui_add_tree_item(self):
         info = ChangeTreeItem()
@@ -379,8 +381,10 @@ class TreeList(QMainWindow, tree_class):
         pass
 
     def ui_update_table(self):
+        self.table_widget.setSortingEnabled(False)
         self.set_table_info()
         self.set_tree_info()
+        self.table_widget.setSortingEnabled(True)
 
     def ui_other(self):
         pass

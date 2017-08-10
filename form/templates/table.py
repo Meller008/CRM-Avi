@@ -114,7 +114,9 @@ class TableList(QMainWindow, table_list_class):
         self.set_table_info()
 
     def ui_update(self):
+        self.table_items.setSortingEnabled(False)
         self.set_table_info()
+        self.table_items.setSortingEnabled(True)
 
     def ui_duplicate_table_item(self):
         pass
