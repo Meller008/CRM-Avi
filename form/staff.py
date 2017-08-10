@@ -1900,6 +1900,11 @@ class OneStaff(QMainWindow, one_staff_class):
             QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
             return False
 
+        info = InfoDate(QDate().currentDate())
+        info.label.setText("Продлить до")
+        if info.exec() == 0:
+            return False
+
         # Проверяем нужный номер документа
         self.statusBar().showMessage("проверяю SQL")
         query = "SELECT IFNULL(MAX(CAST(Number AS SIGNED)), 'No Number') FROM staff_worker_doc_number WHERE Name = %s"
@@ -1936,6 +1941,7 @@ class OneStaff(QMainWindow, one_staff_class):
 
         xml = xml.replace("?НОМЕРДОК", str(doc_number))
         xml = xml.replace("?ДАТАДОК", QDate().currentDate().toString("dd.MM.yyyy"))
+        xml = xml.replace("?ДАТАДО", info.de_in.date().toString("dd.MM.yyyy"))
         xml = xml.replace("?РЕСПУБЛИКА", self.cb_info_country.currentText())
         xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
         xml = xml.replace("?ДАТАРОЖ", self.de_info_birth.date().toString("dd.MM.yyyy"))
