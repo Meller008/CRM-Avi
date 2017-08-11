@@ -1,10 +1,10 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QFileDialog
 from PyQt5.QtGui import QIcon
-from function import to_excel, my_sql, table_to_html
-from classes.my_class import User
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QTreeWidgetItem, QFileDialog
+from PyQt5.uic import loadUiType
 from classes import print_qt
+from classes.my_class import User
+from function import to_excel, my_sql, table_to_html
 
 tree_class = loadUiType(getcwd() + '/ui/templates ui/tree.ui')[0]
 change_tree_item_class = loadUiType(getcwd() + '/ui/templates ui/add_tree_item.ui')[0]
