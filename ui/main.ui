@@ -184,6 +184,7 @@
      <string>Отчеты</string>
     </property>
     <addaction name="ma_report_need_article_order"/>
+    <addaction name="ma_report_supply"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -375,6 +376,11 @@
   <action name="ma_staff_traffic">
    <property name="text">
     <string>Посещмемость</string>
+   </property>
+  </action>
+  <action name="ma_report_supply">
+   <property name="text">
+    <string>Приходы материала</string>
    </property>
   </action>
  </widget>
@@ -956,6 +962,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_supply</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_supply()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -994,5 +1016,6 @@
   <slot>view_report_need_article_order()</slot>
   <slot>view_staff_card()</slot>
   <slot>view_staff_traffic()</slot>
+  <slot>view_report_supply()</slot>
  </slots>
 </ui>
