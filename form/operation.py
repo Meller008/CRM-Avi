@@ -126,6 +126,9 @@ class OperationList(tree.TreeList):
 
         text = ""
         for art in sql_art:
+            if art[0] is None:
+                text = "Нет совпадений"
+                break
             text += art[0] + "\n"
 
         msg = QMessageBox()
