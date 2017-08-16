@@ -27,7 +27,7 @@ class ArticleList(tree.TreeList):
         self.toolBar.setStyleSheet("background-color: rgb(167, 183, 255);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Артикул", 70), ("Название", 230), ("Размеры", 200), ("Варианты", 200))
+        self.table_header_name = (("Артикул", 70), ("Название", 230), ("Размеры", 220), ("Варианты", 200))
 
         self.query_tree_select = "SELECT Id, Parent_Id, Name FROM product_tree ORDER BY Parent_Id, Position"
         self.query_tree_add = "INSERT INTO product_tree (Parent_Id, Name, Position) VALUES (%s, %s, %s)"
@@ -35,7 +35,7 @@ class ArticleList(tree.TreeList):
         self.query_tree_del = "DELETE FROM product_tree WHERE Id = %s"
 
         self.query_table_all = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
-                                      GROUP_CONCAT(DISTINCT product_article_size.Size ORDER BY product_article_parametrs.Name),
+                                      GROUP_CONCAT(DISTINCT product_article_size.Size ORDER BY product_article_size.Size),
                                       GROUP_CONCAT(DISTINCT product_article_parametrs.Name ORDER BY product_article_parametrs.Name)
                                       FROM product_article
                                         LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
@@ -45,7 +45,7 @@ class ArticleList(tree.TreeList):
 
         #  нулевой элемент должен быть ID а первый Parent_ID (ID категории)
         self.query_table_select = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
-                                      GROUP_CONCAT(DISTINCT product_article_size.Size ORDER BY product_article_parametrs.Name),
+                                      GROUP_CONCAT(DISTINCT product_article_size.Size ORDER BY product_article_size.Size),
                                       GROUP_CONCAT(DISTINCT product_article_parametrs.Name ORDER BY product_article_parametrs.Name)
                                       FROM product_article
                                         LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
