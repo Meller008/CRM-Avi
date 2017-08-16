@@ -388,7 +388,10 @@ class Order(QMainWindow, order_class):
         table_item.setData(5, self.position.le_in_on_place.text())
         self.tw_position.setItem(row, 5, table_item)
         self.save_change_order_position = True
-        self.pb_doc.deleteLater()
+        try:
+            self.main.pb_doc.deleteLater()
+        except:
+            pass
         return True
 
     def ui_change_position(self, row_in=False):
@@ -513,7 +516,10 @@ class Order(QMainWindow, order_class):
         table_item.setData(5, self.position.le_in_on_place.text())
         self.tw_position.setItem(row, 5, table_item)
         self.save_change_order_position = True
-        self.pb_doc.deleteLater()
+        try:
+            self.main.pb_doc.deleteLater()
+        except:
+            pass
         return True
 
     def ui_double_click_position(self, row):
@@ -2288,7 +2294,10 @@ class ImportEDI(QDialog, import_edi):
                 self.main.tw_position.setItem(row, 5, table_item)
 
         self.main.save_change_order_position = True
-        self.main.pb_doc.deleteLater()
+        try:
+            self.main.pb_doc.deleteLater()
+        except:
+            pass
         self.close()
         self.destroy()
         return True
