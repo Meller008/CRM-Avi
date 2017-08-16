@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>542</width>
-    <height>451</height>
+    <height>462</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -685,7 +685,7 @@ border-color: rgb(170, 0, 0);
     <string>toolBar</string>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">background-color: rgb(89, 125, 163);</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -696,9 +696,9 @@ border-color: rgb(170, 0, 0);
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="pb_action"/>
+   <addaction name="pb_print"/>
   </widget>
-  <action name="pb_action">
+  <action name="pb_print">
    <property name="text">
     <string>Печать</string>
    </property>
@@ -914,6 +914,22 @@ border-color: rgb(170, 0, 0);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_print</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print_report()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>270</x>
+     <y>225</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_material_name()</slot>
@@ -924,5 +940,6 @@ border-color: rgb(170, 0, 0);
   <slot>ui_calc_accessories_supply()</slot>
   <slot>ui_view_comparing_name()</slot>
   <slot>ui_calc_comparing_supply()</slot>
+  <slot>ui_print_report()</slot>
  </slots>
 </ui>

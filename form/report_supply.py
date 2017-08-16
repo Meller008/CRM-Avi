@@ -238,6 +238,48 @@ class ReportSupply(QMainWindow, report_supply_class):
         text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
         self.le_comparing_sum.setText(text)
 
+    def ui_print_report(self):
+        up_html = """
+          <table>
+          <tr>
+          <th>Тип</th><th>Поставщик</th><th>Дата с</th><th>Дата по</th><th>ИТОГО</th>
+          </tr>
+          <tr>
+          <td>#type#</td><td>#provider#</td><td>#data_from#</td><td>#data_to#</td><td>#sum#</td>
+          </tr>
+          </table>
+          """
+
+        if self.tabWidget.currentIndex() == 0:
+            head = "Отчет по приходу ткани"
+            up_html = up_html.replace("#type#", self.le_material_type.text())
+            up_html = up_html.replace("#provider#", self.le_material_provider.text())
+            up_html = up_html.replace("#data_from#", self.de_material_from.date().toString("dd.MM.yyyy"))
+            up_html = up_html.replace("#data_to#", self.de_material_to.date().toString("dd.MM.yyyy"))
+            up_html = up_html.replace("#sum#", self.le_material_sum.text())
+            table_widget = self.tw_material
+        elif self.tabWidget.currentIndex() == 1:
+            head = "Отчет по приходу фурнитуры"
+            up_html = up_html.replace("#type#", self.le_accessories_type.text())
+            up_html = up_html.replace("#provider#", self.le_accessories_provider.text())
+            up_html = up_html.replace("#data_from#", self.de_accessories_from.date().toString("dd.MM.yyyy"))
+            up_html = up_html.replace("#data_to#", self.de_accessories_to.date().toString("dd.MM.yyyy"))
+            up_html = up_html.replace("#sum#", self.le_accessories_sum.text())
+            table_widget = self.tw_accessories
+
+        elif self.tabWidget.currentIndex() == 2:
+            head = "Отчет по расходам на поставки"
+            up_html = up_html.replace("#type#", self.le_comparing_type.text())
+            up_html = up_html.replace("#provider#", "")
+            up_html = up_html.replace("#data_from#", self.de_comparing_from.date().toString("dd.MM.yyyy"))
+            up_html = up_html.replace("#data_to#", self.de_comparing_to.date().toString("dd.MM.yyyy"))
+            up_html = up_html.replace("#sum#", self.le_comparing_sum.text())
+            table_widget = self.tw_comparing
+        else:
+            return False
+
+        html = table_to_html.tab_html(table_widget, table_head=head, up_template=up_html)
+        self.print_class = print_qt.PrintHtml(self, html)
 
     def of_list_material_name(self, item):
         self.le_material_type.setWhatsThis(str(item[0]))
