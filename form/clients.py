@@ -202,7 +202,7 @@ class Client(QDialog, client_class):
                         if "mysql.connector.errors" in str(type(info_sql)):
                             QMessageBox.critical(self, "Ошибка sql добавления номера", info_sql.msg, QMessageBox.Ok)
                     elif item.data(-2) == "update":
-                        query = "UPDATE clients_vendor_number SET Number = %s, Contract = %s, Data_From = %s WHERE Client_Id = %s"
+                        query = "UPDATE clients_vendor_number SET Number = %s, Contract = %s, Data_From = %s WHERE Id = %s"
                         data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
                         paremetrs = (self.tw_vendor_number.item(row, 0).text(), self.tw_vendor_number.item(row, 1).text(), data, item.data(-1))
                         info_sql = my_sql.sql_change(query, paremetrs)
