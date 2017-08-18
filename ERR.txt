@@ -18,3 +18,39 @@ Time = 18.08.2017 14:29:16Traceback (most recent call last):
   File "C:/Users/Meller/Desktop/CRM-Avi\form\report_cost_article.py", line 70, in ui_calc_cost
     text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(material[3], 2)))
 TypeError: type NoneType doesn't define __round__ method
+
+---===Error===---
+Time = 18.08.2017 16:29:26Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 2000, in ui_acc
+    self.main.of_ex_ttn(addres, article)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1417, in of_ex_ttn
+    sheet["B7"] = self.le_ttn_auto.text()
+AttributeError: 'Order' object has no attribute 'le_ttn_auto'
+
+---===Error===---
+Time = 18.08.2017 17:03:29Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1987, in ui_acc
+    self.main.of_ex_invoice(addres, article)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1378, in of_ex_invoice
+    book.save(path[0])
+  File "C:\Python34\lib\site-packages\openpyxl\workbook\workbook.py", line 342, in save
+    save_workbook(self, filename)
+  File "C:\Python34\lib\site-packages\openpyxl\writer\excel.py", line 264, in save_workbook
+    archive = ZipFile(filename, 'w', ZIP_DEFLATED, allowZip64=True)
+  File "C:\Python34\lib\zipfile.py", line 923, in __init__
+    self.fp = io.open(file, modeDict[mode])
+PermissionError: [Errno 13] Permission denied: 'C:/Users/Meller/Desktop/1.xlsx'
+
+---===Error===---
+Time = 18.08.2017 17:05:45Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1987, in ui_acc
+    self.main.of_ex_invoice(addres, article)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1378, in of_ex_invoice
+    book.save(path[0])
+  File "C:\Python34\lib\site-packages\openpyxl\workbook\workbook.py", line 342, in save
+    save_workbook(self, filename)
+  File "C:\Python34\lib\site-packages\openpyxl\writer\excel.py", line 264, in save_workbook
+    archive = ZipFile(filename, 'w', ZIP_DEFLATED, allowZip64=True)
+  File "C:\Python34\lib\zipfile.py", line 923, in __init__
+    self.fp = io.open(file, modeDict[mode])
+PermissionError: [Errno 13] Permission denied: 'C:/Users/Meller/Desktop/1.xlsx'

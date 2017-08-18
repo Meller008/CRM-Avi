@@ -33,22 +33,26 @@ class OrderList(table.TableList):
         self.toolBar.setStyleSheet("background-color: rgb(126, 176, 127);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Клиент", 120), ("Пункт разгрузки", 170), ("Дата заказ.", 75), ("Дата отгр.", 70), ("№ док.", 50), ("Стоймость", 105),
-                                  ("Примечание", 230), ("Отгр.", 40))
+        self.table_header_name = (("Клиент", 120), ("Пункт разгрузки", 140), ("Дата заказ.", 75), ("Дата отгр.", 70), ("№ док.", 50), ("Стоймость", 105),
+                                  ("Стоймость без ндс", 105), ("Примечание", 170), ("Отгр.", 40))
 
         self.filter = None
         self.query_table_all = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc,
-                                    SUM(order_position.Value * order_position.Price), `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да')
-                                      FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
-                                        LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
-                                        LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
+                                      SUM(order_position.Value * order_position.Price),
+                                      ROUND(SUM(order_position.Value * (order_position.Price - (order_position.Price * order_position.NDS) / (100 + order_position.NDS))), 4),
+                                      `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да')
+                                        FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                                          LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc,
-                                    SUM(order_position.Value * order_position.Price), `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да')
-                                      FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
-                                        LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
-                                        LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
+                                          SUM(order_position.Value * order_position.Price),
+                                          ROUND(SUM(order_position.Value * (order_position.Price - (order_position.Price * order_position.NDS) / (100 + order_position.NDS))), 4),
+                                          `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да')
+                                            FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                                              LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                                              LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
 
         self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
 
