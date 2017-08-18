@@ -10,7 +10,7 @@ import openpyxl
 from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
 from openpyxl.worksheet.pagebreak import Break
 from copy import copy
-from function import my_sql, to_excel, table_to_html
+from function import my_sql, to_excel, table_to_html, moneyfmt
 from classes import print_qt
 from form.templates import table, list
 from form import clients, article, print_label
@@ -1056,10 +1056,18 @@ class Order(QMainWindow, order_class):
             else:
                 name = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
             nds = self.tw_position.item(row, 4).data(5)
-            no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
-                                 / (100 + float(nds)), 2)
-            sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
-            sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+
+            if self.lb_client.whatsThis().find("no_nds") >= 0:
+                no_nds_price = round(float(self.tw_position.item(row, 4).text()), 2)
+                sum_no_nds = no_nds_price * int(self.tw_position.item(row, 5).text())
+                sum = round(sum_no_nds * 1.18, 2)
+
+            else:
+                no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
+                                     / (100 + float(nds)), 2)
+                sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
+                sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+
             if int(self.tw_position.item(row, 5).data(5)):
                 mest = int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
             else:
@@ -1082,11 +1090,15 @@ class Order(QMainWindow, order_class):
             sheet["I%s" % row_ex] = self.tw_position.item(row, 5).data(5)
             sheet["J%s" % row_ex] = mest
             sheet["L%s" % row_ex] = int(self.tw_position.item(row, 5).text())
-            sheet["N%s" % row_ex] = no_nds_price
-            sheet["P%s" % row_ex] = sum_no_nds
+            sheet["N%s" % row_ex] = moneyfmt.moneyfmt(no_nds_price)
+            sheet["N%s" % row_ex].alignment = ald_right
+            sheet["P%s" % row_ex] = moneyfmt.moneyfmt(sum_no_nds)
+            sheet["P%s" % row_ex].alignment = ald_right
             sheet["R%s" % row_ex] = nds
-            sheet["T%s" % row_ex] = round(sum - sum_no_nds, 2)
-            sheet["V%s" % row_ex] = sum
+            sheet["T%s" % row_ex] = moneyfmt.moneyfmt(sum - sum_no_nds)
+            sheet["T%s" % row_ex].alignment = ald_right
+            sheet["V%s" % row_ex] = moneyfmt.moneyfmt(sum)
+            sheet["V%s" % row_ex].alignment = ald_right
 
             all_position += mest
             all_value += int(self.tw_position.item(row, 5).text())
@@ -1127,7 +1139,7 @@ class Order(QMainWindow, order_class):
         sheet["N%s" % row_ex].alignment = ald_center
 
         sheet.merge_cells("P%s:Q%s" % (row_ex, row_ex))
-        sheet["P%s" % row_ex] = all_no_nds
+        sheet["P%s" % row_ex] = moneyfmt.moneyfmt(all_no_nds)
         sheet["P%s" % row_ex].alignment = ald_right
 
         sheet.merge_cells("R%s:S%s" % (row_ex, row_ex))
@@ -1135,10 +1147,10 @@ class Order(QMainWindow, order_class):
         sheet["R%s" % row_ex].alignment = ald_center
 
         sheet.merge_cells("T%s:U%s" % (row_ex, row_ex))
-        sheet["T%s" % row_ex] = all_nds
+        sheet["T%s" % row_ex] = moneyfmt.moneyfmt(all_nds)
         sheet["T%s" % row_ex].alignment = ald_right
 
-        sheet["V%s" % row_ex] = round(all_sum, 2)
+        sheet["V%s" % row_ex] = moneyfmt.moneyfmt(all_sum)
         sheet["V%s" % row_ex].alignment = ald_right
 
         self.progress.setValue(self.progress.value() + 1)
@@ -1229,6 +1241,7 @@ class Order(QMainWindow, order_class):
 
         font_7 = Font(name="Arial", size=7)
         alg_center = Alignment(horizontal="center")
+        alg_right = Alignment(horizontal="right")
         wite = PatternFill(start_color='ffffff', end_color='ffffff', fill_type='solid')
 
         book = openpyxl.load_workbook(filename='%s/фактура.xlsx' % (getcwd() + "/templates/order"))
@@ -1298,10 +1311,16 @@ class Order(QMainWindow, order_class):
             cl_code = sql_info[0][1]
 
             nds = self.tw_position.item(row, 4).data(5)
-            no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
-                                 / (100 + float(nds)), 2)
-            sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
-            sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+
+            if self.lb_client.whatsThis().find("no_nds") >= 0:
+                no_nds_price = round(float(self.tw_position.item(row, 4).text()), 2)
+                sum_no_nds = no_nds_price * int(self.tw_position.item(row, 5).text())
+                sum = round(sum_no_nds * 1.18, 2)
+            else:
+                no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
+                                     / (100 + float(nds)), 2)
+                sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
+                sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
 
             sheet.merge_cells("A%s:D%s" % (row_ex, row_ex))
 
@@ -1312,13 +1331,17 @@ class Order(QMainWindow, order_class):
             sheet["F%s" % row_ex] = "796"
             sheet["G%s" % row_ex] = "Шт."
             sheet["H%s" % row_ex] = int(self.tw_position.item(row, 5).text())
-            sheet["I%s" % row_ex] = no_nds_price
-            sheet["J%s" % row_ex] = sum_no_nds
+            sheet["I%s" % row_ex] = moneyfmt.moneyfmt(no_nds_price)
+            sheet["I%s" % row_ex].alignment = alg_right
+            sheet["J%s" % row_ex] = moneyfmt.moneyfmt(sum_no_nds)
+            sheet["J%s" % row_ex].alignment = alg_right
             sheet["K%s" % row_ex] = "без акциза"
             sheet["K%s" % row_ex].font = font_7
             sheet["L%s" % row_ex] = nds
-            sheet["M%s" % row_ex] = round(sum - sum_no_nds, 2)
-            sheet["N%s" % row_ex] = sum
+            sheet["M%s" % row_ex] = moneyfmt.moneyfmt(sum - sum_no_nds)
+            sheet["M%s" % row_ex].alignment = alg_right
+            sheet["N%s" % row_ex] = moneyfmt.moneyfmt(sum)
+            sheet["N%s" % row_ex].alignment = alg_right
             sheet["P%s" % row_ex] = "РФ"
             sheet["P%s" % row_ex].alignment = alg_center
 
@@ -1350,13 +1373,16 @@ class Order(QMainWindow, order_class):
         # Запишем итог
         sheet.merge_cells("A%s:H%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "ВСЕГО К ОПЛАТЕ"
-        sheet["J%s" % row_ex] = all_no_nds
+        sheet["J%s" % row_ex] = moneyfmt.moneyfmt(all_no_nds)
+        sheet["J%s" % row_ex].alignment = alg_right
         sheet["K%s" % row_ex] = "X"
         sheet["K%s" % row_ex].alignment = alg_center
         sheet["L%s" % row_ex] = "X"
         sheet["L%s" % row_ex].alignment = alg_center
-        sheet["M%s" % row_ex] = all_nds
-        sheet["N%s" % row_ex] = all_sum
+        sheet["M%s" % row_ex] = moneyfmt.moneyfmt(all_nds)
+        sheet["M%s" % row_ex].alignment = alg_right
+        sheet["N%s" % row_ex] = moneyfmt.moneyfmt(all_sum)
+        sheet["N%s" % row_ex].alignment = alg_right
         for row in sheet.iter_rows(min_row=row_ex, max_col=14):
             for cell in row:
                 cell.border = border_all
@@ -1398,6 +1424,7 @@ class Order(QMainWindow, order_class):
         sheet = book['Отчет']
 
         border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+        border_all_big = Border(left=Side(style='medium'), right=Side(style='medium'), top=Side(style='medium'), bottom=Side(style='medium'))
         ald_center_full = Alignment(horizontal="center", vertical="center", wrapText=True)
         ald_center = Alignment(horizontal="center")
         font_8 = Font(name="Arial", size=8)
@@ -1501,10 +1528,16 @@ class Order(QMainWindow, order_class):
             else:
                 name = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
             nds = self.tw_position.item(row, 4).data(5)
-            no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
-                                 / (100 + float(nds)), 2)
-            sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
-            sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
+
+            if self.lb_client.whatsThis().find("no_nds") >= 0:
+                no_nds_price = round(float(self.tw_position.item(row, 4).text()), 2)
+                sum_no_nds = no_nds_price * int(self.tw_position.item(row, 5).text())
+                sum = round(sum_no_nds * 1.18, 2)
+            else:
+                no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
+                                     / (100 + float(nds)), 2)
+                sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
+                sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
 
             if int(self.tw_position.item(row, 5).data(5)):
                 mest = int(int(self.tw_position.item(row, 5).text()) / int(self.tw_position.item(row, 5).data(5)))
@@ -1525,13 +1558,15 @@ class Order(QMainWindow, order_class):
             sheet["A%s" % row_ex] = sql_info[0][1]
             sheet["F%s" % row_ex] = sql_info[0][1]
             sheet["J%s" % row_ex] = int(self.tw_position.item(row, 5).text())
-            sheet["L%s" % row_ex] = no_nds_price
+            sheet["L%s" % row_ex] = moneyfmt.moneyfmt(no_nds_price)
+            sheet["L%s" % row_ex].alignment = ald_center_full
             sheet["N%s" % row_ex] = name
             sheet["T%s" % row_ex] = "шт."
             sheet["U%s" % row_ex] = "Короб"
             sheet["W%s" % row_ex] = mest
             sheet["Y%s" % row_ex] = "---"
-            sheet["AA%s" % row_ex] = sum_no_nds
+            sheet["AA%s" % row_ex] = moneyfmt.moneyfmt(sum_no_nds)
+            sheet["AA%s" % row_ex].alignment = ald_center_full
 
             all_no_nds += sum_no_nds
             all_mest += mest
@@ -1576,7 +1611,12 @@ class Order(QMainWindow, order_class):
 
         sheet["U%s" % (row_ex-20)] = self.le_number_doc.text()
         sheet["S%s" % (row_ex-19)] = list_all
-        sheet["AB%s" % (row_ex-20)] = all_no_nds
+
+        sheet.merge_cells("AA%s:AC%s" % (row_ex-20, row_ex-20))
+        sheet["AA%s" % (row_ex-20)] = moneyfmt.moneyfmt(all_no_nds)
+        sheet["AA%s" % (row_ex-20)].alignment = ald_center_full
+        sheet["AB%s" % (row_ex-20)].border = border_all_big
+        sheet["AC%s" % (row_ex-20)].border = border_all_big
 
         sheet["L%s" % (row_ex-18)] = num2t4ru.num2text(self.tw_position.rowCount()) + " позиций"
         sheet["L%s" % (row_ex-18)].alignment = ald_center
