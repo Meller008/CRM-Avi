@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../favicon.ico</normaloff>../../favicon.ico</iconset>
+    <normaloff>../favicon.ico</normaloff>../favicon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -185,6 +185,7 @@
     </property>
     <addaction name="ma_report_need_article_order"/>
     <addaction name="ma_report_supply"/>
+    <addaction name="ma_report_cost_article"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -381,6 +382,11 @@
   <action name="ma_report_supply">
    <property name="text">
     <string>Приходы материала</string>
+   </property>
+  </action>
+  <action name="ma_report_cost_article">
+   <property name="text">
+    <string>Расчетная себестоимость</string>
    </property>
   </action>
  </widget>
@@ -978,6 +984,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_cost_article</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_cost_article()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1017,5 +1039,6 @@
   <slot>view_staff_card()</slot>
   <slot>view_staff_traffic()</slot>
   <slot>view_report_supply()</slot>
+  <slot>view_report_cost_article()</slot>
  </slots>
 </ui>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>569</width>
+    <height>403</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Расчетная себестоимость</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>1</number>
+    </property>
+    <property name="topMargin">
+     <number>1</number>
+    </property>
+    <property name="rightMargin">
+     <number>1</number>
+    </property>
+    <property name="bottomMargin">
+     <number>1</number>
+    </property>
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <item row="2" column="0">
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>20</number>
+      </attribute>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>18</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Артикул</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Размер</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Параметр</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Операции</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ткань</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Фурнитура</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>ИТОГО</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Артикул</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="le_article"/>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolButton">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolButton_10">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(170, 0, 0);
+color: rgb(255, 255, 255);
+border-style: outset;
+border-width: 1px;
+border-color: rgb(170, 0, 0);
+</string>
+        </property>
+        <property name="text">
+         <string> X</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Рассчитать</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="pb_print"/>
+  </widget>
+  <action name="pb_print">
+   <property name="text">
+    <string>Печать</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_cost()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>567</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>568</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_view_article()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>523</x>
+     <y>28</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>523</x>
+     <y>-46</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>ui_calc_cost()</slot>
+  <slot>ui_view_article()</slot>
+ </slots>
+</ui>

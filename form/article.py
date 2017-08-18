@@ -937,7 +937,8 @@ class Article(QMainWindow, article_class):
                 nds = 18
             else:
                 nds = 10
-            article_info = {"article": self.le_article.text(),
+            article_info = {"article_id": self.le_article.whatsThis(),
+                            "article": self.le_article.text(),
                             "size": self.cb_size.currentText(),
                             "parametr": self.cb_parametrs.currentText(),
                             "parametr_id": self.cb_parametrs.currentData(),

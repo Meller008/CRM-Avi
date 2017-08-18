@@ -6,7 +6,7 @@ from form import login_window, provider, comparing, staff, program_settings, not
     clients, operation, other, audit, warehouse_material, warehouse_accessories
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
     warehouse_rest, supply_material, supply_accessories, scan_pack, settings_access
-from form import report_supply
+from form import report_supply, report_cost_article
 from form import staff_traffic
 from form import report_order
 from classes.my_class import User
@@ -340,6 +340,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_report_supply)
         self.sub_report_supply.resize(self.report_supply.size())
         self.sub_report_supply.show()
+
+    def view_report_cost_article(self):
+        self.report_cost_article = report_cost_article.ReportCostArticle()
+        self.sub_report_cost_article = QMdiSubWindow()
+        self.sub_report_cost_article.setWidget(self.report_cost_article)
+        self.mdi.addSubWindow(self.sub_report_cost_article)
+        self.sub_report_cost_article.resize(self.report_cost_article.size())
+        self.sub_report_cost_article.show()
 
     def login_access(self):
         self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())
