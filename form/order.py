@@ -1162,6 +1162,15 @@ class Order(QMainWindow, order_class):
             for cell in row:
                 cell.border = border_all
 
+        # Формируем шапку-правую колонку
+        for row in sheet.iter_rows(min_row=13, min_col=20, max_col=22, max_row=14):
+            for cell in row:
+                cell.border = border_all
+        sheet["T13"].border = Border(left=Side(style='medium'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+        sheet["T14"].border = Border(left=Side(style='medium'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+        sheet["V13"].border = Border(left=Side(style='thin'), right=Side(style='medium'), top=Side(style='thin'), bottom=Side(style='thin'))
+        sheet["V14"].border = Border(left=Side(style='thin'), right=Side(style='medium'), top=Side(style='thin'), bottom=Side(style='thin'))
+
         self.progress.setValue(self.progress.value()+1)
 
 
@@ -1256,8 +1265,7 @@ class Order(QMainWindow, order_class):
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                 return False
-
-            base = "№ заказа " + self.le_number_order.text() + ", Номер поставщика " + str(sql_info[0][0])
+            base = "Идентификатор государственного контракта, договора (соглашения): Договор поставки № " + str(sql_info[0][1]) + " от " + sql_info[0][2].strftime("%d.%m.%Y")
 
             sheet["A14"] = base
 
@@ -1283,6 +1291,8 @@ class Order(QMainWindow, order_class):
             else:
                 name = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
 
+            cl_code = sql_info[0][1]
+
             nds = self.tw_position.item(row, 4).data(5)
             no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
                                  / (100 + float(nds)), 2)
@@ -1294,16 +1304,19 @@ class Order(QMainWindow, order_class):
             sheet["A%s" % row_ex] = name
             sheet["A%s" % row_ex].font = font_7
             sheet["A%s" % row_ex].alignment = Alignment(wrapText=True)
-            sheet["G%s" % row_ex] = int(self.tw_position.item(row, 5).text())
-            sheet["H%s" % row_ex] = no_nds_price
-            sheet["I%s" % row_ex] = sum_no_nds
-            sheet["J%s" % row_ex] = "без акциза"
-            sheet["J%s" % row_ex].font = font_7
-            sheet["K%s" % row_ex] = nds
-            sheet["L%s" % row_ex] = round(sum - sum_no_nds, 2)
-            sheet["M%s" % row_ex] = sum
-            sheet["O%s" % row_ex] = "РФ"
-            sheet["O%s" % row_ex].alignment = alg_center
+            sheet["E%s" % row_ex] = cl_code
+            sheet["F%s" % row_ex] = "796"
+            sheet["G%s" % row_ex] = "Шт."
+            sheet["H%s" % row_ex] = int(self.tw_position.item(row, 5).text())
+            sheet["I%s" % row_ex] = no_nds_price
+            sheet["J%s" % row_ex] = sum_no_nds
+            sheet["K%s" % row_ex] = "без акциза"
+            sheet["K%s" % row_ex].font = font_7
+            sheet["L%s" % row_ex] = nds
+            sheet["M%s" % row_ex] = round(sum - sum_no_nds, 2)
+            sheet["N%s" % row_ex] = sum
+            sheet["P%s" % row_ex] = "РФ"
+            sheet["P%s" % row_ex].alignment = alg_center
 
             all_no_nds += sum_no_nds
             all_nds += round(sum - sum_no_nds, 2)
@@ -1326,21 +1339,21 @@ class Order(QMainWindow, order_class):
             list_all += 1
 
         # Формируем границы таблицы
-        for row in sheet.iter_rows(min_row=16, max_col=16, max_row=row_ex-1):
+        for row in sheet.iter_rows(min_row=16, max_col=17, max_row=row_ex-1):
             for cell in row:
                 cell.border = border_all
 
         # Запишем итог
         sheet.merge_cells("A%s:H%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "ВСЕГО К ОПЛАТЕ"
-        sheet["I%s" % row_ex] = all_no_nds
-        sheet["J%s" % row_ex] = "X"
-        sheet["J%s" % row_ex].alignment = alg_center
+        sheet["J%s" % row_ex] = all_no_nds
         sheet["K%s" % row_ex] = "X"
         sheet["K%s" % row_ex].alignment = alg_center
-        sheet["L%s" % row_ex] = all_nds
-        sheet["M%s" % row_ex] = all_sum
-        for row in sheet.iter_rows(min_row=row_ex, max_col=13):
+        sheet["L%s" % row_ex] = "X"
+        sheet["L%s" % row_ex].alignment = alg_center
+        sheet["M%s" % row_ex] = all_nds
+        sheet["N%s" % row_ex] = all_sum
+        for row in sheet.iter_rows(min_row=row_ex, max_col=14):
             for cell in row:
                 cell.border = border_all
 
@@ -1362,10 +1375,14 @@ class Order(QMainWindow, order_class):
         book.remove(sheet2)
         self.progress.setValue(self.progress.value() + 1)
 
-        book.save(path[0])
+        try:
+            book.save(path[0])
+        except PermissionError:
+            QMessageBox.critical(self, "Ошибка сохранения", "Не удалось сохранить документ\n Скорее всего во сохраняете заместо открытого документа!", QMessageBox.Ok)
+
         self.progress.setValue(self.progress.value() + 1)
 
-    def of_ex_ttn(self, addres, article):
+    def of_ex_ttn(self, addres, article, auto, driver):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1390,12 +1407,13 @@ class Order(QMainWindow, order_class):
         # строим первый лист
         sheet["A4"] = "Срок доставки груза " + self.de_date_shipment.date().toString("dd.MM.yyyy")
         sheet["AD3"] = self.le_number_doc.text()
-        query = "SELECT Details FROM order_transport_company WHERE Id = %s"
+        query = "SELECT Name, Details FROM order_transport_company WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.le_transport_company.whatsThis(),))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения информации транспортной компании", sql_info.msg, QMessageBox.Ok)
             return False
         sheet["B5"] = sql_info[0][0]
+        sheet["B16"] = sql_info[0][1]
 
         query = "SELECT Adres FROM clients_actual_address WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.cb_clients_adress.currentData(),))
@@ -1403,6 +1421,9 @@ class Order(QMainWindow, order_class):
             QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_info.msg, QMessageBox.Ok)
             return False
         sheet["R16"] = sql_info[0][0]
+
+        sheet["B7"] = auto
+        sheet["C11"] = driver
 
         for row in sheet.iter_rows(min_row=23, max_col=31, max_row=25):
             for cell in row:
@@ -1437,7 +1458,7 @@ class Order(QMainWindow, order_class):
         if sql_info[0][2]:
             client += " КПП " + str(sql_info[0][2])
         client += ", " + sql_info[0][4] + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
-        sheet["C11"] = client
+        # sheet["C11"] = client
         sheet["E72"] = client
 
         if addres == "fact":
@@ -1950,7 +1971,7 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            self.main.of_ex_torg12(edo, head, addres, article)
+            self.main.of_ex_torg12(edo, head, article, addres)
             self.close()
             self.destroy()
 
@@ -1984,7 +2005,7 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            self.main.of_ex_ttn(addres, article)
+            self.main.of_ex_ttn(addres, article, self.le_ttn_auto.text(), self.le_ttn_driver.text())
             self.close()
             self.destroy()
 
