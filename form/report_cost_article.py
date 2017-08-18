@@ -54,7 +54,7 @@ class ReportCostArticle(QMainWindow, report_cost_article):
                                                 WHERE accessories_supplyposition.Accessories_NameId = accessories_name.Id AND accessories_balance.BalanceValue > 0
                                                 ORDER BY accessories_supply.Data LIMIT 1))
                       FROM product_article_material LEFT JOIN accessories_name ON product_article_material.Accessories_Id = accessories_name.Id
-                      WHERE product_article_material.Accessories_Id IS NOT NULL)
+                      WHERE product_article_material.Product_Article_Parametrs_Id = product_article_parametrs.Id AND product_article_material.Accessories_Id IS NOT NULL)
                   FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
                     LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id"""
 
