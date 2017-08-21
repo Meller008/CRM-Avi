@@ -15,6 +15,7 @@ from classes import print_qt
 from form.templates import table, list
 from form import clients, article, print_label
 import num2t4ru
+from classes.my_class import User
 
 position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
 order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
@@ -138,6 +139,7 @@ class Order(QMainWindow, order_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.id = id
         self.main = main_class
+        self.access_save_sql = True
 
         self.save_change_order = False
         self.save_change_order_position = False
@@ -146,6 +148,28 @@ class Order(QMainWindow, order_class):
 
         self.save_change_order = False
         self.save_change_order_position = False
+
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
+            else:
+                a()
+
+    def access_save(self, bool):
+        self.access_save_sql = bool
 
     def start_settings(self):
         self.tw_position.horizontalHeader().resizeSection(0, 70)
@@ -729,7 +753,7 @@ class Order(QMainWindow, order_class):
                 self.main.of_order_complete()
 
     def ui_can(self):
-        if self.save_change_order or self.save_change_order_position:
+        if (self.save_change_order or self.save_change_order_position) and self.access_save_sql:
             result = QMessageBox.question(self, "Сохранить?", "Сохранить изменение перед выходом?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
                 self.save_sql()

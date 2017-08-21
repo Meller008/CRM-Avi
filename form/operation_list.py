@@ -100,7 +100,10 @@ class PayListFilter(QDialog, operation_pack_filter):
             where_item = self.add_filter(where_item, "pack_operation.Worker_Id IS NOT NULL", False)
 
         if self.cb_operation_pay.isChecked():
-            where_item = self.add_filter(where_item, "pack_operation.Pay = 1", False)
+            where_item = self.add_filter(where_item, "pack_operation.Pay = 1", True)
+
+        if self.cb_operation_no_pay.isChecked():
+            where_item = self.add_filter(where_item, "pack_operation.Pay = 0", True)
 
         if where_item:
             where_item = "(" + where_item + ")"

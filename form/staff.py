@@ -56,7 +56,13 @@ class Staff(QMainWindow, staff_list_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
             else:
                 a()
 
@@ -265,7 +271,9 @@ class OneStaff(QMainWindow, one_staff_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.change = change  # Запоминаем это добаление работника или изменение
         self.m = main
+        self.access_save_sql = True
         self.alert = []  # Массив для запоминания изменений
+
         self.access()
 
     def access(self):
@@ -275,9 +283,18 @@ class OneStaff(QMainWindow, one_staff_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
             else:
                 a()
+
+    def access_save(self, bool):
+        self.access_save_sql = bool
 
     def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
         if not hasattr(self, 'path_work'):
@@ -1982,7 +1999,7 @@ class OneStaff(QMainWindow, one_staff_class):
             return False
 
     def closeEvent(self, e):
-        if self.alert:
+        if self.alert and self.access_save_sql:
             result = QMessageBox.question(self, "Выйтиb?", "Сохранить изменения перед выходом?",
                                           QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Yes)
             if result == 16384:

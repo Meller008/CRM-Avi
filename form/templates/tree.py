@@ -33,7 +33,13 @@ class TreeList(QMainWindow, tree_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
             else:
                 a()
 

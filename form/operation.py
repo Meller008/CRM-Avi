@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from function import my_sql
+from classes.my_class import User
 
 operation_class = loadUiType(getcwd() + '/ui/operation_change.ui')[0]
 operation_filter = loadUiType(getcwd() + '/ui/operation_filter.ui')[0]
@@ -154,6 +155,25 @@ class Operation(QDialog, operation_class):
         self.tree_id = tree_id
         if self.id:
             self.set_sql_info()
+
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
+            else:
+                a()
 
     def set_sql_info(self):
         query = """SELECT operations.Name, operations.Price, sewing_machine.Name, sewing_machine.Id, operations.Note, operations.Note2

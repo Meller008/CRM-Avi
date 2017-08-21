@@ -105,151 +105,6 @@ class CutList(table.TableList):
     def of_change_cut_complete(self):
         self.ui_update()
 
-'''
-class CutList0(QMainWindow, cut_list_class):
-    def __init__(self):
-        super(CutList, self).__init__()
-        self.setupUi(self)
-        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
-
-        self.filter = None
-        self.query_table_all = """SELECT cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
-                                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
-                                      LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
-                                      GROUP BY cut.Id
-                                      ORDER BY Cut_Id DESC"""
-        self.query_table_select = self.query_table_all
-
-        self.set_size_table()
-        self.set_cut_table()
-
-        # Быстрый фильтр
-        self.le_fast_filter = QLineEdit()
-        self.le_fast_filter.setPlaceholderText("Номер кроя")
-        self.le_fast_filter.setMaximumWidth(150)
-        self.le_fast_filter.editingFinished.connect(self.fast_filter)
-        dummy = QWidget()
-        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
-        self.toolBar.addWidget(dummy)
-        self.toolBar.addWidget(self.le_fast_filter)
-
-    def ui_add_cut(self):
-        self.cut_window = CutBrows(self)
-        self.cut_window.setModal(True)
-        self.cut_window.show()
-
-    def set_size_table(self):
-        self.tw_cut_list.horizontalHeader().resizeSection(0, 35)
-        self.tw_cut_list.horizontalHeader().resizeSection(1, 70)
-        self.tw_cut_list.horizontalHeader().resizeSection(2, 80)
-        self.tw_cut_list.horizontalHeader().resizeSection(3, 80)
-        self.tw_cut_list.horizontalHeader().resizeSection(4, 80)
-        self.tw_cut_list.horizontalHeader().resizeSection(5, 55)
-        self.tw_cut_list.horizontalHeader().resizeSection(6, 100)
-        self.tw_cut_list.horizontalHeader().resizeSection(7, 200)
-
-    def ui_double_table(self, table_item):
-        self.cut_window = CutBrows(self, table_item.data(-2))
-        self.cut_window.setModal(True)
-        self.cut_window.show()
-
-    def ui_del_cut(self):
-        try:
-            id = int(self.tw_cut_list.item(self.tw_cut_list.currentRow(), 0).data(-2))
-        except:
-            QMessageBox.information(self, "Ошибка", "Выберите крой", QMessageBox.Ok)
-            return False
-
-        result = QMessageBox.question(self, "Удалить?", "Точно удалить крой?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if result == 16384:
-
-            cut_del = cut.Cut(id)
-            del_note = cut_del.del_sql()
-            if not del_note[0]:
-                QMessageBox.information(self, "Ошибка удаления кроя", del_note[1], QMessageBox.Ok)
-
-            self.set_cut_table()
-            return True
-        else:
-            return False
-
-    def ui_filter(self):
-        if self.filter is None:
-            self.filter = CutFilter(self)
-        self.filter.of_set_sql_query(self.query_table_all)
-        self.filter.setWindowModality(Qt.ApplicationModal)
-        self.filter.show()
-
-    def ui_print(self):
-        head = "Список кроев"
-        html = table_to_html.tab_html(self.tw_cut_list, table_head=head)
-        self.print_class = print_qt.PrintHtml(self, html)
-
-    def set_cut_table(self):
-        sql_info = my_sql.sql_select(self.query_table_select)
-        if "mysql.connector.errors" in str(type(sql_info)):
-            print("Не смог получить список кроя")
-            return False
-
-        self.tw_cut_list.clearContents()
-        self.tw_cut_list.setRowCount(0)
-
-        for row, cut in enumerate(sql_info):
-            self.tw_cut_list.insertRow(row)
-
-            new_table_item = QTableWidgetItem(str(cut[0]))
-            new_table_item.setData(-2, cut[0])
-            self.tw_cut_list.setItem(row, 0, new_table_item)
-
-            new_table_item = QTableWidgetItem(cut[1].strftime("%d.%m.%Y"))
-            new_table_item.setData(-2, cut[0])
-            self.tw_cut_list.setItem(row, 1, new_table_item)
-
-            new_table_item = QTableWidgetItem(str(cut[2]))
-            new_table_item.setData(-2, cut[0])
-            self.tw_cut_list.setItem(row, 2, new_table_item)
-
-            new_table_item = QTableWidgetItem(str(cut[3]))
-            new_table_item.setData(-2, cut[0])
-            self.tw_cut_list.setItem(row, 3, new_table_item)
-
-            rest = cut[3] if cut[3] is not None else 0
-            weight = cut[2] if cut[2] is not None else 0
-            new_table_item = QTableWidgetItem(str(rest + weight))
-            new_table_item.setData(-2, cut[0])
-            self.tw_cut_list.setItem(row, 4, new_table_item)
-
-            new_table_item = QTableWidgetItem(str(cut[4]))
-            new_table_item.setData(-2, cut[0])
-            self.tw_cut_list.setItem(row, 5, new_table_item)
-
-            new_table_item = QTableWidgetItem(str(cut[5]))
-            new_table_item.setData(-2, cut[0])
-            self.tw_cut_list.setItem(row, 6, new_table_item)
-
-            new_table_item = QTableWidgetItem(str(cut[6]))
-            new_table_item.setData(-2, cut[0])
-            self.tw_cut_list.setItem(row, 7, new_table_item)
-
-    def fast_filter(self):
-        # Блок условий номер кроя
-        if self.le_fast_filter.text() != '':
-            q_filter = " WHERE (cut.Id = %s)" % self.le_fast_filter.text()
-            self.query_table_select = self.query_table_all.replace("GROUP BY", q_filter + " GROUP BY")
-        else:
-            self.query_table_select = self.query_table_all
-
-        self.set_cut_table()
-
-    def of_change_cut_complete(self):
-        self.set_cut_table()
-
-    def of_set_filter(self, sql):
-        self.query_table_select = sql
-
-        self.set_cut_table()
-'''
-
 
 class CutBrows(QDialog, cut_brows_class):
     def __init__(self, main=None, cut_id=None):
@@ -257,6 +112,7 @@ class CutBrows(QDialog, cut_brows_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        self.access_save_sql = True
         self.insert_values_sql = False
         self.cut = cut.Cut(cut_id)
         self.main = main
@@ -272,9 +128,18 @@ class CutBrows(QDialog, cut_brows_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
             else:
                 a()
+
+    def access_save(self, bool):
+        self.access_save_sql = bool
 
     def set_start_info(self):
         if self.cut.number() is None:
@@ -539,7 +404,7 @@ class CutBrows(QDialog, cut_brows_class):
         self.destroy()
 
     def ui_can(self):
-        if self.cut.need_save():
+        if self.cut.need_save() and self.access_save_sql:
             result = QMessageBox.question(self, "Выйти?", "Есть несохраненая информация.\nТочно выйти без сохранения?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
                 self.close()

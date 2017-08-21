@@ -157,6 +157,7 @@ class Article(QMainWindow, article_class):
         super(Article, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+        self.access_save_sql = True
         self.main = main
         self.id = id
         self.tree_id = tree_id
@@ -177,9 +178,19 @@ class Article(QMainWindow, article_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
             else:
                 a()
+
+
+    def access_save(self, bool):
+        self.access_save_sql = bool
 
     def set_start_settings(self):
         # Ширина материалов
@@ -1011,7 +1022,7 @@ class Article(QMainWindow, article_class):
             self.destroy()
 
     def ui_cancel(self):
-        if self.save_change:
+        if self.save_change and self.access_save_sql:
             result = QMessageBox.question(self, "Сохранить?", "Сохранить изменение перед выходом?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
                 self.save_sql()
@@ -1490,7 +1501,13 @@ class ChangeOperation(QDialog, article_change_operation_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
             else:
                 a()
 
@@ -1532,7 +1549,13 @@ class ChangeMaterial(QDialog, article_change_material_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
             else:
                 a()
 

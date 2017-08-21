@@ -30,6 +30,7 @@ class PackBrows(QDialog, pack_class):
             self.pack = pack
 
         self.insert_values_sql = False
+        self.access_save_sql = True
 
         self.set_start_info()
         self.set_size_table()
@@ -42,9 +43,18 @@ class PackBrows(QDialog, pack_class):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
             else:
                 a()
+
+    def access_save(self, bool):
+        self.access_save_sql = bool
 
     def set_start_info(self):
 
@@ -231,6 +241,8 @@ class PackBrows(QDialog, pack_class):
                 self.set_operation_name()
 
     def ui_double_click_operation(self, table_item):
+        if not self.toolButton_8.isEnabled():
+            return False
         try:
             id = int(table_item.data(-2))
         except:
@@ -260,6 +272,8 @@ class PackBrows(QDialog, pack_class):
         self.set_operation_name()
 
     def ui_double_click_accessories(self, table_item):
+        if not self.toolButton_5.isEnabled():
+            return False
         try:
             id = int(table_item.data(-2))
         except:
@@ -368,7 +382,7 @@ class PackBrows(QDialog, pack_class):
         self.destroy()
 
     def ui_can(self):
-        if self.pack.need_save_sql():
+        if self.pack.need_save_sql() and self.access_save_sql:
             result = QMessageBox.question(self, "Выйти?", "Есть несохраненая информация.\nТочно выйти без сохранения?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
                 self.close()

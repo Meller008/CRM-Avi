@@ -7,6 +7,7 @@ from classes import print_qt
 from decimal import Decimal
 import datetime
 import re
+from classes.my_class import User
 
 
 table_list_class = loadUiType(getcwd() + '/ui/templates ui/table.ui')[0]
@@ -23,6 +24,24 @@ class TableList(QMainWindow, table_list_class):
         self.set_settings()
         self.set_table_header()
         self.set_table_info()
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
+            else:
+                a()
 
     def set_settings(self):
         self.setWindowTitle("Список")  # Имя окна

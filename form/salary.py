@@ -6,6 +6,7 @@ from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt
 from decimal import *
 from function import my_sql, to_excel
+from classes.my_class import User
 
 
 salary_list = loadUiType(getcwd() + '/ui/salary_work.ui')[0]
@@ -20,6 +21,23 @@ class SalaryList(QDialog, salary_list):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_size_table()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
+            else:
+                a()
 
     def start_sql_info(self):
         self.all_operation = 0
