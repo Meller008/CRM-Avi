@@ -54,3 +54,13 @@ Time = 18.08.2017 17:05:45Traceback (most recent call last):
   File "C:\Python34\lib\zipfile.py", line 923, in __init__
     self.fp = io.open(file, modeDict[mode])
 PermissionError: [Errno 13] Permission denied: 'C:/Users/Meller/Desktop/1.xlsx'
+
+---===Error===---
+Time = 18.08.2017 18:47:21Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1986, in ui_acc
+    self.main.of_ex_torg12(edo, head, article, addres)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1093, in of_ex_torg12
+    sheet["N%s" % row_ex] = moneyfmt.moneyfmt(no_nds_price)
+  File "C:/Users/Meller/Desktop/CRM-Avi\function\moneyfmt.py", line 29, in moneyfmt
+    sign, digits, exp = value.quantize(q).as_tuple()
+AttributeError: 'float' object has no attribute 'quantize'

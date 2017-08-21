@@ -1030,9 +1030,19 @@ class Article(QMainWindow, article_class):
     def save_sql(self):
 
         try:
-            float(self.le_in_on_place.text())
+            int(self.le_in_on_place.text())
         except ValueError:
             QMessageBox.information(self, "Ошибка PCB", "Не верное значение поля 'В одном месте'", QMessageBox.Ok)
+            return False
+
+        try:
+            float(self.le_price.text())
+        except ValueError:
+            QMessageBox.information(self, "Ошибка Цены", "Не верное значение поля 'Цена'", QMessageBox.Ok)
+            return False
+
+        if not self.cb_parametrs.currentText():
+            QMessageBox.information(self, "Ошибка названия", "Недопустимое название параметра", QMessageBox.Ok)
             return False
 
         if "article" in self.save_change:
