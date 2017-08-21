@@ -396,7 +396,11 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="le_name"/>
+     <widget class="QLineEdit" name="le_name">
+      <property name="maxLength">
+       <number>60</number>
+      </property>
+     </widget>
     </item>
     <item row="4" column="1">
      <widget class="QPlainTextEdit" name="pe_cut_note">
@@ -578,10 +582,18 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLineEdit" name="le_client_code"/>
+        <widget class="QLineEdit" name="le_client_code">
+         <property name="maxLength">
+          <number>15</number>
+         </property>
+        </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="le_client_name"/>
+        <widget class="QLineEdit" name="le_client_name">
+         <property name="maxLength">
+          <number>65</number>
+         </property>
+        </widget>
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="label_12">
@@ -605,10 +617,18 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="le_barcode"/>
+        <widget class="QLineEdit" name="le_barcode">
+         <property name="maxLength">
+          <number>15</number>
+         </property>
+        </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QLineEdit" name="le_in_on_place"/>
+        <widget class="QLineEdit" name="le_in_on_place">
+         <property name="maxLength">
+          <number>10</number>
+         </property>
+        </widget>
        </item>
        <item row="8" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
