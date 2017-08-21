@@ -5,8 +5,9 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
-from function import my_sql
+from function import my_sql, table_to_html
 from classes.my_class import User
+from classes import print_qt
 
 article_class = loadUiType(getcwd() + '/ui/article.ui')[0]
 article_change_operation_class = loadUiType(getcwd() + '/ui/article_change_operation.ui')[0]
@@ -913,6 +914,65 @@ class Article(QMainWindow, article_class):
                 new_item.setData(-2, sql_id)
                 self.tw_operations.setItem(row, col - 1, new_item)
         self.calc()
+
+    def ui_print(self):
+        head = "%s (%s) %s   %s" % (self.le_article.text(), self.cb_size.currentText(), self.cb_parametrs.currentText(), self.tw_materials.text())
+
+        up_html = """
+          <table>
+          <caption>#caption#</caption>
+          <tr>
+          <th>Название клиента</th><th>Штрих-код</th><th>Код клиента</th><th>PCB</th>
+          </tr>
+          <tr>
+          <td>#cl_name#</td><td>#barcode#</td><td>#cl_code#</td><td>#pcb#</td>
+          </tr>
+          <tr>
+          <th>Цена</th><th>НДС</th><th>Цена без НДС</th><th>Себестоймость</th>
+          </tr>
+          <tr>
+          <td>#price#</td><td>#nds#</td><td>#price_no_nds#</td><td>#sibestoimost#</td>
+          </tr>
+          </table>
+          <table>
+          <tr>
+          <th>Описание товара</th>
+          </tr>
+          <tr>
+          <td>#product_note#</td>
+          </tr>
+          </table>
+          <table>
+          <tr>
+          <th>Описание кроя</th>
+          </tr>
+          <tr>
+          <td>#cut_note#</td>
+          </tr>
+          </table>
+          """
+
+        if self.rb_nds_1.isChecked():
+            nds = 18
+        else:
+            nds = 10
+
+        up_html = up_html.replace("#caption#", head)
+        up_html = up_html.replace("#cl_name#", self.le_client_name.text())
+        up_html = up_html.replace("#barcode#", self.le_barcode.text())
+        up_html = up_html.replace("#cl_code#", self.le_client_code.text())
+        up_html = up_html.replace("#pcb#", self.le_in_on_place.text())
+        up_html = up_html.replace("#price#", self.le_price.text())
+        up_html = up_html.replace("#nds#", str(nds))
+        up_html = up_html.replace("#price_no_nds#", str(self.sb_no_nds.value()))
+        up_html = up_html.replace("#sibestoimost#", self.le_cost_price.text())
+        up_html = up_html.replace("#product_note#", self.pe_product_note.toPlainText())
+        up_html = up_html.replace("#cut_note#", self.pe_cut_note.toPlainText())
+
+        html = table_to_html.tab_html(self.tw_operations, up_template=up_html)
+        html = table_to_html.tab_html(self.tw_materials, up_template=html)
+
+        self.print_class = print_qt.PrintHtml(self, html)
 
     def ui_calc_nds(self):
         try:

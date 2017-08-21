@@ -432,9 +432,9 @@ class CutBrows(QDialog, cut_brows_class):
           <tr>
           <td>#id_cut#</td><td>#cut_date#</td><td>#cut_material#</td><td>#material_price#</td><td>#worker#</td>
           </tr>
-          <tr>
           </table>
           <table>
+          <tr>
           <th>Вес пачек</th><th>Вес обрези</th><th>Вес итого</th><th>% обрези</th><th>Заметка</th>
           </tr>
           <tr>

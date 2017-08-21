@@ -745,10 +745,16 @@ font: 8pt &quot;Tahoma&quot;;</string>
     <bool>false</bool>
    </attribute>
    <addaction name="pb_copy"/>
+   <addaction name="pb_print"/>
   </widget>
   <action name="pb_copy">
    <property name="text">
     <string>Копировать информацию</string>
+   </property>
+  </action>
+  <action name="pb_print">
+   <property name="text">
+    <string>Печать</string>
    </property>
   </action>
  </widget>
@@ -1554,6 +1560,22 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_print</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_size()</slot>
@@ -1587,5 +1609,6 @@ font: 8pt &quot;Tahoma&quot;;</string>
   <slot>ui_calc_nds()</slot>
   <slot>ui_change_curent()</slot>
   <slot>ui_print_label()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>
