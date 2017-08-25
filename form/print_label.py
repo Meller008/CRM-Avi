@@ -61,6 +61,7 @@ class LabelFile(QDialog, label_file):
                 return "%s/%s" % (self.path_wor, dir_name)
 
     def inspection_files(self, dir_name, sql_dir_name):   # Проверяем файлы и даем иконки
+        dir_name = dir_name.replace("/", "-")
         self.path = self.inspection_path(dir_name, sql_dir_name)
         if self.path:
             self.lw_label.clear()
