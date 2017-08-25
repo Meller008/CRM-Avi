@@ -1,10 +1,8 @@
 from os import getcwd, path, mkdir, listdir
-from form.templates import tree
-from form import operation, supply_material, supply_accessories
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem
-from PyQt5.QtGui import QIcon, QBrush, QColor
-from PyQt5 import QtCore
+from PyQt5.QtWidgets import QDialog, QMessageBox, QListWidgetItem
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QDate
 from function import my_sql
 import socket
 
@@ -105,7 +103,8 @@ class LabelSettings(QDialog, label_settings):
                            "pack_id": "None",
                            "clients_vendor": "None",
                            "date_order": "None",
-                           "number_order": "None"}
+                           "number_order": "None",
+                           "date_now": QDate.currentDate().toString("MM.yyyy")}
 
         self.le_label_path.setText(path)
 

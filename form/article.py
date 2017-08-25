@@ -188,7 +188,6 @@ class Article(QMainWindow, article_class):
             else:
                 a()
 
-
     def access_save(self, bool):
         self.access_save_sql = bool
 
