@@ -64,3 +64,67 @@ Time = 18.08.2017 18:47:21Traceback (most recent call last):
   File "C:/Users/Meller/Desktop/CRM-Avi\function\moneyfmt.py", line 29, in moneyfmt
     sign, digits, exp = value.quantize(q).as_tuple()
 AttributeError: 'float' object has no attribute 'quantize'
+
+---===Error===---
+Time = 21.08.2017 13:50:01Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 185, in view_product
+    self.article_list = article.ArticleList()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\tree.py", line 21, in __init__
+    self.access()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\tree.py", line 36, in access
+    a(item["value"])
+TypeError: QAction.setEnabled(bool): argument 1 has unexpected type 'str'
+
+---===Error===---
+Time = 21.08.2017 13:59:23Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 125, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 105, in ui_change_table_item
+    self.new_operation = Article(self, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 172, in __init__
+    self.access()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 178, in access
+    a = getattr(a, item["atr2"])
+AttributeError: 'bool' object has no attribute 'False'
+
+---===Error===---
+Time = 21.08.2017 14:00:25Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 125, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 105, in ui_change_table_item
+    self.new_operation = Article(self, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 172, in __init__
+    self.access()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 187, in access
+    a(val)
+TypeError: 'bool' object is not callable
+
+---===Error===---
+Time = 21.08.2017 14:39:26Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 244, in ui_double_click_operation
+    if not self.toolButton_8.enabled:
+AttributeError: 'QToolButton' object has no attribute 'enabled'
+
+---===Error===---
+Time = 21.08.2017 14:41:03Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 244, in ui_double_click_operation
+    if not self.toolButton_8.enabled():
+AttributeError: 'QToolButton' object has no attribute 'enabled'
+
+---===Error===---
+Time = 21.08.2017 15:21:51Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 131, in double_click
+    self.add_mat = OneStaff(self, True)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 277, in __init__
+    self.access()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 292, in access
+    a(val)
+TypeError: QWidget.show(): too many arguments
+
+---===Error===---
+Time = 22.08.2017 15:09:09Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 233, in view_audit_verification
+    self.audit_verification = audit.AuditVerification()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\audit.py", line 21, in __init__
+    int("dd")
+ValueError: invalid literal for int() with base 10: 'dd'

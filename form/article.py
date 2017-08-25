@@ -1285,7 +1285,6 @@ class Article(QMainWindow, article_class):
             self.inspection_files(dir_name, "Путь корень бирки")
 
     def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
-        dir_name = dir_name.replace("/", "//")
         if not hasattr(self, 'path_work'):
             query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % sql_dir_name
             info_sql = my_sql.sql_select(query)
@@ -1304,7 +1303,7 @@ class Article(QMainWindow, article_class):
                 return "%s/%s" % (self.path_wor, dir_name)
 
     def inspection_files(self, dir_name, sql_dir_name):   # Проверяем файлы и даем иконки
-        dir_name = dir_name.replace("/", "//")
+        dir_name = dir_name.replace("/", "-")
         self.path = self.inspection_path(dir_name, sql_dir_name)
         if self.path:
             self.lw_label.clear()
