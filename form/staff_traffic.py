@@ -175,6 +175,36 @@ class StaffTraffic(QDialog, staff_traffic):
         self.cut_passport.setModal(True)
         self.cut_passport.show()
 
+    def ui_set_date_month(self):
+        table_date = []
+        for trafic in self.sql_traffic:
+            if trafic[2]:
+                if not trafic[3]:
+                    min = trafic[2].minute
+                    if 0 <= min <= 15:
+                        tab_date = trafic[2].replace(minute=0)
+                    elif 16 <= min <= 45:
+                        tab_date = trafic[2].replace(minute=30)
+                    else:
+                        tab_date = trafic[2].replace(minute=0)
+                        hour_up = trafic[2].hour + 1
+                        tab_date = tab_date.replace(hour=hour_up)
+
+                    table_date.append((tab_date, trafic[0]))
+
+            else:
+                QMessageBox.critical(self, "Ошибка даты", "Что то не так с датой", QMessageBox.Ok)
+                return False
+
+        query = "UPDATE staff_worker_traffic SET Table_Data = %s WHERE Id = %s"
+        for sql_table in table_date:
+            sql = my_sql.sql_change(query, sql_table)
+            if "mysql.connector.errors" in str(type(sql)):
+                QMessageBox.critical(self, "Ошибка sql проставления дат", sql.msg, QMessageBox.Ok)
+                return False
+
+        self.set_work_traffic(int(self.le_worker.whatsThis()), True)
+
     def ui_view_list_worker(self):
         self.worker_list = staff.Staff(self, True)
         self.worker_list.setWindowModality(Qt.ApplicationModal)

@@ -153,6 +153,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="toolButton">
+         <property name="text">
+          <string>Проставить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -297,6 +304,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>toolButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_set_date_month()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>548</x>
+     <y>34</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>541</x>
+     <y>-24</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_view_list_worker()</slot>
@@ -305,5 +328,6 @@
   <slot>ui_change_date()</slot>
   <slot>ui_calc_traffic()</slot>
   <slot>ui_del()</slot>
+  <slot>ui_set_date_month()</slot>
  </slots>
 </ui>
