@@ -1106,7 +1106,7 @@ class Article(QMainWindow, article_class):
             return False
 
         try:
-            float(self.le_price.text())
+            float(self.le_price.text().replace(",", "."))
         except ValueError:
             QMessageBox.information(self, "Ошибка Цены", "Не верное значение поля 'Цена'", QMessageBox.Ok)
             return False
