@@ -47,20 +47,22 @@ class CutList(table.TableList):
         self.toolBar.addWidget(self.le_fast_filter)
 
         self.filter = None
-        self.query_table_all = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
+        self.query_table_all = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest, COUNT(pack.Id),
+                                        staff_worker_info.Last_Name, cut.Note
                                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
                                       GROUP BY cut.Id
                                       ORDER BY Cut_Id DESC"""
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, COUNT(pack.Id), staff_worker_info.Last_Name, cut.Note
+        self.query_table_select = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest, COUNT(pack.Id),
+                                        staff_worker_info.Last_Name, cut.Note
                                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
                                       GROUP BY cut.Id
                                       ORDER BY Cut_Id DESC"""
 
-        #self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
+        self.query_table_dell = "DELETE FROM cut WHERE Id = %s"
 
     def ui_add_table_item(self):  # Добавить предмет
         self.cut_window = CutBrows(self)
@@ -145,6 +147,7 @@ class CutBrows(QDialog, cut_brows_class):
         if self.cut.number() is None:
             self.le_number_cut.setText(str(self.cut.take_new_number()))
             self.de_cut_date.setDate(QDate.currentDate())
+            self.cut.set_date(self.de_cut_date.date())
         else:
             self.insert_values_sql = True
 
