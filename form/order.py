@@ -1084,7 +1084,7 @@ class Order(QMainWindow, order_class):
             if self.lb_client.whatsThis().find("no_nds") >= 0:
                 no_nds_price = round(float(self.tw_position.item(row, 4).text()), 2)
                 sum_no_nds = no_nds_price * int(self.tw_position.item(row, 5).text())
-                sum = round(sum_no_nds * 1.18, 2)
+                sum = round(sum_no_nds * (1 + nds / 100), 2)
 
             else:
                 no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
@@ -1339,7 +1339,7 @@ class Order(QMainWindow, order_class):
             if self.lb_client.whatsThis().find("no_nds") >= 0:
                 no_nds_price = round(float(self.tw_position.item(row, 4).text()), 2)
                 sum_no_nds = no_nds_price * int(self.tw_position.item(row, 5).text())
-                sum = round(sum_no_nds * 1.18, 2)
+                sum = round(sum_no_nds * (1 + nds / 100), 2)
             else:
                 no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
                                      / (100 + float(nds)), 2)
@@ -1556,7 +1556,7 @@ class Order(QMainWindow, order_class):
             if self.lb_client.whatsThis().find("no_nds") >= 0:
                 no_nds_price = round(float(self.tw_position.item(row, 4).text()), 2)
                 sum_no_nds = no_nds_price * int(self.tw_position.item(row, 5).text())
-                sum = round(sum_no_nds * 1.18, 2)
+                sum = round(sum_no_nds * (1 + nds / 100), 2)
             else:
                 no_nds_price = round(float(self.tw_position.item(row, 4).text()) - (float(self.tw_position.item(row, 4).text()) * float(nds))
                                      / (100 + float(nds)), 2)
@@ -1633,7 +1633,8 @@ class Order(QMainWindow, order_class):
         sheet["M25"] = all_mest
         sheet["H28"] = all_mest
 
-        sheet["U%s" % (row_ex-20)] = self.le_number_doc.text()
+        sheet["U%s" % (row_ex-20)] = self.le_number_order.text()
+        sheet["U%s" % (row_ex-20)].font = font_8
         sheet["S%s" % (row_ex-19)] = list_all
 
         sheet.merge_cells("AA%s:AC%s" % (row_ex-20, row_ex-20))
