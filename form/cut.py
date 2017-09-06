@@ -1,5 +1,5 @@
 from os import getcwd
-from form import order, staff
+from form import order, staff, print_label
 from datetime import datetime
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton, QLineEdit, QWidget, QSizePolicy
@@ -326,6 +326,11 @@ class CutBrows(QDialog, cut_brows_class):
 
         html = table_to_html.tab_html(self.tw_pack, up_template=up_html)
         self.print_class = print_qt.PrintHtml(self, html)
+
+    def ui_print_label(self):
+        self.label_list = LabelList(self, self.cut)
+        self.label_list.setModal(True)
+        self.label_list.show()
 
     def ui_fast_filter(self):
         if self.le_pack_number_filter.text():
@@ -692,7 +697,6 @@ class CutPassport(QDialog, cut_print_passport):
             QMessageBox.information(self, "Ошибка", "Выберите хотя бы одну пачку", QMessageBox.Ok)
             return False
 
-
         #  Начинаем перебор выбраных пачек
         pack_html = """    <div style="display: inline-block; width: 100%">
                             <table style="height: 150px; border-color: black; margin-left: auto; margin-right: auto;" border="1" width="100%" cellspacing="0" cellpadding="0">
@@ -807,6 +811,40 @@ class CutPassport(QDialog, cut_print_passport):
     def ui_can(self):
         self.close()
         self.destroy()
+
+
+class LabelList(CutPassport):
+    def __init__(self, main, cut):
+        CutPassport.__init__(self, main, cut)
+        self.setWindowTitle("Печать бирок")
+
+    def ui_acc(self):
+        select_pack = []
+        for row in range(self.tw_pack.rowCount()):
+            if self.tw_pack.item(row, 0).checkState() == Qt.Checked:
+                select_pack.append(self.tw_pack.item(row, 0).data(-2))
+
+        if not select_pack:
+            QMessageBox.information(self, "Ошибка", "Выберите хотя бы одну пачку", QMessageBox.Ok)
+            return False
+
+        #  Начинаем перебор выбраных пачек
+        for pack_id in select_pack:
+            pack = self.cut.pack(pack_id)
+
+            data = {
+                    "article": pack.article(),
+                    "article_size": pack.article_size(),
+                    "article_parametr": pack.parametr_name(),
+                    "article_barcode": pack.article_barcode(),
+                    "pack_id": pack.id(),
+                    "label_value": pack.value()}
+
+            self.print_label = print_label.LabelFile(pack.parametr_id(), "Путь корень бирки", data)
+            self.print_label.setModal(True)
+            self.print_label.show()
+            if self.print_label.exec() <= 0:
+                return False
 
 
 class CutListMission(QMainWindow, cut_list_mission_class):

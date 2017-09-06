@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>673</width>
-    <height>418</height>
+    <width>701</width>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -279,6 +279,13 @@
          <widget class="QToolButton" name="toolButton_5">
           <property name="text">
            <string>Печать пасспортов</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="toolButton_7">
+          <property name="text">
+           <string>Печать бирок</string>
           </property>
          </widget>
         </item>
@@ -572,7 +579,7 @@
    <slot>ui_view_list_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>369</x>
+     <x>395</x>
      <y>50</y>
     </hint>
     <hint type="destinationlabel">
@@ -588,7 +595,7 @@
    <slot>ui_view_list_worker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>650</x>
+     <x>695</x>
      <y>50</y>
     </hint>
     <hint type="destinationlabel">
@@ -705,7 +712,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>546</x>
-     <y>455</y>
+     <y>421</y>
     </hint>
    </hints>
   </connection>
@@ -716,11 +723,11 @@
    <slot>ui_can()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>616</x>
-     <y>403</y>
+     <x>696</x>
+     <y>419</y>
     </hint>
     <hint type="destinationlabel">
-     <x>721</x>
+     <x>700</x>
      <y>389</y>
     </hint>
    </hints>
@@ -753,7 +760,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>568</x>
-     <y>-76</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -769,7 +776,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>245</x>
-     <y>-27</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -780,12 +787,28 @@
    <slot>ui_print_cut()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>349</x>
+     <x>455</x>
+     <y>135</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>700</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_7</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_print_label()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>356</x>
      <y>128</y>
     </hint>
     <hint type="destinationlabel">
-     <x>754</x>
-     <y>99</y>
+     <x>377</x>
+     <y>-173</y>
     </hint>
    </hints>
   </connection>
@@ -809,5 +832,6 @@
   <slot>ui_fast_filter()</slot>
   <slot>ui_print_passport()</slot>
   <slot>ui_print_cut()</slot>
+  <slot>ui_print_label()</slot>
  </slots>
 </ui>

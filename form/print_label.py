@@ -29,8 +29,10 @@ class LabelFile(QDialog, label_file):
         if "mysql.connector.errors" in str(type(info_sql)):
                 QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
 
-        dir_name = info_sql[0][0] + " " + info_sql[0][1] + " " + info_sql[0][2]
+        lable_article = "Артикул: %s Размер: %s Параметр: %s" % (info_sql[0][0], info_sql[0][1], info_sql[0][2])
+        self.lb_article.setText(lable_article)
 
+        dir_name = info_sql[0][0] + " " + info_sql[0][1] + " " + info_sql[0][2]
         self.full_path = self.inspection_files(dir_name, path_name)
 
     def ui_select_label(self, item):
@@ -113,6 +115,9 @@ class LabelSettings(QDialog, label_settings):
             for key, val in data.items():
                 if self.label_data.get(key, False) != False:
                     self.label_data[key] = str(val)
+
+        if self.label_data["label_value"]:
+            self.le_value.setValue(int(self.label_data["label_value"]))
 
     def ui_print_tcp(self):
 
