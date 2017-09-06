@@ -133,9 +133,11 @@ class LabelSettings(QDialog, label_settings):
         conn.send(bytes(str(self.label_data), encoding='utf-8'))
         conn.send(b"data_ok")
 
-        self.done(1)
+        self.setResult(1)
+        self.close()
+        self.destroy()
 
     def ui_can(self):
-        self.done(-1)
+        self.setResult(-1)
         self.close()
         self.destroy()
