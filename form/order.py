@@ -59,7 +59,7 @@ class OrderList(table.TableList):
 
     def ui_add_table_item(self):  # Добавить предмет
         id = False
-        self.new_order = Order(0, id)
+        self.new_order = Order(self, id)
         self.new_order.setWindowModality(Qt.ApplicationModal)
         self.new_order.show()
 
@@ -750,7 +750,7 @@ class Order(QMainWindow, order_class):
             self.close()
             self.destroy()
             if self.main != 0:
-                self.main.of_order_complete()
+                self.main.ui_update()
 
     def ui_can(self):
         if (self.save_change_order or self.save_change_order_position) and self.access_save_sql:
@@ -794,7 +794,7 @@ class Order(QMainWindow, order_class):
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql добавления заказа", sql_info.msg, QMessageBox.Ok)
                     return False
-                self.new_id = sql_info[0][0]
+                self.new_id = sql_info
         if self.save_change_order_position or self.sql_shipped != self.cb_shipping.isChecked():
 
             if self.cb_shipping.isChecked():
