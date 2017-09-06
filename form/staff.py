@@ -395,6 +395,7 @@ class OneStaff(QMainWindow, one_staff_class):
     def change_birth(self, birth_date):  # Подсчет колличества лет
         years = int(birth_date.daysTo(self.to_date) / 365)
         self.lb_info_years.setText("Возраст: %s" % years)
+        self.alter_info()
 
     def change_patent_date(self, patent_date):  # автоматически продлевает патент на 1 год
         self.de_patent_ending.setDate(patent_date.addYears(1))
