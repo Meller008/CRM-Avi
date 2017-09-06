@@ -843,7 +843,7 @@ class LabelList(CutPassport):
             self.print_label = print_label.LabelFile(pack.parametr_id(), "Путь корень бирки", data)
             self.print_label.setModal(True)
             self.print_label.show()
-            if self.print_label.exec() > 0:
+            if self.print_label.exec() < 1:
                 return False
 
 
