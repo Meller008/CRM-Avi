@@ -843,8 +843,10 @@ class LabelList(CutPassport):
             self.print_label = print_label.LabelFile(pack.parametr_id(), "Путь корень бирки", data)
             self.print_label.setModal(True)
             self.print_label.show()
-            if print(self.print_label.exec() < 0):
-                return False
+            res = self.print_label.exec()
+            print(res)
+            #if not res:
+                #return False
 
 
 class CutListMission(QMainWindow, cut_list_mission_class):
