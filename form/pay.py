@@ -1,5 +1,5 @@
 from os import getcwd
-from form import staff
+from form import staff, supply_material
 from datetime import datetime
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
@@ -160,6 +160,7 @@ class PayBrows(QDialog, brows_pay):
             self.de_minus_date.setDate(QDate.currentDate())
             self.de_road_date.setDate(QDate.currentDate())
             self.de_p_m_date.setDate(QDate.currentDate())
+            self.de_bye_date.setDate(QDate.currentDate())
         else:
             query = """SELECT work.Id, work.First_Name, work.Last_Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_reason.Id, pay_reason.Name, pay_worker.Note
                           FROM pay_worker
@@ -221,6 +222,8 @@ class PayBrows(QDialog, brows_pay):
             self.sw_main.setCurrentIndex(3)
         elif self.menu_text == "Обмен":
             self.sw_main.setCurrentIndex(4)
+        elif self.menu_text == "Продажа материала":
+            self.sw_main.setCurrentIndex(5)
 
     def ui_add_worker(self):
         self.worker_list = staff.Staff(self, True)
@@ -271,6 +274,57 @@ class PayBrows(QDialog, brows_pay):
         self.reason_list = PayReasonPlus(self, True)
         self.reason_list.setWindowModality(Qt.ApplicationModal)
         self.reason_list.show()
+
+    # Для продажи ткани
+    def ui_add_worker_bye(self):
+        self.button = "Продажа ткани"
+        self.worker_list = staff.Staff(self, True)
+        self.worker_list.setWindowModality(Qt.ApplicationModal)
+        self.worker_list.show()
+
+    def ui_add_reason_bye(self):
+        self.button = "Продажа ткани"
+        self.reason_list = PayReasonMinus(self, True)
+        self.reason_list.setWindowModality(Qt.ApplicationModal)
+        self.reason_list.show()
+
+    def ui_add_material_name(self):
+        self.material_name = supply_material.MaterialName(self, True)
+        self.material_name.setWindowModality(Qt.ApplicationModal)
+        self.material_name.show()
+
+    def ui_change_weight(self):
+        try:
+            weight = float(self.le_weight.text().replace(",", "."))
+            self.need_weight = False
+
+            query = """SELECT SUM(material_balance.BalanceWeight) FROM material_balance
+                                  LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
+                                  WHERE material_supplyposition.Material_NameId = %s"""
+            sql_info = my_sql.sql_select(query, (self.le_material_name.whatsThis(),))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql баланс ткани", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            if sql_info[0][0] is None:
+                self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
+                self.le_weight.setToolTip("Нету такой ткани на складе")
+
+            elif weight is not None and sql_info[0][0] < weight:
+                self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
+                self.le_weight.setToolTip("Этой ткани не хватит для изменения расходов")
+
+            elif weight is None or sql_info[0][0] > weight:
+                self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(122, 247, 84);")
+                self.le_weight.setToolTip("Новой ткани хватает")
+                self.need_weight = True
+                self.le_sum.setText(str(round(weight * float(self.le_price.text()), 4)))
+            else:
+                self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
+                self.le_weight.setToolTip("Что то не так при проверке новой ткани (Обратитесь к админу)")
+        except:
+            self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
+            self.le_weight.setToolTip("Что то не так при проверке новой ткани (Обратитесь к админу)")
 
     def ui_acc(self):
         if self.id is None:
@@ -336,6 +390,62 @@ class PayBrows(QDialog, brows_pay):
 
                 self.close()
                 self.destroy()
+
+            elif self.menu_text == "Продажа материала":
+                if self.need_weight:
+                    sql_connect_transaction = my_sql.sql_start_transaction()
+
+                    query = """INSERT INTO pay_worker (Worker_Id, Worker_Id_Insert, Reason_Id, Balance, Date_In_Pay, Date_Input, Note, Pay, Date_Pay)
+                            VALUES (%s, %s, %s, -%s, %s, NOW(), %s, %s, %s)"""
+                    sql_value = (self.le_work_bye.whatsThis(), User().id(), self.le_reason_bye.whatsThis(), self.le_sum.text().replace(",", "."),
+                                 self.de_bye_date.date().toString(Qt.ISODate), self.le_note_bye.text(), 0, None)
+                    sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_value)
+                    if "mysql.connector.errors" in str(type(sql_info)):
+                            QMessageBox.critical(self, "Ошибка sql сохр. вычета продажи ткани", sql_info.msg, QMessageBox.Ok)
+                            return False
+
+                    change_value = float(self.le_weight.text().replace(",", "."))
+                    material_id = self.le_material_name.whatsThis()
+
+                    while change_value > 0:
+                        # получим первый остаток на складе
+                        # Проверяем первое кол-во на складе
+                        query = """SELECT material_balance.Id, material_balance.BalanceWeight, MIN(material_supply.Data)
+                                      FROM material_balance
+                                        LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
+                                        LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                      WHERE material_supplyposition.Material_NameId = %s AND material_balance.BalanceWeight > 0"""
+                        sql_balance_material = my_sql.sql_select_transaction(sql_connect_transaction, query, (material_id, ))
+                        if "mysql.connector.errors" in str(type(sql_balance_material)):
+                            QMessageBox.critical(self, "Ошибка sql Не смог получить остаток ткани на балансе", sql_balance_material.msg, QMessageBox.Ok)
+                        if sql_balance_material[0][1] > change_value:
+                            # Если в этом балансе больше чем нам надо
+                            take_material_value = change_value
+                            change_value = 0
+                        else:
+                            # Если в этом балансе меньше чем нам надо
+                            take_material_value = sql_balance_material[0][1]
+                            change_value -= sql_balance_material[0][1]
+                        # Забираем возможное кол-во
+                        query = "UPDATE material_balance SET BalanceWeight = BalanceWeight - %s WHERE Id = %s"
+                        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (take_material_value, sql_balance_material[0][0]))
+                        if "mysql.connector.errors" in str(type(sql_info)):
+                            my_sql.sql_rollback_transaction(sql_connect_transaction)
+                            QMessageBox.critical(self, "Ошибка sql Не смог забрать ткань с баланса", sql_info.msg, QMessageBox.Ok)
+
+                        # Делаем запись о заборе ткани с баланса склада
+                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
+                                    VALUES (%s, %s, SYSDATE(), %s, NULL)"""
+                        txt_note = "Продажа ткани работнику № %s" % self.le_work_bye.whatsThis()
+                        sql_values = (sql_balance_material[0][0], -take_material_value, txt_note)
+                        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
+                        if "mysql.connector.errors" in str(type(sql_info)):
+                            my_sql.sql_rollback_transaction(sql_connect_transaction)
+                            QMessageBox.critical(self, "Ошибка sql Не смог добавить запись", sql_info.msg, QMessageBox.Ok)
+
+                    my_sql.sql_commit_transaction(sql_connect_transaction)
+                else:
+                    QMessageBox.information(self, "Ошибка веса", "У вас что то не так с весом!", QMessageBox.Ok)
 
             else:
                 QMessageBox.critical(self, "Ошибка", "Непонятный элемент меню", QMessageBox.Ok)
@@ -437,6 +547,9 @@ class PayBrows(QDialog, brows_pay):
         elif self.button == "Плюс минус - Плюс":
             self.le_p_m_worker_plus.setWhatsThis(str(item[0]))
             self.le_p_m_worker_plus.setText(item[1])
+        elif self.button == "Продажа ткани":
+            self.le_work_bye.setWhatsThis(str(item[0]))
+            self.le_work_bye.setText(item[1])
         else:
             self.le_work_minus.setWhatsThis(str(item[0]))
             self.le_work_minus.setText(item[1])
@@ -461,10 +574,37 @@ class PayBrows(QDialog, brows_pay):
         if self.button == "Плюс минус - Минус":
             self.le_p_m_reason_minus.setWhatsThis(str(item[0]))
             self.le_p_m_reason_minus.setText(item[1])
+        elif self.button == "Продажа ткани":
+            self.le_reason_bye.setWhatsThis(str(item[0]))
+            self.le_reason_bye.setText(item[1])
         else:
             self.le_reason_minus.setWhatsThis(str(item[0]))
             self.le_reason_minus.setText(item[1])
         self.button = None
+
+    def of_list_material_name(self, item):
+        self.le_material_name.setWhatsThis(str(item[0]))
+        self.le_material_name.setText(item[1])
+
+        # Проверим цену материала
+        query = """SELECT Price
+                        FROM material_name
+                          LEFT JOIN material_supplyposition ON material_name.Id = material_supplyposition.Material_NameId
+                          LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                          LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                        WHERE material_name.Id = %s AND BalanceWeight > 0
+                        ORDER BY Data
+                        LIMIT 1"""
+        sql_info = my_sql.sql_select(query, (item[0], ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql цена ткани", sql_info.msg, QMessageBox.Ok)
+            return False
+        if sql_info:
+            self.le_price.setText(str(sql_info[0][0]))
+        else:
+            self.le_price.setText("None")
+
+        self.ui_change_weight()
 
 
 class PayFilter(QDialog, pay_filter):
