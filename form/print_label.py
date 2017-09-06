@@ -41,6 +41,7 @@ class LabelFile(QDialog, label_file):
         self.print.setModal(True)
         self.print.show()
         if self.print.exec() > 0:
+            self.done(1)
             self.close()
             self.destroy()
 
@@ -133,11 +134,9 @@ class LabelSettings(QDialog, label_settings):
         conn.send(bytes(str(self.label_data), encoding='utf-8'))
         conn.send(b"data_ok")
 
-        self.setResult(1)
-        self.close()
-        self.destroy()
+        self.done(1)
 
     def ui_can(self):
-        self.setResult(-1)
+        self.done(-1)
         self.close()
         self.destroy()
