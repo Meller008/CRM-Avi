@@ -4,6 +4,7 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QMessageBox, QListWidgetItem, QMainWindow
 from PyQt5.QtGui import QIcon
 from function import my_sql
+from classes.my_class import User
 
 list_class = loadUiType(getcwd() + '/ui/templates ui/list_item.ui')[0]
 
@@ -17,6 +18,24 @@ class ListItems(QMainWindow, list_class):
         self.sql_set_list()
         self.m_class = main_class
         self.dc_select = dc_select
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
+            else:
+                a()
 
     def set_settings(self):
         self.setWindowTitle("Список")  # Имя окна

@@ -38,7 +38,10 @@ class TableList(QMainWindow, table_list_class):
                 elif item["value"] == "False":
                     val = False
                 else:
-                    val = item["value"]
+                    try:
+                        val = int(item["value"])
+                    except:
+                        val = item["value"]
                 a(val)
             else:
                 a()

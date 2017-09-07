@@ -101,6 +101,9 @@ class PayList(table.TableList):
         self.new_pay.show()
 
     def ui_change_table_item(self, id=False):  # изменить элемент
+        if not self.pb_change.isEnabled():
+            return False
+
         if id:
             item_id = id
         else:
@@ -150,7 +153,16 @@ class PayBrows(QDialog, brows_pay):
                 a = getattr(a, item["atr2"])
 
             if item["value"]:
-                a(item["value"])
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    try:
+                        val = int(item["value"])
+                    except:
+                        val = item["value"]
+                a(val)
             else:
                 a()
 
