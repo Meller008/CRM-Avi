@@ -177,10 +177,11 @@ class WarehouseTransaction(table.TableList):
         self.pb_filter.deleteLater()
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Кол-во", 70), ("Дата", 65), ("Заметка", 300), ("Пачка", 40))
+        self.table_header_name = (("№", 30), ("Кол-во", 70), ("Дата", 65), ("Заметка", 300), ("Пачка", 40))
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT transaction_records_accessories.Id, transaction_records_accessories.Balance, transaction_records_accessories.Date,
+        self.query_table_select = """SELECT transaction_records_accessories.Id, transaction_records_accessories.Id,
+                                        transaction_records_accessories.Balance, transaction_records_accessories.Date,
                                         transaction_records_accessories.Note, transaction_records_accessories.Pack_Accessories_Id
                                       FROM accessories_balance LEFT JOIN transaction_records_accessories ON accessories_balance.Id = transaction_records_accessories.Supply_Balance_Id
                                       WHERE transaction_records_accessories.Supply_Balance_Id = %s
@@ -209,7 +210,7 @@ class WarehouseTransaction(table.TableList):
                 else:
                     text = str(table_typle[column])
 
-                if table_typle[1] >= 0:
+                if table_typle[2] >= 0:
                     color = QBrush(QColor(150, 255, 161, 255))
                 else:
                     color = QBrush(QColor(255, 255, 153, 255))

@@ -20,17 +20,17 @@ class PayList(table.TableList):
     def set_settings(self):
 
         self.setWindowTitle("Доплаты и вычеты")  # Имя окна
-        self.resize(900, 270)
+        self.resize(940, 270)
         self.pb_copy.deleteLater()
         self.pb_other.deleteLater()
         self.toolBar.setStyleSheet("background-color: rgb(191, 255, 42);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Кому", 100), ("Сумма", 65), ("Д. исполнения", 100), ("Причина", 205), ("Замтка", 180),
+        self.table_header_name = (("№", 40), ("Кому", 100), ("Сумма", 75), ("Д. исполнения", 100), ("Причина", 200), ("Замтка", 180),
                                   ("Кто назначил", 100), ("Добавлено", 70), ("В ЗП", 35))
 
         self.filter = None
-        self.query_table_all = """SELECT pay_worker.Id, work.Last_Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_reason.Name,
+        self.query_table_all = """SELECT pay_worker.Id, pay_worker.Id, work.Last_Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_reason.Name,
                                                 pay_worker.Note, admin.Last_Name, pay_worker.Date_Input,
                                                 CASE
                                                   WHEN pay_worker.Pay = 0
@@ -45,7 +45,7 @@ class PayList(table.TableList):
                                               ORDER BY pay_worker.Date_Input DESC , pay_worker.Date_In_Pay DESC """
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT pay_worker.Id, work.Last_Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_reason.Name,
+        self.query_table_select = """SELECT pay_worker.Id, pay_worker.Id, work.Last_Name, pay_worker.Balance, pay_worker.Date_In_Pay, pay_reason.Name,
                                         pay_worker.Note, admin.Last_Name, pay_worker.Date_Input,
                                         CASE
                                           WHEN pay_worker.Pay = 0
@@ -77,7 +77,7 @@ class PayList(table.TableList):
         for table_typle in self.table_items:
             self.table_widget.insertRow(self.table_widget.rowCount())
 
-            if table_typle[2] > 0:
+            if table_typle[3] > 0:
                 color = QBrush(QColor(150, 255, 161, 255))
             else:
                 color = QBrush(QColor(252, 141, 141, 255))
@@ -399,9 +399,9 @@ class PayBrows(QDialog, brows_pay):
                             VALUES (%s, %s, %s, -%s, %s, NOW(), %s, %s, %s)"""
                     sql_value = (self.le_work_bye.whatsThis(), User().id(), self.le_reason_bye.whatsThis(), self.le_sum.text().replace(",", "."),
                                  self.de_bye_date.date().toString(Qt.ISODate), self.le_note_bye.text(), 0, None)
-                    sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_value)
-                    if "mysql.connector.errors" in str(type(sql_info)):
-                            QMessageBox.critical(self, "Ошибка sql сохр. вычета продажи ткани", sql_info.msg, QMessageBox.Ok)
+                    id_pay = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_value)
+                    if "mysql.connector.errors" in str(type(id_pay)):
+                            QMessageBox.critical(self, "Ошибка sql сохр. вычета продажи ткани", id_pay.msg, QMessageBox.Ok)
                             return False
 
                     change_value = float(self.le_weight.text().replace(",", "."))
@@ -436,7 +436,7 @@ class PayBrows(QDialog, brows_pay):
                         # Делаем запись о заборе ткани с баланса склада
                         query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
                                     VALUES (%s, %s, SYSDATE(), %s, NULL)"""
-                        txt_note = "Продажа ткани работнику № %s" % self.le_work_bye.whatsThis()
+                        txt_note = "Продажа ткани работнику № %s, ID вычета %s" % (self.le_work_bye.whatsThis(), id_pay)
                         sql_values = (sql_balance_material[0][0], -take_material_value, txt_note)
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                         if "mysql.connector.errors" in str(type(sql_info)):

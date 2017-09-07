@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt
 import re
 from function import my_sql
 from decimal import *
+from math import fabs
 
 
 class Warehouse(table.TableList):
@@ -170,18 +171,20 @@ class WarehouseTransaction(table.TableList):
         self.toolBar.setStyleSheet("background-color: rgb(0, 170, 255);")  # Цвет бара
 
         self.pb_copy.deleteLater()
-        self.pb_other.deleteLater()
         self.pb_add.deleteLater()
         self.pb_change.deleteLater()
         self.pb_dell.deleteLater()
         self.pb_filter.deleteLater()
 
+        self.pb_other.setText("Отменить транзакцию")
+
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Кол-во", 70), ("Дата", 65), ("Заметка", 290), ("Крой", 35), ("Бейка", 40))
+        self.table_header_name = (("№", 30), ("Кол-во", 70), ("Дата", 65), ("Заметка", 290), ("Крой", 35), ("Бейка", 40))
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT transaction_records_material.Id, transaction_records_material.Balance, transaction_records_material.Date,
-                                        transaction_records_material.Note, transaction_records_material.Cut_Material_Id, transaction_records_material.Beika_Id
+        self.query_table_select = """SELECT transaction_records_material.Id, transaction_records_material.Id, transaction_records_material.Balance,
+                                        transaction_records_material.Date, transaction_records_material.Note, transaction_records_material.Cut_Material_Id,
+                                        transaction_records_material.Beika_Id
                                       FROM material_balance LEFT JOIN transaction_records_material ON material_balance.Id = transaction_records_material.Supply_Balance_Id
                                       WHERE transaction_records_material.Supply_Balance_Id = %s
                                       ORDER BY transaction_records_material.Date DESC """
@@ -209,7 +212,7 @@ class WarehouseTransaction(table.TableList):
                 else:
                     text = str(table_typle[column])
 
-                if table_typle[1] >= 0:
+                if table_typle[2] >= 0:
                     color = QBrush(QColor(150, 255, 161, 255))
                 else:
                     color = QBrush(QColor(255, 255, 153, 255))
@@ -221,3 +224,79 @@ class WarehouseTransaction(table.TableList):
 
     def ui_change_table_item(self, id=False):  # изменить элемент
         pass
+
+    def ui_other(self):
+        try:
+            row = self.table_widget.selectedItems()[0].row()
+            if self.table_widget.item(row, 4).text() != "None" and self.table_widget.item(row, 5).text() != "None":
+                QMessageBox.critical(self, "Ошибка ", "Нельзя откатить транзакцию, которая принадлежит крою или бейке", QMessageBox.Ok)
+                return False
+
+            if float(self.table_widget.item(row, 1).text()) > 0:
+                QMessageBox.critical(self, "Ошибка ", "Нельзя откатить положительную транзакцию", QMessageBox.Ok)
+                return False
+            item_id = self.table_widget.selectedItems()[0].data(5)
+
+        except:
+            QMessageBox.critical(self, "Ошибка ", "Выделите транзакцию которую хотите откатить", QMessageBox.Ok)
+            return False
+
+        sql_connect_transaction = my_sql.sql_start_transaction()
+
+        # Получаем транзакцию
+        query = """SELECT Id, Supply_Balance_Id, Balance FROM transaction_records_material WHERE Id = %s"""
+        sql_value = (item_id, )
+        sql_info_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, sql_value)
+        if "mysql.connector.errors" in str(type(sql_info_transaction)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                QMessageBox.critical(self, "Ошибка sql получения транзакции", sql_info_transaction.msg, QMessageBox.Ok)
+                return False
+
+        if not sql_info_transaction:
+            my_sql.sql_rollback_transaction(sql_connect_transaction)
+            QMessageBox.critical(self, "Ошибка", "Транзакция не найдена", QMessageBox.Ok)
+            return False
+
+        # Проверяем хватает ли места в данном приоходе
+        sql_connect_transaction = my_sql.sql_start_transaction()
+        query = """SELECT material_balance.BalanceWeight, material_supplyposition.Weight
+                    FROM material_balance LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
+                    WHERE material_balance.Id = %s"""
+        sql_value = (sql_info_transaction[0][1], )
+        sql_info_balance = my_sql.sql_select_transaction(sql_connect_transaction, query, sql_value)
+        if "mysql.connector.errors" in str(type(sql_info_balance)):
+            my_sql.sql_rollback_transaction(sql_connect_transaction)
+            QMessageBox.critical(self, "Ошибка sql получения баланса", sql_info_balance.msg, QMessageBox.Ok)
+            return False
+
+        if not sql_info_balance:
+            my_sql.sql_rollback_transaction(sql_connect_transaction)
+            QMessageBox.critical(self, "Ошибка", "Баланс не найден", QMessageBox.Ok)
+            return False
+
+        if sql_info_balance[0][0] - sql_info_transaction[0][2] > sql_info_balance[0][1]:
+            my_sql.sql_rollback_transaction(sql_connect_transaction)
+            QMessageBox.critical(self, "Ошибка", "Возвращаемое кол-во превышает приход", QMessageBox.Ok)
+            return False
+
+        # Возвращаем материал на склад
+        query = "UPDATE material_balance SET BalanceWeight = BalanceWeight + %s WHERE Id = %s"
+        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (fabs(sql_info_transaction[0][2]), sql_info_transaction[0][1]))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            my_sql.sql_rollback_transaction(sql_connect_transaction)
+            QMessageBox.critical(self, "Не смог вернуть ткань на баланс склада", sql_info_balance.msg, QMessageBox.Ok)
+            return False
+
+        # Делаем запись о возврате
+        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id) VALUES (%s, %s, SYSDATE(), %s, NULL )"""
+        txt_note = "Отмена транзакции № %s" % sql_info_transaction[0][0]
+        sql_values = (sql_info_transaction[0][1], fabs(sql_info_transaction[0][2]), txt_note)
+        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            my_sql.sql_rollback_transaction(sql_connect_transaction)
+            QMessageBox.critical(self, "Не смог добавить запись при уменьшении ткани", sql_info_balance.msg, QMessageBox.Ok)
+            return False
+
+        my_sql.sql_commit_transaction(sql_connect_transaction)
+        self.update()
+
