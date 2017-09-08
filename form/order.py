@@ -1014,17 +1014,19 @@ class Order(QMainWindow, order_class):
 
         if addres:
             adr = sql_info[0][3]
+            kpp = sql_info[0][2]
         else:
-            query = "SELECT Adres FROM clients_actual_address WHERE Id = %s"
+            query = "SELECT Adres, KPP FROM clients_actual_address WHERE Id = %s"
             sql_adr = my_sql.sql_select(query, (self.cb_clients_adress.currentData(),))
             if "mysql.connector.errors" in str(type(sql_adr)):
                 QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_adr.msg, QMessageBox.Ok)
                 return False
             adr = sql_adr[0][0]
+            kpp = sql_adr[0][1]
 
         client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
         if sql_info[0][2]:
-            client += " КПП " + str(sql_info[0][2])
+            client += " КПП " + str(kpp)
         client += ", " + adr + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
         sheet["C8"] = client
 
@@ -1285,20 +1287,23 @@ class Order(QMainWindow, order_class):
 
         if addres == "fact":
             adr = sql_info[0][3]
+            kpp = sql_info[0][2]
         elif addres == "adr list":
-            query = "SELECT Adres FROM clients_actual_address WHERE Id = %s"
+            query = "SELECT Adres, KPP FROM clients_actual_address WHERE Id = %s"
             sql_adr = my_sql.sql_select(query, (self.cb_clients_adress.currentData(),))
             if "mysql.connector.errors" in str(type(sql_adr)):
                 QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_adr.msg, QMessageBox.Ok)
                 return False
             adr = sql_adr[0][0]
+            kpp = sql_adr[0][1]
         else:
             adr = sql_info[0][4]
+            kpp = sql_info[0][2]
 
         sheet["A8"] = "Грузополучатель и его адрес: " + sql_info[0][0] + " " + adr
         sheet["A10"] = "Покупатель: " + sql_info[0][0]
         sheet["A11"] = "Адрес: " + sql_info[0][4]
-        sheet["A12"] = "ИНН/КПП покупателя: " + sql_info[0][1] + "/" + sql_info[0][2]
+        sheet["A12"] = "ИНН/КПП покупателя: " + sql_info[0][1] + "/" + str(kpp)
 
         if self.cb_clients_vendor.currentData():
             query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Client_Id = %s"
@@ -1499,7 +1504,6 @@ class Order(QMainWindow, order_class):
             sheet.page_breaks.append(Break(59))
 
         # Заполняем шапку второго листа
-        sheet["B65"] = "ТОВАРНО-ТРАНСПОРТНАЯ НАКЛАДНАЯ № %s_____________________________________  №" % self.le_number_doc.text()
         sheet["AC65"] = self.le_number_doc.text()
         sheet["AC66"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
 
@@ -2057,7 +2061,7 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            self.main.of_ex_invoice(addres, article)
+            self.main.of_ex_invoice(article, addres)
             self.close()
             self.destroy()
 
