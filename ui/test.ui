@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>491</width>
-    <height>392</height>
+    <height>402</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -152,6 +152,13 @@
       </item>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -167,5 +174,25 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_t1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>358</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>120</x>
+     <y>487</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>ui_t1()</slot>
+ </slots>
 </ui>

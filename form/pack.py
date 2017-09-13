@@ -8,13 +8,14 @@ import re
 import codecs
 from decimal import *
 from classes import cut, print_qt
-from form import clients, article, print_label
+from form import clients, article, print_label, supply_material
 from function import barcode, files, my_sql
 from classes.my_class import User
 
 pack_class = loadUiType(getcwd() + '/ui/pack.ui')[0]
 pack_operation_class = loadUiType(getcwd() + '/ui/pack_operation.ui')[0]
 pack_accessories_class = loadUiType(getcwd() + '/ui/pack_accsessories.ui')[0]
+pack_add_material = loadUiType(getcwd() + '/ui/pack_add_material.ui')[0]
 
 
 class PackBrows(QDialog, pack_class):
@@ -67,6 +68,7 @@ class PackBrows(QDialog, pack_class):
 
             self.pack.take_accessories_pack()
             self.pack.take_operation_pack()
+            self.pack.take_add_material()
 
             if self.pack.date_complete() is not None:
                 self.cb_date_complete.setChecked(True)
@@ -100,6 +102,7 @@ class PackBrows(QDialog, pack_class):
 
             self.set_operation_name()
             self.set_accessories_name()
+            self.set_add_material()
 
             self.insert_values_sql = False
 
@@ -127,6 +130,11 @@ class PackBrows(QDialog, pack_class):
         self.tw_accessories.horizontalHeader().resizeSection(4, 75)
         self.tw_accessories.horizontalHeader().resizeSection(5, 75)
         self.tw_accessories.horizontalHeader().resizeSection(6, 75)
+
+        self.tw_add_material.horizontalHeader().resizeSection(0, 230)
+        self.tw_add_material.horizontalHeader().resizeSection(1, 75)
+        self.tw_add_material.horizontalHeader().resizeSection(2, 75)
+        self.tw_add_material.horizontalHeader().resizeSection(3, 75)
 
     def ui_edit_date_complete(self):
         if not self.insert_values_sql:
@@ -330,6 +338,39 @@ class PackBrows(QDialog, pack_class):
                 QMessageBox.information(self, "Ошибка", "Фурнитура не удалилась", QMessageBox.Ok)
             else:
                 self.set_accessories_name()
+
+    def ui_add_material(self):
+        self.add_material = PackAddMaterial()
+        self.add_material.setModal(True)
+        self.add_material.show()
+        if self.add_material.exec() <= 0:
+            return False
+
+        materail = {"material_id": self.add_material.le_material.whatsThis(),
+                    "material_name": self.add_material.le_material.text(),
+                    "weight": self.add_material.le_weight.text().replace(",", "."),
+                    "weight_rest": self.add_material.le_weight_rest.text().replace(",", ".")}
+
+        result = self.pack.set_add_material(materail)
+        if not result[0]:
+            QMessageBox.critical(self, "Ошибка добавления ткани", result[1], QMessageBox.Ok)
+            return False
+
+        self.set_add_material()
+
+    def ui_del_material(self):
+        try:
+            id_material = int(self.tw_add_material.item(self.tw_add_material.currentRow(), 0).data(-2))
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите запись.", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Удалить?", "Точно удалить доп материал?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            if not self.pack.del_add_material(id_material):
+                QMessageBox.information(self, "Ошибка", "Доп материал не удалился", QMessageBox.Ok)
+            else:
+                self.set_add_material()
 
     def ui_calc_pack(self):
         value = self.pack.value()
@@ -599,6 +640,30 @@ class PackBrows(QDialog, pack_class):
 
             row += 1
 
+    def set_add_material(self):
+        material_list = self.pack.add_materials()
+        self.tw_add_material.clearContents()
+        self.tw_add_material.setRowCount(0)
+        row = 0
+        for dict in material_list:
+            self.tw_add_material.insertRow(row)
+
+            new_table_item = QTableWidgetItem(str(dict["material_name"]))
+            new_table_item.setData(-2, dict["id"])
+            self.tw_add_material.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(dict["weight"]))
+            new_table_item.setData(-2, dict["id"])
+            self.tw_add_material.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(dict["weight_rest"]))
+            new_table_item.setData(-2, dict["id"])
+            self.tw_add_material.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(dict["price"]))
+            new_table_item.setData(-2, dict["id"])
+            self.tw_add_material.setItem(row, 3, new_table_item)
+
     def set_value_pack(self):
         self.le_value_all.setText(str(self.pack.value_all()))
 
@@ -819,3 +884,38 @@ class PackAccessories(QDialog, pack_accessories_class):
     def of_list_accessories_name(self, accessories):
         self.le_accessories.setText(str(accessories[1]))
         self.le_accessories.setWhatsThis(str(accessories[0]))
+
+
+class PackAddMaterial(QDialog, pack_add_material):
+    def __init__(self):
+        super(PackAddMaterial, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+    def ui_view_material(self):
+        self.material_name = supply_material.MaterialName(self, True)
+        self.material_name.setWindowModality(Qt.ApplicationModal)
+        self.material_name.show()
+
+    def ui_acc(self):
+        if not self.le_material.text():
+            QMessageBox.critical(self, "Ошибка материала", "Выберите материал", QMessageBox.Ok)
+            return False
+
+        try:
+            float(self.le_weight.text().replace(",", "."))
+        except:
+            QMessageBox.critical(self, "Ошибка кол-вы", "Неправильно задано количство", QMessageBox.Ok)
+            return False
+
+        self.done(1)
+        self.close()
+
+    def ui_can(self):
+        self.done(-1)
+        self.close()
+        self.destroy()
+
+    def of_list_material_name(self, item):
+        self.le_material.setWhatsThis(str(item[0]))
+        self.le_material.setText(item[1])

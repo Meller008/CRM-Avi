@@ -18,6 +18,9 @@ class TestWindow(QMainWindow, test_window_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+    def ui_t1(self):
+        for i in range(300, 100, -1):
+            self.tableWidget.resize(50, i)
 
 
 class TableItem(QTableWidgetItem):

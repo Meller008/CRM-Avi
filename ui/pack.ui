@@ -32,7 +32,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="tw_accessories_operation">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -311,6 +311,117 @@
          <column>
           <property name="text">
            <string>Итого</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_6">
+      <attribute name="title">
+       <string>Дополнительная ткань</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_11">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="bu_pack_add">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Добавить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bu_pack_del">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Удалить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QTableWidget" name="tw_add_material">
+         <property name="font">
+          <font>
+           <family>Tahoma</family>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>20</number>
+         </attribute>
+         <attribute name="verticalHeaderMinimumSectionSize">
+          <number>18</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Ткань</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Вес</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Вес обрези</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Цена</string>
           </property>
          </column>
         </widget>
@@ -1061,8 +1172,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_view_list_article()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>434</x>
-     <y>100</y>
+     <x>468</x>
+     <y>89</y>
     </hint>
     <hint type="destinationlabel">
      <x>401</x>
@@ -1077,8 +1188,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_size()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>652</x>
-     <y>100</y>
+     <x>679</x>
+     <y>90</y>
     </hint>
     <hint type="destinationlabel">
      <x>926</x>
@@ -1093,8 +1204,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_value_product()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>27</x>
-     <y>200</y>
+     <x>30</x>
+     <y>181</y>
     </hint>
     <hint type="destinationlabel">
      <x>-64</x>
@@ -1109,8 +1220,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_weight()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>653</x>
-     <y>200</y>
+     <x>680</x>
+     <y>181</y>
     </hint>
     <hint type="destinationlabel">
      <x>881</x>
@@ -1125,8 +1236,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_value_damage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>326</x>
-     <y>200</y>
+     <x>339</x>
+     <y>181</y>
     </hint>
     <hint type="destinationlabel">
      <x>260</x>
@@ -1141,8 +1252,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_add_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>37</x>
-     <y>251</y>
+     <x>40</x>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>-209</x>
@@ -1158,7 +1269,7 @@ border-color: rgb(170, 0, 0);
    <hints>
     <hint type="sourcelabel">
      <x>126</x>
-     <y>251</y>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>-64</x>
@@ -1174,7 +1285,7 @@ border-color: rgb(170, 0, 0);
    <hints>
     <hint type="sourcelabel">
      <x>183</x>
-     <y>251</y>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>-125</x>
@@ -1189,8 +1300,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_view_client()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>307</x>
-     <y>127</y>
+     <x>322</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>859</x>
@@ -1205,8 +1316,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_view_order()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>622</x>
-     <y>127</y>
+     <x>654</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>738</x>
@@ -1221,8 +1332,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_del_client()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>338</x>
-     <y>127</y>
+     <x>348</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
      <x>334</x>
@@ -1237,8 +1348,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_del_order()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>653</x>
-     <y>127</y>
+     <x>680</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
      <x>940</x>
@@ -1253,8 +1364,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_add_accessories()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>15</x>
-     <y>250</y>
+     <x>18</x>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>-76</x>
@@ -1270,7 +1381,7 @@ border-color: rgb(170, 0, 0);
    <hints>
     <hint type="sourcelabel">
      <x>126</x>
-     <y>250</y>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>-31</x>
@@ -1301,8 +1412,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_note()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>153</y>
+     <x>112</x>
+     <y>139</y>
     </hint>
     <hint type="destinationlabel">
      <x>-149</x>
@@ -1317,8 +1428,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_date_make()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>653</x>
-     <y>70</y>
+     <x>680</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel">
      <x>617</x>
@@ -1333,8 +1444,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_date_make()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>652</x>
-     <y>72</y>
+     <x>679</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
      <x>622</x>
@@ -1365,8 +1476,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_date_complete()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>525</x>
-     <y>72</y>
+     <x>564</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
      <x>550</x>
@@ -1430,7 +1541,7 @@ border-color: rgb(170, 0, 0);
    <hints>
     <hint type="sourcelabel">
      <x>183</x>
-     <y>250</y>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>-74</x>
@@ -1445,8 +1556,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_calc_pack()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>646</x>
-     <y>191</y>
+     <x>673</x>
+     <y>172</y>
     </hint>
     <hint type="destinationlabel">
      <x>765</x>
@@ -1461,8 +1572,8 @@ border-color: rgb(170, 0, 0);
    <slot>ui_clone_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>327</x>
-     <y>253</y>
+     <x>307</x>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>280</x>
@@ -1502,6 +1613,38 @@ border-color: rgb(170, 0, 0);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>bu_pack_add</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_add_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>10</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-49</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bu_pack_del</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_del_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>99</x>
+     <y>222</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-30</x>
+     <y>265</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_edit_date_make()</slot>
@@ -1530,5 +1673,7 @@ border-color: rgb(170, 0, 0);
   <slot>ui_clone_operation()</slot>
   <slot>ui_print_pack_passport()</slot>
   <slot>ui_print_label()</slot>
+  <slot>ui_add_material()</slot>
+  <slot>ui_del_material()</slot>
  </slots>
 </ui>

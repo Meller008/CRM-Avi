@@ -6,7 +6,7 @@ from math import fabs
 
 
 class Cut:
-    def __init__(self, id=None):
+    def __init__(self, id_сut=None):
         self.__id = None
         self.__date_cut = None
         self.__worker_id = None
@@ -29,8 +29,8 @@ class Cut:
 
         self.__change_cut_weight = True
         self.__error_value_material = False
-        if id is not None:
-            self.take_sql_info(int(id))
+        if id_сut is not None:
+            self.take_sql_info(int(id_сut))
 
     # sql функции
     def take_sql_info(self, sql_id=None):
@@ -795,18 +795,23 @@ class Pack:
 
         self.__operation = []
         self.__accessories = []
+        self.__add_material = []
 
         if id is not None:
             self.set_sql_info(id)
 
         self.__new_operation_count = -1
         self.__new_accessories_count = -1
+        self.__new_add_material = -1
 
         # Учесть при сохранении
         self.__save_operation_sql = []
         self.__dell_operation_sql = []
         self.__save_accessories_sql = []
         self.__dell_accessories_sql = []
+        self.__save_add_material_sql = []
+        self.__dell_add_material_sql = []
+
         self.__error_value_accessories_id = []
         self.__error_value_material = False
 
@@ -985,6 +990,26 @@ class Pack:
                            "sql_value_sum": sql_accessories[4] * sql_accessories[5]}
             self.__accessories.append(accessories)
         return self.__accessories
+
+    def take_add_material(self):
+        query = """SELECT pack_add_material.Id, pack_add_material.Material_Name_Id, material_name.Name, pack_add_material.Weight, pack_add_material.Weight_Rest,
+                          pack_add_material.Price
+                      FROM pack_add_material LEFT JOIN material_name ON pack_add_material.Material_Name_Id = material_name.Id
+                      WHERE pack_add_material.Pack_Id = %s"""
+        sql_info = my_sql.sql_select(query, (self.__id, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            raise RuntimeError("Не смог получить доп материал артикула")
+
+        self.__add_material = []
+        for material in sql_info:
+            material_add = {"id": material[0],
+                            "material_id": material[1],
+                            "material_name": material[2],
+                            "weight": material[3],
+                            "weight_rest": material[4],
+                            "price": material[5]}
+            self.__add_material.append(material_add)
+        return self.__add_material
 
     def save_sql(self, cut_id):
         if self.__cut_id is None and cut_id is None:
@@ -1609,6 +1634,159 @@ class Pack:
                         my_sql.sql_rollback_transaction(sql_connect_transaction)
                         return [False, "Не смог изменить операцию"]
 
+        # Дополнительный материал
+        # Сохранение маетриала
+        for material in self.__add_material:
+            # Проверяем надо ли сохранять материал
+            if material["id"] < 0:
+                change_value = Decimal(str(material["weight"])) + Decimal(str(material["weight_rest"]))
+                while change_value > 0:
+                    # получим первый остаток на складе
+                    # Проверяем первое кол-во на складе
+                    query = """SELECT material_balance.Id, material_balance.BalanceWeight, MIN(material_supply.Data)
+                                  FROM material_balance
+                                    LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
+                                    LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                  WHERE material_supplyposition.Material_NameId = %s AND material_balance.BalanceWeight > 0"""
+                    sql_balance_material = my_sql.sql_select_transaction(sql_connect_transaction, query, (material["material_id"], ))
+                    if "mysql.connector.errors" in str(type(sql_balance_material)):
+                        return [False, "Не смог получить остаток ткани на балансе (Это плохо к админу)"]
+                    if sql_balance_material[0][1] > change_value:
+                        # Если в этом балансе больше чем нам надо
+                        take_material_value = change_value
+                        change_value = 0
+                    else:
+                        # Если в этом балансе меньше чем нам надо
+                        take_material_value = sql_balance_material[0][1]
+                        change_value -= sql_balance_material[0][1]
+                    # Забираем возможное кол-во
+                    query = "UPDATE material_balance SET BalanceWeight = BalanceWeight - %s WHERE Id = %s"
+                    sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (take_material_value, sql_balance_material[0][0]))
+                    if "mysql.connector.errors" in str(type(sql_info)):
+                        my_sql.sql_rollback_transaction(sql_connect_transaction)
+                        return [False, "Не смог забрать ткань с баланса (Это плохо к админу)"]
+                    # Делаем запись о заборе ткани с баланса склада
+                    query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
+                                VALUES (%s, %s, SYSDATE(), %s, %s)"""
+                    txt_note = "%s/%s - Добавление доп. ткани" % (self.__cut_id, self.__number_pack)
+                    sql_values = (sql_balance_material[0][0], -take_material_value, txt_note, self.__cut_id)
+                    sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
+                    if "mysql.connector.errors" in str(type(sql_info)):
+                        my_sql.sql_rollback_transaction(sql_connect_transaction)
+                        return [False, "Не смог добавить запись при увеличении веса ткани (Это плохо к админу)"]
+
+                # Добавим запись о том что добавлена обрезь из доп ткани
+                query = "UPDATE rest_warehouse SET Weight = Weight + %s"
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (material["weight_rest"], ))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Не смог положить обрезь на склад (Это плохо к админу)"]
+
+                txt_note = "%s/%s - Увеличение обрези в доп ткани пачки" % (self.__cut_id, self.__number_pack)
+                query = "INSERT INTO transaction_records_rest (Cut_Id, Date, Balance, Note) VALUES (%s, NOW(), %s, %s)"
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__cut_id, material["weight_rest"], txt_note))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Не смог записать добавление на склад обрези (Это плохо к админу)"]
+
+                # Добавим запись о том что есть доп ткань
+                query = "INSERT INTO pack_add_material (Pack_Id, Material_Name_Id, Weight, Weight_Rest, Price) VALUES (%s, %s, %s, %s, %s)"
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__id, material["material_id"], material["weight"],
+                                                                                          material["weight_rest"], material["price"]))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Не смог сделать запись о наличии доп ткани (Это плохо к админу)"]
+
+        # Удаляем доп материал
+        if self.__dell_add_material_sql:
+            for del_material_id in self.__dell_add_material_sql:
+                # получим записаные расходы и тип ткани
+                query = """SELECT Material_Name_Id, Weight, Weight_Rest FROM pack_add_material WHERE Id = %s"""
+                sum_material = my_sql.sql_select_transaction(sql_connect_transaction, query, (del_material_id, ))
+                if "mysql.connector.errors" in str(type(sum_material)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Не смог получить кол-во удаляемой фурнитуры из бызы"]
+
+                change_value = sum_material[0][1] + sum_material[0][2]
+                change_rest = -sum_material[0][2]
+
+                query = """SELECT transaction_records_material.id, transaction_records_material.Supply_Balance_Id, SUM(transaction_records_material.Balance)
+                              FROM transaction_records_material LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
+                                LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
+                              WHERE transaction_records_material.Cut_Material_Id = %s AND material_supplyposition.Material_NameId = %s
+                              GROUP BY Supply_Balance_Id
+                              ORDER BY Date"""
+                sql_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, (self.__cut_id, sum_material[0][0]))
+                if "mysql.connector.errors" in str(type(sql_transaction)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Не смог получить записи расходов при уменьшении ткани (Это плохо к админу)"]
+                if not sql_transaction:
+                    # Если нету записей об удаляемой ткани
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Нету записей расходов об уменьшаемой ткани (Это плохо к админу)"]
+
+                # проверяем сумму расходов и уменьшаемой ткани
+                supply_value = 0
+                for row_sql_info in sql_transaction:
+                    supply_value += row_sql_info[2]
+
+                if -supply_value < change_value:
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "записей об удалении со склада меньше чем возвращаемое (Это плохо к админу)"]
+
+                # Если все сошлось то начинаем возвращать ткань на склад
+                for supply_row in sql_transaction:
+                    if change_value <= 0:
+                        break
+
+                    if supply_row[2] != 0:
+
+                        if -supply_row[2] > change_value:
+                            # Если в этом балансе больше чем нам надо
+                            take_material_value = change_value
+                            change_value = 0
+                        else:
+                            # Если в этом балансе меньше чем нам надо
+                            take_material_value = -supply_row[2]
+                            change_value -= -supply_row[2]
+
+                        # возвращаем ткань на баланс склада
+                        query = "UPDATE material_balance SET BalanceWeight = BalanceWeight + %s WHERE Id = %s"
+                        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (take_material_value, supply_row[1]))
+                        if "mysql.connector.errors" in str(type(sql_info)):
+                            my_sql.sql_rollback_transaction(sql_connect_transaction)
+                            return [False, "Не смог вернуть ткань на баланс склада при уменьшении ткани (Это плохо к админу)"]
+
+                        # Делаем запись о возырате ткани на баланс склада
+                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
+                                    VALUES (%s, %s, SYSDATE(), %s, %s)"""
+                        txt_note = "%s/%s - Удаление доп. ткани" % (self.__cut_id, self.__number_pack)
+                        sql_values = (supply_row[1], take_material_value, txt_note, self.__cut_id)
+                        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
+                        if "mysql.connector.errors" in str(type(sql_info)):
+                            my_sql.sql_rollback_transaction(sql_connect_transaction)
+                            return [False, "Не смог добавить запись при уменьшении ткани (Это плохо к админу)"]
+
+                query = "UPDATE rest_warehouse SET Weight = Weight + %s"
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (change_rest,))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Не смог забрать обрезь со склада (Это плохо к админу)"]
+
+                txt_note = "%s/%s - Уменьшение обрези в доп ткани пачки" % (self.__cut_id, self.__number_pack)
+                query = "INSERT INTO transaction_records_rest (Cut_Id, Date, Balance, Note) VALUES (%s, NOW(), %s, %s)"
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__cut_id, change_rest, txt_note))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Не смог забисать забор со склада обрези (Это плохо к админу)"]
+
+                # Удалим запись о том что есть доп ткань
+                query = "DELETE FROM pack_add_material WHERE Id = %s"
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (del_material_id, ))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    my_sql.sql_rollback_transaction(sql_connect_transaction)
+                    return [False, "Не смог удалить запись о наличии доп ткани (Это плохо к админу)"]
+
         # закрываем транзакцию!
         my_sql.sql_commit_transaction(sql_connect_transaction)
         return [True, "Пачка созранена!"]
@@ -1897,6 +2075,9 @@ class Pack:
     def cut_date(self):
         return self.__cut_date
 
+    def add_materials(self):
+        return self.__add_material
+
     # Вставка заначений
     def set_number_pack(self, number):
         if self.__number_pack != int(number):
@@ -2107,6 +2288,27 @@ class Pack:
 
     def set_note(self, txt):
         self.__note = str(txt)
+        if not self.__save_sql_info:
+            self.__save_sql_info = True
+
+    def set_add_material(self, info):
+        price = self.take_material_price(info["material_id"])
+        if not price:
+            return [False, "Нету такой ткани!"]
+
+        if self.take_amount_material(info["material_id"]) < float(info["weight"]):
+            return [False, "На складе нет столько ткани!"]
+
+        add_material = {"id": self.__new_add_material,
+                        "material_id": info["material_id"],
+                        "material_name": info["material_name"],
+                        "weight": info["weight"],
+                        "weight_rest": info["weight_rest"],
+                        "price": price}
+
+        self.__add_material.append(add_material)
+        self.__new_add_material -= 1
+        return [True, "Ok"]
 
     # Удаление значений
     def del_operation(self, id):
@@ -2166,6 +2368,23 @@ class Pack:
     def del_order(self):
         self.__save_sql_info = True
         self.__order = None
+
+    def del_add_material(self, id):
+        if id < 0:
+            for e in enumerate(self.__add_material):
+                if e[1]["id"] == id:
+                    self.__add_material.pop(e[0])
+                    return True
+            else:
+                return False
+        else:
+            for e in enumerate(self.__add_material):
+                if e[1]["id"] == id:
+                    self.__add_material.pop(e[0])
+                    self.__dell_add_material_sql.append(e[1]["id"])
+                    return True
+
+        return False
 
     # Разные функции
     def calc_value(self):
@@ -2336,3 +2555,34 @@ class Pack:
                 return [True, ""]
         else:
             return [False, "Не найден ID дублируемой операции"]
+
+    def take_material_price(self, id_material):
+        # Вернет цену материала по id матреиала!
+        query = """SELECT Price
+                        FROM material_name
+                          LEFT JOIN material_supplyposition ON material_name.Id = material_supplyposition.Material_NameId
+                          LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                          LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                        WHERE material_name.Id = %s AND BalanceWeight > 0
+                        ORDER BY Data
+                        LIMIT 1"""
+        sql_info = my_sql.sql_select(query, (id_material, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            raise RuntimeError("Не смог получить цену материала")
+        if sql_info:
+            return sql_info[0][0]
+        else:
+            return None
+
+    def take_amount_material(self, id_material):
+        # Вернет остаток материала по id матреиала!
+        query = """SELECT SUM(material_balance.BalanceWeight)
+                      FROM  material_supplyposition LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                      WHERE material_supplyposition.Material_NameId = %s"""
+        sql_info = my_sql.sql_select(query, (id_material, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            raise RuntimeError("Не смог получить остаток ткани")
+        if sql_info:
+            return sql_info[0][0]
+        else:
+            return None
