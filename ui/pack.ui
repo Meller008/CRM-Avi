@@ -31,10 +31,13 @@
    </property>
    <item row="2" column="0">
     <widget class="QTabWidget" name="tw_accessories_operation">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tab_operation">
       <attribute name="title">
        <string>Операции</string>
       </attribute>
@@ -179,7 +182,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
+     <widget class="QWidget" name="tab_accessories">
       <attribute name="title">
        <string>Фурнитура</string>
       </attribute>
@@ -317,7 +320,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_6">
+     <widget class="QWidget" name="tab_add_naterial">
       <attribute name="title">
        <string>Дополнительная ткань</string>
       </attribute>
@@ -448,6 +451,9 @@ background-color: rgb(240,240,240);}</string>
       <bool>false</bool>
      </property>
      <widget class="QWidget" name="tab">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="autoFillBackground">
        <bool>false</bool>
       </property>
@@ -860,6 +866,9 @@ border-color: rgb(170, 0, 0);
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <attribute name="title">
        <string>Расчеты</string>
       </attribute>
