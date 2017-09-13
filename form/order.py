@@ -944,7 +944,7 @@ class Order(QMainWindow, order_class):
             for item in sql_info:
                 self.cb_clients_adress.addItem(item[1], item[0])
 
-        query = 'SELECT Id,CONCAT_WS(", ", Number, Contract, Data_From) FROM clients_vendor_number WHERE Client_Id = %s'
+        query = 'SELECT Id, CONCAT_WS(", ", Number, Contract, Data_From) FROM clients_vendor_number WHERE Client_Id = %s'
         parametrs = (id_client,)
         sql_info = my_sql.sql_select(query, parametrs)
         if "mysql.connector.errors" in str(type(sql_info)):
@@ -980,7 +980,7 @@ class Order(QMainWindow, order_class):
         border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
         border_all_big = Border(left=Side(style='medium'), right=Side(style='medium'), top=Side(style='medium'), bottom=Side(style='medium'))
 
-        font_7 = Font(name="Arial", size=7)
+        font_8 = Font(name="Arial", size=8)
 
         ald_center = Alignment(horizontal="center")
         ald_right = Alignment(horizontal="right")
@@ -1037,8 +1037,8 @@ class Order(QMainWindow, order_class):
         sheet["C12"] = client
 
         if self.cb_clients_vendor.currentData():
-            query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Client_Id = %s"
-            sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
+            query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Id = %s"
+            sql_info = my_sql.sql_select(query, (self.cb_clients_vendor.currentData(), ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                 return False
@@ -1108,7 +1108,8 @@ class Order(QMainWindow, order_class):
 
             sheet["A%s" % row_ex] = row + 1
             sheet["B%s" % row_ex] = name
-            sheet["B%s" % row_ex].font = font_7
+            sheet["B%s" % row_ex].alignment = Alignment(wrapText=True)
+            sheet["B%s" % row_ex].font = font_8
             sheet["E%s" % row_ex] = str(sql_info[0][1])
             sheet["F%s" % row_ex] = "шт."
             sheet["G%s" % row_ex] = "796"
