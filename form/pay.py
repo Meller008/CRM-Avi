@@ -612,7 +612,7 @@ class PayBrows(QDialog, brows_pay):
             QMessageBox.critical(self, "Ошибка sql цена ткани", sql_info.msg, QMessageBox.Ok)
             return False
         if sql_info:
-            self.le_price.setText(str(sql_info[0][0]))
+            self.le_price.setText(str(round(sql_info[0][0] * Decimal(1.3), 2)))
         else:
             self.le_price.setText("None")
 
