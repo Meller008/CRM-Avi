@@ -34,26 +34,22 @@ class OrderList(table.TableList):
         self.toolBar.setStyleSheet("background-color: rgb(126, 176, 127);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Клиент", 120), ("Пункт разгрузки", 140), ("Дата заказ.", 75), ("Дата отгр.", 70), ("№ док.", 50), ("Стоймость", 105),
-                                  ("Стоймость без ндс", 105), ("Примечание", 170), ("Отгр.", 40))
+        self.table_header_name = (("Клиент", 120), ("Пункт разгрузки", 100), ("Дата заказ.", 75), ("Дата отгр.", 70), ("№ док.", 50), ("Позиций", 50),
+                                  ("Стоймость", 105), ("Стоймость без ндс", 105), ("Примечание", 150), ("Отгр.", 40))
 
         self.filter = None
-        self.query_table_all = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc,
-                                      SUM(order_position.Value * order_position.Price),
-                                      ROUND(SUM(order_position.Value * (order_position.Price - (order_position.Price * order_position.NDS) / (100 + order_position.NDS))), 4),
-                                      `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да')
+        self.query_table_all = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
+                                      `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
                                         FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
                                           LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
                                           LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc,
-                                          SUM(order_position.Value * order_position.Price),
-                                          ROUND(SUM(order_position.Value * (order_position.Price - (order_position.Price * order_position.NDS) / (100 + order_position.NDS))), 4),
-                                          `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да')
-                                            FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
-                                              LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
-                                              LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
+        self.query_table_select = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
+                                      `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
+                                        FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                                          LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
 
         self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
 
@@ -106,7 +102,8 @@ class OrderList(table.TableList):
             else:
                 color = QBrush(QColor(228, 242, 99, 255))
 
-            for column in range(1, len(table_typle)):
+            # Вставим все до цены
+            for column in range(1, 7):
 
                 if isinstance(table_typle[column], Decimal):
                     text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
@@ -118,6 +115,59 @@ class OrderList(table.TableList):
                 item.setData(5, table_typle[0])
                 item.setBackground(color)
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 1, item)
+
+            # После вставки основной инормации расщитаем цену
+            else:
+                if table_typle[9] > 0:
+                    query = """SELECT SUM(order_position.Price * order_position.Value), SUM((order_position.Price * order_position.Value) * (1 + order_position.NDS / 100))
+                                  FROM order_position WHERE Order_Id = %s"""
+                    sum_sql = my_sql.sql_select(query, (table_typle[0], ))
+                    if "mysql.connector.errors" in str(type(sum_sql)):
+                        QMessageBox.critical(self, "Ошибка sql получения суммы заказа", sum_sql.msg, QMessageBox.Ok)
+                        return False
+
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][1], 2)))
+                    item = QTableWidgetItem(text)
+                    item.setData(5, table_typle[0])
+                    item.setBackground(color)
+                    self.table_widget.setItem(self.table_widget.rowCount() - 1, 6, item)
+
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][0], 2)))
+                    item = QTableWidgetItem(text)
+                    item.setData(5, table_typle[0])
+                    item.setBackground(color)
+                    self.table_widget.setItem(self.table_widget.rowCount() - 1, 7, item)
+                else:
+                    query = """SELECT SUM(order_position.Price * order_position.Value),
+                                SUM(order_position.Price * order_position.Value - (order_position.Price * order_position.Value * order_position.NDS) / (100 + order_position.NDS))
+                              FROM order_position WHERE Order_Id = %s"""
+                    sum_sql = my_sql.sql_select(query, (table_typle[0], ))
+                    if "mysql.connector.errors" in str(type(sum_sql)):
+                        QMessageBox.critical(self, "Ошибка sql получения суммы заказа", sum_sql.msg, QMessageBox.Ok)
+                        return False
+
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][0], 2)))
+                    item = QTableWidgetItem(text)
+                    item.setData(5, table_typle[0])
+                    item.setBackground(color)
+                    self.table_widget.setItem(self.table_widget.rowCount() - 1, 6, item)
+
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][1], 2)))
+                    item = QTableWidgetItem(text)
+                    item.setData(5, table_typle[0])
+                    item.setBackground(color)
+                    self.table_widget.setItem(self.table_widget.rowCount() - 1, 7, item)
+
+                item = QTableWidgetItem(table_typle[7])
+                item.setData(5, table_typle[0])
+                item.setBackground(color)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 8, item)
+
+                item = QTableWidgetItem(table_typle[8])
+                item.setData(5, table_typle[0])
+                item.setBackground(color)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 9, item)
+
 
     def ui_filter(self):
         if self.filter is None:
