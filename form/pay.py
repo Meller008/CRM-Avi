@@ -166,6 +166,9 @@ class PayBrows(QDialog, brows_pay):
             else:
                 a()
 
+    def access_set_menu(self, text):
+        self.menu_text = text
+
     def start_settings(self):
         if self.id is None:
             self.de_plus_date.setDate(QDate.currentDate())
