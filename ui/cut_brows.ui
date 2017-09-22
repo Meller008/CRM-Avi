@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>701</width>
+    <width>732</width>
     <height>422</height>
    </rect>
   </property>
@@ -435,7 +435,12 @@
         </column>
         <column>
          <property name="text">
-          <string>Артикул</string>
+          <string>Имя</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Клиент</string>
          </property>
         </column>
         <column>
