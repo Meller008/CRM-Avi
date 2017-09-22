@@ -1056,7 +1056,7 @@ class Order(QMainWindow, order_class):
         if not head:
             sheet["A2"] = ""
 
-        query = "SELECT Name,  INN, KPP, Actual_Address, Legal_Address, Account, Bank, corres_Account, BIK FROM clients WHERE Id = %s"
+        query = "SELECT Name,  INN, KPP, Actual_Address, Legal_Address, Account, Bank, corres_Account, BIK, Full_Name FROM clients WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
@@ -1074,13 +1074,13 @@ class Order(QMainWindow, order_class):
             adr = sql_adr[0][0]
             kpp = sql_adr[0][1]
 
-        client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
+        client = sql_info[0][9] + " ИНН " + str(sql_info[0][1])
         if sql_info[0][2]:
             client += " КПП " + str(kpp)
         client += ", " + adr + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
         sheet["C8"] = client
 
-        client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
+        client = sql_info[0][9] + " ИНН " + str(sql_info[0][1])
         if sql_info[0][2]:
             client += " КПП " + str(sql_info[0][2])
         client += ", " + sql_info[0][4] + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])
@@ -1330,7 +1330,7 @@ class Order(QMainWindow, order_class):
 
         sheet["A2"] = "Счет-фактура № %s от %s" % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
 
-        query = "SELECT Name, INN, KPP, Actual_Address, Legal_Address FROM clients WHERE Id = %s"
+        query = "SELECT Name, INN, KPP, Actual_Address, Legal_Address, Full_Name FROM clients WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(),))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
@@ -1345,14 +1345,14 @@ class Order(QMainWindow, order_class):
             if "mysql.connector.errors" in str(type(sql_adr)):
                 QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_adr.msg, QMessageBox.Ok)
                 return False
-            adr = sql_adr[0][0]
+            adr = sql_adr[0][5]
             kpp = sql_adr[0][1]
         else:
             adr = sql_info[0][4]
             kpp = sql_info[0][2]
 
-        sheet["A8"] = "Грузополучатель и его адрес: " + sql_info[0][0] + " " + adr
-        sheet["A10"] = "Покупатель: " + sql_info[0][0]
+        sheet["A8"] = "Грузополучатель и его адрес: " + sql_info[0][5] + " " + adr
+        sheet["A10"] = "Покупатель: " + sql_info[0][5]
         sheet["A11"] = "Адрес: " + sql_info[0][4]
         sheet["A12"] = "ИНН/КПП покупателя: " + sql_info[0][1] + "/" + str(kpp)
 
@@ -1558,13 +1558,13 @@ class Order(QMainWindow, order_class):
         sheet["AC65"] = self.le_number_doc.text()
         sheet["AC66"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
 
-        query = "SELECT Name, INN, KPP, Actual_Address, Legal_Address, Account, Bank, corres_Account, BIK FROM clients WHERE Id = %s"
+        query = "SELECT Name, INN, KPP, Actual_Address, Legal_Address, Account, Bank, corres_Account, BIK, Full_Name FROM clients WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(),))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
             return False
 
-        client = sql_info[0][0] + " ИНН " + str(sql_info[0][1])
+        client = sql_info[0][9] + " ИНН " + str(sql_info[0][1])
         if sql_info[0][2]:
             client += " КПП " + str(sql_info[0][2])
         client += ", " + sql_info[0][4] + ",р/с " + str(sql_info[0][5]) + " в " + sql_info[0][6] + " к/с " + str(sql_info[0][7]) + " БИК " + str(sql_info[0][8])

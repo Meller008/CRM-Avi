@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>553</width>
-    <height>417</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,55 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="16" column="0" colspan="4">
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Юред. адрес:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>КПП:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>ОГРН</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <widget class="QLineEdit" name="le_rs"/>
+   </item>
+   <item row="7" column="1">
+    <widget class="QLineEdit" name="le_inn"/>
+   </item>
+   <item row="1" column="1" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLineEdit" name="le_name"/>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cb_nds">
+       <property name="text">
+        <string>БезНДС?</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Р/c:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0" colspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <spacer name="horizontalSpacer">
@@ -60,28 +108,54 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1" colspan="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLineEdit" name="le_name"/>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="cb_nds">
-       <property name="text">
-        <string>БезНДС?</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="7" column="3">
+    <widget class="QLineEdit" name="le_fio"/>
    </item>
-   <item row="9" column="3" rowspan="4">
+   <item row="4" column="1" colspan="3">
+    <widget class="QLineEdit" name="le_actual_address"/>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>ИНН:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="QLineEdit" name="le_kpp"/>
+   </item>
+   <item row="8" column="2">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Телефон</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="3">
+    <widget class="QLineEdit" name="le_legal_address"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Факт. адрес:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>ФИО</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="3" rowspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPlainTextEdit" name="le_note"/>
      </item>
     </layout>
    </item>
-   <item row="9" column="2" rowspan="4">
+   <item row="10" column="2" rowspan="4">
     <widget class="QLabel" name="label_13">
      <property name="text">
       <string>Прочее</string>
@@ -95,140 +169,53 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
-    <widget class="QLineEdit" name="le_inn"/>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>ИНН:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Р/c:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QLineEdit" name="le_kpp"/>
-   </item>
-   <item row="6" column="2">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>ФИО</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="3">
-    <widget class="QLineEdit" name="le_fio"/>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>ОГРН</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <widget class="QLineEdit" name="le_ogrn"/>
    </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>КПП:</string>
-     </property>
-    </widget>
+   <item row="13" column="1">
+    <widget class="QLineEdit" name="le_bik"/>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Юред. адрес:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
-    <widget class="QLineEdit" name="le_rs"/>
-   </item>
-   <item row="2" column="1" colspan="3">
-    <widget class="QLineEdit" name="le_legal_address"/>
-   </item>
-   <item row="3" column="1" colspan="3">
-    <widget class="QLineEdit" name="le_actual_address"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Факт. адрес:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="2">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Телефон</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="3">
-    <widget class="QLineEdit" name="le_phone"/>
-   </item>
-   <item row="0" column="0" colspan="4">
-    <widget class="QWidget" name="widget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>10</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(85, 170, 0);</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="3">
-    <widget class="QLineEdit" name="le_mail"/>
-   </item>
-   <item row="8" column="2">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Почта</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
+   <item row="11" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
       <string>Банк</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="label_11">
-     <property name="text">
-      <string>К/с:</string>
-     </property>
-    </widget>
-   </item>
    <item row="11" column="1">
-    <widget class="QLineEdit" name="le_ks"/>
-   </item>
-   <item row="12" column="1">
-    <widget class="QLineEdit" name="le_bik"/>
-   </item>
-   <item row="10" column="1">
     <widget class="QLineEdit" name="le_bank"/>
    </item>
-   <item row="12" column="0">
+   <item row="13" column="0">
     <widget class="QLabel" name="label_12">
      <property name="text">
       <string>БИК:</string>
      </property>
     </widget>
    </item>
-   <item row="13" column="0" colspan="4">
+   <item row="8" column="3">
+    <widget class="QLineEdit" name="le_phone"/>
+   </item>
+   <item row="12" column="1">
+    <widget class="QLineEdit" name="le_ks"/>
+   </item>
+   <item row="12" column="0">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>К/с:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Почта</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="3">
+    <widget class="QLineEdit" name="le_mail"/>
+   </item>
+   <item row="14" column="0" colspan="4">
     <widget class="QTabWidget" name="tabWidget">
      <property name="enabled">
       <bool>true</bool>
@@ -499,6 +486,29 @@
       </layout>
      </widget>
     </widget>
+   </item>
+   <item row="0" column="0" colspan="4">
+    <widget class="QWidget" name="widget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>10</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(85, 170, 0);</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_16">
+     <property name="text">
+      <string>Полное имя</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="3">
+    <widget class="QLineEdit" name="le_full_name"/>
    </item>
   </layout>
  </widget>

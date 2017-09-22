@@ -141,11 +141,12 @@ class Client(QDialog, client_class):
         else:
             no_nds = 0
         if self.select_id == "new":
-            query = """INSERT INTO clients (Name, Legal_Address, Actual_Address, INN, KPP, OGRN, Account, Bank, corres_Account, BIK, Contact_Person, Phone, Mail, Note, No_Nds)
-                              VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            query = """INSERT INTO clients (Name, Legal_Address, Actual_Address, INN, KPP, OGRN, Account, Bank, corres_Account, BIK, Contact_Person, Phone,
+                                              Mail, Note, No_Nds, Full_Name)
+                              VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             paremetrs = (self.le_name.text(), self.le_legal_address.text(), self.le_actual_address.text(), self.le_inn.text(), self.le_kpp.text(), self.le_ogrn.text(),
                          self.le_rs.text(), self.le_bank.text(), self.le_ks.text(), self.le_bik.text(), self.le_fio.text(), self.le_phone.text(),
-                         self.le_mail.text(), self.le_note.toPlainText(), no_nds)
+                         self.le_mail.text(), self.le_note.toPlainText(), no_nds, self.le_full_name.text())
             new_id = my_sql.sql_change(query, paremetrs)
             if "mysql.connector.errors" in str(type(new_id)):
                     QMessageBox.critical(self, "Ошибка sql добавление клиента", new_id.msg, QMessageBox.Ok)
@@ -161,10 +162,10 @@ class Client(QDialog, client_class):
                             QMessageBox.critical(self, "Ошибка sql добавления адреса", info_sql.msg, QMessageBox.Ok)
         else:
             query = """UPDATE clients SET Name = %s, Legal_Address = %s, Actual_Address = %s, INN = %s, KPP = %s, OGRN = %s, Account = %s, Bank = %s, corres_Account = %s,
-                       BIK = %s, Contact_Person = %s, Phone = %s, Mail = %s, Note = %s, No_Nds = %s WHERE Id = %s"""
+                       BIK = %s, Contact_Person = %s, Phone = %s, Mail = %s, Note = %s, No_Nds = %s, Full_Name = %s WHERE Id = %s"""
             paremetrs = (self.le_name.text(), self.le_legal_address.text(), self.le_actual_address.text(), self.le_inn.text(), self.le_kpp.text(), self.le_ogrn.text(),
                          self.le_rs.text(), self.le_bank.text(), self.le_ks.text(), self.le_bik.text(), self.le_fio.text(), self.le_phone.text(),
-                         self.le_mail.text(), self.le_note.toPlainText(), no_nds, self.select_id)
+                         self.le_mail.text(), self.le_note.toPlainText(), no_nds, self.le_full_name.text(), self.select_id)
             info_sql = my_sql.sql_change(query, paremetrs)
             if "mysql.connector.errors" in str(type(info_sql)):
                     QMessageBox.critical(self, "Ошибка sql изменение клиента", info_sql.msg, QMessageBox.Ok)
@@ -237,7 +238,7 @@ class Client(QDialog, client_class):
             self.pb_open_file.setEnabled(False)
         else:
             query = """SELECT Name, Legal_Address, Actual_Address, INN, KPP, OGRN, Account, Bank, corres_Account,
-                                        BIK, Contact_Person, Phone, Mail, Note, No_Nds FROM clients WHERE Id = %s"""
+                                        BIK, Contact_Person, Phone, Mail, Note, No_Nds, Full_Name FROM clients WHERE Id = %s"""
             info_client = my_sql.sql_select(query, (self.select_id, ))
             if "mysql.connector.errors" in str(type(info_client)):
                     QMessageBox.critical(self, "Ошибка sql вывод клиента", info_client.msg, QMessageBox.Ok)
@@ -259,6 +260,8 @@ class Client(QDialog, client_class):
             self.le_note.appendPlainText(info_client[0][13])
             if info_client[0][14]:
                 self.cb_nds.setChecked(True)
+
+            self.le_full_name.setText(info_client[0][15])
 
             query = """SELECT Id, Name, Adres, KPP FROM clients_actual_address WHERE Client_Id = %s"""
             info_client = my_sql.sql_select(query, (self.select_id, ))
