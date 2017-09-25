@@ -5,6 +5,7 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QTimer
 from function import my_sql
+from classes.my_class import User
 import re
 
 main_class = loadUiType(getcwd() + '/ui/operation/main.ui')[0]
@@ -25,6 +26,23 @@ class MainWindowOperation(QMainWindow, main_class):
 
         self.start_var()
         self.start_settings()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    val = item["value"]
+                a(val)
+            else:
+                a()
 
     def start_var(self):
         self.user = {"id": None,
@@ -100,9 +118,17 @@ class MainWindowOperation(QMainWindow, main_class):
             self.le_login.setText("")
             self.le_pass.setText("")
 
+            # Закрываем кнопку бейки
+            self.pb_beika.setEnabled(False)
+
             # Заполняем 2 окно
             self.lb_l_name.setText("Имя: " + sql_info[0][1])
             self.lb_f_name.setText("Фамилия: " + sql_info[0][2])
+
+            # запоминаем пользователя для доступа и настраиваем доступ
+            User().set_id(sql_info[0][0])
+            self.access()
+
             self.sw_main.setCurrentIndex(1)
 
         else:
@@ -188,6 +214,24 @@ class MainWindowOperation(QMainWindow, main_class):
 
         self.le_pack_number.setFocus()
         self.sw_main.setCurrentIndex(3)
+
+    def ui_operation_double_click(self, item):
+        try:
+            id = int(item.data(-2))
+            open_operation = int(item.data(-1))
+        except:
+            return False
+
+        if not open_operation:
+            self.lb_operation_error.setText('<html><head/><body><p align="center"><span style=" color:#ff0000;">Операция занята</span></p></body></html>')
+            return False
+
+        self.lb_operation_error.setText('')
+
+        self.operation_acc = OperationAcc(self, self.cut, self.operation_list[self.tw_operation.currentRow()])
+        self.operation_acc.setModal(True)
+        self.operation_acc.show()
+
 
     def ui_operation_next(self):
         self.timer.start(900000)

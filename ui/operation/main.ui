@@ -232,7 +232,10 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QPushButton" name="pushButton_11">
+           <widget class="QPushButton" name="pb_beika">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -2058,7 +2061,7 @@
   <tabstop>pushButton_18</tabstop>
   <tabstop>tw_salary_p_m</tabstop>
   <tabstop>tw_salary_history</tabstop>
-  <tabstop>pushButton_11</tabstop>
+  <tabstop>pb_beika</tabstop>
   <tabstop>tw_salary_history_operation</tabstop>
   <tabstop>tw_salary_history_all</tabstop>
   <tabstop>tw_salary_history_p_m</tabstop>
@@ -2359,7 +2362,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_11</sender>
+   <sender>pb_beika</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>ui_beika()</slot>
@@ -2422,6 +2425,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tw_operation</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_operation_double_click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>559</x>
+     <y>390</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>605</x>
+     <y>-100</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_login()</slot>
@@ -2444,5 +2463,6 @@
   <slot>ui_beika_back()</slot>
   <slot>ui_beika_acc()</slot>
   <slot>ui_beika_change_value()</slot>
+  <slot>ui_operation_double_click()</slot>
  </slots>
 </ui>
