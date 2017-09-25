@@ -34,7 +34,7 @@ class CutList(table.TableList):
 
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("№", 35), ("Дата кроя", 70), ("Вес пачек", 80), ("Вес обрези", 80), ("Вес итого", 80), ("Пачек", 55),
-                                  ("Раскладчик", 100), ("Заметка", 200))
+                                  ("Раскладчик", 100), ("ткань", 120), ("Заметка", 200))
 
         # Быстрый фильтр
         self.le_fast_filter = QLineEdit()
@@ -48,17 +48,19 @@ class CutList(table.TableList):
 
         self.filter = None
         self.query_table_all = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest, COUNT(pack.Id),
-                                        staff_worker_info.Last_Name, cut.Note
+                                        staff_worker_info.Last_Name, material_name.Name, cut.Note
                                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
+                                      LEFT JOIN material_name ON cut.Material_Id = material_name.Id
                                       GROUP BY cut.Id
                                       ORDER BY Cut_Id DESC"""
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest, COUNT(pack.Id),
-                                        staff_worker_info.Last_Name, cut.Note
+                                        staff_worker_info.Last_Name, material_name.Name, cut.Note
                                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
+                                      LEFT JOIN material_name ON cut.Material_Id = material_name.Id
                                       GROUP BY cut.Id
                                       ORDER BY Cut_Id DESC"""
 
