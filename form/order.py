@@ -1129,7 +1129,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Проверяем совпадают ли имена
-                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text() + " " + str(cod):
+                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text():
                     QMessageBox.critical(self, "Ошибка объединения кодов", "Разные имена одинаковых кодов", QMessageBox.Ok)
                     return False
 
@@ -1149,7 +1149,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Вставляем статические параметры
-                product[cod]["name"] = self.tw_position.item(row, 3).text() + " " + str(cod)
+                product[cod]["name"] = self.tw_position.item(row, 3).text()
                 product[cod]["price"] = float(self.tw_position.item(row, 4).text())
                 product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
                 product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
@@ -1413,8 +1413,10 @@ class Order(QMainWindow, order_class):
                 QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                 return False
             base = "Идентификатор государственного контракта, договора (соглашения): Договор поставки № " + str(sql_info[0][1]) + " от " + sql_info[0][2].strftime("%d.%m.%Y")
-
             sheet["A14"] = base
+
+            base = "№ поставщика: %s, № заказа: %s" % (str(sql_info[0][0]), self.le_number_order.text())
+            sheet["A15"] = base
 
         if unite:
             query = """SELECT DISTINCT(product_article_parametrs.Client_code)
@@ -1445,7 +1447,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Проверяем совпадают ли имена
-                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text() + " " + str(cod):
+                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text():
                     QMessageBox.critical(self, "Ошибка объединения кодов", "Разные имена одинаковых кодов", QMessageBox.Ok)
                     return False
 
@@ -1465,7 +1467,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Вставляем статические параметры
-                product[cod]["name"] = self.tw_position.item(row, 3).text() + " " + str(cod)
+                product[cod]["name"] = self.tw_position.item(row, 3).text()
                 product[cod]["price"] = float(self.tw_position.item(row, 4).text())
                 product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
                 product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
@@ -1525,7 +1527,7 @@ class Order(QMainWindow, order_class):
 
         list_all = 1
         row_break = 12
-        row_ex = 19
+        row_ex = 20
         num = 1
         for cod, position in product.items():
             sheet.merge_cells("A%s:D%s" % (row_ex, row_ex))
@@ -1570,7 +1572,7 @@ class Order(QMainWindow, order_class):
             list_all += 1
 
         # Формируем границы таблицы
-        for row in sheet.iter_rows(min_row=16, max_col=17, max_row=row_ex-1):
+        for row in sheet.iter_rows(min_row=17, max_col=17, max_row=row_ex-1):
             for cell in row:
                 cell.border = border_all
 
@@ -1728,7 +1730,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 #Проверяем совпадают ли имена
-                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text() + " " + str(cod):
+                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text():
                     QMessageBox.critical(self, "Ошибка объединения кодов", "Разные имена одинаковых кодов", QMessageBox.Ok)
                     return False
 
@@ -1748,7 +1750,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Вставляем статические параметры
-                product[cod]["name"] = self.tw_position.item(row, 3).text() + " " + str(cod)
+                product[cod]["name"] = self.tw_position.item(row, 3).text()
                 product[cod]["price"] = float(self.tw_position.item(row, 4).text())
                 product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
                 product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
