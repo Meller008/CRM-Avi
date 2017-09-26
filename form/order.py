@@ -1129,7 +1129,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Проверяем совпадают ли имена
-                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text():
+                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text() + " " + str(cod):
                     QMessageBox.critical(self, "Ошибка объединения кодов", "Разные имена одинаковых кодов", QMessageBox.Ok)
                     return False
 
@@ -1149,7 +1149,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Вставляем статические параметры
-                product[cod]["name"] = self.tw_position.item(row, 3).text()
+                product[cod]["name"] = self.tw_position.item(row, 3).text() + " " + str(cod)
                 product[cod]["price"] = float(self.tw_position.item(row, 4).text())
                 product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
                 product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
@@ -1395,7 +1395,7 @@ class Order(QMainWindow, order_class):
             if "mysql.connector.errors" in str(type(sql_adr)):
                 QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_adr.msg, QMessageBox.Ok)
                 return False
-            adr = sql_adr[0][5]
+            adr = sql_adr[0][0]
             kpp = sql_adr[0][1]
         else:
             adr = sql_info[0][4]
@@ -1445,7 +1445,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Проверяем совпадают ли имена
-                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text():
+                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text() + " " + str(cod):
                     QMessageBox.critical(self, "Ошибка объединения кодов", "Разные имена одинаковых кодов", QMessageBox.Ok)
                     return False
 
@@ -1465,7 +1465,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Вставляем статические параметры
-                product[cod]["name"] = self.tw_position.item(row, 3).text()
+                product[cod]["name"] = self.tw_position.item(row, 3).text() + " " + str(cod)
                 product[cod]["price"] = float(self.tw_position.item(row, 4).text())
                 product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
                 product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
@@ -1727,10 +1727,10 @@ class Order(QMainWindow, order_class):
                     QMessageBox.critical(self, "Ошибка объединения кодов", "Не найден код в словаре!", QMessageBox.Ok)
                     return False
 
-                # Проверяем совпадают ли имена
-                # if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text():
-                #     QMessageBox.critical(self, "Ошибка объединения кодов", "Разные имена одинаковых кодов", QMessageBox.Ok)
-                #     return False
+                #Проверяем совпадают ли имена
+                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text() + " " + str(cod):
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Разные имена одинаковых кодов", QMessageBox.Ok)
+                    return False
 
                 # Проверяем совпадают ли цены
                 if product[cod]["price"] is not None and product[cod]["price"] != float(self.tw_position.item(row, 4).text()):
@@ -1748,7 +1748,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Вставляем статические параметры
-                product[cod]["name"] = self.tw_position.item(row, 3).text()
+                product[cod]["name"] = self.tw_position.item(row, 3).text() + " " + str(cod)
                 product[cod]["price"] = float(self.tw_position.item(row, 4).text())
                 product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
                 product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
