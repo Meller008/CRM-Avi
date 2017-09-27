@@ -1218,7 +1218,7 @@ class Pack:
                                   FROM transaction_records_material
                                   WHERE Cut_Material_Id = %s
                                   GROUP BY Supply_Balance_Id
-                                  ORDER BY Date"""
+                                  ORDER BY Date DESC , transaction_records_material.Id DESC"""
                     sql_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, (self.__cut_id, ))
                     if "mysql.connector.errors" in str(type(sql_transaction)):
                         my_sql.sql_rollback_transaction(sql_connect_transaction)
