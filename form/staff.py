@@ -31,7 +31,8 @@ class Staff(QMainWindow, staff_list_class):
         self.main = main
         self.dc_select = dc_select
         self.filter = None
-        self.query_table_all = """SELECT staff_worker_info.Id, Last_Name, First_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'), `Leave`, Date_Leave, staff_position.Name
+        self.query_table_all = """SELECT staff_worker_info.Id, Last_Name, First_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'),
+                                      `Leave`, Date_Leave, staff_position.Name, Date_Recruitment
                                     FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id ORDER BY Last_Name"""
         self.query_table_select = self.query_table_all
 
@@ -178,7 +179,7 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][4] == 0 and self.staff_workers[row][5].month == self.to_date.month() and self.staff_workers[row][5].year == self.to_date.year():
+                if self.staff_workers[row][4] == 0 and self.staff_workers[row][7].month == self.to_date.month() and self.staff_workers[row][7].year == self.to_date.year():
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
                     for column in range(4):
                         a = self.staff_workers[row][column]
