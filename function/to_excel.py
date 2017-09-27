@@ -15,10 +15,13 @@ def table_to_excel(table, path):
         for row in range(table.rowCount()):
             for col in range(table.columnCount()):
                 if table.item(row, col):
-                    txt = table.item(row, col).text()
+                    try:
+                        txt = float(table.item(row, col).text().replace(" ", ""))
+                    except:
+                        txt = table.item(row, col).text()
                 else:
                     txt = ''
-                ws["%s%s" % (COLUMN_EXCEL[col], row+2)] = str(txt)
+                ws["%s%s" % (COLUMN_EXCEL[col], row+2)] = txt
 
     wb.save(path + ".xlsx")
 
