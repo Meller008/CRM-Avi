@@ -105,6 +105,7 @@ class Staff(QMainWindow, staff_list_class):
         for position in self.staff_positions:
             self.lw_position.addItem(position[1])
         else:
+            self.lw_position.addItem("Принятые в этом месяце")
             self.lw_position.addItem("Уволеные в этом месяце")
             self.lw_position.addItem("Уволеные в этом году")
             self.lw_position.addItem("Уволеные")
@@ -173,7 +174,18 @@ class Staff(QMainWindow, staff_list_class):
         self.to_date = QDate.currentDate()
         self.tw_workers.setSortingEnabled(False)
 
-        if self.select_position == "Уволеные":  # Вставляем уволеных
+        if self.select_position == "Принятые в этом месяце":  # Вставляем принятых в этом месяце
+            self.tw_workers.clearContents()
+            self.tw_workers.setRowCount(0)
+            for row in range(len(self.staff_workers)):
+                if self.staff_workers[row][4] == 0 and self.staff_workers[row][5].month == self.to_date.month() and self.staff_workers[row][5].year == self.to_date.year():
+                    self.tw_workers.insertRow(self.tw_workers.rowCount())
+                    for column in range(4):
+                        a = self.staff_workers[row][column]
+                        item = QTableWidgetItem(str(a))
+                        self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
+
+        elif self.select_position == "Уволеные":  # Вставляем уволеных
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
