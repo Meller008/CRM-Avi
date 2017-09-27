@@ -19,7 +19,7 @@ class WarehouseRest(QMainWindow, warehouse_info):
         self.set_start_info()
 
     def set_size_table(self):
-        self.tw_info.horizontalHeader().resizeSection(0, 35)
+        self.tw_info.horizontalHeader().resizeSection(0, 50)
         self.tw_info.horizontalHeader().resizeSection(1, 70)
         self.tw_info.horizontalHeader().resizeSection(2, 70)
         self.tw_info.horizontalHeader().resizeSection(3, 240)
@@ -33,7 +33,7 @@ class WarehouseRest(QMainWindow, warehouse_info):
 
         self.le_weight.setText(str(sql_info[0][0]))
 
-        query = """SELECT Id, Balance, Date, Note, Cut_Id FROM transaction_records_rest ORDER BY Date DESC LIMIT 30"""
+        query = """SELECT Id, Balance, Date, Note, Cut_Id FROM transaction_records_rest ORDER BY Date DESC, Id DESC LIMIT 30"""
         sql_info = my_sql.sql_select(query)
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения информации", sql_info.msg, QMessageBox.Ok)

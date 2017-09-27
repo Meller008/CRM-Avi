@@ -71,7 +71,7 @@ class WarehouseSupplyPosition(table.TableList):
                                       FROM material_supplyposition LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
                                         LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
                                       WHERE material_supplyposition.Material_NameId = %s AND BalanceWeight > 0
-                                      ORDER BY material_supply.Data DESC"""
+                                      ORDER BY material_supply.Data DESC, material_supply.Id DESC """
         self.query_table_dell = ""
 
     def set_table_info(self):
@@ -179,7 +179,7 @@ class WarehouseTransaction(table.TableList):
         self.pb_other.setText("Отменить транзакцию")
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("№", 30), ("Кол-во", 70), ("Дата", 65), ("Заметка", 290), ("Крой", 35), ("Бейка", 40))
+        self.table_header_name = (("№", 50), ("Кол-во", 70), ("Дата", 65), ("Заметка", 250), ("Крой", 35), ("Бейка", 40))
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT transaction_records_material.Id, transaction_records_material.Id, transaction_records_material.Balance,
@@ -187,7 +187,7 @@ class WarehouseTransaction(table.TableList):
                                         transaction_records_material.Beika_Id
                                       FROM material_balance LEFT JOIN transaction_records_material ON material_balance.Id = transaction_records_material.Supply_Balance_Id
                                       WHERE transaction_records_material.Supply_Balance_Id = %s
-                                      ORDER BY transaction_records_material.Date DESC """
+                                      ORDER BY transaction_records_material.Date DESC, transaction_records_material.Id DESC """
         self.query_table_dell = ""
 
     def set_table_info(self):

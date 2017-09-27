@@ -53,7 +53,7 @@ class CutList(table.TableList):
                                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
                                       LEFT JOIN material_name ON cut.Material_Id = material_name.Id
                                       GROUP BY cut.Id
-                                      ORDER BY Cut_Id DESC"""
+                                      ORDER BY cut.Id DESC"""
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest, COUNT(pack.Id),
@@ -62,7 +62,7 @@ class CutList(table.TableList):
                                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
                                       LEFT JOIN material_name ON cut.Material_Id = material_name.Id
                                       GROUP BY cut.Id
-                                      ORDER BY Cut_Id DESC"""
+                                      ORDER BY cut.Id DESC"""
 
         self.query_table_dell = "DELETE FROM cut WHERE Id = %s"
 

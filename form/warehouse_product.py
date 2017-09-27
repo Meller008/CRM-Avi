@@ -254,7 +254,7 @@ class WarehouseInfo(QDialog, warehouse_info):
         query = """SELECT Id, Date, Balance, Note
                       FROM transaction_records_warehouse
                       WHERE Article_Parametr_Id = %s AND Date >= %s AND Date <= %s
-                      ORDER BY Date"""
+                      ORDER BY Date DESC, Id DESC """
         sql_info_warehouse = my_sql.sql_select(query, (self.id, self.date.addMonths(-3).toString(1), self.date.toString(1)))
         if "mysql.connector.errors" in str(type(sql_info_warehouse)):
             QMessageBox.critical(self, "Ошибка sql получение склада", sql_info_warehouse.msg, QMessageBox.Ok)
@@ -283,9 +283,10 @@ class WarehouseInfo(QDialog, warehouse_info):
         self.tw_workshop.horizontalHeader().resizeSection(2, 55)
         self.tw_workshop.horizontalHeader().resizeSection(3, 80)
 
-        self.tw_warehouse.horizontalHeader().resizeSection(0, 70)
-        self.tw_warehouse.horizontalHeader().resizeSection(1, 50)
-        self.tw_warehouse.horizontalHeader().resizeSection(2, 250)
+        self.tw_warehouse.horizontalHeader().resizeSection(0, 50)
+        self.tw_warehouse.horizontalHeader().resizeSection(1, 70)
+        self.tw_warehouse.horizontalHeader().resizeSection(2, 50)
+        self.tw_warehouse.horizontalHeader().resizeSection(3, 250)
 
         self.tw_order.horizontalHeader().resizeSection(0, 50)
         self.tw_order.horizontalHeader().resizeSection(1, 135)
@@ -329,20 +330,25 @@ class WarehouseInfo(QDialog, warehouse_info):
             else:
                 color = QBrush(QColor(252, 141, 141, 255))
 
-            new_table_item = QTableWidgetItem(transaction[1].strftime("%d.%m.%Y"))
+            new_table_item = QTableWidgetItem(str(transaction[0]))
             new_table_item.setData(-2, transaction[0])
             new_table_item.setBackground(color)
             self.tw_warehouse.setItem(row, 0, new_table_item)
 
-            new_table_item = QTableWidgetItem(str(transaction[2]))
+            new_table_item = QTableWidgetItem(transaction[1].strftime("%d.%m.%Y"))
             new_table_item.setData(-2, transaction[0])
             new_table_item.setBackground(color)
             self.tw_warehouse.setItem(row, 1, new_table_item)
 
-            new_table_item = QTableWidgetItem(str(transaction[3]))
+            new_table_item = QTableWidgetItem(str(transaction[2]))
             new_table_item.setData(-2, transaction[0])
             new_table_item.setBackground(color)
             self.tw_warehouse.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(transaction[3]))
+            new_table_item.setData(-2, transaction[0])
+            new_table_item.setBackground(color)
+            self.tw_warehouse.setItem(row, 3, new_table_item)
 
     def set_order_table(self):
 

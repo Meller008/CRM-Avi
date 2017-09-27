@@ -259,11 +259,11 @@ class Cut:
             change_value = -change_value
             # Ткани стало меньше будем возвращать
             # получим записаные расходы
-            query = """SELECT id, Supply_Balance_Id, SUM(Balance)
+            query = """SELECT id, Supply_Balance_Id, SUM(Balance), Date
                           FROM transaction_records_material
                           WHERE Cut_Material_Id = %s
                           GROUP BY Supply_Balance_Id
-                          ORDER BY Date"""
+                          ORDER BY Date DESC , transaction_records_material.Id DESC """
             sql_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, (self.__id, ))
             if "mysql.connector.errors" in str(type(sql_transaction)):
                 my_sql.sql_rollback_transaction(sql_connect_transaction)

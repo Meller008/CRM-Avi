@@ -70,7 +70,7 @@ class WarehouseSupplyPosition(table.TableList):
                                       FROM accessories_supplyposition LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.accessories_SupplyPositionId
                                         LEFT JOIN accessories_supply ON accessories_supplyposition.accessories_SupplyId = accessories_supply.Id
                                       WHERE accessories_supplyposition.accessories_NameId = %s AND BalanceValue > 0
-                                      ORDER BY accessories_supply.Data DESC"""
+                                      ORDER BY accessories_supply.Data DESC, accessories_supply.Id DESC """
         self.query_table_dell = ""
 
     def set_table_info(self):
@@ -177,7 +177,7 @@ class WarehouseTransaction(table.TableList):
         self.pb_filter.deleteLater()
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("№", 30), ("Кол-во", 70), ("Дата", 65), ("Заметка", 300), ("Пачка", 40))
+        self.table_header_name = (("№", 50), ("Кол-во", 70), ("Дата", 65), ("Заметка", 250), ("Пачка", 40))
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT transaction_records_accessories.Id, transaction_records_accessories.Id,
@@ -185,7 +185,7 @@ class WarehouseTransaction(table.TableList):
                                         transaction_records_accessories.Note, transaction_records_accessories.Pack_Accessories_Id
                                       FROM accessories_balance LEFT JOIN transaction_records_accessories ON accessories_balance.Id = transaction_records_accessories.Supply_Balance_Id
                                       WHERE transaction_records_accessories.Supply_Balance_Id = %s
-                                      ORDER BY transaction_records_accessories.Date DESC """
+                                      ORDER BY transaction_records_accessories.Date DESC, transaction_records_accessories.Id DESC """
         self.query_table_dell = ""
 
     def set_table_info(self):
