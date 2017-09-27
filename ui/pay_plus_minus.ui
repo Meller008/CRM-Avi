@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Доплаты и вычеты</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="1,0">
    <property name="leftMargin">
     <number>2</number>
    </property>
@@ -716,61 +716,6 @@
        <property name="spacing">
         <number>2</number>
        </property>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_29">
-         <property name="text">
-          <string>Ткань</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="3">
-        <widget class="QLineEdit" name="le_price">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_27">
-         <property name="text">
-          <string>Причина</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" rowspan="2">
-        <widget class="QLabel" name="label_24">
-         <property name="text">
-          <string>Работник</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_25">
-         <property name="text">
-          <string>Заметка</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_26">
-         <property name="text">
-          <string>Дата</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_30">
          <property name="text">
@@ -778,7 +723,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="4">
+       <item row="4" column="3">
         <widget class="QLabel" name="label_28">
          <property name="font">
           <font>
@@ -791,10 +736,10 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="5">
+       <item row="4" column="4">
         <widget class="QLineEdit" name="le_weight"/>
        </item>
-       <item row="0" column="1" rowspan="2" colspan="5">
+       <item row="0" column="1" rowspan="2" colspan="4">
         <layout class="QHBoxLayout" name="horizontalLayout_16">
          <property name="spacing">
           <number>0</number>
@@ -811,7 +756,7 @@
          </item>
         </layout>
        </item>
-       <item row="3" column="1" colspan="5">
+       <item row="3" column="1" colspan="4">
         <layout class="QHBoxLayout" name="horizontalLayout_17">
          <property name="spacing">
           <number>0</number>
@@ -828,7 +773,14 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="1" colspan="5">
+       <item row="4" column="1" colspan="2">
+        <widget class="QLineEdit" name="le_price">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="4">
         <layout class="QHBoxLayout" name="horizontalLayout_15">
          <property name="spacing">
           <number>0</number>
@@ -845,22 +797,60 @@
          </item>
         </layout>
        </item>
-       <item row="5" column="1" colspan="5">
-        <widget class="QLineEdit" name="le_sum">
-         <property name="readOnly">
-          <bool>true</bool>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Причина</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1" colspan="5">
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_25">
+         <property name="text">
+          <string>Заметка</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0" rowspan="2">
+        <widget class="QLabel" name="label_24">
+         <property name="text">
+          <string>Работник</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_29">
+         <property name="text">
+          <string>Ткань</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>Дата</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1" colspan="4">
         <widget class="QDateEdit" name="de_bye_date">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item row="7" column="1" colspan="5">
-        <widget class="QLineEdit" name="le_note_bye"/>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_31">
@@ -868,6 +858,37 @@
           <string>Сумма</string>
          </property>
         </widget>
+       </item>
+       <item row="7" column="1" colspan="4">
+        <widget class="QLineEdit" name="le_note_bye"/>
+       </item>
+       <item row="5" column="1" colspan="4">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="le_sum">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_32">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Вычесть&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="le_minus_sum">
+           <property name="text">
+            <string>0</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -900,8 +921,8 @@
    <slot>ui_add_worker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>36</y>
+     <x>226</x>
+     <y>10</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -916,8 +937,8 @@
    <slot>ui_add_worker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>454</x>
-     <y>22</y>
+     <x>226</x>
+     <y>10</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -932,8 +953,8 @@
    <slot>ui_add_reason_plus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>60</y>
+     <x>226</x>
+     <y>16</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -948,8 +969,8 @@
    <slot>ui_add_reason_minus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>447</x>
-     <y>51</y>
+     <x>226</x>
+     <y>16</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -964,8 +985,8 @@
    <slot>ui_edit_date_road()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>422</x>
-     <y>199</y>
+     <x>227</x>
+     <y>23</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -980,8 +1001,8 @@
    <slot>ui_add_worker_m_p_minus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>21</y>
+     <x>226</x>
+     <y>2</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -996,8 +1017,8 @@
    <slot>ui_add_worker_m_p_plus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>173</y>
+     <x>226</x>
+     <y>25</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1012,8 +1033,8 @@
    <slot>ui_add_reason_m_p_minus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>45</y>
+     <x>226</x>
+     <y>6</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1028,8 +1049,8 @@
    <slot>ui_add_reason_m_p_plus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>197</y>
+     <x>226</x>
+     <y>28</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1076,8 +1097,8 @@
    <slot>ui_add_reason_road()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>175</y>
+     <x>226</x>
+     <y>14</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1149,6 +1170,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>le_minus_sum</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_material_sum_calc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>397</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>546</x>
+     <y>126</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_menu_select()</slot>
@@ -1167,5 +1204,6 @@
   <slot>ui_add_reason_bye()</slot>
   <slot>ui_add_material_name()</slot>
   <slot>ui_change_weight()</slot>
+  <slot>ui_material_sum_calc()</slot>
  </slots>
 </ui>

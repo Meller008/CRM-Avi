@@ -333,13 +333,23 @@ class PayBrows(QDialog, brows_pay):
                 self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(122, 247, 84);")
                 self.le_weight.setToolTip("Новой ткани хватает")
                 self.need_weight = True
-                self.le_sum.setText(str(round(weight * float(self.le_price.text()), 4)))
+                self.ui_material_sum_calc()
             else:
                 self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
                 self.le_weight.setToolTip("Что то не так при проверке новой ткани (Обратитесь к админу)")
         except:
             self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
             self.le_weight.setToolTip("Что то не так при проверке новой ткани (Обратитесь к админу)")
+
+    def ui_material_sum_calc(self):
+        try:
+            weight = float(self.le_weight.text().replace(",", "."))
+            minus = float(self.le_minus_sum.text().replace(",", "."))
+            price = float(self.le_price.text())
+        except:
+            return False
+
+        self.le_sum.setText(str(round(weight * price - minus, 4)))
 
     def ui_acc(self):
         if self.id is None:
