@@ -1505,7 +1505,7 @@ class Pack:
                         query = """SELECT Id, Supply_Balance_Id, SUM(Balance) as balance, Date FROM transaction_records_accessories
                                     WHERE Pack_Accessories_Id = %s
                                     GROUP BY Supply_Balance_Id
-                                    ORDER BY Date"""
+                                    ORDER BY Date DESC , Id DESC """
                         sql_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, (change_accessory["id"], ))
                         if "mysql.connector.errors" in str(type(sql_transaction)):
                             my_sql.sql_rollback_transaction(sql_connect_transaction)
