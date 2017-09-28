@@ -35,7 +35,8 @@ class BeikaList(table.TableList):
         self.query_table_select = """SELECT beika.Id, beika.Id, CONCAT(w.Last_Name, ' ', w.First_Name), material_name.Name, beika.Value, beika.Date,
                                         IF(beika.Finished = 1, 'Да', 'Нет')
                                       FROM beika LEFT JOIN material_name ON beika.Material_Id = material_name.Id
-                                        LEFT JOIN staff_worker_info AS w ON beika.Worker_Id = w.Id"""
+                                        LEFT JOIN staff_worker_info AS w ON beika.Worker_Id = w.Id
+                                      ORDER BY beika.Id DESC """
 
         self.query_table_dell = "DELETE FROM beika WHERE Id = %s"
 

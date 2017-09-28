@@ -679,10 +679,16 @@ class MainWindowOperation(QMainWindow, main_class):
         elif self.lw_material.currentRow() < 0:
             return False
 
+        try:
+            value = self.le_value.text().replace(",", ".")
+        except:
+            self.le_value.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
+            return False
+
         query = """INSERT INTO beika (Material_Id, Accessories_Id, Date, Value, Finished, Worker_Id, Supply_Id)
                       VALUES (%s, %s, %s, %s, %s, %s, %s)"""
         sql_value = (self.lw_material.selectedItems()[0].data(-1), self.beika_accessories_id, self.cw_date.selectedDate().toString(Qt.ISODate),
-                     self.le_value.value(), 0, self.user["id"], None)
+                     value, 0, self.user["id"], None)
         sql_info = my_sql.sql_change(query, sql_value)
         if "mysql.connector.errors" in str(type(sql_info)):
             self.le_error.setText("Не получилось сохранить нарезку. Обратитесь к администрации.")
