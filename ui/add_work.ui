@@ -625,7 +625,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Пусто</string>
+           <string>Приказ о приеме работкника</string>
           </property>
          </widget>
         </item>
@@ -684,7 +684,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Пусто</string>
+           <string>Приказ о увольнении работника</string>
           </property>
          </widget>
         </item>
@@ -1243,7 +1243,6 @@
    <zorder>cb_info_position</zorder>
    <zorder>le_info_birthplace</zorder>
    <zorder>label_7</zorder>
-   <zorder>horizontalLayoutWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -2420,6 +2419,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_7</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>build_word_order_on_reception()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>378</x>
+     <y>418</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>316</x>
+     <y>623</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_8</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>build_word_order_on_dismissal()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>464</x>
+     <y>453</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>456</x>
+     <y>629</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>acc()</slot>
@@ -2448,5 +2479,7 @@
   <slot>build_word_hodataistvo()</slot>
   <slot>check_login()</slot>
   <slot>free_login()</slot>
+  <slot>build_word_order_on_reception()</slot>
+  <slot>build_word_order_on_dismissal()</slot>
  </slots>
 </ui>

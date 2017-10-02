@@ -1445,17 +1445,19 @@ class OneStaff(QMainWindow, one_staff_class):
         sheet['H60'] = date_now.toString("MM")
         sheet['Z60'] = date_now.toString("yy")
 
-
         dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю")
             if option == "in":
-                book.save('%s/%s' % (self.path, "Уведомление о приеме на работу.xlsx"))
+                file_name = "Уведомление о приеме на работу %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
+                book.save('%s/%s' % (self.path, file_name))
             elif option == "out":
-                book.save('%s/%s' % (self.path, "Уведомление о увольнении.xlsx"))
+                file_name = "Уведомление для регистрации %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
+                book.save('%s/%s' % (self.path, file_name))
             dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
             self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
+            self.inspection_files(dir_name, 'Путь корень рабочие')
             self.statusBar().showMessage("Готово")
         else:
             self.statusBar().showMessage("Ошибка сохранения")
@@ -1684,7 +1686,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
-            book.save('%s/%s' % (self.path, "Уведомление для регистрации.xlsx"))
+            file_name = "Уведомление для регистрации %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
+            book.save('%s/%s' % (self.path, file_name))
             self.inspection_files(dir_name, 'Путь корень рабочие')
             self.statusBar().showMessage("Готово")
         else:
@@ -1712,6 +1715,7 @@ class OneStaff(QMainWindow, one_staff_class):
         else:
             doc_number = 1
             doc_date = self.de_info_recruitment.date().toPyDate()
+            doc_date_new = True
 
         info = InfoDateNumber(doc_date, doc_number)
         if info.exec() == 0:
@@ -1764,7 +1768,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
-            f = open('%s/%s' % (self.path, "Трудовой договор.doc"), "w", -1, "utf-8")
+            file_name = "Трудовой договор %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+            f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             if doc_date_new:
@@ -1820,9 +1825,11 @@ class OneStaff(QMainWindow, one_staff_class):
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
             if option == "out":
-                f = open('%s/%s' % (self.path, "Заявление об увольнении.doc"), "w", -1, "utf-8")
+                file_name = "Заявление об увольнении %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+                f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
             else:
-                f = open('%s/%s' % (self.path, "Заявление о приеме на работу.doc"), "w", -1, "utf-8")
+                file_name = "Заявление о приеме на работу %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+                f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             self.statusBar().showMessage("Готово")
@@ -1854,7 +1861,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
-            f = open('%s/%s' % (self.path, "Доверенность на ЗП.doc"), "w", -1, "utf-8")
+            file_name = "Доверенность на ЗП %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+            f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             self.statusBar().showMessage("Готово")
@@ -1883,7 +1891,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
-            f = open('%s/%s' % (self.path, "Временный пропуск.doc"), "w", -1, "utf-8")
+            file_name = "Временный пропуск %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+            f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             self.statusBar().showMessage("Готово")
@@ -1918,7 +1927,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
-            f = open('%s/%s' % (self.path, "Справка о приеме уведомления.doc"), "w", -1, "utf-8")
+            file_name = "Справка о приеме уведомления %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+            f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             self.statusBar().showMessage("Готово")
@@ -1996,7 +2006,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
-            f = open('%s/%s' % (self.path, "Ходатайство.doc"), "w", -1, "utf-8")
+            file_name = "Ходатайство %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+            f = open('%s/%s' % (self.path, "file_name"), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             query = """INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)
@@ -2011,6 +2022,159 @@ class OneStaff(QMainWindow, one_staff_class):
         else:
             self.statusBar().showMessage("Ошибка сохранения")
             return False
+
+    # Приказ о приеме работника на работу
+    def build_word_order_on_reception(self):
+        if not self.id_info:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
+            return False
+
+        # Проверяем нужный номер документа
+        self.statusBar().showMessage("проверяю SQL")
+        doc_date_new = False
+        query = "SELECT Number, Date FROM staff_worker_doc_number WHERE Worker_Info_Id = %s AND Name = %s"
+        doc_number_sql = my_sql.sql_select(query, (self.id_info, "приказ.прием"))
+        if "mysql.connector.errors" in str(type(doc_number_sql)):
+            QMessageBox.critical(self, "Ошибка sql", doc_number_sql.msg, QMessageBox.Ok)
+
+        if doc_number_sql:
+            doc_number = doc_number_sql[0][0]
+            doc_date = doc_number_sql[0][1]
+        else:
+            doc_number = 1
+            doc_date = self.de_info_recruitment.date().toPyDate()
+            doc_date_new = True
+
+        info = InfoDateNumber(doc_date, doc_number)
+        if info.exec() == 0:
+            self.statusBar().showMessage("Отмена")
+            return False
+
+        if info.de_in.date().toPyDate() != doc_date or info.le_number.text() != str(doc_number):
+            doc_date = info.de_in.date().toPyDate()
+            doc_number = info.le_number.text()
+            doc_date_new = True
+
+        # Узнаем номер договора
+        query = "SELECT IFNULL(MAX(CAST(Number AS SIGNED)), 'No Number'), Date FROM staff_worker_doc_number WHERE Name = %s AND Worker_Info_Id = %s"
+        contract_number = my_sql.sql_select(query, ("труд.дог.", self.id_info))
+        if "mysql.connector.errors" in str(type(contract_number)):
+            QMessageBox.critical(self, "Ошибка sql", contract_number.msg, QMessageBox.Ok)
+            return False
+
+        self.statusBar().showMessage("Открываю шаблон")
+        f = open(getcwd() + '/templates/staff/order_on_reception.xml', "r", -1, "utf-8")
+        xml = f.read()
+        self.statusBar().showMessage("Закрываю шаблон")
+        f.close()
+        self.statusBar().showMessage("Создаю документ")
+
+        xml = xml.replace("?НОМЕРДОК", str(doc_number))
+        xml = xml.replace("?ДАТАСОСТ", doc_date.strftime("%d.%m.%Y"))
+        xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
+        xml = xml.replace("?ТАБЕЛЬНОМ", str(self.id_info))
+        xml = xml.replace("?ДОЛЖНОСТЬ", self.cb_info_position.currentText())
+        xml = xml.replace("?ТРУДОВОЙДОГДАТА", contract_number[0][1].strftime("%d.%m.%Y"))
+        xml = xml.replace("?ТРУДОВОЙДОГ", str(contract_number[0][0] + "/" + contract_number[0][1].strftime("%y")))
+
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю фаил")
+            file_name = "Приказ о приеме %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+            f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
+            f.write(xml)
+            f.close()
+            if doc_date_new:
+                query = """INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)
+                            ON DUPLICATE KEY UPDATE Number = %s, Date = %s"""
+                parametrs = (self.id_info, "приказ.прием", doc_number, doc_date, doc_number, doc_date)
+                info_sql = my_sql.sql_change(query, parametrs)
+                if "mysql.connector.errors" in str(type(info_sql)):
+                    QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                    return False
+            self.statusBar().showMessage("Готово")
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
+
+    # Приказ о прекращении трудового договора
+    def build_word_order_on_dismissal(self):
+        if not self.id_info:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет номера", QMessageBox.Ok)
+            return False
+
+        # Проверяем нужный номер документа
+        self.statusBar().showMessage("проверяю SQL")
+        doc_date_new = False
+        query = "SELECT Number, Date FROM staff_worker_doc_number WHERE Worker_Info_Id = %s AND Name = %s"
+        doc_number_sql = my_sql.sql_select(query, (self.id_info, "приказ.увольне"))
+        if "mysql.connector.errors" in str(type(doc_number_sql)):
+            QMessageBox.critical(self, "Ошибка sql", doc_number_sql.msg, QMessageBox.Ok)
+
+        if doc_number_sql:
+            doc_number = doc_number_sql[0][0]
+            doc_date = doc_number_sql[0][1]
+        else:
+            doc_number = 1
+            doc_date = self.de_info_recruitment.date().toPyDate()
+            doc_date_new = True
+
+        info = InfoDateNumber(doc_date, doc_number)
+        if info.exec() == 0:
+            self.statusBar().showMessage("Отмена")
+            return False
+
+        if info.de_in.date().toPyDate() != doc_date or info.le_number.text() != str(doc_number):
+            doc_date = info.de_in.date().toPyDate()
+            doc_number = info.le_number.text()
+            doc_date_new = True
+
+        # Узнаем номер договора
+        query = "SELECT IFNULL(MAX(CAST(Number AS SIGNED)), 'No Number'), Date FROM staff_worker_doc_number WHERE Name = %s AND Worker_Info_Id = %s"
+        contract_number = my_sql.sql_select(query, ("труд.дог.", self.id_info))
+        if "mysql.connector.errors" in str(type(contract_number)):
+            QMessageBox.critical(self, "Ошибка sql", contract_number.msg, QMessageBox.Ok)
+            return False
+
+        self.statusBar().showMessage("Открываю шаблон")
+        f = open(getcwd() + '/templates/staff/order_on_dismissal.xml', "r", -1, "utf-8")
+        xml = f.read()
+        self.statusBar().showMessage("Закрываю шаблон")
+        f.close()
+        self.statusBar().showMessage("Создаю документ")
+
+        xml = xml.replace("?НОМЕРДОК", str(doc_number))
+        xml = xml.replace("?ДАТАСОСТ", doc_date.strftime("%d.%m.%Y"))
+        xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
+        xml = xml.replace("?ТАБЕЛЬНОМ", str(self.id_info))
+        xml = xml.replace("?ДОЛЖНОСТЬ", self.cb_info_position.currentText())
+        xml = xml.replace("?ТРУДОВОЙДОГДАТА", contract_number[0][1].strftime("%d.%m.%Y"))
+        xml = xml.replace("?ТРУДОВОЙДОГ", str(contract_number[0][0] + "/" + contract_number[0][1].strftime("%y")))
+
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю фаил")
+            file_name = "Приказ о расторжении догвора %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+            f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
+            f.write(xml)
+            f.close()
+            if doc_date_new:
+                query = """INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)
+                            ON DUPLICATE KEY UPDATE Number = %s, Date = %s"""
+                parametrs = (self.id_info, "приказ.увольне", doc_number, doc_date, doc_number, doc_date)
+                info_sql = my_sql.sql_change(query, parametrs)
+                if "mysql.connector.errors" in str(type(info_sql)):
+                    QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                    return False
+            self.statusBar().showMessage("Готово")
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
+
 
     def closeEvent(self, e):
         if self.alert and self.access_save_sql:
