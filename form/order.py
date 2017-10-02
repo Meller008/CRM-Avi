@@ -2433,7 +2433,7 @@ class ImportEDI(QDialog, import_edi):
 
         url = "https://www.ecod.pl/webserv2/EDIservice.asmx/ListMBEx"
         item_info.update(self.login)
-        item_info.update({'DocumentStatus': 'A', 'Timeout': 3000, "DateFrom": "", "DateTo": "", "ItemFrom": "", "ItemTo": 30})
+        item_info.update({'DocumentStatus': 'A', 'Timeout': 3000, "DateFrom": "", "DateTo": "", "ItemFrom": "", "ItemTo": 60})
         req = requests.get(url, params=item_info)
 
         text = req.text.replace("&lt;", "<")
