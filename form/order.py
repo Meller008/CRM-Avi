@@ -126,13 +126,19 @@ class OrderList(table.TableList):
                         QMessageBox.critical(self, "Ошибка sql получения суммы заказа", sum_sql.msg, QMessageBox.Ok)
                         return False
 
-                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][1], 2)))
+                    if sum_sql[0][1] is not None:
+                        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][1], 2)))
+                    else:
+                        text = "NONE"
                     item = QTableWidgetItem(text)
                     item.setData(5, table_typle[0])
                     item.setBackground(color)
                     self.table_widget.setItem(self.table_widget.rowCount() - 1, 6, item)
 
-                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][0], 2)))
+                    if sum_sql[0][0] is not None:
+                        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][0], 2)))
+                    else:
+                        text = "NONE"
                     item = QTableWidgetItem(text)
                     item.setData(5, table_typle[0])
                     item.setBackground(color)
