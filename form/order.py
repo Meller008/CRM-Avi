@@ -42,14 +42,16 @@ class OrderList(table.TableList):
                                       `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
                                         FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
                                           LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
-                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
+                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id
+                                          ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
                                       `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
                                         FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
                                           LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
-                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id ORDER BY `order`.Date_Order DESC"""
+                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id
+                                          ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
 
         self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
 
@@ -152,13 +154,19 @@ class OrderList(table.TableList):
                         QMessageBox.critical(self, "Ошибка sql получения суммы заказа", sum_sql.msg, QMessageBox.Ok)
                         return False
 
-                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][0], 2)))
+                    if sum_sql[0][1] is not None:
+                        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][0], 2)))
+                    else:
+                        text = "NONE"
                     item = QTableWidgetItem(text)
                     item.setData(5, table_typle[0])
                     item.setBackground(color)
                     self.table_widget.setItem(self.table_widget.rowCount() - 1, 6, item)
 
-                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][1], 2)))
+                    if sum_sql[0][1] is not None:
+                        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][1], 2)))
+                    else:
+                        text = "NONE"
                     item = QTableWidgetItem(text)
                     item.setData(5, table_typle[0])
                     item.setBackground(color)
