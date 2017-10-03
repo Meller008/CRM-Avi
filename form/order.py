@@ -321,8 +321,9 @@ class Order(QMainWindow, order_class):
                     product_article_parametrs.Client_Name, order_position.Price, order_position.NDS, order_position.Value, order_position.In_On_Place,
                     order_position.Price * order_position.Value
                     FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
-                    LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
-                    LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id WHERE Order_Id = %s"""
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                    WHERE Order_Id = %s ORDER BY order_position.Id"""
         sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения позиций заказа", sql_info.msg, QMessageBox.Ok)
@@ -1033,7 +1034,7 @@ class Order(QMainWindow, order_class):
         self.le_transport_company.setText(item[1])
         self.le_transport_company.setWhatsThis(str(item[0]))
 
-    def of_ex_torg12(self,edo, head, article, addres, unite):
+    def of_ex_torg12(self,edo, head, article, addres, unite, manager_name):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1350,6 +1351,9 @@ class Order(QMainWindow, order_class):
 
         sheet2 = book['Низ']
 
+        # Вставляем имя менеджера
+        sheet2['G14'] = manager_name
+
         for row in sheet2.iter_rows(min_row=1, max_col=22, max_row=17):
             for cell in row:
                 sheet["%s%s" % (cell.column, row_ex)] = cell.value
@@ -1374,7 +1378,7 @@ class Order(QMainWindow, order_class):
 
         book.save(path[0])
 
-    def of_ex_invoice(self, article, addres, unite):
+    def of_ex_invoice(self, article, addres, unite, manager_name):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1610,6 +1614,10 @@ class Order(QMainWindow, order_class):
         row_ex += 2
 
         sheet2 = book['низ']
+
+        # Вставляем имя менеджера
+        sheet2['H4'] = manager_name
+
         for row in sheet2.iter_rows(min_row=1, max_col=16, max_row=7):
             for cell in row:
                 sheet["%s%s" % (cell.column, row_ex)] = cell.value
@@ -1628,7 +1636,7 @@ class Order(QMainWindow, order_class):
         except PermissionError:
             QMessageBox.critical(self, "Ошибка сохранения", "Не удалось сохранить документ\n Скорее всего во сохраняете заместо открытого документа!", QMessageBox.Ok)
 
-    def of_ex_ttn(self, addres, article, auto, driver, unite):
+    def of_ex_ttn(self, addres, article, auto, driver, unite, manager_name):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1875,6 +1883,10 @@ class Order(QMainWindow, order_class):
 
         # низ ТТН
         sheet2 = book['Низ']
+
+        # Вставляем имя менеджера
+        sheet2['H17'] = manager_name
+
         for row in sheet2.iter_rows(min_row=1, max_col=31, max_row=20):
             for cell in row:
                 sheet["%s%s" % (cell.column, row_ex)] = cell.value
@@ -2290,7 +2302,9 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            self.main.of_ex_torg12(edo, head, article, addres, unite)
+            manager_name = self.cb_manager_name_1.currentText()
+
+            self.main.of_ex_torg12(edo, head, article, addres, unite, manager_name)
             self.close()
             self.destroy()
 
@@ -2312,7 +2326,8 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            self.main.of_ex_invoice(article, addres, unite)
+            manager_name = self.cb_manager_name_2.currentText()
+            self.main.of_ex_invoice(article, addres, unite, manager_name)
             self.close()
             self.destroy()
 
@@ -2335,7 +2350,8 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            self.main.of_ex_ttn(addres, article, self.le_ttn_auto.text(), self.le_ttn_driver.text(), unite)
+            manager_name = self.cb_manager_name_3.currentText()
+            self.main.of_ex_ttn(addres, article, self.le_ttn_auto.text(), self.le_ttn_driver.text(), unite, manager_name)
             self.close()
             self.destroy()
 
