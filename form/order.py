@@ -34,24 +34,26 @@ class OrderList(table.TableList):
         self.toolBar.setStyleSheet("background-color: rgb(126, 176, 127);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Клиент", 120), ("Пункт разгрузки", 100), ("Дата заказ.", 75), ("Дата отгр.", 70), ("№ док.", 50), ("Позиций", 50),
+        self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата отгр.", 70), ("№ док.", 50), ("Позиций", 50),
                                   ("Стоймость", 105), ("Стоймость без ндс", 105), ("Примечание", 150), ("Отгр.", 40))
 
         self.filter = None
-        self.query_table_all = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
+        self.query_table_all = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
+                                      `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
                                       `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
-                                        FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
-                                          LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
-                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id
-                                          ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
+                                    FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                                      LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                                      LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id
+                                    ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT `order`.Id, clients.Name, clients_actual_address.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
-                                      `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
-                                        FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+        self.query_table_select = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
+                                          `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
+                                          `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
+                                      FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
                                           LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
                                           LEFT JOIN order_position ON `order`.Id = order_position.Order_Id GROUP BY `order`.Id
-                                          ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
+                                      ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
 
         self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
 
@@ -1370,9 +1372,9 @@ class Order(QMainWindow, order_class):
         # Числа прописью
         int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
         exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
-        sheet["D%s" % (row_ex-15)] = num2t4ru.num2text(self.tw_position.rowCount())
-        sheet["D%s" % (row_ex-12)] = num2t4ru.num2text(all_position)
-        sheet["D%s" % (row_ex-8)] = num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
+        sheet["D%s" % (row_ex-14)] = num2t4ru.num2text(self.tw_position.rowCount())
+        sheet["D%s" % (row_ex-11)] = num2t4ru.num2text(all_position)
+        sheet["D%s" % (row_ex-7)] = num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
 
         book.remove(sheet2)
 
@@ -2657,7 +2659,7 @@ class ImportEDI(QDialog, import_edi):
 
                 table_item = QTableWidgetItem(self.tw_edi_3.item(row, 3).text())
                 table_item.setData(-1, "new")
-                table_item.setData(5, self.tw_edi_3.item(row, 4).text())
+                table_item.setData(5, self.tw_edi_3.item(row, 5).text())
                 self.main.tw_position.setItem(row, 5, table_item)
 
         self.main.save_change_order_position = True
