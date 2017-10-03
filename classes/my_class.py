@@ -33,6 +33,7 @@ class User(metaclass=Singleton):
         return list
 
     def set_id(self, id):
+        self.__access = {}
         query = """SELECT staff_worker_info.Id, staff_worker_info.First_Name, staff_worker_info.Last_Name, staff_position.Id, staff_position.Name
                       FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id
                       WHERE staff_worker_info.Id = %s"""
