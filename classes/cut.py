@@ -24,7 +24,7 @@ class Cut:
         self.__material_name = None
         self.__material_price = None
         self.__number = None
-        self.__print_passport = None
+        self.__print_passport = False
 
         self.__save_sql_info = False
 

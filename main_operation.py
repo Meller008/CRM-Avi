@@ -232,7 +232,6 @@ class MainWindowOperation(QMainWindow, main_class):
         self.operation_acc.setModal(True)
         self.operation_acc.show()
 
-
     def ui_operation_next(self):
         self.timer.start(900000)
         try:
