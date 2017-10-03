@@ -1374,7 +1374,7 @@ class Order(QMainWindow, order_class):
         exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
         sheet["D%s" % (row_ex-16)] = num2t4ru.num2text(self.tw_position.rowCount())
         sheet["D%s" % (row_ex-13)] = num2t4ru.num2text(all_position)
-        sheet["D%s" % (row_ex-7)] = num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
+        sheet["D%s" % (row_ex-9)] = num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
 
         book.remove(sheet2)
 
