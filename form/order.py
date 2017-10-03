@@ -17,6 +17,8 @@ from form import clients, article, print_label
 import num2t4ru
 from classes.my_class import User
 
+import collections
+
 position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
 order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
 order_doc = loadUiType(getcwd() + '/ui/order_doc_list.ui')[0]
@@ -1125,7 +1127,7 @@ class Order(QMainWindow, order_class):
                 QMessageBox.critical(self, "Ошибка sql получения уникальных кодов", unite_code_sql.msg, QMessageBox.Ok)
                 return False
 
-            product = {}
+            product = collections.OrderedDict()
 
             for cod in unite_code_sql:
                 product[str(cod[0])] = {"name": None, "cod": str(cod[0]), "psb": None, "mest": 0, "value": 0, "price": None, "price_no_nds": None,
@@ -1184,7 +1186,7 @@ class Order(QMainWindow, order_class):
 
         else:
             # если
-            product = {}
+            product = collections.OrderedDict()
             for row in range(self.tw_position.rowCount()):
 
                 product[row] = {"name": None, "cod": None, "psb": None, "mest": 0, "value": 0, "price": None,
@@ -1446,7 +1448,7 @@ class Order(QMainWindow, order_class):
                 QMessageBox.critical(self, "Ошибка sql получения уникальных кодов", unite_code_sql.msg, QMessageBox.Ok)
                 return False
 
-            product = {}
+            product = collections.OrderedDict()
 
             for cod in unite_code_sql:
                 product[str(cod[0])] = {"name": None, "cod": str(cod[0]), "psb": None, "mest": 0, "value": 0, "price": None, "price_no_nds": None,
@@ -1505,7 +1507,7 @@ class Order(QMainWindow, order_class):
 
         else:
             # если
-            product = {}
+            product = collections.OrderedDict()
             for row in range(self.tw_position.rowCount()):
 
                 product[row] = {"name": None, "cod": None, "psb": None, "mest": 0, "value": 0, "price": None,
@@ -1733,7 +1735,7 @@ class Order(QMainWindow, order_class):
                 QMessageBox.critical(self, "Ошибка sql получения уникальных кодов", unite_code_sql.msg, QMessageBox.Ok)
                 return False
 
-            product = {}
+            product = collections.OrderedDict()
 
             for cod in unite_code_sql:
                 product[str(cod[0])] = {"name": None, "cod": str(cod[0]), "psb": None, "mest": 0, "value": 0, "price": None, "price_no_nds": None,
@@ -1792,7 +1794,7 @@ class Order(QMainWindow, order_class):
 
         else:
             # если
-            product = {}
+            product = collections.OrderedDict()
             for row in range(self.tw_position.rowCount()):
 
                 product[row] = {"name": None, "cod": None, "psb": None, "mest": 0, "value": 0, "price": None,
