@@ -24,6 +24,7 @@ class Cut:
         self.__material_name = None
         self.__material_price = None
         self.__number = None
+        self.__print_passport = None
 
         self.__save_sql_info = False
 
@@ -42,7 +43,7 @@ class Cut:
                           WHEN SUM(IF(pack.Date_Coplete IS NULL, 1, 0)) > 0 THEN '0'
                           ELSE '1'
                         END,
-                        Material_Id, material_name.Name
+                        Material_Id, material_name.Name, cut.Print_passport
                       FROM cut
                         LEFT JOIN pack ON cut.Id = pack.Cut_Id
                         LEFT JOIN material_name ON cut.Material_Id = material_name.Id
@@ -69,6 +70,7 @@ class Cut:
         self.__material_id = sql_info[0][8]
         self.__material_id_old_sql = sql_info[0][8]
         self.__material_name = sql_info[0][9]
+        self.__print_passport = sql_info[0][10]
 
         self.take_material_price()
         self.calc_width()
@@ -137,18 +139,18 @@ class Cut:
                 raise RuntimeError("Не выбрана ткань для сохранения кроя!")
             if self.__id is None:
                 # Это новый крой
-                sql_values = (self.__date_cut, self.__worker_id, 0, self.__note, self.__material_id, self.__material_price)
-                query = """INSERT INTO cut (Date_Cut, Worker_Id, Weight_Rest, Note, Material_Id, Material_Price) VALUES
-                                          (%s, %s, %s, %s, %s, %s)"""
+                sql_values = (self.__date_cut, self.__worker_id, 0, self.__note, self.__material_id, self.__material_price, self.print_passport_int())
+                query = """INSERT INTO cut (Date_Cut, Worker_Id, Weight_Rest, Note, Material_Id, Material_Price, Print_passport) VALUES
+                                          (%s, %s, %s, %s, %s, %s, %s)"""
                 sql_info = my_sql.sql_change(query, sql_values)
                 if "mysql.connector.errors" in str(type(sql_info)):
                     return [False, "Не смог сохранить новый крой"]
                 self.__id = sql_info
             else:
                 # Это старый крой
-                sql_values = (self.__date_cut, self.__worker_id, self.__note, self.__material_price, self.__id)
+                sql_values = (self.__date_cut, self.__worker_id, self.__note, self.__material_price, self.print_passport_int(), self.__id)
                 query = """UPDATE cut
-                              SET Date_Cut = %s, Worker_Id = %s, Note = %s, Material_Price = %s
+                              SET Date_Cut = %s, Worker_Id = %s, Note = %s, Material_Price = %s, Print_passport = %s
                               WHERE Id = %s"""
                 sql_info = my_sql.sql_change(query, sql_values)
                 if "mysql.connector.errors" in str(type(sql_info)):
@@ -639,6 +641,15 @@ class Cut:
     def need_save(self):
         return self.__save_sql_info
 
+    def print_passport(self):
+        return self.__print_passport
+
+    def print_passport_int(self):
+        if self.__print_passport:
+            return 1
+        else:
+            return 0
+
     # Вставка заначений
     def set_id(self):
         pass
@@ -708,9 +719,16 @@ class Cut:
     def set_weight_rest(self, weight):
         if weight == "":
             weight = "0"
-        if  self.__weight_rest != float(weight.replace(",", ".")):
+        if self.__weight_rest != float(weight.replace(",", ".")):
             self.__weight_rest = float(weight.replace(",", "."))
             self.calc_width()
+
+            if not self.__save_sql_info:
+                    self.__save_sql_info = True
+
+    def set_print_passport(self, bol):
+        if self.__print_passport != bool(bol):
+            self.__print_passport = bool(bol)
 
             if not self.__save_sql_info:
                     self.__save_sql_info = True

@@ -1,6 +1,6 @@
 from os import getcwd
 from form import order, staff, print_label
-from datetime import datetime
+from datetime import datetime, date
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
@@ -13,6 +13,7 @@ from classes import cut, print_qt
 from classes.my_class import User
 from form.templates import table
 import codecs
+from decimal import Decimal
 
 cut_brows_class = loadUiType(getcwd() + '/ui/cut_brows.ui')[0]
 cut_filter = loadUiType(getcwd() + '/ui/cut_filter.ui')[0]
@@ -47,8 +48,8 @@ class CutList(table.TableList):
         self.toolBar.addWidget(self.le_fast_filter)
 
         self.filter = None
-        self.query_table_all = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest, COUNT(pack.Id),
-                                        staff_worker_info.Last_Name, material_name.Name, cut.Note
+        self.query_table_all = """SELECT cut.Id, cut.Print_passport, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest,
+                                        COUNT(pack.Id), staff_worker_info.Last_Name, material_name.Name, cut.Note
                                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
                                       LEFT JOIN material_name ON cut.Material_Id = material_name.Id
@@ -56,8 +57,8 @@ class CutList(table.TableList):
                                       ORDER BY cut.Id DESC"""
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT cut.Id, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest, COUNT(pack.Id),
-                                        staff_worker_info.Last_Name, material_name.Name, cut.Note
+        self.query_table_select = """SELECT cut.Id, cut.Print_passport, cut.Id, cut.Date_Cut, SUM(pack.Weight), cut.Weight_Rest, SUM(pack.Weight) + cut.Weight_Rest,
+                                        COUNT(pack.Id), staff_worker_info.Last_Name, material_name.Name, cut.Note
                                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                                       LEFT JOIN staff_worker_info ON cut.Worker_Id = staff_worker_info.Id
                                       LEFT JOIN material_name ON cut.Material_Id = material_name.Id
@@ -91,6 +92,38 @@ class CutList(table.TableList):
         self.filter.of_set_sql_query(self.query_table_all)
         self.filter.setWindowModality(Qt.ApplicationModal)
         self.filter.show()
+
+    def set_table_info(self):
+        self.table_items = my_sql.sql_select(self.query_table_select)
+        if "mysql.connector.errors" in str(type(self.table_items)):
+                QMessageBox.critical(self, "Ошибка sql получение таблицы", self.table_items.msg, QMessageBox.Ok)
+                return False
+
+        self.table_widget.clearContents()
+        self.table_widget.setRowCount(0)
+
+        if not self.table_items:
+            return False
+
+        for table_typle in self.table_items:
+            self.table_widget.insertRow(self.table_widget.rowCount())
+
+            if table_typle[1] == 1:
+                color = QBrush(QColor(62, 240, 130, 255))
+            else:
+                color = QBrush(QColor(228, 242, 99, 255))
+
+            for column in range(2, len(table_typle)):
+                if isinstance(table_typle[column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
+                elif isinstance(table_typle[column], date):
+                    text = table_typle[column].strftime("%d.%m.%Y")
+                else:
+                    text = str(table_typle[column])
+                item = QTableWidgetItem(text)
+                item.setData(5, table_typle[0])
+                item.setBackground(color)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 2, item)
 
     def fast_filter(self):
         # Блок условий номер кроя
@@ -165,6 +198,7 @@ class CutBrows(QDialog, cut_brows_class):
             self.le_all_weight_cut.setText(str(self.cut.weight_all()))
             self.le_rest_cut.setText(str(self.cut.percent_rest()))
             self.le_note_cut.setText(str(self.cut.note()))
+            self.cb_print.setChecked(self.cut.print_passport())
 
             self.cut.take_pack_sql()
             self.set_pack()
@@ -221,6 +255,10 @@ class CutBrows(QDialog, cut_brows_class):
     def ui_edit_note_cut(self):
         if not self.insert_values_sql:
             self.cut.set_note(self.le_note_cut.text())
+
+    def ui_edit_print(self, bol):
+        if not self.insert_values_sql:
+            self.cut.set_print_passport(bol)
 
     def ui_view_list_material(self):
         self.material_name = MaterialName(self, True)

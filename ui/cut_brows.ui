@@ -171,10 +171,10 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="label_7">
+       <item row="0" column="4">
+        <widget class="QLabel" name="label_9">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Вес ИТОГО&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Заметка&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -185,10 +185,20 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="4">
+        <widget class="QLineEdit" name="le_note_cut"/>
+       </item>
        <item row="0" column="3">
         <widget class="QLabel" name="label_8">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;% обрези&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Вес ИТОГО&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -199,15 +209,15 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="4">
-        <widget class="QLabel" name="label_9">
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="cb_print">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Заметка&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Распечатано</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item row="1" column="4">
-        <widget class="QLineEdit" name="le_note_cut"/>
        </item>
       </layout>
      </item>
@@ -600,8 +610,8 @@
    <slot>ui_view_list_worker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>695</x>
-     <y>50</y>
+     <x>726</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel">
      <x>655</x>
@@ -632,8 +642,8 @@
    <slot>ui_add_pack()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>31</x>
-     <y>135</y>
+     <x>35</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -665,7 +675,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>127</x>
-     <y>135</y>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -681,7 +691,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>184</x>
-     <y>135</y>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -712,8 +722,8 @@
    <slot>ui_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>546</x>
-     <y>408</y>
+     <x>646</x>
+     <y>419</y>
     </hint>
     <hint type="destinationlabel">
      <x>546</x>
@@ -744,8 +754,8 @@
    <slot>ui_fast_filter()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>668</x>
-     <y>135</y>
+     <x>727</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>686</x>
@@ -760,8 +770,8 @@
    <slot>ui_fast_filter()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>575</x>
-     <y>132</y>
+     <x>678</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>568</x>
@@ -776,8 +786,8 @@
    <slot>ui_print_passport()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>247</x>
-     <y>124</y>
+     <x>312</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>245</x>
@@ -792,8 +802,8 @@
    <slot>ui_print_cut()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>455</x>
-     <y>135</y>
+     <x>495</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>700</x>
@@ -808,12 +818,28 @@
    <slot>ui_print_label()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>356</x>
-     <y>128</y>
+     <x>407</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>377</x>
      <y>-173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_print</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>12</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-97</x>
+     <y>109</y>
     </hint>
    </hints>
   </connection>
@@ -838,5 +864,6 @@
   <slot>ui_print_passport()</slot>
   <slot>ui_print_cut()</slot>
   <slot>ui_print_label()</slot>
+  <slot>ui_edit_print()</slot>
  </slots>
 </ui>

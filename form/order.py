@@ -184,7 +184,6 @@ class OrderList(table.TableList):
                 item.setBackground(color)
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, 9, item)
 
-
     def ui_filter(self):
         if self.filter is None:
             self.filter = OrderFilter(self)
