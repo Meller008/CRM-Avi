@@ -246,6 +246,7 @@ class Order(QMainWindow, order_class):
         self.tw_position.horizontalHeader().resizeSection(4, 60)
         self.tw_position.horizontalHeader().resizeSection(5, 50)
         self.tw_position.horizontalHeader().resizeSection(6, 70)
+        self.tw_position.horizontalHeader().resizeSection(7, 70)
 
         self.tw_position_label.horizontalHeader().resizeSection(0, 70)
         self.tw_position_label.horizontalHeader().resizeSection(1, 60)
@@ -254,6 +255,7 @@ class Order(QMainWindow, order_class):
         self.tw_position_label.horizontalHeader().resizeSection(4, 60)
         self.tw_position_label.horizontalHeader().resizeSection(5, 50)
         self.tw_position_label.horizontalHeader().resizeSection(6, 70)
+        self.tw_position_label.horizontalHeader().resizeSection(7, 70)
 
         if self.id:
             self.start_set_sql_info()
@@ -322,7 +324,7 @@ class Order(QMainWindow, order_class):
 
         query = """SELECT order_position.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Id, product_article_parametrs.Name,
                     product_article_parametrs.Client_Name, order_position.Price, order_position.NDS, order_position.Value, order_position.In_On_Place,
-                    order_position.Price * order_position.Value
+                    order_position.Price * order_position.Value, product_article_parametrs.Client_code
                     FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
@@ -405,6 +407,11 @@ class Order(QMainWindow, order_class):
             table_item.setData(-2, position[0])
             self.tw_position_label.setItem(row, 6, table_item)
 
+            table_item = QTableWidgetItem(str(position[11]))
+            table_item.setData(-1, "set")
+            table_item.setData(-2, position[0])
+            self.tw_position.setItem(row, 7, table_item)
+
     def ui_view_client(self):
         self.client_list = clients.ClientList(self, True)
         self.client_list.setWindowModality(Qt.ApplicationModal)
@@ -444,6 +451,12 @@ class Order(QMainWindow, order_class):
         table_item.setData(-1, "new")
         table_item.setData(5, self.position.le_parametr.whatsThis())
         self.tw_position.setItem(row, 2, table_item)
+
+        # вставка кода товара
+        table_item = QTableWidgetItem(self.position.le_client_cod.text())
+        table_item.setData(-1, "new")
+        table_item.setData(5, self.position.le_parametr.whatsThis())
+        self.tw_position.setItem(row, 7, table_item)
 
         query = "SELECT Client_Name FROM product_article_parametrs WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.position.le_parametr.whatsThis(),))
@@ -509,6 +522,7 @@ class Order(QMainWindow, order_class):
         self.position.le_size.setText(self.tw_position.item(select_row, 1).text())
         self.position.le_parametr.setText(self.tw_position.item(select_row, 2).text())
         self.position.le_parametr.setWhatsThis(str(self.tw_position.item(select_row, 2).data(5)))
+        self.position.le_client_cod.setText(self.tw_position.item(select_row, 7).text())
 
         nds = self.tw_position.item(select_row, 4).data(5)
         if nds == 18:
@@ -560,6 +574,12 @@ class Order(QMainWindow, order_class):
             table_item.setData(-2, id)
         table_item.setData(5, self.position.le_parametr.whatsThis())
         self.tw_position.setItem(row, 2, table_item)
+
+        # вставка кода товара
+        table_item = QTableWidgetItem(self.position.le_client_cod.text())
+        table_item.setData(-1, "new")
+        table_item.setData(5, self.position.le_parametr.whatsThis())
+        self.tw_position.setItem(row, 7, table_item)
 
         query = "SELECT Client_Name FROM product_article_parametrs WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.position.le_parametr.whatsThis(),))
@@ -2230,6 +2250,7 @@ class Position(QDialog, position_class):
         self.le_parametr.setWhatsThis(str(article["parametr_id"]))
         self.le_price.setText(article["price"])
         self.le_in_on_place.setText(article["in on place"])
+        self.le_client_cod.setText(article["client_cod"])
         if article["nds"] == 18:
             self.nds_1.setChecked(True)
         else:

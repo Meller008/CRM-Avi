@@ -1015,7 +1015,8 @@ class Article(QMainWindow, article_class):
                             "price": self.le_price.text(),
                             "in on place": self.le_in_on_place.text(),
                             "nds": nds,
-                            "client_Name": self.le_client_name.text()}
+                            "client_Name": self.le_client_name.text(),
+                            "client_cod": self.le_client_code.text()}
             self.main.of_tree_select_article(article_info)
             self.close()
             self.destroy()
