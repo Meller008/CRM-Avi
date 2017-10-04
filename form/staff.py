@@ -2007,7 +2007,7 @@ class OneStaff(QMainWindow, one_staff_class):
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
             file_name = "Ходатайство %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
-            f = open('%s/%s' % (self.path, "file_name"), "w", -1, "utf-8")
+            f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
             f.write(xml)
             f.close()
             query = """INSERT INTO staff_worker_doc_number (Worker_Info_Id, Name, Number, Date) VALUES (%s, %s, %s, %s)
