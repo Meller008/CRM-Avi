@@ -118,7 +118,7 @@ class LabelSettings(QDialog, label_settings):
                     self.label_data[key] = str(val)
 
         if self.label_data["label_value"]:
-            self.le_value.setValue(int(self.label_data["label_value"]))
+            self.le_value.setValue(int(self.label_data["label_value"]) + 4)  # + на всякий случай
 
     def ui_print_tcp(self):
 
