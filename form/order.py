@@ -1373,7 +1373,7 @@ class Order(QMainWindow, order_class):
         # Числа прописью
         int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
         exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
-        sheet["D%s" % (row_ex-16)] = num2t4ru.num2text(self.tw_position.rowCount())
+        sheet["D%s" % (row_ex-16)] = num2t4ru.num2text(len(product))
         sheet["D%s" % (row_ex-13)] = num2t4ru.num2text(all_position)
         sheet["D%s" % (row_ex-9)] = num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
 
@@ -1914,10 +1914,10 @@ class Order(QMainWindow, order_class):
         sheet["AB%s" % (row_ex-20)].border = border_all_big
         sheet["AC%s" % (row_ex-20)].border = border_all_big
 
-        sheet["L%s" % (row_ex-18)] = num2t4ru.num2text(self.tw_position.rowCount()) + " позиций"
+        sheet["L%s" % (row_ex-18)] = num2t4ru.num2text(len(product)) + " позиций"
         sheet["L%s" % (row_ex-18)].alignment = ald_center
 
-        sheet["F%s" % (row_ex-16)] = num2t4ru.num2text(self.tw_position.rowCount())
+        sheet["F%s" % (row_ex-16)] = num2t4ru.num2text(len(product))
         sheet["F%s" % (row_ex-16)].alignment = ald_center
 
         sheet["F%s" % (row_ex-14)] = num2t4ru.num2text(all_mest)
