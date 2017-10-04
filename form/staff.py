@@ -1453,7 +1453,7 @@ class OneStaff(QMainWindow, one_staff_class):
                 file_name = "Уведомление о приеме на работу %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
                 book.save('%s/%s' % (self.path, file_name))
             elif option == "out":
-                file_name = "Уведомление для регистрации %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
+                file_name = "Уведомление о расторжении договора %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
                 book.save('%s/%s' % (self.path, file_name))
             dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
             self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
