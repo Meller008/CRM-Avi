@@ -485,7 +485,8 @@ class PackBrows(QDialog, pack_class):
                 "article_size": self.pack.article_size(),
                 "article_parametr": self.pack.parametr_name(),
                 "article_barcode": self.pack.article_barcode(),
-                "pack_id": self.pack.id()}
+                "pack_id": self.pack.id(),
+                "label_value": self.pack.value()}
         self.print_label = print_label.LabelFile(self.pack.parametr_id(), "Путь корень бирки", data)
         self.print_label.setModal(True)
         self.print_label.show()

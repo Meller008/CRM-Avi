@@ -117,8 +117,10 @@ class LabelSettings(QDialog, label_settings):
                 if self.label_data.get(key, False) != False:
                     self.label_data[key] = str(val)
 
-        if self.label_data["label_value"]:
+        if self.label_data["label_value"] != "None":
             self.le_value.setValue(int(self.label_data["label_value"]) + 4)  # + на всякий случай
+        else:
+            self.le_value.setValue(0)
 
     def ui_print_tcp(self):
 
