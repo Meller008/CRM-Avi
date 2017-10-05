@@ -7,12 +7,16 @@ from function import my_sql
 from form import provider, comparing
 from form.templates import table, list
 from decimal import Decimal
+import datetime
 import re
 
 
 supply_accessories = loadUiType(getcwd() + '/ui/supply_material.ui')[0]
 supply_accessories_position = loadUiType(getcwd() + '/ui/supply_material_position.ui')[0]
 supply_accessories_filter = loadUiType(getcwd() + '/ui/supply_filter.ui')[0]
+
+# ID поставщика бейщиков для скрытия лишних строк
+SUPPLY_PROVIDER_ID = 23
 
 
 class AccessoriesSupplyList(table.TableList):
@@ -23,13 +27,14 @@ class AccessoriesSupplyList(table.TableList):
         self.setWindowTitle("Приход фурнитуры")  # Имя окна
         self.resize(750, 270)
         self.pb_copy.deleteLater()
-        self.pb_other.deleteLater()
+        self.pb_other.setText("Бейка п/с")
         self.toolBar.setStyleSheet("background-color: rgb(251, 110, 255);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("№", 30), ("Дата", 70), ("Поставщик", 170), ("Вес", 100), ("Сумма", 100), ("Примечание", 240))
 
-        self.query_table_all = """SELECT accessories_supply.Id, accessories_supply.Id, accessories_supply.Data, accessories_provider.Name, SUM(accessories_supplyposition.Value),
+        self.query_table_all = """SELECT accessories_supply.Id, accessories_provider.Id, accessories_supply.Id, accessories_supply.Data, accessories_provider.Name,
+                                                SUM(accessories_supplyposition.Value),
                                                 ROUND(IFNULL(SUM(accessories_supplyposition.Value * accessories_supplyposition.Price), 0) +
                                                   IFNULL((SELECT SUM(comparing_supplyposition.Value * comparing_supplyposition.Price)
                                                    FROM comparing_supplyposition WHERE comparing_supplyposition.Accessories_SupplyId = accessories_supply.Id), 0), 4), accessories_supply.Note
@@ -38,7 +43,8 @@ class AccessoriesSupplyList(table.TableList):
                                               GROUP BY accessories_supply.Id ORDER BY accessories_supply.Data DESC"""
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT accessories_supply.Id, accessories_supply.Id, accessories_supply.Data, accessories_provider.Name, SUM(accessories_supplyposition.Value),
+        self.query_table_select = """SELECT accessories_supply.Id, accessories_provider.Id, accessories_supply.Id, accessories_supply.Data, accessories_provider.Name,
+                                        SUM(accessories_supplyposition.Value),
                                         ROUND(IFNULL(SUM(accessories_supplyposition.Value * accessories_supplyposition.Price), 0) +
                                           IFNULL((SELECT SUM(comparing_supplyposition.Value * comparing_supplyposition.Price)
                                            FROM comparing_supplyposition WHERE comparing_supplyposition.Accessories_SupplyId = accessories_supply.Id), 0), 4), accessories_supply.Note
@@ -47,6 +53,36 @@ class AccessoriesSupplyList(table.TableList):
                                       GROUP BY accessories_supply.Id ORDER BY accessories_supply.Data DESC"""
 
         self.query_table_dell = ""
+
+        self.filter_beika = True
+
+    def set_table_info(self):
+        self.table_items = my_sql.sql_select(self.query_table_select)
+        if "mysql.connector.errors" in str(type(self.table_items)):
+                QMessageBox.critical(self, "Ошибка sql получение таблицы", self.table_items.msg, QMessageBox.Ok)
+                return False
+
+        self.table_widget.clearContents()
+        self.table_widget.setRowCount(0)
+
+        if not self.table_items:
+            return False
+
+        for table_typle in self.table_items:
+            if self.filter_beika and table_typle[1] == SUPPLY_PROVIDER_ID:  # Отсекаем нарезаную бейку
+                continue
+
+            self.table_widget.insertRow(self.table_widget.rowCount())
+            for column in range(2, len(table_typle)):
+                if isinstance(table_typle[column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
+                elif isinstance(table_typle[column], datetime.date):
+                    text = table_typle[column].strftime("%d.%m.%Y")
+                else:
+                    text = str(table_typle[column])
+                item = QTableWidgetItem(text)
+                item.setData(5, table_typle[0])
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 2, item)
 
     def ui_add_table_item(self):  # Добавить предмет
         self.new_supply = AccessoriesSupply(self)
@@ -141,6 +177,14 @@ class AccessoriesSupplyList(table.TableList):
         self.filter.of_set_sql_query(self.query_table_all)
         self.filter.setWindowModality(Qt.ApplicationModal)
         self.filter.show()
+
+    def ui_other(self):
+        if self.filter_beika:
+            self.filter_beika = False
+        else:
+            self.filter_beika = True
+
+        self.set_table_info()
 
     def of_set_filter(self, sql):
         self.query_table_select = sql

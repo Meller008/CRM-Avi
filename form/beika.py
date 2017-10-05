@@ -15,7 +15,7 @@ beika_settings = loadUiType(getcwd() + '/ui/beika_settings.ui')[0]
 beika = loadUiType(getcwd() + '/ui/beika.ui')[0]
 
 # ID поставщика Авидевелопмент в фурнитуре
-SUPPLY_PROVIDER_ID = 10
+SUPPLY_PROVIDER_ID = 23
 
 
 class BeikaList(table.TableList):
