@@ -19,6 +19,7 @@ class ScanPack(QDialog, scan_pack):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.scan_article = True
+        self.access()
 
     def access(self):
         for item in User().access_list(self.__class__.__name__):
@@ -36,6 +37,9 @@ class ScanPack(QDialog, scan_pack):
                 a(val)
             else:
                 a()
+
+    def access_search_article(self, bol):
+        self.scan_article = bol
 
     def ui_acc_id(self):
         try:
