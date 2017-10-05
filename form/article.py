@@ -926,7 +926,7 @@ class Article(QMainWindow, article_class):
         self.calc()
 
     def ui_print(self):
-        head = "%s (%s) %s   %s" % (self.le_article.text(), self.cb_size.currentText(), self.cb_parametrs.currentText(), self.tw_materials.text())
+        head = "%s (%s) %s   %s" % (self.le_article.text(), self.cb_size.currentText(), self.cb_parametrs.currentText(), self.le_name.text())
 
         up_html = """
           <table>
