@@ -2,7 +2,7 @@ from os import getcwd, path, mkdir, listdir, rmdir, rename
 from shutil import copy
 from form.templates import list
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog, QLineEdit, QWidget, QSizePolicy, QButtonGroup
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog, QLineEdit, QWidget, QSizePolicy, QButtonGroup, QInputDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql, to_excel
@@ -718,6 +718,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.pushButton_14.setEnabled(True)
         self.pushButton_8.setEnabled(True)
         self.pushButton_15.setEnabled(True)
+        self.pushButton_18.setEnabled(True)
+        self.pushButton_19.setEnabled(True)
         self.le_login_login.setEnabled(True)
         self.le_login_password.setEnabled(True)
 
@@ -2175,6 +2177,40 @@ class OneStaff(QMainWindow, one_staff_class):
             self.statusBar().showMessage("Ошибка сохранения")
             return False
 
+    # Подарочный сертификат
+    def build_word_sertificat(self):
+        dialog = QInputDialog.getInt(self, "Введите сумму", "Сумма сертификата", 0, 0, 10000)
+        if not dialog[1]:
+            return False
+
+        self.statusBar().showMessage("Открываю шаблон")
+        f = open(getcwd() + '/templates/staff/sertificat.xml', "r", -1, "utf-8")
+        xml = f.read()
+        self.statusBar().showMessage("Закрываю шаблон")
+        f.close()
+        self.statusBar().showMessage("Создаю документ")
+
+        if self.rb_sex_m.isChecked():  # Узнаем пол работника
+            xml = xml.replace("?РОД", "Получил")
+        elif self.rb_sex_f.isChecked():
+            xml = xml.replace("?РОД", "Получила")
+
+        xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
+        xml = xml.replace("?СУМ", str(dialog[0]))
+
+        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        self.inspection_files(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю фаил")
+            file_name = "Подарочный сертификат %s.doc" % QDate.currentDate().toString("dd.MM.yyyy")
+            f = open('%s/%s' % (self.path, file_name), "w", -1, "utf-8")
+            f.write(xml)
+            f.close()
+            self.statusBar().showMessage("Готово")
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
 
     def closeEvent(self, e):
         if self.alert and self.access_save_sql:
