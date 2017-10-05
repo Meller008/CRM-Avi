@@ -2595,7 +2595,7 @@ class ImportEDI(QDialog, import_edi):
                     item = QTableWidgetItem(OrderedUnitPacksize)
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
 
-                    item = QTableWidgetItem(str(int(value_one_position) / int(float(OrderedUnitPacksize))))
+                    item = QTableWidgetItem(str(int(value_one_position / float(OrderedUnitPacksize))))
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
 
                     item = QTableWidgetItem(element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text)
@@ -2603,6 +2603,12 @@ class ImportEDI(QDialog, import_edi):
 
                     price = round(sql_info[0][5] - (sql_info[0][5] * sql_info[0][6]) / (100 + sql_info[0][6]), 2)
                     item_product = QTableWidgetItem(sql_info[0][1] + " " + sql_info[0][2] + " " + sql_info[0][3])
+                    item_product.setData(5, {"article": sql_info[0][1],
+                                             "size": sql_info[0][2],
+                                             "parametr": sql_info[0][3],
+                                             "parametr_id": sql_info[0][0],
+                                             "client_Name": sql_info[0][4],
+                                             "price": sql_info[0][5]})
 
                     if str(price) == element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text:
                         item_price = QTableWidgetItem(str(price))
@@ -2619,7 +2625,6 @@ class ImportEDI(QDialog, import_edi):
                     butt.setProperty("row", self.tw_edi_3.rowCount()-1)
                     butt.clicked.connect(self.change_material_name)
                     self.tw_edi_3.setCellWidget(self.tw_edi_3.rowCount()-1, 9, butt)
-
 
         else:  # Если позиции не надо разделять
             for element in tree.iter('{http://www.comarch.com/}Line-Item'):
@@ -2652,7 +2657,7 @@ class ImportEDI(QDialog, import_edi):
                 item = QTableWidgetItem(element.find('{http://www.comarch.com/}BuyerItemCode').text)
                 self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 2, item)
 
-                item = QTableWidgetItem(value)
+                item = QTableWidgetItem(str(value))
                 self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 3, item)
 
                 OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
@@ -2673,7 +2678,7 @@ class ImportEDI(QDialog, import_edi):
                         item_product = QTableWidgetItem(sql_info[0][1] + " " + sql_info[0][2] + " " + sql_info[0][3])
                         item_product.setData(5, {"article": sql_info[0][1],
                                                  "size": sql_info[0][2],
-                                                 "parametr": sql_info[0][2],
+                                                 "parametr": sql_info[0][3],
                                                  "parametr_id": sql_info[0][0],
                                                  "client_Name": sql_info[0][4],
                                                  "price": sql_info[0][5]})
@@ -2706,6 +2711,14 @@ class ImportEDI(QDialog, import_edi):
         self.sw_main.setCurrentIndex(1)
 
     def ui_edi3_acc(self):
+        # Проверим что бы количество было целым числом
+        for row in range(self.tw_edi_3.rowCount()):
+            if self.tw_edi_3.item(row, 8).data(5):
+                value = float(self.tw_edi_3.item(row, 3).text())
+                if value % 1 != 0:
+                    QMessageBox.critical(self, "Ошибка количества", "Где то не целое колличество товара", QMessageBox.Ok)
+                    return False
+
         for row in range(self.tw_edi_3.rowCount()):
             if self.tw_edi_3.item(row, 8).data(5):
                 row_main = self.main.tw_position.rowCount()
@@ -2740,7 +2753,7 @@ class ImportEDI(QDialog, import_edi):
                     table_item.setData(5, nds)
                     self.main.tw_position.setItem(row, 4, table_item)
 
-                    table_item = QTableWidgetItem(str(round(price_no_nds * int(self.tw_edi_3.item(row, 3).text()), 4)))
+                    table_item = QTableWidgetItem(str(round(price_no_nds * int(float(self.tw_edi_3.item(row, 3).text())), 4)))
                     table_item.setData(-1, "new")
                     table_item.setData(5, nds)
                     self.main.tw_position.setItem(row, 6, table_item)
