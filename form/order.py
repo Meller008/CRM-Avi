@@ -705,7 +705,7 @@ class Order(QMainWindow, order_class):
     def ui_export(self):
         path = QFileDialog.getSaveFileName(self, "Сохранение")
         if path[0]:
-            to_excel.table_to_excel(self.table_widget, path[0])
+            to_excel.table_to_excel(self.tw_position, path[0])
 
     def ui_import_edi(self):
         self.position = ImportEDI(self)
