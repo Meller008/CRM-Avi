@@ -41,7 +41,7 @@ class OrderList(table.TableList):
 
         self.filter = None
         self.query_table_all = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
-                                      `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
+                                      `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id), ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
                                       `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
                                     FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
                                       LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
@@ -50,7 +50,7 @@ class OrderList(table.TableList):
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
-                                          `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id),
+                                          `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id), ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
                                           `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
                                       FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
                                           LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
@@ -103,13 +103,12 @@ class OrderList(table.TableList):
 
         for table_typle in self.table_items:
             self.table_widget.insertRow(self.table_widget.rowCount())
-            if table_typle[8] == "Да":
+            if table_typle[10] == "Да":
                 color = QBrush(QColor(62, 240, 130, 255))
             else:
                 color = QBrush(QColor(228, 242, 99, 255))
 
-            # Вставим все до цены
-            for column in range(1, 7):
+            for column in range(1, len(table_typle)):
 
                 if isinstance(table_typle[column], Decimal):
                     text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
@@ -121,70 +120,6 @@ class OrderList(table.TableList):
                 item.setData(5, table_typle[0])
                 item.setBackground(color)
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 1, item)
-
-            # После вставки основной инормации расщитаем цену
-            else:
-                if table_typle[9] > 0:
-                    query = """SELECT SUM(order_position.Price * order_position.Value), SUM((order_position.Price * order_position.Value) * (1 + order_position.NDS / 100))
-                                  FROM order_position WHERE Order_Id = %s"""
-                    sum_sql = my_sql.sql_select(query, (table_typle[0], ))
-                    if "mysql.connector.errors" in str(type(sum_sql)):
-                        QMessageBox.critical(self, "Ошибка sql получения суммы заказа", sum_sql.msg, QMessageBox.Ok)
-                        return False
-
-                    if sum_sql[0][1] is not None:
-                        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][1], 2)))
-                    else:
-                        text = "NONE"
-                    item = QTableWidgetItem(text)
-                    item.setData(5, table_typle[0])
-                    item.setBackground(color)
-                    self.table_widget.setItem(self.table_widget.rowCount() - 1, 6, item)
-
-                    if sum_sql[0][0] is not None:
-                        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][0], 2)))
-                    else:
-                        text = "NONE"
-                    item = QTableWidgetItem(text)
-                    item.setData(5, table_typle[0])
-                    item.setBackground(color)
-                    self.table_widget.setItem(self.table_widget.rowCount() - 1, 7, item)
-                else:
-                    query = """SELECT SUM(order_position.Price * order_position.Value),
-                                SUM(order_position.Price * order_position.Value - (order_position.Price * order_position.Value * order_position.NDS) / (100 + order_position.NDS))
-                              FROM order_position WHERE Order_Id = %s"""
-                    sum_sql = my_sql.sql_select(query, (table_typle[0], ))
-                    if "mysql.connector.errors" in str(type(sum_sql)):
-                        QMessageBox.critical(self, "Ошибка sql получения суммы заказа", sum_sql.msg, QMessageBox.Ok)
-                        return False
-
-                    if sum_sql[0][1] is not None:
-                        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][0], 2)))
-                    else:
-                        text = "NONE"
-                    item = QTableWidgetItem(text)
-                    item.setData(5, table_typle[0])
-                    item.setBackground(color)
-                    self.table_widget.setItem(self.table_widget.rowCount() - 1, 6, item)
-
-                    if sum_sql[0][1] is not None:
-                        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sql[0][1], 2)))
-                    else:
-                        text = "NONE"
-                    item = QTableWidgetItem(text)
-                    item.setData(5, table_typle[0])
-                    item.setBackground(color)
-                    self.table_widget.setItem(self.table_widget.rowCount() - 1, 7, item)
-
-                item = QTableWidgetItem(table_typle[7])
-                item.setData(5, table_typle[0])
-                item.setBackground(color)
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 8, item)
-
-                item = QTableWidgetItem(table_typle[8])
-                item.setData(5, table_typle[0])
-                item.setBackground(color)
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 9, item)
 
     def ui_filter(self):
         if self.filter is None:
@@ -412,6 +347,8 @@ class Order(QMainWindow, order_class):
             table_item.setData(-2, position[0])
             self.tw_position.setItem(row, 7, table_item)
 
+        self.calc_sum()
+
     def ui_view_client(self):
         self.client_list = clients.ClientList(self, True)
         self.client_list.setWindowModality(Qt.ApplicationModal)
@@ -501,6 +438,8 @@ class Order(QMainWindow, order_class):
             self.main.pb_doc.deleteLater()
         except:
             pass
+
+        self.calc_sum()
         return True
 
     def ui_change_position(self, row_in=False):
@@ -636,6 +575,8 @@ class Order(QMainWindow, order_class):
             self.main.pb_doc.deleteLater()
         except:
             pass
+
+        self.calc_sum()
         return True
 
     def ui_double_click_position(self, row):
@@ -662,6 +603,8 @@ class Order(QMainWindow, order_class):
             for col in range(4):
                 self.tw_position.item(row, col).setData(-1, "del")
         self.save_change_order_position = True
+
+        self.calc_sum()
         return True
 
     def ui_change_date_shipment(self):
@@ -862,11 +805,13 @@ class Order(QMainWindow, order_class):
                 else:
                     tc_id = self.le_transport_company.whatsThis()
 
+
+
                 query = """UPDATE `order` SET Client_Id = %s, Clients_Vendor_Id = %s, Clients_Adress_Id = %s, Transport_Company_Id = %s, Date_Order = %s,
-                            Date_Shipment = %s, Number_Order = %s, Number_Doc = %s, Note = %s WHERE Id = %s"""
+                            Date_Shipment = %s, Number_Order = %s, Number_Doc = %s, Note = %s, Sum_In_Nds = %s, Sum_Off_Nds = %s WHERE Id = %s"""
                 parametrs = (self.le_client.whatsThis(), self.cb_clients_vendor.currentData(), self.cb_clients_adress.currentData(),
-                             tc_id, self.de_date_order.date().toString(Qt.ISODate), self.de_date_shipment.date().toString(Qt.ISODate),
-                             self.le_number_order.text(), self.le_number_doc.text(), self.le_note.text(), self.id)
+                             tc_id, self.de_date_order.date().toString(Qt.ISODate), self.de_date_shipment.date().toString(Qt.ISODate), self.le_number_order.text(),
+                             self.le_number_doc.text(), self.le_note.text(), self.le_sum_in_nds.text(), self.le_sum_no_nds.text(), self.id)
                 sql_info = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql изменения заказа", sql_info.msg, QMessageBox.Ok)
@@ -874,10 +819,11 @@ class Order(QMainWindow, order_class):
                 self.new_id = False
             else:
                 query = """INSERT INTO `order` (Client_Id, Clients_Vendor_Id, Clients_Adress_Id, Transport_Company_Id, Date_Order, Date_Shipment,
-                                                Number_Order, Number_Doc, Note, Shipped) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0)"""
+                                                Number_Order, Number_Doc, Note, Shipped, Sum_In_Nds, Sum_Off_Nds) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s, %s)"""
                 parametrs = (self.le_client.whatsThis(), self.cb_clients_vendor.currentData(), self.cb_clients_adress.currentData(),
                              self.le_transport_company.whatsThis(), self.de_date_order.date().toString(Qt.ISODate),
-                             self.de_date_shipment.date().toString(Qt.ISODate), self.le_number_order.text(), self.le_number_doc.text(), self.le_note.text())
+                             self.de_date_shipment.date().toString(Qt.ISODate), self.le_number_order.text(), self.le_number_doc.text(), self.le_note.text(),
+                             self.le_sum_in_nds.text(), self.le_sum_no_nds.text())
                 sql_info = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql добавления заказа", sql_info.msg, QMessageBox.Ok)
@@ -984,6 +930,29 @@ class Order(QMainWindow, order_class):
 
         return True
 
+    def calc_sum(self):
+        if self.tw_position.rowCount() < 1:
+            return False
+
+        sum_in_nds = 0
+        sum_of_nds = 0
+        for row in range(self.tw_position.rowCount()):
+            price = float(self.tw_position.item(row, 4).text())
+            value = int(self.tw_position.item(row, 5).text())
+            nds = int(self.tw_position.item(row, 4).data(5))
+
+            if self.lb_client.whatsThis().find("no_nds") >= 0:
+                sum_of_nds += price * value
+                sum_in_nds += (price * value) * (1 + nds / 100)
+            else:
+                sum_in_nds += price * value
+                sum_of_nds += (price * value - (price * value * nds) / (100 + nds))
+
+        self.le_sum_position.setText(str(self.tw_position.rowCount()))
+        self.le_sum_no_nds.setText(str(round(sum_of_nds, 2)))
+        self.le_sum_in_nds.setText(str(round(sum_in_nds, 2)))
+        self.le_sum_nds.setText(str(round(sum_in_nds - sum_of_nds, 2)))
+
     def of_list_clients(self, item):
         id_client, name_client = item
         self.le_client.setText(str(name_client))
@@ -1023,7 +992,7 @@ class Order(QMainWindow, order_class):
                 self.cb_clients_adress.setEnabled(False)
             else:
                 self.cb_clients_adress.clear()
-                self.cb_clients_adress.addItem(sql_info[0][0], -1)
+                self.cb_clients_adress.addItem(sql_info[0][0], None)
                 self.cb_clients_adress.setEnabled(False)
 
         else:
