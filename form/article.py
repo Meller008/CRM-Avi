@@ -1024,6 +1024,7 @@ class Article(QMainWindow, article_class):
             article_info = {"article_id": self.le_article.whatsThis(),
                             "article": self.le_article.text(),
                             "size": self.cb_size.currentText(),
+                            "size_id": self.cb_size.currentData(),
                             "parametr": self.cb_parametrs.currentText(),
                             "parametr_id": self.cb_parametrs.currentData(),
                             "price": self.le_price.text(),

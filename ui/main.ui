@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1059</width>
-    <height>610</height>
+    <width>1184</width>
+    <height>667</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,7 +69,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1059</width>
+     <width>1184</width>
      <height>21</height>
     </rect>
    </property>
@@ -187,6 +187,7 @@
     <addaction name="ma_report_need_article_order"/>
     <addaction name="ma_report_supply"/>
     <addaction name="ma_report_cost_article"/>
+    <addaction name="ma_sibest"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -393,6 +394,11 @@
   <action name="ma_test">
    <property name="text">
     <string>тест</string>
+   </property>
+  </action>
+  <action name="ma_sibest">
+   <property name="text">
+    <string>Сибестоймость</string>
    </property>
   </action>
  </widget>
@@ -1022,6 +1028,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_sibest</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_sibestoimost()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>591</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1063,5 +1085,6 @@
   <slot>view_report_supply()</slot>
   <slot>view_report_cost_article()</slot>
   <slot>view_test_window()</slot>
+  <slot>view_report_sibestoimost()</slot>
  </slots>
 </ui>

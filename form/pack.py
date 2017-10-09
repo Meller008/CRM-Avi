@@ -772,7 +772,7 @@ class PackOperation(QDialog, pack_operation_class):
             self.operation["date_input"] = self.de_input.date()
 
         if self.le_price.text() != "" and self.le_price.text() != "None":
-            self.operation["price"] = float(self.le_price.text())
+            self.operation["price"] = float(self.le_price.text().replace(",", "."))
 
         if self.le_value.text() != "" and self.le_value.text() != "New" and self.le_value.text() != "None":
             self.operation["value"] = int(self.le_value.text())
