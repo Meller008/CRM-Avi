@@ -931,6 +931,9 @@ class Order(QMainWindow, order_class):
         return True
 
     def calc_sum(self):
+
+        old_sum = self.le_sum_in_nds.text()
+
         if self.tw_position.rowCount() < 1:
             return False
 
@@ -952,6 +955,9 @@ class Order(QMainWindow, order_class):
         self.le_sum_no_nds.setText(str(round(sum_of_nds, 2)))
         self.le_sum_in_nds.setText(str(round(sum_in_nds, 2)))
         self.le_sum_nds.setText(str(round(sum_in_nds - sum_of_nds, 2)))
+
+        if old_sum != self.le_sum_in_nds.text():
+            self.ui_order_info_edit()
 
     def of_list_clients(self, item):
         id_client, name_client = item
@@ -1026,7 +1032,7 @@ class Order(QMainWindow, order_class):
         self.le_transport_company.setText(item[1])
         self.le_transport_company.setWhatsThis(str(item[0]))
 
-    def of_ex_torg12(self,edo, head, article, addres, unite, manager_name):
+    def of_ex_torg12(self,edo, head, article, addres, unite, manager_name, no_pcb):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1237,7 +1243,8 @@ class Order(QMainWindow, order_class):
             sheet["F%s" % row_ex] = "шт."
             sheet["G%s" % row_ex] = "796"
             sheet["H%s" % row_ex] = "кор."
-            sheet["I%s" % row_ex] = position["psb"]
+            if not no_pcb:
+                sheet["I%s" % row_ex] = position["psb"]
             sheet["J%s" % row_ex] = position["mest"]
             sheet["L%s" % row_ex] = position["value"]
             sheet["N%s" % row_ex] = moneyfmt.moneyfmt(position["price_no_nds"])
@@ -2296,8 +2303,9 @@ class OrderDocList(QDialog, order_doc):
                 article = True
 
             manager_name = self.cb_manager_name_1.currentText()
+            no_pcb = self.cb_no_pcb_1.isChecked()
 
-            self.main.of_ex_torg12(edo, head, article, addres, unite, manager_name)
+            self.main.of_ex_torg12(edo, head, article, addres, unite, manager_name, no_pcb)
             self.close()
             self.destroy()
 
