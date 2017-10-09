@@ -2037,6 +2037,22 @@ class Order(QMainWindow, order_class):
 
         book.save(path[0])
 
+    def of_word_reestr(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Word(*.doc)")
+        if not path[0]:
+            return False
+
+        f = open(getcwd() + '/templates/order/reestr.xml', "r", -1, "utf-8")
+        xml = f.read()
+        f.close()
+
+        xml = xml.replace("?НАКЛАДНОМЕР", self.le_number_doc.text())
+        xml = xml.replace("?НАКЛАДДАТА", self.de_date_shipment.date().toString("dd.MM.yyyy"))
+
+        f = open(path[0], "w", -1, "utf-8")
+        f.write(xml)
+        f.close()
+
 
 class OrderFilter(QDialog, order_filter):
     def __init__(self, main):
@@ -2274,6 +2290,8 @@ class OrderDocList(QDialog, order_doc):
             self.sw_main.setCurrentIndex(3)
         elif doc_name == "Счет":
             self.sw_main.setCurrentIndex(4)
+        elif doc_name == "Реестр":
+            self.sw_main.setCurrentIndex(0)
 
     def ui_acc(self):
         if self.lw_main.selectedItems()[0].text() == "Накладная":
@@ -2363,6 +2381,11 @@ class OrderDocList(QDialog, order_doc):
                 article = True
 
             self.main.of_ex_score(article)
+            self.close()
+            self.destroy()
+
+        elif self.lw_main.selectedItems()[0].text() == "Реестр":
+            self.main.of_word_reestr()
             self.close()
             self.destroy()
 

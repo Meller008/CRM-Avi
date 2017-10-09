@@ -205,7 +205,6 @@ class Article(QMainWindow, article_class):
             self.label_11.show()
             self.le_cost_price.show()
 
-
     def set_start_settings(self):
         # Ширина материалов
         self.tw_materials.horizontalHeader().resizeSection(0, 240)

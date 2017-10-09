@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>317</width>
+    <width>429</width>
     <height>314</height>
    </rect>
   </property>
@@ -761,6 +761,14 @@
      <item>
       <property name="text">
        <string>Счет</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignCenter</set>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Реестр</string>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>
