@@ -126,16 +126,18 @@ class OperationList(tree.TreeList):
                 return False
 
         text = ""
+        count_art = 0
         for art in sql_art:
             if art[0] is None:
                 text = "Нет совпадений"
                 break
             text += art[0] + "\n"
+            count_art += 1
 
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Information)
         msg.setWindowTitle("Совпадения")
-        msg.setText("Найдено %s совпадений" % len(sql_art))
+        msg.setText("Найдено %s совпадений" % count_art)
         msg.setDetailedText(text)
         msg.exec()
 
