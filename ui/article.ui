@@ -502,10 +502,10 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Цена</string>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="le_client_name">
+         <property name="maxLength">
+          <number>65</number>
          </property>
         </widget>
        </item>
@@ -516,13 +516,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="cb_parametrs"/>
-       </item>
-       <item row="7" column="1">
-        <widget class="QLineEdit" name="le_price">
-         <property name="enabled">
-          <bool>true</bool>
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="le_in_on_place">
+         <property name="maxLength">
+          <number>10</number>
          </property>
         </widget>
        </item>
@@ -574,10 +571,10 @@
          </item>
         </layout>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_10">
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_9">
          <property name="text">
-          <string>Название у клиента</string>
+          <string>Цена</string>
          </property>
         </widget>
        </item>
@@ -588,10 +585,17 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="le_client_name">
-         <property name="maxLength">
-          <number>65</number>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Штрих-код</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLineEdit" name="le_price">
+         <property name="enabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -602,12 +606,8 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Штрих-код</string>
-         </property>
-        </widget>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="cb_parametrs"/>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_7">
@@ -616,17 +616,17 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Название у клиента</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="1">
         <widget class="QLineEdit" name="le_barcode">
          <property name="maxLength">
           <number>15</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLineEdit" name="le_in_on_place">
-         <property name="maxLength">
-          <number>10</number>
          </property>
         </widget>
        </item>
@@ -652,30 +652,6 @@
         </layout>
        </item>
        <item row="10" column="1">
-        <widget class="QLineEdit" name="le_cost_price">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="label_13">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Цена без НДС&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
         <widget class="QDoubleSpinBox" name="sb_no_nds">
          <property name="readOnly">
           <bool>true</bool>
@@ -688,6 +664,30 @@
          </property>
          <property name="maximum">
           <double>500.990000000000009</double>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Цена без НДС&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLineEdit" name="le_cost_price">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>

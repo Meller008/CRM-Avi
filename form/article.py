@@ -169,6 +169,7 @@ class Article(QMainWindow, article_class):
         self.pb_down.setIcon(QIcon(getcwd() + "/images/down.ico"))
         self.set_start_settings()
         self.show_complete = True  # Переменная показывает что страница загружена
+        self.access_hidden_calc(True)
         self.access()
 
     def access(self):
@@ -183,13 +184,27 @@ class Article(QMainWindow, article_class):
                 elif item["value"] == "False":
                     val = False
                 else:
-                    val = item["value"]
+                    try:
+                        val = int(item["value"])
+                    except:
+                        val = item["value"]
                 a(val)
             else:
                 a()
 
-    def access_save(self, bool):
-        self.access_save_sql = bool
+    def access_save(self, bol):
+        self.access_save_sql = bol
+
+    def access_hidden_calc(self, bol):
+        if bol:
+            self.tw_materials.setColumnHidden(3, True)
+            self.label_11.hide()
+            self.le_cost_price.hide()
+        else:
+            self.tw_materials.setColumnHidden(3, False)
+            self.label_11.show()
+            self.le_cost_price.show()
+
 
     def set_start_settings(self):
         # Ширина материалов

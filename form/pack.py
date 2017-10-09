@@ -33,6 +33,9 @@ class PackBrows(QDialog, pack_class):
         self.insert_values_sql = False
         self.access_save_sql = True
 
+        # Прячем рвсчетную часть пачки (Открываем доступами) self.frame_calc.show()
+        self.frame_calc.hide()
+
         self.set_start_info()
         self.set_size_table()
         self.access()
