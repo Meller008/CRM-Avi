@@ -36,7 +36,7 @@ class OrderList(table.TableList):
         self.toolBar.setStyleSheet("background-color: rgb(126, 176, 127);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата отгр.", 70), ("№ док.", 50), ("Позиций", 50),
+        self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата поствки", 70), ("№ док.", 50), ("Позиций", 50),
                                   ("Стоймость", 105), ("Стоймость без ндс", 105), ("Примечание", 150), ("Отгр.", 40))
 
         self.filter = None
@@ -2578,21 +2578,21 @@ class ImportEDI(QDialog, import_edi):
                     item = QTableWidgetItem(element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text)
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 6, item)
 
-                    price = round(sql_info[0][5] - (sql_info[0][5] * sql_info[0][6]) / (100 + sql_info[0][6]), 2)
-                    item_product = QTableWidgetItem(sql_info[0][1] + " " + sql_info[0][2] + " " + sql_info[0][3])
-                    item_product.setData(5, {"article": sql_info[0][1],
-                                             "size": sql_info[0][2],
-                                             "parametr": sql_info[0][3],
-                                             "parametr_id": sql_info[0][0],
-                                             "client_Name": sql_info[0][4],
-                                             "price": sql_info[0][5]})
+                    price = round(sql_position[5] - (sql_position[5] * sql_position[6]) / (100 + sql_position[6]), 2)
+                    item_product = QTableWidgetItem(sql_position[1] + " " + sql_position[2] + " " + sql_position[3])
+                    item_product.setData(5, {"article": sql_position[1],
+                                             "size": sql_position[2],
+                                             "parametr": sql_position[3],
+                                             "parametr_id": sql_position[0],
+                                             "client_Name": sql_position[4],
+                                             "price": sql_position[5]})
 
                     if str(price) == element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text:
                         item_price = QTableWidgetItem(str(price))
-                        item_price.setData(5, sql_info[0][6])
+                        item_price.setData(5, sql_position[6])
                     else:
                         item_price = QTableWidgetItem(str(price))
-                        item_price.setData(5, sql_info[0][6])
+                        item_price.setData(5, sql_position[6])
                         item_price.setBackground(color)
 
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 8, item_product)
