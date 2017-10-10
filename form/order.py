@@ -1223,7 +1223,7 @@ class Order(QMainWindow, order_class):
         all_position = 0
 
         list_all = 1
-        row_break = 13
+        row_break = 12
         row_ex = 22
 
         num = 1
