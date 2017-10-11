@@ -845,7 +845,7 @@ class CutPassport(QDialog, cut_print_passport):
             html = html.replace("#pack_value#", str(pack.value()))
             html = html.replace("#client#", str(pack.client_name()))
             html = html.replace("#art_barcode#", str(pack.article_barcode()))
-            html = html.replace("#art_barcode#", str(self.pack.note_article()))
+            html = html.replace("#note_art#", str(pack.note_article()))
             html = html.replace("#note#", str(pack.note()))
             html = html.replace("#o_table#", operation_table)
             all_pack_html = all_pack_html + html + "\n"
