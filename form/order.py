@@ -940,16 +940,16 @@ class Order(QMainWindow, order_class):
         sum_in_nds = 0
         sum_of_nds = 0
         for row in range(self.tw_position.rowCount()):
-            price = float(self.tw_position.item(row, 4).text())
+            price = round(float(self.tw_position.item(row, 4).text()), 2)
             value = int(self.tw_position.item(row, 5).text())
             nds = int(self.tw_position.item(row, 4).data(5))
 
             if self.lb_client.whatsThis().find("no_nds") >= 0:
-                sum_of_nds += price * value
-                sum_in_nds += (price * value) * (1 + nds / 100)
+                sum_of_nds += round(price * value, 2)
+                sum_in_nds += round((price * value) * (1 + nds / 100), 2)
             else:
-                sum_in_nds += price * value
-                sum_of_nds += (price * value - (price * value * nds) / (100 + nds))
+                sum_in_nds += round(price * value, 2)
+                sum_of_nds += round(price * value - (price * value * nds) / (100 + nds), 2)
 
         self.le_sum_position.setText(str(self.tw_position.rowCount()))
         self.le_sum_no_nds.setText(str(round(sum_of_nds, 2)))
@@ -1223,7 +1223,7 @@ class Order(QMainWindow, order_class):
         all_position = 0
 
         list_all = 1
-        row_break = 12
+        row_break = 14
         row_ex = 22
 
         num = 1

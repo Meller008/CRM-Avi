@@ -199,7 +199,7 @@
           <item row="0" column="0">
            <widget class="QRadioButton" name="rb_addres_1">
             <property name="text">
-             <string>Фактический Адрес</string>
+             <string>Юридический адрес</string>
             </property>
             <property name="checked">
              <bool>true</bool>

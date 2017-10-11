@@ -225,7 +225,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Фактические адреса</string>
+       <string>Пункты разгрузки</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <property name="leftMargin">
