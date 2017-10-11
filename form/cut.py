@@ -775,6 +775,12 @@ class CutPassport(QDialog, cut_print_passport):
                             <td style="width: 130px; height: 10px; text-align: center; vertical-align: middle;"><strong>#art_barcode#</strong></td>
                             </tr>
                             <tr>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="6">Описание</td>
+                            </tr>
+                            <tr>
+                            <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="6"><strong>#note_art#</strong></td>
+                            </tr>
+                            <tr>
                             <td style="height: 10px; text-align: center; vertical-align: middle;" colspan="6">Примечание</td>
                             </tr>
                             <tr>
@@ -839,6 +845,7 @@ class CutPassport(QDialog, cut_print_passport):
             html = html.replace("#pack_value#", str(pack.value()))
             html = html.replace("#client#", str(pack.client_name()))
             html = html.replace("#art_barcode#", str(pack.article_barcode()))
+            html = html.replace("#art_barcode#", str(self.pack.note_article()))
             html = html.replace("#note#", str(pack.note()))
             html = html.replace("#o_table#", operation_table)
             all_pack_html = all_pack_html + html + "\n"

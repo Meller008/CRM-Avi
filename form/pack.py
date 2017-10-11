@@ -475,6 +475,7 @@ class PackBrows(QDialog, pack_class):
         html = html.replace("#pack_value#", str(self.pack.value()))
         html = html.replace("#client#", str(self.pack.client_name()))
         html = html.replace("#art_barcode#", str(self.pack.article_barcode()))
+        html = html.replace("#note_art#", str(self.pack.note_article()))
         html = html.replace("#note#", str(self.pack.note()))
         html = html.replace("#o_table#", operation_table)
 

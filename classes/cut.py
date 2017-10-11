@@ -797,6 +797,7 @@ class Pack:
         self.__value_all = 0
         self.__weight = 0
         self.__note = None
+        self.__note_article = None
         self.__size = None
         self.__date_make = None
         self.__date_complete = None
@@ -842,7 +843,7 @@ class Pack:
         query = """SELECT pack.Id, pack.Article_Parametr_Id, pack.Cut_Id, pack.Order_Id, pack.Number, pack.Value_Pieces, pack.Value_Damage,
                         pack.Weight, pack.Note, pack.Size, pack.Client_Id, clients.Name, pack.Date_Make, pack.Date_Coplete, cut.Material_Id, product_article.Article,
                         product_article_size.Size, product_article_parametrs.Name, cut.Date_Cut, product_article.Name,
-                        product_article_parametrs.Barcode, product_article.Id, product_article_parametrs.Id
+                        product_article_parametrs.Barcode, product_article.Id, product_article_parametrs.Id, product_article_parametrs.Product_Note
                       FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
                       LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                       LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
@@ -880,6 +881,7 @@ class Pack:
         self.__article_barcode = sql_info[0][20]
         self.__article_id = sql_info[0][21]
         self.__article_parametr_id = sql_info[0][22]
+        self.__note_article = sql_info[0][23]
 
         self.__value_all = self.__value_pieces - self.__value_damage
         self.__value_all_sql = self.__value_all
@@ -2073,6 +2075,9 @@ class Pack:
 
     def note(self):
         return self.__note
+
+    def note_article(self):
+        return self.__note_article
 
     def material_price(self):
         if self.__material_price is None:
