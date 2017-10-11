@@ -620,6 +620,9 @@ class Cut:
     def weight_rest_old(self):
         return self.__weight_rest_old
 
+    def rest_in_pack(self):
+        return self.__weight_rest / len(self.__pack_id_dict )
+
     def weight_all(self):
         return self.__weight_all
 
@@ -2064,6 +2067,9 @@ class Pack:
     def weight(self):
         return self.__weight
 
+    def weight_piece(self):
+        return round(self.__weight / self.__value_pieces, 4)
+
     def client(self):
         return self.__client_id
 
@@ -2091,7 +2097,7 @@ class Pack:
             if "mysql.connector.errors" in str(type(sql_info)):
                 print("Не смог получить цену ткани")
                 return False
-            self.__material_price = sql_info[0][0]
+            self.__material_price = round(sql_info[0][0], 4)
 
         return self.__material_price
 
@@ -2100,6 +2106,9 @@ class Pack:
 
     def add_materials(self):
         return self.__add_material
+
+    def percent_damage(self):
+        return round((self.__value_damage * 100) / self.__value_pieces, 4)
 
     # Вставка заначений
     def set_number_pack(self, number):
