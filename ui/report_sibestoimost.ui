@@ -119,6 +119,11 @@
       </column>
       <column>
        <property name="text">
+        <string>+ обр</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>% обр</string>
        </property>
       </column>
@@ -144,7 +149,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Ткани в шт.</string>
+        <string>Ткани в ед.</string>
        </property>
       </column>
       <column>

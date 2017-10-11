@@ -8,6 +8,7 @@ from PyQt5.QtCore import Qt, QObject, QDate, QCoreApplication
 from function import my_sql, table_to_html
 from classes.my_class import User
 from classes import print_qt, cut
+from decimal import Decimal
 
 sibest_class = loadUiType(getcwd() + '/ui/report_sibestoimost.ui')[0]
 
@@ -42,6 +43,7 @@ class ReportSibestoimost(QMainWindow, sibest_class):
         self.table_widget.horizontalHeader().resizeSection(15, 70)
         self.table_widget.horizontalHeader().resizeSection(16, 70)
         self.table_widget.horizontalHeader().resizeSection(17, 70)
+        self.table_widget.horizontalHeader().resizeSection(18, 70)
 
     def ui_calc(self):
         query = "SELECT cut.Id FROM cut"
@@ -95,10 +97,12 @@ class ReportSibestoimost(QMainWindow, sibest_class):
                 accessories_price_piece = self.calc_accessories_piece(pack_class.accessories())
                 operation_price_piece = self.calc_operation_piece(pack_class.operations())
                 percent_damage = pack_class.percent_damage()
-                material_add_rest_in_piece = round(weight_piece + (cut_class.rest_in_pack() / value), 4)
+                rest_in_piece = cut_class.rest_in_pack() / value
+                material_add_rest_in_piece = round(weight_piece + (rest_in_piece), 4)
+                price_naterial_add_rest_in_piece = round(material_add_rest_in_piece * material_price, 4)
 
-                sebest = operation_price_piece + accessories_price_piece + weight_piece
-                sebest_add_percent = round(float(sebest + (sebest / 100)) * float(self.le_add_percent.text()), 4)
+                sebest = operation_price_piece + accessories_price_piece + price_material_in_piece
+                sebest_add_percent = round(sebest + (sebest / 100 * Decimal(self.le_add_percent.text())), 4)
 
                 self.table_widget.insertRow(self.table_widget.rowCount())
 
@@ -146,33 +150,37 @@ class ReportSibestoimost(QMainWindow, sibest_class):
                 item = QTableWidgetItem(str(price_material_in_piece))
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, 10, item)
 
+                # Встааляем цена ткани на еденицу + обрезь
+                item = QTableWidgetItem(str(price_naterial_add_rest_in_piece))
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 11, item)
+
                 # Встааляем процент обрези
                 item = QTableWidgetItem(str(cut_class.rest_percent()))
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 11, item)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 12, item)
 
                 # Встааляем цену операций на еденицу
                 item = QTableWidgetItem(str(operation_price_piece))
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 12, item)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 13, item)
 
                 # Встааляем цену фурнитуры на еденицу
                 item = QTableWidgetItem(str(accessories_price_piece))
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 13, item)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 14, item)
 
                 # Встааляем процент брака
                 item = QTableWidgetItem(str(percent_damage))
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 14, item)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 15, item)
 
                 # Встааляем себестоймость + %
                 item = QTableWidgetItem(str(sebest_add_percent))
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 15, item)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 16, item)
 
                 # Вставляем сколько ткани в штуке
                 item = QTableWidgetItem(str(weight_piece))
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 16, item)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 17, item)
 
                 # Вставляем сколько ткани в штуке + обрези
                 item = QTableWidgetItem(str(material_add_rest_in_piece))
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, 17, item)
+                self.table_widget.setItem(self.table_widget.rowCount() - 1, 18, item)
 
     def ui_view_art(self):
         but_name = QObject.sender(self).objectName()

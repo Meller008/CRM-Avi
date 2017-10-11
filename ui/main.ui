@@ -398,7 +398,7 @@
   </action>
   <action name="ma_sibest">
    <property name="text">
-    <string>Сибестоймость</string>
+    <string>Себестоймость</string>
    </property>
   </action>
  </widget>
