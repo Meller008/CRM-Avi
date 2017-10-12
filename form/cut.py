@@ -206,16 +206,17 @@ class CutBrows(QDialog, cut_brows_class):
             self.insert_values_sql = False
 
     def set_size_table(self):
-        self.tw_pack.horizontalHeader().resizeSection(0, 35)
+        self.tw_pack.horizontalHeader().resizeSection(0, 25)
         self.tw_pack.horizontalHeader().resizeSection(1, 65)
-        self.tw_pack.horizontalHeader().resizeSection(2, 55)
-        self.tw_pack.horizontalHeader().resizeSection(3, 165)
-        self.tw_pack.horizontalHeader().resizeSection(4, 70)
-        self.tw_pack.horizontalHeader().resizeSection(5, 55)
-        self.tw_pack.horizontalHeader().resizeSection(6, 55)
-        self.tw_pack.horizontalHeader().resizeSection(7, 65)
+        self.tw_pack.horizontalHeader().resizeSection(2, 35)
+        self.tw_pack.horizontalHeader().resizeSection(3, 145)
+        self.tw_pack.horizontalHeader().resizeSection(4, 85)
+        self.tw_pack.horizontalHeader().resizeSection(5, 35)
+        self.tw_pack.horizontalHeader().resizeSection(6, 35)
+        self.tw_pack.horizontalHeader().resizeSection(7, 55)
         self.tw_pack.horizontalHeader().resizeSection(8, 65)
         self.tw_pack.horizontalHeader().resizeSection(9, 65)
+        self.tw_pack.horizontalHeader().resizeSection(10, 165)
 
     def ui_edit_date_cut(self):
         if not self.insert_values_sql:
@@ -523,6 +524,10 @@ class CutBrows(QDialog, cut_brows_class):
                     new_table_item = QTableWidgetItem(date_complete)
                     new_table_item.setData(-2, pack_id)
                     self.tw_pack.setItem(row, 9, new_table_item)
+
+                    new_table_item = QTableWidgetItem(pack.article_client_name())
+                    new_table_item.setData(-2, pack_id)
+                    self.tw_pack.setItem(row, 10, new_table_item)
 
                     row += 1
                     pack_number_table += 1

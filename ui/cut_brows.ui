@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>732</width>
+    <width>810</width>
     <height>422</height>
    </rect>
   </property>
@@ -447,7 +447,7 @@
         </column>
         <column>
          <property name="text">
-          <string>Размер</string>
+          <string>Раз.</string>
          </property>
         </column>
         <column>
@@ -462,7 +462,7 @@
         </column>
         <column>
          <property name="text">
-          <string>Кол-во</string>
+          <string>Кол.</string>
          </property>
         </column>
         <column>
@@ -483,6 +483,11 @@
         <column>
          <property name="text">
           <string>Проверка</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Название клиента</string>
          </property>
         </column>
        </widget>
