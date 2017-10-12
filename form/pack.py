@@ -2,8 +2,8 @@ from os import getcwd
 from form import staff, operation, order, supply_accessories
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
-from PyQt5.QtGui import QIcon, QBrush, QColor
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtGui import QIcon, QBrush, QColor, QRegExpValidator
+from PyQt5.QtCore import Qt, QDate, QRegExp
 import re
 import codecs
 from decimal import *
@@ -61,6 +61,7 @@ class PackBrows(QDialog, pack_class):
         self.access_save_sql = bool
 
     def set_start_info(self):
+        self.le_value_product.setValidator(QRegExpValidator(QRegExp("[0-9]{0,3}"), self))
 
         self.le_number_pack.setText(str(self.pack.number_pack()))
         self.le_number_cut.setText(str(self.pack.number_cut()))
