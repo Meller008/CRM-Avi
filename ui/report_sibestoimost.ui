@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1275</width>
+    <width>1340</width>
     <height>567</height>
    </rect>
   </property>
@@ -279,7 +279,7 @@
       <item row="2" column="2">
        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,1">
         <item>
-         <widget class="QPushButton" name="pb_set">
+         <widget class="QPushButton" name="pb_parametr">
           <property name="text">
            <string>Выбрать арт + раз + пар</string>
           </property>
@@ -301,7 +301,7 @@
        </layout>
       </item>
       <item row="0" column="3" rowspan="3">
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="gb_date">
         <property name="title">
          <string>Дата</string>
         </property>
@@ -390,8 +390,8 @@
    <slot>ui_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>927</x>
-     <y>47</y>
+     <x>1272</x>
+     <y>49</y>
     </hint>
     <hint type="destinationlabel">
      <x>1032</x>
@@ -422,8 +422,8 @@
    <slot>ui_view_art()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>341</x>
-     <y>47</y>
+     <x>571</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
      <x>344</x>
@@ -432,18 +432,66 @@
    </hints>
   </connection>
   <connection>
-   <sender>pb_set</sender>
+   <sender>pb_parametr</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>ui_view_art()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>632</x>
-     <y>45</y>
+     <x>917</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
      <x>630</x>
      <y>-68</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>le_param</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>958</x>
+     <y>53</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>955</x>
+     <y>25</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>le_size</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>608</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>610</x>
+     <y>26</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>le_art</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>32</y>
     </hint>
    </hints>
   </connection>

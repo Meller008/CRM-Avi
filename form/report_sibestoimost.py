@@ -22,7 +22,7 @@ class ReportSibestoimost(QMainWindow, sibest_class):
         self.start_settings()
 
     def start_settings(self):
-        self.de_date_in.setDate(QDate.currentDate().addMonths(-3))
+        self.de_date_in.setDate(QDate.currentDate().addMonths(-1))
         self.de_date_from.setDate(QDate.currentDate())
 
         self.table_widget.horizontalHeader().resizeSection(0, 65)
@@ -46,18 +46,39 @@ class ReportSibestoimost(QMainWindow, sibest_class):
         self.table_widget.horizontalHeader().resizeSection(18, 70)
 
     def ui_calc(self):
-        query = "SELECT cut.Id FROM cut"
+        # Составим sql запрос
+        sql_quere = """SELECT cut.Id, pack.Id
+                  FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                    LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                    LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                    LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id"""
+
+        where = self.build_sql_where()
+
+        if where:
+            sql_quere += " WHERE %s" % where
+
+        sql_quere += " ORDER BY cut.Date_Cut"
+
+        query = sql_quere
         sql_info = my_sql.sql_select(query)
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения номеров кроя", sql_info.msg, QMessageBox.Ok)
             return False
+
+        # разобьем полученый список на два Крой и пачки
+        sql_cut = set()
+        sql_pack = []
+        for item in sql_info:
+            sql_cut.add(item[0])
+            sql_pack.append(item)
 
         # обнуляем таблицу
         self.table_widget.clearContents()
         self.table_widget.setRowCount(0)
 
         # Создаем прогресс полосу
-        progress_bar = QProgressDialog("Построение отчета всего %s кроев" % len(sql_info), "Отмена", 0, len(sql_info))
+        progress_bar = QProgressDialog("Построение отчета всего %s пачек" % len(sql_pack), "Отмена", 0, len(sql_pack))
         progress_bar.setMinimumDuration(0)
 
         # Создаем список для кроев и счетчик кроев
@@ -65,16 +86,12 @@ class ReportSibestoimost(QMainWindow, sibest_class):
         i = 0
 
         # получаем классы кроев из списка id плученных из sql
-        for cut_id in sql_info:
-            cut_list.append(cut.Cut(cut_id[0]))
+        for cut_id in sql_cut:
+            cut_list.append(cut.Cut(cut_id))
 
         # Начинаем перебор кроев, в которых будем перебирать их пачки
         for cut_class in cut_list:
-            cut_class.take_pack_sql()
-            pack_list_class = cut_class.pack_list()
-
-            # Добавляем счетчик и вставляем значение в прогресс полосу
-            i += 1
+            # Вставляем значение в прогресс полосу
             progress_bar.setValue(i)
             QCoreApplication.processEvents()
 
@@ -82,9 +99,16 @@ class ReportSibestoimost(QMainWindow, sibest_class):
             if progress_bar.wasCanceled():
                 break
 
-            # перебираем пачки кроя
-            for pack_class in pack_list_class.values():
+            # перебираем id пачек из этого кроя
+            for pack_id in sql_pack:
+                # Проверяем относиться ли id пачки к данному крою, если нет смотрим следующий id
+                if pack_id[0] != cut_class.id():
+                    continue
 
+                # Добавляем счетчик
+                i += 1
+
+                pack_class = cut.Pack(pack_id[1])
                 # Получим фурнитуру и операции в пачке
                 pack_class.take_accessories_pack()
                 pack_class.take_operation_pack()
@@ -97,11 +121,14 @@ class ReportSibestoimost(QMainWindow, sibest_class):
                 accessories_price_piece = self.calc_accessories_piece(pack_class.accessories())
                 operation_price_piece = self.calc_operation_piece(pack_class.operations())
                 percent_damage = pack_class.percent_damage()
-                rest_in_piece = cut_class.rest_in_pack() / value
+                if value:
+                    rest_in_piece = cut_class.rest_in_pack() / value
+                else:
+                    rest_in_piece = 0
                 material_add_rest_in_piece = round(weight_piece + (rest_in_piece), 4)
                 price_naterial_add_rest_in_piece = round(material_add_rest_in_piece * material_price, 4)
 
-                sebest = operation_price_piece + accessories_price_piece + price_material_in_piece
+                sebest = Decimal(operation_price_piece + accessories_price_piece + price_material_in_piece)
                 sebest_add_percent = round(sebest + (sebest / 100 * Decimal(self.le_add_percent.text())), 4)
 
                 self.table_widget.insertRow(self.table_widget.rowCount())
@@ -183,7 +210,7 @@ class ReportSibestoimost(QMainWindow, sibest_class):
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, 18, item)
 
     def ui_view_art(self):
-        but_name = QObject.sender(self).objectName()
+        self.but_name = QObject.sender(self).objectName()
 
         self.article_list = article.ArticleList(self, True)
         self.article_list.setWindowModality(Qt.ApplicationModal)
@@ -204,9 +231,46 @@ class ReportSibestoimost(QMainWindow, sibest_class):
         return round(sum, 4)
 
     def build_sql_where(self):
-        pass
+        where = ""
+
+        # Проверяем по какому пункту будем сортировать
+        if self.le_param.text():
+            where += " product_article_parametrs.Id = %s" % self.le_param.whatsThis()
+        elif self.le_size.text():
+            where += " product_article_size.Id = %s" % self.le_size.whatsThis()
+        elif self.le_art.text():
+            where += " product_article.Id = %s" % self.le_art.whatsThis()
+
+        if self.gb_date.isChecked():
+            sql_date = "(cut.Date_Cut >= '%s' AND cut.Date_Cut <= '%s')" % (self.de_date_in.date().toString(Qt.ISODate), self.de_date_from.date().toString(Qt.ISODate))
+
+            # Если что то есть в Where тогда приверку на дату доьбавляем через AND
+            if where:
+                where += " AND %s" % sql_date
+            else:
+                where += sql_date
+
+        return where
 
     def of_tree_select_article(self, article):
+        if self.but_name == "pb_parametr":
+            self.le_art.setWhatsThis(str(article["article_id"]))
+            self.le_art.setText(str(article["article"]))
+            self.le_size.setWhatsThis(str(article["size_id"]))
+            self.le_size.setText(str(article["size"]))
+            self.le_param.setWhatsThis(str(article["parametr_id"]))
+            self.le_param.setText(str(article["parametr"]))
+
+        elif self.but_name == "pb_size":
+            self.le_art.setWhatsThis(str(article["article_id"]))
+            self.le_art.setText(str(article["article"]))
+            self.le_size.setWhatsThis(str(article["size_id"]))
+            self.le_size.setText(str(article["size"]))
+
+        else:
+            self.le_art.setWhatsThis(str(article["article_id"]))
+            self.le_art.setText(str(article["article"]))
+
         self.article_list.close()
         self.article_list.destroy()
 
