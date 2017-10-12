@@ -608,6 +608,8 @@ class Order(QMainWindow, order_class):
         return True
 
     def ui_change_date_shipment(self):
+        if self.le_number_doc.text():
+            return False
         query = "SELECT IFNULL(MAX(Number_Doc + 1), 'No Number') FROM `order` WHERE YEAR(Date_Order) = %s"
         sql_info = my_sql.sql_select(query, (self.de_date_shipment.date().year(),))
         if "mysql.connector.errors" in str(type(sql_info)):
