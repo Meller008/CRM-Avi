@@ -25,6 +25,7 @@ class Cut:
         self.__material_price = None
         self.__number = None
         self.__print_passport = False
+        self.__pack_value = 0
 
         self.__save_sql_info = False
 
@@ -43,7 +44,7 @@ class Cut:
                           WHEN SUM(IF(pack.Date_Coplete IS NULL, 1, 0)) > 0 THEN '0'
                           ELSE '1'
                         END,
-                        Material_Id, material_name.Name, cut.Print_passport
+                        Material_Id, material_name.Name, cut.Print_passport, COUNT(pack.Id)
                       FROM cut
                         LEFT JOIN pack ON cut.Id = pack.Cut_Id
                         LEFT JOIN material_name ON cut.Material_Id = material_name.Id
@@ -71,6 +72,7 @@ class Cut:
         self.__material_id_old_sql = sql_info[0][8]
         self.__material_name = sql_info[0][9]
         self.__print_passport = sql_info[0][10]
+        self.__pack_value = sql_info[0][11]
 
         self.take_material_price()
         self.calc_width()
@@ -124,8 +126,8 @@ class Cut:
         if self.__material_id is None:
             raise RuntimeError("Не выбрана ткань для сохранения кроя!")
         sql_values = (self.__date_cut, self.__worker_id, 0, self.__note, self.__material_id, self.__material_price)
-        query = """INSERT INTO cut (Date_Cut, Worker_Id, Weight_Rest, Note, Material_Id, Material_Price) VALUES
-                                  (%s, %s, %s, %s, %s, %s)"""
+        query = """INSERT INTO cut (Date_Cut, Worker_Id, Weight_Rest, Note, Material_Id, Material_Price, Print_passport) VALUES
+                                  (%s, %s, %s, %s, %s, %s, 0)"""
         sql_info = my_sql.sql_change(query, sql_values)
         if "mysql.connector.errors" in str(type(sql_info)):
             raise RuntimeError("Не смог сохранить пустой крой!")
@@ -621,7 +623,13 @@ class Cut:
         return self.__weight_rest_old
 
     def rest_in_pack(self):
-        return self.__weight_rest / len(self.__pack_id_dict )
+        # Проверяем получали ли мы пачки, если нет то возьмем значение полученое при получении кроя
+        if self.__pack_id_dict:
+            return self.__weight_rest / len(self.__pack_id_dict)
+        elif self.__pack_value:
+            return self.__weight_rest / self.__pack_value
+        else:
+            return 0
 
     def weight_all(self):
         return self.__weight_all
@@ -2068,7 +2076,10 @@ class Pack:
         return self.__weight
 
     def weight_piece(self):
-        return round(self.__weight / self.__value_pieces, 4)
+        if self.__value_pieces:
+            return round(self.__weight / self.__value_pieces, 4)
+        else:
+            return 0
 
     def client(self):
         return self.__client_id
@@ -2097,7 +2108,10 @@ class Pack:
             if "mysql.connector.errors" in str(type(sql_info)):
                 print("Не смог получить цену ткани")
                 return False
-            self.__material_price = round(sql_info[0][0], 4)
+            if sql_info[0][0]:
+                self.__material_price = round(sql_info[0][0], 4)
+            else:
+                self.__material_price = 0
 
         return self.__material_price
 
@@ -2108,7 +2122,10 @@ class Pack:
         return self.__add_material
 
     def percent_damage(self):
-        return round((self.__value_damage * 100) / self.__value_pieces, 4)
+        if self.__value_pieces:
+            return round((self.__value_damage * 100) / self.__value_pieces, 4)
+        else:
+            return 0
 
     # Вставка заначений
     def set_number_pack(self, number):
