@@ -226,6 +226,11 @@ class Article(QMainWindow, article_class):
             else:
                 self.set_start_sql_info()
                 self.set_all_enabled(False)
+                # вставим путые строки в размер и параметр для необходимости выбоа
+                self.cb_size.insertItem(0, "Выбрать", -1)
+                self.cb_size.setCurrentIndex(0)
+                self.cb_parametrs.insertItem(0, "Выбрать", -1)
+                self.cb_parametrs.setCurrentIndex(0)
 
         key_up = QShortcut(QtCore.Qt.Key_Up, self)
         key_up.activated.connect(self.key_up)
@@ -356,6 +361,10 @@ class Article(QMainWindow, article_class):
                 for param in self.article_parametrs:
                     if select_size_id == param[0] and param[10] == 0:
                         self.cb_parametrs.addItem(icon, param[2], param[1])
+
+        if self.dc_select:
+            self.cb_parametrs.insertItem(0, "Выбрать", -1)
+            self.cb_parametrs.setCurrentIndex(0)
 
     def set_parametr_info(self, other_param_id=False):  # Вставляем данные о параметрах получение из БД
         if not other_param_id:
@@ -1010,13 +1019,17 @@ class Article(QMainWindow, article_class):
         self.sb_no_nds.setValue(round(price - (price * nds) / (100 + nds), 4))
 
     def ui_acc(self):
-
         if not self.dc_select:
             if self.save_sql():
                 self.close()
                 self.destroy()
                 self.main.set_table_info()
         else:
+
+            if self.cb_size.currentData() < 0 or self.cb_parametrs.currentData() < 0:
+                QMessageBox.information(self, "Ошибка выбора", "Выберите размер и параметр!", QMessageBox.Ok)
+                return False
+
             if self.rb_nds_1.isChecked():
                 nds = 18
             else:
