@@ -136,6 +136,13 @@ class LabelSettings(QDialog, label_settings):
         conn.send(bytes(str(self.label_data), encoding='utf-8'))
         conn.send(b"data_ok")
 
+        # Если есть ID пачки то отправим информацию в БД что пачка напечатана!
+        if self.label_data["pack_id"] != "None":
+            query = """UPDATE pack SET Print = 1 WHERE Id = %s"""
+            info_sql = my_sql.sql_select(query, (self.label_data["pack_id"], ))
+            if "mysql.connector.errors" in str(type(info_sql)):
+                    QMessageBox.critical(self, "Ошибка sql подтверждения напечатанности пачки", info_sql.msg, QMessageBox.Ok)
+
         self.done(1)
 
     def ui_can(self):

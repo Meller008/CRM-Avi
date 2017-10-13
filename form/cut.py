@@ -483,50 +483,66 @@ class CutBrows(QDialog, cut_brows_class):
                 if pack.number_pack() == pack_number_table:
                     self.tw_pack.insertRow(row)
 
+                    if pack.print_label():
+                        color = QBrush(QColor(62, 240, 130, 255))
+                    else:
+                        color = QBrush(QColor(228, 242, 99, 255))
+
                     new_table_item = QTableWidgetItem(str(pack.number_pack()))
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 0, new_table_item)
 
                     new_table_item = QTableWidgetItem(str(pack.article()))
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 1, new_table_item)
 
                     new_table_item = QTableWidgetItem(str(pack.size()))
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 2, new_table_item)
 
                     new_table_item = QTableWidgetItem(str(pack.parametr_name()))
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 3, new_table_item)
 
                     new_table_item = QTableWidgetItem(str(pack.client_name()))
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 4, new_table_item)
 
                     new_table_item = QTableWidgetItem(str(pack.value()))
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 5, new_table_item)
 
                     new_table_item = QTableWidgetItem(str(pack.value_damage()))
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 6, new_table_item)
 
                     new_table_item = QTableWidgetItem(str(pack.weight()))
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 7, new_table_item)
 
                     date_make = pack.date_make().strftime("%d.%m.%Y") if pack.date_make() is not None else ""
                     new_table_item = QTableWidgetItem(date_make)
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 8, new_table_item)
 
                     date_complete = pack.date_complete().strftime("%d.%m.%Y") if pack.date_complete() is not None else ""
                     new_table_item = QTableWidgetItem(date_complete)
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 9, new_table_item)
 
                     new_table_item = QTableWidgetItem(pack.article_client_name())
                     new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 10, new_table_item)
 
                     row += 1

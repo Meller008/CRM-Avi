@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>688</width>
+    <width>722</width>
     <height>427</height>
    </rect>
   </property>
@@ -620,57 +620,6 @@ border-color: rgb(170, 0, 0);
          </item>
         </layout>
        </item>
-       <item row="1" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,0,0,0">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLineEdit" name="le_article">
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButton">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_6">
-           <property name="spacing">
-            <number>2</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>Размер</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="le_size"/>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
        <item row="0" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0,1,10,0,0">
          <property name="spacing">
@@ -810,6 +759,85 @@ border-color: rgb(170, 0, 0);
          </item>
         </layout>
        </item>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,0,0,0">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="le_article">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Размер</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="le_size"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Артикул</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>№ пачки</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Примичание</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Клиент</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="0" colspan="2">
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
@@ -885,36 +913,22 @@ border-color: rgb(170, 0, 0);
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Клиент</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Артикул</string>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="le_note"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>№ пачки</string>
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <property name="spacing">
+          <number>10</number>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Примичание</string>
-         </property>
-        </widget>
+         <item>
+          <widget class="QLineEdit" name="le_note"/>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="cb_print">
+           <property name="text">
+            <string>Рапечатан</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -1220,12 +1234,12 @@ border-color: rgb(170, 0, 0);
    <slot>ui_view_list_article()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>468</x>
+     <x>502</x>
      <y>89</y>
     </hint>
     <hint type="destinationlabel">
      <x>401</x>
-     <y>-128</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1240,7 +1254,7 @@ border-color: rgb(170, 0, 0);
      <y>90</y>
     </hint>
     <hint type="destinationlabel">
-     <x>926</x>
+     <x>721</x>
      <y>60</y>
     </hint>
    </hints>
@@ -1256,7 +1270,7 @@ border-color: rgb(170, 0, 0);
      <y>181</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-64</x>
+     <x>0</x>
      <y>156</y>
     </hint>
    </hints>
@@ -1272,7 +1286,7 @@ border-color: rgb(170, 0, 0);
      <y>181</y>
     </hint>
     <hint type="destinationlabel">
-     <x>881</x>
+     <x>721</x>
      <y>173</y>
     </hint>
    </hints>
@@ -1289,7 +1303,7 @@ border-color: rgb(170, 0, 0);
     </hint>
     <hint type="destinationlabel">
      <x>260</x>
-     <y>-174</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1304,7 +1318,7 @@ border-color: rgb(170, 0, 0);
      <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-209</x>
+     <x>0</x>
      <y>192</y>
     </hint>
    </hints>
@@ -1320,7 +1334,7 @@ border-color: rgb(170, 0, 0);
      <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-64</x>
+     <x>0</x>
      <y>183</y>
     </hint>
    </hints>
@@ -1336,7 +1350,7 @@ border-color: rgb(170, 0, 0);
      <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-125</x>
+     <x>0</x>
      <y>223</y>
     </hint>
    </hints>
@@ -1352,7 +1366,7 @@ border-color: rgb(170, 0, 0);
      <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>859</x>
+     <x>721</x>
      <y>95</y>
     </hint>
    </hints>
@@ -1364,11 +1378,11 @@ border-color: rgb(170, 0, 0);
    <slot>ui_view_order()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>654</x>
+     <x>688</x>
      <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>738</x>
+     <x>721</x>
      <y>79</y>
     </hint>
    </hints>
@@ -1385,7 +1399,7 @@ border-color: rgb(170, 0, 0);
     </hint>
     <hint type="destinationlabel">
      <x>334</x>
-     <y>-46</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1396,11 +1410,11 @@ border-color: rgb(170, 0, 0);
    <slot>ui_del_order()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>680</x>
+     <x>714</x>
      <y>114</y>
     </hint>
     <hint type="destinationlabel">
-     <x>940</x>
+     <x>721</x>
      <y>101</y>
     </hint>
    </hints>
@@ -1416,7 +1430,7 @@ border-color: rgb(170, 0, 0);
      <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-76</x>
+     <x>0</x>
      <y>210</y>
     </hint>
    </hints>
@@ -1432,7 +1446,7 @@ border-color: rgb(170, 0, 0);
      <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-31</x>
+     <x>0</x>
      <y>283</y>
     </hint>
    </hints>
@@ -1444,28 +1458,12 @@ border-color: rgb(170, 0, 0);
    <slot>ui_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>563</x>
-     <y>414</y>
+     <x>639</x>
+     <y>425</y>
     </hint>
     <hint type="destinationlabel">
      <x>563</x>
-     <y>458</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>le_note</sender>
-   <signal>editingFinished()</signal>
-   <receiver>Dialog</receiver>
-   <slot>ui_edit_note()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>112</x>
-     <y>139</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-149</x>
-     <y>113</y>
+     <y>426</y>
     </hint>
    </hints>
   </connection>
@@ -1481,7 +1479,7 @@ border-color: rgb(170, 0, 0);
     </hint>
     <hint type="destinationlabel">
      <x>617</x>
-     <y>-40</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1497,7 +1495,7 @@ border-color: rgb(170, 0, 0);
     </hint>
     <hint type="destinationlabel">
      <x>622</x>
-     <y>-97</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1508,12 +1506,12 @@ border-color: rgb(170, 0, 0);
    <slot>ui_edit_date_complete()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>461</x>
-     <y>41</y>
+     <x>599</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel">
      <x>478</x>
-     <y>-63</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1529,7 +1527,7 @@ border-color: rgb(170, 0, 0);
     </hint>
     <hint type="destinationlabel">
      <x>550</x>
-     <y>-124</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1540,11 +1538,11 @@ border-color: rgb(170, 0, 0);
    <slot>ui_can()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>638</x>
-     <y>421</y>
+     <x>720</x>
+     <y>425</y>
     </hint>
     <hint type="destinationlabel">
-     <x>733</x>
+     <x>721</x>
      <y>421</y>
     </hint>
    </hints>
@@ -1560,7 +1558,7 @@ border-color: rgb(170, 0, 0);
      <y>345</y>
     </hint>
     <hint type="destinationlabel">
-     <x>766</x>
+     <x>721</x>
      <y>392</y>
     </hint>
    </hints>
@@ -1592,7 +1590,7 @@ border-color: rgb(170, 0, 0);
      <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-74</x>
+     <x>0</x>
      <y>345</y>
     </hint>
    </hints>
@@ -1609,7 +1607,7 @@ border-color: rgb(170, 0, 0);
     </hint>
     <hint type="destinationlabel">
      <x>280</x>
-     <y>-54</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1624,7 +1622,7 @@ border-color: rgb(170, 0, 0);
      <y>45</y>
     </hint>
     <hint type="destinationlabel">
-     <x>771</x>
+     <x>721</x>
      <y>56</y>
     </hint>
    </hints>
@@ -1640,7 +1638,7 @@ border-color: rgb(170, 0, 0);
      <y>73</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-64</x>
+     <x>0</x>
      <y>76</y>
     </hint>
    </hints>
@@ -1656,7 +1654,7 @@ border-color: rgb(170, 0, 0);
      <y>220</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-49</x>
+     <x>0</x>
      <y>216</y>
     </hint>
    </hints>
@@ -1672,7 +1670,7 @@ border-color: rgb(170, 0, 0);
      <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-30</x>
+     <x>0</x>
      <y>265</y>
     </hint>
    </hints>
@@ -1688,8 +1686,40 @@ border-color: rgb(170, 0, 0);
      <y>152</y>
     </hint>
     <hint type="destinationlabel">
-     <x>741</x>
+     <x>721</x>
      <y>148</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_note</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_note()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-36</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_print</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_edit_print_label()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>658</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>835</x>
+     <y>137</y>
     </hint>
    </hints>
   </connection>
@@ -1723,5 +1753,6 @@ border-color: rgb(170, 0, 0);
   <slot>ui_print_label()</slot>
   <slot>ui_add_material()</slot>
   <slot>ui_del_material()</slot>
+  <slot>ui_edit_print_label()</slot>
  </slots>
 </ui>

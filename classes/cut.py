@@ -817,6 +817,7 @@ class Pack:
         self.__article_id = None
         self.__article_size = None
         self.__article_parametr_name = None
+        self.__print_label = 0
 
         self.__material_price = None
         self.__weight_old_sql = 0
@@ -855,7 +856,7 @@ class Pack:
                         pack.Weight, pack.Note, pack.Size, pack.Client_Id, clients.Name, pack.Date_Make, pack.Date_Coplete, cut.Material_Id, product_article.Article,
                         product_article_size.Size, product_article_parametrs.Name, cut.Date_Cut, product_article.Name,
                         product_article_parametrs.Barcode, product_article.Id, product_article_parametrs.Id, product_article_parametrs.Product_Note,
-                        product_article_parametrs.Client_Name
+                        product_article_parametrs.Client_Name, pack.Print
                       FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
                       LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                       LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
@@ -895,6 +896,7 @@ class Pack:
         self.__article_parametr_id = sql_info[0][22]
         self.__note_article = sql_info[0][23]
         self.__article_client_name = sql_info[0][24]
+        self.__print_label = sql_info[0][25]
 
         self.__value_all = self.__value_pieces - self.__value_damage
         self.__value_all_sql = self.__value_all
@@ -1074,10 +1076,11 @@ class Pack:
                     # Если есть номер кроя для новой пачки
                     self.__cut_id = cut_id
 
-                    query = """INSERT pack (Article_Parametr_Id, Cut_Id, Order_Id, Number, Value_Pieces, Value_Damage, Weight, Note, Size, Client_Id, Date_Make, Date_Coplete)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                    query = """INSERT pack (Article_Parametr_Id, Cut_Id, Order_Id, Number, Value_Pieces, Value_Damage, Weight, Note, Size, Client_Id,
+                                            Date_Make, Date_Coplete, Print)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                     sql_values = (self.__article_parametr, self.__cut_id , self.__order, self.__number_pack, self.__value_pieces, self.__value_damage, self.__weight,
-                                  self.__note, self.__size, self.__client_id, self.__date_make, self.__date_complete)
+                                  self.__note, self.__size, self.__client_id, self.__date_make, self.__date_complete, self.__print_label)
 
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                     if "mysql.connector.errors" in str(type(sql_info)):
@@ -1142,10 +1145,10 @@ class Pack:
                 # Изменение информации о пачке
                 query = """UPDATE pack
                               SET Article_Parametr_Id = %s, Cut_Id= %s, Order_Id= %s, Number= %s, Value_Pieces= %s, Value_Damage= %s, Weight= %s,
-                                Note= %s, Size= %s, Client_Id= %s, Date_Make= %s, Date_Coplete= %s
+                                Note= %s, Size= %s, Client_Id= %s, Date_Make= %s, Date_Coplete= %s, Print = %s
                               WHERE Id = %s"""
                 sql_values = (self.__article_parametr, self.__cut_id , self.__order, self.__number_pack, self.__value_pieces, self.__value_damage, self.__weight,
-                              self.__note, self.__size, self.__client_id, self.__date_make, self.__date_complete, self.__id)
+                              self.__note, self.__size, self.__client_id, self.__date_make, self.__date_complete, self.__print_label, self.__id)
 
                 sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
                 if "mysql.connector.errors" in str(type(sql_info)):
@@ -2132,6 +2135,15 @@ class Pack:
     def article_client_name(self):
         return self.__article_client_name
 
+    def print_label(self):
+        return self.__print_label
+
+    def print_label_bool(self):
+        if self.__print_label:
+            return True
+        else:
+            return False
+
     # Вставка заначений
     def set_number_pack(self, number):
         if self.__number_pack != int(number):
@@ -2363,6 +2375,12 @@ class Pack:
         self.__add_material.append(add_material)
         self.__new_add_material -= 1
         return [True, "Ok"]
+
+    def set_print_label(self, info):
+        if self.__print_label != int(info):
+            self.__print_label = int(info)
+            if not self.__save_sql_info:
+                self.__save_sql_info = True
 
     # Удаление значений
     def del_operation(self, id):

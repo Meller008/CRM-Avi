@@ -104,6 +104,8 @@ class PackBrows(QDialog, pack_class):
             self.le_value_all.setText(str(self.pack.value_all()))
             self.le_weight.setText(str(self.pack.weight()))
 
+            self.cb_print.setChecked(self.pack.print_label_bool())
+
             self.set_operation_name()
             self.set_accessories_name()
             self.set_add_material()
@@ -186,6 +188,12 @@ class PackBrows(QDialog, pack_class):
             self.set_value_pack()
             self.set_accessories_name()
             self.set_operation_name()
+
+    def ui_edit_print_label(self, bol):
+        if bol:
+            self.pack.set_print_label(1)
+        else:
+            self.pack.set_print_label(0)
 
     def ui_view_client(self):
         self.client_list = clients.ClientList(self, True)
