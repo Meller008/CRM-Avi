@@ -2760,7 +2760,7 @@ class ImportEDI(QDialog, import_edi):
                     table_item.setData(5, nds)
                     self.main.tw_position.setItem(row, 6, table_item)
                 else:
-                    table_item = QTableWidgetItem(article["price"])
+                    table_item = QTableWidgetItem(str(article["price"]))
                     table_item.setData(-1, "new")
                     table_item.setData(5, nds)
                     self.main.tw_position.setItem(row, 4, table_item)
