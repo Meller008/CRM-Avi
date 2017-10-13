@@ -2765,7 +2765,7 @@ class ImportEDI(QDialog, import_edi):
                     table_item.setData(5, nds)
                     self.main.tw_position.setItem(row, 4, table_item)
 
-                    table_item = QTableWidgetItem(str(round(float(article["price"]) * int(self.tw_edi_3.item(row, 3).text()), 4)))
+                    table_item = QTableWidgetItem(str(round(float(article["price"]) * int(float(self.tw_edi_3.item(row, 3).text())), 4)))
                     table_item.setData(-1, "new")
                     table_item.setData(5, nds)
                     self.main.tw_position.setItem(row, 6, table_item)
