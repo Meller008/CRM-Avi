@@ -943,8 +943,8 @@ class Order(QMainWindow, order_class):
         sum_of_nds = 0
         for row in range(self.tw_position.rowCount()):
             price = round(float(self.tw_position.item(row, 4).text()), 2)
-            value = int(self.tw_position.item(row, 5).text())
-            nds = int(self.tw_position.item(row, 4).data(5))
+            value = float(self.tw_position.item(row, 5).text())
+            nds = float(self.tw_position.item(row, 4).data(5))
 
             if self.lb_client.whatsThis().find("no_nds") >= 0:
                 sum_of_nds += round(price * value, 2)
@@ -2776,6 +2776,7 @@ class ImportEDI(QDialog, import_edi):
                 self.main.tw_position.setItem(row, 5, table_item)
 
         self.main.save_change_order_position = True
+        self.main.calc_sum()
         try:
             self.main.pb_doc.deleteLater()
         except:
