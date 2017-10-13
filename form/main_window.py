@@ -26,6 +26,7 @@ class MainWindow(QMainWindow, main_class):
 
         self.menu_3.setEnabled(False)
         self.ma_sibest.setEnabled(False)
+        self.menu_14.setEnabled(False)
 
         self.show()
         self.setDisabled(True)
