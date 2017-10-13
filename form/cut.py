@@ -596,6 +596,9 @@ class CutBrows(QDialog, cut_brows_class):
         self.set_width_all()
         self.cut.set_material_id_old(self.cut.material_id())
 
+    def of_print_complete(self):
+        self.set_pack()
+
 
 class CutFilter(QDialog, cut_filter):
     def __init__(self, main):
@@ -918,6 +921,8 @@ class LabelList(CutPassport):
             self.print_label.show()
             if self.print_label.exec() < 1:
                 return False
+
+        self.main.of_print_complete()
 
 
 class CutListMission(QMainWindow, cut_list_mission_class):

@@ -208,6 +208,26 @@
      </item>
     </layout>
    </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>290</y>
+      <width>151</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -230,8 +250,8 @@
    <slot>ui_t1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>358</y>
+     <x>83</x>
+     <y>481</y>
     </hint>
     <hint type="destinationlabel">
      <x>120</x>
@@ -239,8 +259,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>comboBox</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_c2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>242</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-59</x>
+     <y>332</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_t1()</slot>
+  <slot>ui_c2()</slot>
  </slots>
 </ui>

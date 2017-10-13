@@ -18,9 +18,15 @@ class TestWindow(QMainWindow, test_window_class):
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        self.comboBox.insertItem(0, "Выбрать", -1)
+        self.comboBox.setCurrentIndex(0)
+
     def ui_t1(self):
         for i in range(300, 100, -1):
             self.tableWidget.resize(50, i)
+
+    def ui_c2(self):
+        print("123")
 
 
 class TableItem(QTableWidgetItem):

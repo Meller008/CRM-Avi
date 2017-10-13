@@ -163,6 +163,7 @@ class Article(QMainWindow, article_class):
         self.tree_id = tree_id
         self.view_show = False
         self.show_complete = False  # Переменная показывает что страница загружена
+        self.set_empty_string = False  # Переменная нужня для вставки пустой строки в списки, для того что бы втавка не защитывалась как выбор
         self.dc_select = dc_select
         self.save_change = []  # Переменная для запоминания изменений
         self.pb_up.setIcon(QIcon(getcwd() + "/images/up.ico"))
@@ -226,11 +227,12 @@ class Article(QMainWindow, article_class):
             else:
                 self.set_start_sql_info()
                 self.set_all_enabled(False)
+
                 # вставим путые строки в размер и параметр для необходимости выбоа
+                self.set_empty_string = True
                 self.cb_size.insertItem(0, "Выбрать", -1)
                 self.cb_size.setCurrentIndex(0)
-                self.cb_parametrs.insertItem(0, "Выбрать", -1)
-                self.cb_parametrs.setCurrentIndex(0)
+                self.set_empty_string = False
 
         key_up = QShortcut(QtCore.Qt.Key_Up, self)
         key_up.activated.connect(self.key_up)
@@ -363,8 +365,10 @@ class Article(QMainWindow, article_class):
                         self.cb_parametrs.addItem(icon, param[2], param[1])
 
         if self.dc_select:
+            self.set_empty_string = True
             self.cb_parametrs.insertItem(0, "Выбрать", -1)
             self.cb_parametrs.setCurrentIndex(0)
+            self.set_empty_string = False
 
     def set_parametr_info(self, other_param_id=False):  # Вставляем данные о параметрах получение из БД
         if not other_param_id:
@@ -501,6 +505,9 @@ class Article(QMainWindow, article_class):
             self.get_start_sql_info()
 
     def ui_select_size(self):
+        if self.set_empty_string:
+            return False
+
         if self.save_change and self.show_complete:
             result = QMessageBox.question(self, "Внимание", "Сохранить информацию? (Иначе изменения не сохранятся)", QMessageBox.Yes | QMessageBox.No,
                                           QMessageBox.No)
@@ -644,6 +651,9 @@ class Article(QMainWindow, article_class):
         self.set_size_parametr()
 
     def ui_select_parametr(self):
+        if self.set_empty_string:
+            return False
+
         if self.save_change and self.show_complete:
             result = QMessageBox.question(self, "Внимание", "Сохранить информацию? (Иначе изменения не сохранятся)", QMessageBox.Yes | QMessageBox.No,
                                           QMessageBox.No)
