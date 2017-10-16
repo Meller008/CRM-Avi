@@ -2064,6 +2064,10 @@ class OneStaff(QMainWindow, one_staff_class):
             QMessageBox.critical(self, "Ошибка sql", contract_number.msg, QMessageBox.Ok)
             return False
 
+        if contract_number[0][1] is None:
+            QMessageBox.critical(self, "Ошибка", "У этого работника нет трудового договора", QMessageBox.Ok)
+            return False
+
         self.statusBar().showMessage("Открываю шаблон")
         f = open(getcwd() + '/templates/staff/order_on_reception.xml', "r", -1, "utf-8")
         xml = f.read()
