@@ -160,6 +160,7 @@ class Client(QDialog, client_class):
                         info_sql = my_sql.sql_change(query, paremetrs)
                         if "mysql.connector.errors" in str(type(info_sql)):
                             QMessageBox.critical(self, "Ошибка sql добавления адреса", info_sql.msg, QMessageBox.Ok)
+                            return False
         else:
             query = """UPDATE clients SET Name = %s, Legal_Address = %s, Actual_Address = %s, INN = %s, KPP = %s, OGRN = %s, Account = %s, Bank = %s, corres_Account = %s,
                        BIK = %s, Contact_Person = %s, Phone = %s, Mail = %s, Note = %s, No_Nds = %s, Full_Name = %s WHERE Id = %s"""
@@ -168,7 +169,8 @@ class Client(QDialog, client_class):
                          self.le_mail.text(), self.le_note.toPlainText(), no_nds, self.le_full_name.text(), self.select_id)
             info_sql = my_sql.sql_change(query, paremetrs)
             if "mysql.connector.errors" in str(type(info_sql)):
-                    QMessageBox.critical(self, "Ошибка sql изменение клиента", info_sql.msg, QMessageBox.Ok)
+                QMessageBox.critical(self, "Ошибка sql изменение клиента", info_sql.msg, QMessageBox.Ok)
+                return False
 
             for row in range(self.tw_adres.rowCount()):
                 item = self.tw_adres.item(row, 0)
@@ -179,18 +181,21 @@ class Client(QDialog, client_class):
                         info_sql = my_sql.sql_change(query, paremetrs)
                         if "mysql.connector.errors" in str(type(info_sql)):
                             QMessageBox.critical(self, "Ошибка sql добавления адреса", info_sql.msg, QMessageBox.Ok)
+                            return False
                     elif item.data(-2) == "update":
                         query = "UPDATE clients_actual_address SET Name = %s, Adres = %s, KPP = %s WHERE Id = %s"
                         paremetrs = (self.tw_adres.item(row, 0).text(), self.tw_adres.item(row, 1).text(), self.tw_adres.item(row, 2).text(), item.data(-1))
                         info_sql = my_sql.sql_change(query, paremetrs)
                         if "mysql.connector.errors" in str(type(info_sql)):
                             QMessageBox.critical(self, "Ошибка sql изменение адреса", info_sql.msg, QMessageBox.Ok)
+                            return False
 
             for del_id in self.delete_adress:
                 query = 'DELETE FROM clients_actual_address WHERE Id = %s'
                 info_sql = my_sql.sql_change(query, (del_id, ))
                 if "mysql.connector.errors" in str(type(info_sql)):
                     QMessageBox.critical(self, "Ошибка sql удаление адреса", info_sql.msg, QMessageBox.Ok)
+                    return False
 
             for row in range(self.tw_vendor_number.rowCount()):
                 item = self.tw_vendor_number.item(row, 0)
@@ -202,6 +207,7 @@ class Client(QDialog, client_class):
                         info_sql = my_sql.sql_change(query, paremetrs)
                         if "mysql.connector.errors" in str(type(info_sql)):
                             QMessageBox.critical(self, "Ошибка sql добавления номера", info_sql.msg, QMessageBox.Ok)
+                            return False
                     elif item.data(-2) == "update":
                         query = "UPDATE clients_vendor_number SET Number = %s, Contract = %s, Data_From = %s WHERE Id = %s"
                         data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
@@ -209,12 +215,14 @@ class Client(QDialog, client_class):
                         info_sql = my_sql.sql_change(query, paremetrs)
                         if "mysql.connector.errors" in str(type(info_sql)):
                             QMessageBox.critical(self, "Ошибка sql изменение номера", info_sql.msg, QMessageBox.Ok)
+                            return False
 
             for del_id in self.delete_numbers:
                 query = 'DELETE FROM clients_vendor_number WHERE Id = %s'
                 info_sql = my_sql.sql_change(query, (del_id, ))
                 if "mysql.connector.errors" in str(type(info_sql)):
                     QMessageBox.critical(self, "Ошибка sql удаление номера", info_sql.msg, QMessageBox.Ok)
+                    return False
 
         self.m.sql_set_list()
         self.close()
