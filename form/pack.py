@@ -389,6 +389,16 @@ class PackBrows(QDialog, pack_class):
         value_damage = self.pack.value_damage()
         weight = self.pack.weight()
         material_price = self.pack.material_price()
+
+        query = """SELECT cut.Weight_Rest * 100 / (SUM(pack.Weight) + cut.Weight_Rest)
+                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                      WHERE cut.Id = %s"""
+        sql_info = my_sql.sql_select(query, (self.pack.number_cut(),))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения информации о проценте обрези", sql_info.msg, QMessageBox.Ok)
+            return False
+        rest_percent = sql_info[0][0]
+
         percent = int(self.le_calc_percent.text())
 
         operations_price = 0
@@ -401,17 +411,42 @@ class PackBrows(QDialog, pack_class):
         for accessory in accessories:
             accessories_price += accessory["value"] * Decimal(str(accessory["value_thing"])) * Decimal(str(accessory["price"]))
 
-        price_one_weight = round((weight / value) * material_price, 4)
+        add_material_price = 0
+        add_materials = self.pack.add_materials()
+        for add_material in add_materials:
+            add_material_price += (add_material["weight"] + add_material["weight_rest"]) * add_material["price"]
 
-        price_all_one = round((operations_price / value) + (accessories_price / value) + price_one_weight, 4)
-        price_all_many = round(operations_price + accessories_price + (material_price * weight), 4)
+        price_one_weight = round((weight / value) * material_price, 4)
+        price_many_weight = round(material_price * weight, 4)
+
+        material_and_rest_one = price_one_weight + (price_one_weight / 100 * rest_percent)
+        material_and_rest_many = price_many_weight + (price_many_weight / 100 * rest_percent)
+
+        add_material_one = round(add_material_price / value, 4)
+        add_material_many = round(add_material_price, 4)
+
+        all_material_one = material_and_rest_one + add_material_one
+        all_meterial_many = material_and_rest_many + add_material_many
+
+        price_all_one = round((operations_price / value) + (accessories_price / value) + all_material_one, 4)
+        price_all_many = round(operations_price + accessories_price + all_meterial_many, 4)
+
+
 
         self.le_calc_one_operation.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(operations_price / value, 4))))
         self.le_calc_many_operation.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(operations_price, 4))))
         self.le_calc_one_accessory.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(accessories_price / value, 4))))
         self.le_calc_many_accessory.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(accessories_price, 4))))
         self.le_calc_one_material.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(price_one_weight, 4))))
-        self.le_calc_many_material.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(material_price * weight, 4))))
+        self.le_calc_many_material.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(price_many_weight, 4))))
+        self.le_calc_rest_cut.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(rest_percent, 4))))
+        self.le_calc_rest_cut.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(rest_percent, 4))))
+        self.le_calc_one_mat_and_rest.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(material_and_rest_one , 4))))
+        self.le_calc_many_mat_and_rest.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(material_and_rest_many, 4))))
+        self.le_calc_one_add_material.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(add_material_one, 4))))
+        self.le_calc_many_add_material.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(add_material_many, 4))))
+        self.le_calc_one_all_material.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_material_one, 4))))
+        self.le_calc_many_all_material.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_meterial_many, 4))))
         self.le_calc_one_all.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(price_all_one, 4))))
         self.le_calc_many_all.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(price_all_many, 4))))
         self.le_calc_one_percent.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(price_all_one + (price_all_one * percent / 100), 4))))
