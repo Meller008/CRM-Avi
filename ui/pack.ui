@@ -1040,7 +1040,11 @@ border-color: rgb(170, 0, 0);
                </widget>
               </item>
               <item row="1" column="8">
-               <widget class="QLineEdit" name="le_calc_one_all_material"/>
+               <widget class="QLineEdit" name="le_calc_one_all_material">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item row="0" column="8">
                <widget class="QLabel" name="label_23">
@@ -1058,7 +1062,11 @@ border-color: rgb(170, 0, 0);
                </widget>
               </item>
               <item row="2" column="8">
-               <widget class="QLineEdit" name="le_calc_many_all_material"/>
+               <widget class="QLineEdit" name="le_calc_many_all_material">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item row="2" column="2">
                <widget class="QLineEdit" name="le_calc_many_accessory">
@@ -1138,7 +1146,11 @@ border-color: rgb(170, 0, 0);
                </widget>
               </item>
               <item row="1" column="4" rowspan="2">
-               <widget class="QLineEdit" name="le_calc_rest_cut"/>
+               <widget class="QLineEdit" name="le_calc_rest_cut">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item row="0" column="4">
                <widget class="QLabel" name="label_20">
@@ -1161,16 +1173,32 @@ border-color: rgb(170, 0, 0);
                </widget>
               </item>
               <item row="1" column="5">
-               <widget class="QLineEdit" name="le_calc_one_mat_and_rest"/>
+               <widget class="QLineEdit" name="le_calc_one_mat_and_rest">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item row="2" column="5">
-               <widget class="QLineEdit" name="le_calc_many_mat_and_rest"/>
+               <widget class="QLineEdit" name="le_calc_many_mat_and_rest">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item row="1" column="7">
-               <widget class="QLineEdit" name="le_calc_one_add_material"/>
+               <widget class="QLineEdit" name="le_calc_one_add_material">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item row="2" column="7">
-               <widget class="QLineEdit" name="le_calc_many_add_material"/>
+               <widget class="QLineEdit" name="le_calc_many_add_material">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item row="3" column="8">
                <widget class="QLabel" name="label_17">

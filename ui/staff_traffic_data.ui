@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>164</width>
-    <height>108</height>
+    <width>204</width>
+    <height>139</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -84,7 +84,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item row="5" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pushButton">
@@ -102,7 +102,21 @@
      </item>
     </layout>
    </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="le_note">
+     <property name="maxLength">
+      <number>100</number>
+     </property>
+    </widget>
+   </item>
    <item row="3" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Заметка</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

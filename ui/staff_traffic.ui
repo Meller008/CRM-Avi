@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>583</width>
-    <height>251</height>
+    <width>759</width>
+    <height>273</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,6 +83,11 @@
        <column>
         <property name="text">
          <string>Дата табельная</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Заметка</string>
         </property>
        </column>
       </widget>

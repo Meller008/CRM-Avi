@@ -77,12 +77,13 @@ class StaffTraffic(QDialog, staff_traffic):
 
     def set_start_settings(self):
         self.tw_traffic.horizontalHeader().resizeSection(0, 40)
+        self.tw_traffic.horizontalHeader().resizeSection(3, 185)
 
     def set_work_traffic(self, id, update=False):
         if self.select_data is None or self.last_id != id or update \
                 or self.calendarWidget.selectedDate().month() != self.select_data.month() or self.calendarWidget.selectedDate().year() != self.select_data.year():
             data = self.calendarWidget.selectedDate()
-            query = """SELECT staff_worker_traffic.Id, staff_worker_traffic.Position, staff_worker_traffic.Data, staff_worker_traffic.Table_Data
+            query = """SELECT staff_worker_traffic.Id, staff_worker_traffic.Position, staff_worker_traffic.Data, staff_worker_traffic.Table_Data, staff_worker_traffic.Note
                           FROM staff_worker_traffic LEFT JOIN staff_worker_info ON staff_worker_traffic.Worker_Id = staff_worker_info.Id
                           WHERE staff_worker_traffic.Worker_Id = %s AND staff_worker_traffic.Data >= %s AND staff_worker_traffic.Data <= %s
                           ORDER BY staff_worker_traffic.Data"""
@@ -150,6 +151,10 @@ class StaffTraffic(QDialog, staff_traffic):
                     new_table_item = QTableWidgetItem(tab_date)
                     new_table_item.setData(-2, data[0])
                     self.tw_traffic.setItem(self.tw_traffic.rowCount()-1, 2, new_table_item)
+
+                    new_table_item = QTableWidgetItem(data[4])
+                    new_table_item.setData(-2, data[0])
+                    self.tw_traffic.setItem(self.tw_traffic.rowCount()-1, 3, new_table_item)
 
     def ui_select_date(self):
         if self.le_worker.text():
@@ -256,13 +261,14 @@ class StaffTrafficData(QDialog, staff_traffic_data):
 
     def set_settings(self):
         if self.traffic_id:
-            query = """SELECT Position, Data, Table_Data FROM staff_worker_traffic WHERE Id = %s"""
+            query = """SELECT Position, Data, Table_Data, Note FROM staff_worker_traffic WHERE Id = %s"""
             sql_traffic = my_sql.sql_select(query, (self.traffic_id, ))
             if "mysql.connector.errors" in str(type(sql_traffic)):
                 QMessageBox.critical(self, "Ошибка sql получения записей", sql_traffic.msg, QMessageBox.Ok)
                 return False
             self.le_position.setText(str(sql_traffic[0][0]))
             self.dt_date.setDateTime(sql_traffic[0][1])
+            self.le_note.setText(sql_traffic[0][3])
             if sql_traffic[0][2]:
                 self.dt_tabel_date.setDateTime(sql_traffic[0][2])
             else:
@@ -286,16 +292,17 @@ class StaffTrafficData(QDialog, staff_traffic_data):
 
     def ui_acc(self):
         if self.traffic_id:
-            query = """UPDATE staff_worker_traffic SET Position = %s, Data = %s, Table_Data = %s, Worker_Id = %s WHERE Id = %s"""
-            sql_param = (self.le_position.text(), self.dt_date.dateTime().toPyDateTime(), self.dt_tabel_date.dateTime().toPyDateTime(), self.worker, self.traffic_id)
+            query = """UPDATE staff_worker_traffic SET Position = %s, Data = %s, Table_Data = %s, Worker_Id = %s, Note = %s WHERE Id = %s"""
+            sql_param = (self.le_position.text(), self.dt_date.dateTime().toPyDateTime(), self.dt_tabel_date.dateTime().toPyDateTime(), self.worker,
+                         self.le_note.text(), self.traffic_id)
             sql_traffic = my_sql.sql_change(query, sql_param)
             if "mysql.connector.errors" in str(type(sql_traffic)):
                 QMessageBox.critical(self, "Ошибка sql изменение записи", sql_traffic.msg, QMessageBox.Ok)
                 return False
             self.main.set_work_traffic(self.worker, True)
         else:
-            query = """INSERT INTO staff_worker_traffic (Position, Data, Table_Data, Worker_Id) VALUES (%s, %s, %s, %s)"""
-            sql_param = (self.le_position.text(), self.dt_date.dateTime().toPyDateTime(), self.dt_tabel_date.dateTime().toPyDateTime(), self.worker)
+            query = """INSERT INTO staff_worker_traffic (Position, Data, Table_Data, Worker_Id, Note) VALUES (%s, %s, %s, %s, %s)"""
+            sql_param = (self.le_position.text(), self.dt_date.dateTime().toPyDateTime(), self.dt_tabel_date.dateTime().toPyDateTime(), self.worker, self.le_note.text())
             sql_traffic = my_sql.sql_change(query, sql_param)
             if "mysql.connector.errors" in str(type(sql_traffic)):
                 QMessageBox.critical(self, "Ошибка sql лобавление записи", sql_traffic.msg, QMessageBox.Ok)
