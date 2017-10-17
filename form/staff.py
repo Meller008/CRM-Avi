@@ -31,9 +31,11 @@ class Staff(QMainWindow, staff_list_class):
         self.main = main
         self.dc_select = dc_select
         self.filter = None
-        self.query_table_all = """SELECT staff_worker_info.Id, Last_Name, First_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'),
+        self.query_table_all = """SELECT staff_worker_info.Id, Last_Name, First_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'), staff_worker_login.Login,
                                       `Leave`, Date_Leave, staff_position.Name, Date_Recruitment
-                                    FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id ORDER BY Last_Name"""
+                                    FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id
+                                      LEFT JOIN staff_worker_login ON staff_worker_info.Id = staff_worker_login.Worker_Info_Id
+                                    ORDER BY Last_Name"""
         self.query_table_select = self.query_table_all
 
         self.set_settings()
@@ -48,6 +50,7 @@ class Staff(QMainWindow, staff_list_class):
         dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
         self.toolBar.addWidget(dummy)
         self.toolBar.addWidget(self.le_fast_filter)
+
         self.access()
 
     def access(self):
@@ -62,7 +65,10 @@ class Staff(QMainWindow, staff_list_class):
                 elif item["value"] == "False":
                     val = False
                 else:
-                    val = item["value"]
+                    try:
+                        val = int(item["value"])
+                    except:
+                        val = item["value"]
                 a(val)
             else:
                 a()
@@ -90,6 +96,7 @@ class Staff(QMainWindow, staff_list_class):
         self.tw_workers.horizontalHeader().resizeSection(1, 150)
         self.tw_workers.horizontalHeader().resizeSection(2, 150)
         self.tw_workers.horizontalHeader().resizeSection(3, 80)
+        self.tw_workers.horizontalHeader().resizeSection(4, 60)
 
     def set_info(self):
         query = "SELECT Id, Name FROM staff_position"
@@ -116,7 +123,7 @@ class Staff(QMainWindow, staff_list_class):
         self.tw_workers.clearContents()
         self.tw_workers.setRowCount(len(self.staff_workers))
         for row in range(len(self.staff_workers)):
-            for column in range(4):
+            for column in range(5):
                 a = self.staff_workers[row][column]
                 item = QTableWidgetItem(str(a))
                 self.tw_workers.setItem(row, column, item)
@@ -179,9 +186,9 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][4] == 0 and self.staff_workers[row][7].month == self.to_date.month() and self.staff_workers[row][7].year == self.to_date.year():
+                if self.staff_workers[row][5] == 0 and self.staff_workers[row][8].month == self.to_date.month() and self.staff_workers[row][8].year == self.to_date.year():
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
-                    for column in range(4):
+                    for column in range(5):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
@@ -190,9 +197,9 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][4] == 1:
+                if self.staff_workers[row][5] == 1:
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
-                    for column in range(4):
+                    for column in range(5):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
@@ -201,9 +208,9 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][4] == 1 and self.staff_workers[row][5].year == self.to_date.year():
+                if self.staff_workers[row][5] == 1 and self.staff_workers[row][6].year == self.to_date.year():
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
-                    for column in range(4):
+                    for column in range(5):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
@@ -212,9 +219,9 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][4] == 1 and self.staff_workers[row][5].month == self.to_date.month() and self.staff_workers[row][5].year == self.to_date.year():
+                if self.staff_workers[row][5] == 1 and self.staff_workers[row][6].month == self.to_date.month() and self.staff_workers[row][6].year == self.to_date.year():
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
-                    for column in range(4):
+                    for column in range(5):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
@@ -223,9 +230,9 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][4] == 2:
+                if self.staff_workers[row][5] == 2:
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
-                    for column in range(4):
+                    for column in range(5):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
@@ -234,9 +241,9 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][4] == 0:
+                if self.staff_workers[row][5] == 0:
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
-                    for column in range(4):
+                    for column in range(5):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
@@ -245,9 +252,9 @@ class Staff(QMainWindow, staff_list_class):
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][6] == self.select_position and self.staff_workers[row][4] == 0:
+                if self.staff_workers[row][7] == self.select_position and self.staff_workers[row][5] == 0:
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
-                    for column in range(4):
+                    for column in range(5):
                         a = self.staff_workers[row][column]
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)

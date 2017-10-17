@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>777</width>
+    <width>799</width>
     <height>450</height>
    </rect>
   </property>
@@ -87,6 +87,11 @@
       <column>
        <property name="text">
         <string>Дата приема</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Логин</string>
        </property>
       </column>
      </widget>
