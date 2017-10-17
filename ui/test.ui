@@ -67,8 +67,8 @@
      <rect>
       <x>290</x>
       <y>10</y>
-      <width>256</width>
-      <height>192</height>
+      <width>331</width>
+      <height>211</height>
      </rect>
     </property>
     <property name="editTriggers">
@@ -100,6 +100,41 @@
     <row>
      <property name="text">
       <string>5</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Новая строка</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Новая строка</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Новая строка</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Новая строка</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Новая строка</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Новая строка</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Новая строка</string>
      </property>
     </row>
     <column>

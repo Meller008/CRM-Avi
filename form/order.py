@@ -439,6 +439,7 @@ class Order(QMainWindow, order_class):
         except:
             pass
 
+        self.tw_position.setCurrentItem(table_item)
         self.calc_sum()
         return True
 
