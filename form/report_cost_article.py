@@ -1,13 +1,10 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QDate, Qt
+from PyQt5.QtCore import Qt
 from form import article
-from function import my_sql, to_excel, table_to_html
-from classes import print_qt
-from decimal import Decimal
-import datetime
+from function import my_sql
 import re
 
 report_cost_article = loadUiType(getcwd() + '/ui/report_cost_article.ui')[0]

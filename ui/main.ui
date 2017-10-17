@@ -184,10 +184,17 @@
     <property name="title">
      <string>Отчеты</string>
     </property>
+    <widget class="QMenu" name="ma_sib_menu">
+     <property name="title">
+      <string>Себестоимость</string>
+     </property>
+     <addaction name="ma_sibest"/>
+     <addaction name="ma_report_cost_article"/>
+    </widget>
     <addaction name="ma_report_need_article_order"/>
     <addaction name="ma_report_supply"/>
-    <addaction name="ma_report_cost_article"/>
-    <addaction name="ma_sibest"/>
+    <addaction name="ma_rest_for_work"/>
+    <addaction name="ma_sib_menu"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -398,7 +405,12 @@
   </action>
   <action name="ma_sibest">
    <property name="text">
-    <string>Себестоймость</string>
+    <string>Покроеная себестоимость</string>
+   </property>
+  </action>
+  <action name="ma_rest_for_work">
+   <property name="text">
+    <string>Обрезь на работника</string>
    </property>
   </action>
  </widget>
@@ -1044,6 +1056,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_rest_for_work</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_rest_for_work()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1086,5 +1114,6 @@
   <slot>view_report_cost_article()</slot>
   <slot>view_test_window()</slot>
   <slot>view_report_sibestoimost()</slot>
+  <slot>view_report_rest_for_work()</slot>
  </slots>
 </ui>

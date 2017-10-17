@@ -6,7 +6,7 @@ from form import login_window, provider, comparing, staff, program_settings, not
     clients, operation, other, audit, warehouse_material, warehouse_accessories
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
     warehouse_rest, supply_material, supply_accessories, scan_pack, settings_access
-from form import report_supply, report_cost_article, test_window, report_sibestoimost
+from form import report_supply, report_cost_article, test_window, report_sibestoimost, report_rest_work
 from form import staff_traffic
 from form import report_order
 from classes.my_class import User
@@ -25,7 +25,7 @@ class MainWindow(QMainWindow, main_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.menu_3.setEnabled(False)
-        self.ma_sibest.setEnabled(False)
+        self.ma_sib_menu.setEnabled(False)
         self.menu_14.setEnabled(False)
 
         self.show()
@@ -361,6 +361,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_report_sibest)
         self.sub_report_sibest.resize(self.report_sibest.size())
         self.sub_report_sibest.show()
+
+    def view_report_rest_for_work(self):
+        self.report_rest_work = report_rest_work.ReportRestWork()
+        self.sub_report_rest_work = QMdiSubWindow()
+        self.sub_report_rest_work.setWidget(self.report_rest_work)
+        self.mdi.addSubWindow(self.sub_report_rest_work)
+        self.sub_report_rest_work.resize(self.report_rest_work.size())
+        self.sub_report_rest_work.show()
 
     def view_test_window(self):
         self.test_window = test_window.TestWindow()

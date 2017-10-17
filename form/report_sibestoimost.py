@@ -1,13 +1,11 @@
-from os import getcwd, path, mkdir, listdir
-from form.templates import tree
-from form import operation, supply_material, supply_accessories, print_label, article
+from os import getcwd
+from form import article
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem, QLineEdit, QWidget, QSizePolicy, QProgressDialog
-from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QProgressDialog
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QObject, QDate, QCoreApplication
-from function import my_sql, table_to_html
-from classes.my_class import User
-from classes import print_qt, cut
+from function import my_sql
+from classes import cut
 from decimal import Decimal
 
 sibest_class = loadUiType(getcwd() + '/ui/report_sibestoimost.ui')[0]
@@ -240,8 +238,6 @@ class ReportSibestoimost(QMainWindow, sibest_class):
             else:
                 item = QTableWidgetItem(str(round(sum(list) / len(list), 4)))
                 self.table_widget.setItem(1, col, item)
-
-
 
     def ui_view_art(self):
         self.but_name = QObject.sender(self).objectName()
