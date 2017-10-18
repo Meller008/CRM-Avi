@@ -178,6 +178,7 @@ class StaffTraffic(QDialog, staff_traffic):
 
         self.cut_passport = StaffTrafficData(self, int(self.le_worker.whatsThis()), id)
         self.cut_passport.setModal(True)
+        self.cut_passport.dt_date.setEnabled(False)
         self.cut_passport.show()
 
     def ui_set_date_month(self):
