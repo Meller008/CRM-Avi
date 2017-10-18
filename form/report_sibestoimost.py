@@ -1,12 +1,13 @@
 from os import getcwd
 from form import article
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QProgressDialog
+from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QProgressDialog, QFileDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QObject, QDate, QCoreApplication
 from function import my_sql
-from classes import cut
+from classes import cut, print_qt
 from decimal import Decimal
+from function import table_to_html, to_excel
 
 sibest_class = loadUiType(getcwd() + '/ui/report_sibestoimost.ui')[0]
 
@@ -246,6 +247,18 @@ class ReportSibestoimost(QMainWindow, sibest_class):
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 
+    def ui_print(self):
+        head = "Себестоймость %s (%s) %s %s-%s" % (self.le_art.text(), self.le_size.text(), self.le_param.text(),
+                                                   self.de_date_in.date().toString(Qt.ISODate), self.de_date_from.date().toString(Qt.ISODate))
+
+        html = table_to_html.tab_html(self.table_widget, table_head=head)
+        self.print_class = print_qt.PrintHtml(self, html)
+
+    def ui_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.table_widget, path[0])
+
     def calc_accessories_piece(self, accessories):
         sum = 0
         for item in accessories:
@@ -312,4 +325,3 @@ class ReportSibestoimost(QMainWindow, sibest_class):
 
         self.article_list.close()
         self.article_list.destroy()
-

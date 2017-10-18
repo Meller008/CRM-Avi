@@ -273,31 +273,8 @@
       <property name="spacing">
        <number>2</number>
       </property>
-      <item row="1" column="2">
-       <widget class="QLineEdit" name="le_param">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="5" rowspan="3">
-       <widget class="QPushButton" name="pushButton_7">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Расчитать</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLineEdit" name="le_art">
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="le_size">
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
@@ -316,41 +293,13 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="le_size">
+      <item row="1" column="0">
+       <widget class="QLineEdit" name="le_art">
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
         <property name="readOnly">
          <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,1">
-        <item>
-         <widget class="QPushButton" name="pb_size">
-          <property name="text">
-           <string>Выбрать арт + раз</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="text">
-           <string>Удалить</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Артикул</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -363,30 +312,6 @@
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
-      </item>
-      <item row="2" column="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,1">
-        <item>
-         <widget class="QPushButton" name="pb_parametr">
-          <property name="text">
-           <string>Выбрать арт + раз + пар</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_5">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Удалить</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
       <item row="0" column="3" rowspan="3">
        <widget class="QGroupBox" name="gb_date">
@@ -432,6 +357,24 @@
         </layout>
        </widget>
       </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,1">
+        <item>
+         <widget class="QPushButton" name="pb_size">
+          <property name="text">
+           <string>Выбрать арт + раз</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="text">
+           <string>Удалить</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="0" column="4">
        <widget class="QLabel" name="label_4">
         <property name="text">
@@ -439,6 +382,80 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,1">
+        <item>
+         <widget class="QPushButton" name="pb_parametr">
+          <property name="text">
+           <string>Выбрать арт + раз + пар</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_5">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Удалить</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="5" rowspan="3">
+       <widget class="QPushButton" name="pushButton_7">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Расчитать</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="le_param">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Артикул</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6" rowspan="3">
+       <widget class="QPushButton" name="pb_awg">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Расчет
+среднего</string>
         </property>
        </widget>
       </item>
@@ -485,22 +502,38 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="6" rowspan="3">
-       <widget class="QPushButton" name="pb_awg">
-        <property name="enabled">
-         <bool>false</bool>
+      <item row="0" column="7" rowspan="3">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>1</number>
         </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Расчет
-среднего</string>
-        </property>
-       </widget>
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Печать</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Экспорт</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -516,8 +549,8 @@
    <slot>ui_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1260</x>
-     <y>51</y>
+     <x>1181</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel">
      <x>1032</x>
@@ -548,7 +581,7 @@
    <slot>ui_view_art()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>565</x>
+     <x>521</x>
      <y>62</y>
     </hint>
     <hint type="destinationlabel">
@@ -564,7 +597,7 @@
    <slot>ui_view_art()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>906</x>
+     <x>836</x>
      <y>62</y>
     </hint>
     <hint type="destinationlabel">
@@ -580,12 +613,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>958</x>
-     <y>53</y>
+     <x>944</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
-     <x>955</x>
-     <y>25</y>
+     <x>945</x>
+     <y>36</y>
     </hint>
    </hints>
   </connection>
@@ -628,12 +661,44 @@
    <slot>ui_calc_awg()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1293</x>
-     <y>34</y>
+     <x>1258</x>
+     <y>36</y>
     </hint>
     <hint type="destinationlabel">
      <x>1442</x>
      <y>44</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1310</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1420</x>
+     <y>15</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_export()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1315</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1397</x>
+     <y>36</y>
     </hint>
    </hints>
   </connection>
@@ -642,5 +707,7 @@
   <slot>ui_calc()</slot>
   <slot>ui_view_art()</slot>
   <slot>ui_calc_awg()</slot>
+  <slot>ui_print()</slot>
+  <slot>ui_export()</slot>
  </slots>
 </ui>

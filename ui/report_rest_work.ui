@@ -80,6 +80,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="text">
+         <string>Печать</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="1" column="0">
@@ -206,8 +213,8 @@
    <slot>ui_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>8</y>
+     <x>369</x>
+     <y>10</y>
     </hint>
     <hint type="destinationlabel">
      <x>523</x>
@@ -231,9 +238,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>417</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
   <slot>ui_double_click()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>

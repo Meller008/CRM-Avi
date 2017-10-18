@@ -4,8 +4,8 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QObject, QDate, QCoreApplication
-from function import my_sql
-from classes import cut
+from function import my_sql, table_to_html
+from classes import cut, print_qt
 from decimal import Decimal
 
 rest_work_class = loadUiType(getcwd() + '/ui/report_rest_work.ui')[0]
@@ -42,6 +42,9 @@ class ReportRestWork(QMainWindow, rest_work_class):
         if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получение значение обрези", sql_info.msg, QMessageBox.Ok)
                 return False
+
+        self.tw_work.clearContents()
+        self.tw_work.setRowCount(0)
 
         if not sql_info:
             return False
@@ -83,6 +86,26 @@ class ReportRestWork(QMainWindow, rest_work_class):
 
         if not self.work.exec_():
             return False
+
+    def ui_print(self):
+        head = "Средняя обрезь %s-%s" % (self.de_date_from.date().toString(Qt.ISODate), self.de_date_to.date().toString(Qt.ISODate))
+
+        up_html = """
+          <table>
+          <tr>
+          <th>Минимальное</th><th>Среднее</th><th>Максимальное</th>
+          </tr>
+          <tr>
+          <td>#min#</td><td>#avg#</td><td>#max#</td>
+          </tr>
+          </table>"""
+
+        up_html = up_html.replace("#min#", str(self.le_min.text()))
+        up_html = up_html.replace("#avg#", str(self.le_awg.text()))
+        up_html = up_html.replace("#max#", str(self.le_max.text()))
+
+        html = table_to_html.tab_html(self.tw_work, table_head=head, up_template=up_html)
+        self.print_class = print_qt.PrintHtml(self, html)
 
 
 class RestOneWork(QDialog, rest_one_work_class):
