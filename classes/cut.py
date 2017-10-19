@@ -2466,6 +2466,10 @@ class Pack:
             else:
                 damage = self.__value_damage
             old_value = self.__value_all
+
+            if self.__value_pieces - damage <= 0:
+                return False
+
             self.__value_all = self.__value_pieces - damage
 
             # Вставим изменения в фурнитуру и операции если кол-ва равны
