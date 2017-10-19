@@ -1,5 +1,5 @@
 from os import getcwd
-from form import order, staff, print_label
+from form import order, staff, print_label, article
 from datetime import datetime, date
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton, QLineEdit, QWidget, QSizePolicy
@@ -618,6 +618,11 @@ class CutFilter(QDialog, cut_filter):
         self.worker_list.setWindowModality(Qt.ApplicationModal)
         self.worker_list.show()
 
+    def ui_view_article(self):
+        self.article_list = article.ArticleList(self, True)
+        self.article_list.setWindowModality(Qt.ApplicationModal)
+        self.article_list.show()
+
     def ui_del_material(self):
         self.le_material.setWhatsThis("")
         self.le_material.setText("")
@@ -625,6 +630,10 @@ class CutFilter(QDialog, cut_filter):
     def ui_del_worker(self):
         self.le_work.setWhatsThis("")
         self.le_work.setText("")
+
+    def ui_del_article(self):
+        self.le_art.setWhatsThis("")
+        self.le_art.setText("")
 
     def ui_acc(self):
         where = ""
@@ -640,6 +649,10 @@ class CutFilter(QDialog, cut_filter):
         # Блок  условий выбора закройщика
         if self.le_work.whatsThis() != '':
             where = self.add_filter(where, "(cut.Worker_Id = %s)" % self.le_work.whatsThis())
+
+        # Блок условий выбора артикула
+        if self.le_art.whatsThis() != '':
+            where = self.add_filter(where, "(pack.Article_Parametr_Id = %s)" % self.le_art.whatsThis())
 
         # Блок  условий даты коря
         if self.gb_date_cut.isChecked():
@@ -680,6 +693,14 @@ class CutFilter(QDialog, cut_filter):
     def of_list_worker(self, item):
         self.le_work.setWhatsThis(str(item[0]))
         self.le_work.setText(item[1])
+
+    def of_tree_select_article(self, article):
+        self.article_list.close()
+        self.article_list.destroy()
+
+        str_article = str(article["article"]) + " (" + str(article["size"]) + ") [" + str(article["parametr"]) + "]"
+        self.le_art.setWhatsThis(str(article["parametr_id"]))
+        self.le_art.setText(str_article)
 
 
 class CutPassport(QDialog, cut_print_passport):
