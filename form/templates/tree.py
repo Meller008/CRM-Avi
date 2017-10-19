@@ -18,13 +18,16 @@ class TreeList(QMainWindow, tree_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main_class
         self.dc_select = dc_select
+
+        self.select_item = open_id  # Переменная для открытия выбраного ID
+
         self.access()
         self.set_settings()
         self.set_table_header()
-        self.set_table_info()
         self.set_tree_info()
-        if open_id:
-            self.open_id(open_id)
+        self.set_table_info()
+        # if open_id:
+        #     self.open_id(self.select_item)
 
     def access(self):
         for item in User().access_list(self.__class__.__name__):
@@ -107,6 +110,9 @@ class TreeList(QMainWindow, tree_class):
                 self.ui_sorting(item)
         except:
             pass
+
+        if self.select_item:
+            self.open_id(self.select_item)
 
     def set_tree_info(self):  # заполняем девево
         self.tree = my_sql.sql_select(self.query_tree_select)

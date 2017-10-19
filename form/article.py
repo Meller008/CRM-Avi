@@ -102,6 +102,7 @@ class ArticleList(tree.TreeList):
                 QMessageBox.critical(self, "Ошибка ", "Выделите элемент который хотите изменить", QMessageBox.Ok)
                 return False
 
+        self.select_item = item_id
         self.new_operation = Article(self, item_id)
         self.new_operation.setWindowModality(QtCore.Qt.ApplicationModal)
         self.new_operation.show()

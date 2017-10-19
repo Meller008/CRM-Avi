@@ -70,6 +70,8 @@ class OperationList(tree.TreeList):
                 QMessageBox.critical(self, "Ошибка ", "Выделите элемент который хотите изменить", QMessageBox.Ok)
                 return False
 
+        self.select_item = item_id
+
         self.new_operation = Operation(self, item_id)
         self.new_operation.setModal(True)
         self.new_operation.show()
