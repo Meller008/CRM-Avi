@@ -26,8 +26,6 @@ class MainWindow(QMainWindow, main_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.menu_3.setEnabled(False)
-        self.ma_sib_menu.setEnabled(False)
-        self.menu_14.setEnabled(False)
 
         self.show()
         self.setDisabled(True)

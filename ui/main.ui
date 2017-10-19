@@ -113,6 +113,9 @@
      <addaction name="ma_staff_country"/>
     </widget>
     <widget class="QMenu" name="menu_14">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Посещаемость</string>
      </property>
@@ -181,10 +184,16 @@
     <addaction name="ma_warehouse_rest"/>
    </widget>
    <widget class="QMenu" name="menu_13">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="title">
      <string>Отчеты</string>
     </property>
     <widget class="QMenu" name="ma_sib_menu">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Себестоимость</string>
      </property>
@@ -375,6 +384,9 @@
    </property>
   </action>
   <action name="ma_report_need_article_order">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Недостающая продукция</string>
    </property>
@@ -390,6 +402,9 @@
    </property>
   </action>
   <action name="ma_report_supply">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Приходы материала</string>
    </property>
@@ -410,11 +425,17 @@
    </property>
   </action>
   <action name="ma_rest_for_work">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Обрезь на работника</string>
    </property>
   </action>
   <action name="ma_pack_accept">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Принятые пачки</string>
    </property>
