@@ -17,12 +17,12 @@ class PayList(table.TableList):
         self.filter = None
 
         self.setWindowTitle("Доплаты и вычеты")  # Имя окна
-        self.resize(900, 270)
+        self.resize(1030, 270)
         self.pb_copy.deleteLater()
         self.toolBar.setStyleSheet("background-color: rgb(255, 255, 255);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Швея", 115), ("Операция", 200), ("Крой", 35), ("Пачка", 45), ("Цена", 55), ("Кол-во", 50), ("Итого", 65),
+        self.table_header_name = (("Артикул", 120), ("Швея", 115), ("Операция", 200), ("Крой", 35), ("Пачка", 45), ("Цена", 55), ("Кол-во", 50), ("Итого", 65),
                                   ("Дата пошива", 85), ("Дата внесения", 110), ("Дата оплаты", 100))
 
         self.pb_add.deleteLater()
@@ -31,22 +31,30 @@ class PayList(table.TableList):
         self.pb_copy.deleteLater()
         self.pb_other.deleteLater()
 
-        self.query_table_all = """SELECT pack.Id, CONCAT(work.Last_Name, ' ', work.First_Name), pack_operation.Name, cut.Id, pack.Number, pack_operation.Price, pack_operation.Value,
+        self.query_table_all = """SELECT pack.Id, CONCAT(product_article.Article, ' ', product_article_size.Size, ' ', product_article_parametrs.Name),
+                                        CONCAT(work.Last_Name, ' ', work.First_Name), pack_operation.Name, cut.Id, pack.Number, pack_operation.Price, pack_operation.Value,
                                         pack_operation.Price* pack_operation.Value, DATE_FORMAT(pack_operation.Date_make, '%d.%m.%Y'),
                                         DATE_FORMAT(pack_operation.Date_Input, '%d.%m.%Y %H:%i:%S'), DATE_FORMAT(pack_operation.Date_Pay, '%d.%m.%Y')
                                       FROM pack_operation
                                         LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
                                         LEFT JOIN cut ON pack.Cut_Id = cut.Id
-                                        LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id"""
+                                        LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id
+                                        LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id"""
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT pack.Id, CONCAT(work.Last_Name, ' ', work.First_Name), pack_operation.Name, cut.Id, pack.Number, pack_operation.Price, pack_operation.Value,
+        self.query_table_select = """SELECT pack.Id, CONCAT(product_article.Article, ' ', product_article_size.Size, ' ', product_article_parametrs.Name),
+                                        CONCAT(work.Last_Name, ' ', work.First_Name), pack_operation.Name, cut.Id, pack.Number, pack_operation.Price, pack_operation.Value,
                                         pack_operation.Price* pack_operation.Value, DATE_FORMAT(pack_operation.Date_make, '%d.%m.%Y'),
                                         DATE_FORMAT(pack_operation.Date_Input, '%d.%m.%Y %H:%i:%S'), DATE_FORMAT(pack_operation.Date_Pay, '%d.%m.%Y')
                                       FROM pack_operation
                                         LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
                                         LEFT JOIN cut ON pack.Cut_Id = cut.Id
-                                        LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id"""
+                                        LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id
+                                        LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id"""
 
         self.query_table_dell = ""
 
