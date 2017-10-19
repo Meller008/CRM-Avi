@@ -154,6 +154,8 @@ class CutBrows(QDialog, cut_brows_class):
         self.cut = cut.Cut(cut_id)
         self.main = main
 
+        self.select_pack = None  # Переменная для сохранения Выбраной пачки и последующего его открытия
+
         self.set_start_info()
         self.set_size_table()
         self.access()
@@ -292,6 +294,8 @@ class CutBrows(QDialog, cut_brows_class):
             QMessageBox.information(self, "Ошибка", "Выберите пачку", QMessageBox.Ok)
             return False
 
+        self.select_pack = id
+
         self.pack_win = PackBrows(self, self.cut.pack(id))
         self.pack_win.setModal(True)
         self.pack_win.show()
@@ -321,6 +325,8 @@ class CutBrows(QDialog, cut_brows_class):
 
     def ui_double_click_pack(self, table_item):
         if self.cut.change_cut_weight():
+            self.select_pack = table_item.data(-2)
+
             self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)))
             self.pack_win.setModal(True)
             self.pack_win.show()
@@ -544,6 +550,10 @@ class CutBrows(QDialog, cut_brows_class):
                     new_table_item.setData(-2, pack_id)
                     new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 10, new_table_item)
+
+                    if pack.id() == self.select_pack:
+                        self.select_pack = None
+                        self.tw_pack.setCurrentItem(new_table_item)
 
                     row += 1
                     pack_number_table += 1
