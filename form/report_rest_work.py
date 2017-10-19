@@ -1,11 +1,10 @@
 from os import getcwd
-from form import article
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QDialog
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QObject, QDate, QCoreApplication
+from PyQt5.QtCore import Qt, QDate
 from function import my_sql, table_to_html
-from classes import cut, print_qt
+from classes import print_qt
 from decimal import Decimal
 
 rest_work_class = loadUiType(getcwd() + '/ui/report_rest_work.ui')[0]

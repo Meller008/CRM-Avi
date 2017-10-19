@@ -6,7 +6,8 @@ from form import login_window, provider, comparing, staff, program_settings, not
     clients, operation, other, audit, warehouse_material, warehouse_accessories
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
     warehouse_rest, supply_material, supply_accessories, scan_pack, settings_access
-from form import report_supply, report_cost_article, test_window, report_sibestoimost, report_rest_work
+from form import report_supply, report_cost_article, test_window, report_sibestoimost, report_rest_work,\
+    report_accept_pack
 from form import staff_traffic
 from form import report_order
 from classes.my_class import User
@@ -369,6 +370,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_report_rest_work)
         self.sub_report_rest_work.resize(self.report_rest_work.size())
         self.sub_report_rest_work.show()
+
+    def view_report_pack_accept(self):
+        self.report_pack_accept = report_accept_pack.ReportAcceptPack()
+        self.sub_report_pack_accept = QMdiSubWindow()
+        self.sub_report_pack_accept.setWidget(self.report_pack_accept)
+        self.mdi.addSubWindow(self.sub_report_pack_accept)
+        self.sub_report_pack_accept.resize(self.report_pack_accept.size())
+        self.sub_report_pack_accept.show()
 
     def view_test_window(self):
         self.test_window = test_window.TestWindow()

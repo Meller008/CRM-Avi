@@ -195,6 +195,7 @@
     <addaction name="ma_report_supply"/>
     <addaction name="ma_rest_for_work"/>
     <addaction name="ma_sib_menu"/>
+    <addaction name="ma_pack_accept"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -411,6 +412,11 @@
   <action name="ma_rest_for_work">
    <property name="text">
     <string>Обрезь на работника</string>
+   </property>
+  </action>
+  <action name="ma_pack_accept">
+   <property name="text">
+    <string>Принятые пачки</string>
    </property>
   </action>
  </widget>
@@ -1072,6 +1078,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_pack_accept</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_pack_accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1115,5 +1137,6 @@
   <slot>view_test_window()</slot>
   <slot>view_report_sibestoimost()</slot>
   <slot>view_report_rest_for_work()</slot>
+  <slot>view_report_pack_accept()</slot>
  </slots>
 </ui>
