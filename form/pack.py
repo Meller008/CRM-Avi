@@ -1,7 +1,7 @@
 from os import getcwd
 from form import staff, operation, order, supply_accessories
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QInputDialog
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QInputDialog, QListWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor, QRegExpValidator
 from PyQt5.QtCore import Qt, QDate, QRegExp
 import re
@@ -16,6 +16,7 @@ pack_class = loadUiType(getcwd() + '/ui/pack.ui')[0]
 pack_operation_class = loadUiType(getcwd() + '/ui/pack_operation.ui')[0]
 pack_accessories_class = loadUiType(getcwd() + '/ui/pack_accsessories.ui')[0]
 pack_add_material = loadUiType(getcwd() + '/ui/pack_add_material.ui')[0]
+pack_list = loadUiType(getcwd() + '/ui/pack_list_number.ui')[0]
 
 
 class PackBrows(QDialog, pack_class):
@@ -69,6 +70,8 @@ class PackBrows(QDialog, pack_class):
         if self.pack.id() is not None:
             # Пачка не новая
             self.insert_values_sql = True
+
+            self.pb_copy.hide()  # Скрыть кнопку копирования
 
             self.pack.take_accessories_pack()
             self.pack.take_operation_pack()
@@ -551,6 +554,34 @@ class PackBrows(QDialog, pack_class):
         self.print_label.setModal(True)
         self.print_label.show()
 
+    def ui_copy_pack(self):
+        self.pack_list_window = ListPackNumber(self.pack.number_cut())
+        self.pack_list_window.setModal(True)
+        self.pack_list_window.show()
+
+        id = self.pack_list_window.exec()
+
+        if id <= 0:
+            return False
+
+        self.pack.copy_pack(id)
+
+        self.le_article.setText(self.pack.article_name())
+        self.le_article.setWhatsThis(str(self.pack.article_id()))
+
+        self.le_size.setText(self.pack.size())
+
+        self.le_client.setText(self.pack.client_name())
+        self.le_client.setWhatsThis(str(self.pack.client()))
+
+        self.le_order.setText(str(self.pack.order()))
+        self.le_order.setWhatsThis(str(self.pack.order()))
+
+        self.le_note.setText(self.pack.note())
+
+        self.set_operation_name()
+        self.set_accessories_name()
+
     def set_operation_name(self):
         operation_list = self.pack.operations()
         self.tw_operation.clearContents()
@@ -980,3 +1011,35 @@ class PackAddMaterial(QDialog, pack_add_material):
     def of_list_material_name(self, item):
         self.le_material.setWhatsThis(str(item[0]))
         self.le_material.setText(item[1])
+
+
+class ListPackNumber(QDialog, pack_list):
+    def __init__(self, cut_id):
+        super(ListPackNumber, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+        self.cut_id = cut_id
+
+        self.start_sql()
+
+    def start_sql(self):
+        query = """SELECT pack.Id, CONCAT(pack.Number, ' ', product_article.Article, ' (', product_article_size.Size, ') [', product_article_parametrs.Name, ']')
+                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                        LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                      WHERE cut.Id = %s ORDER BY pack.Number"""
+        sql_info = my_sql.sql_select(query, (self.cut_id, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения пачек", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for pack in sql_info:
+            item = QListWidgetItem(pack[1])
+            item.setData(5, pack[0])
+            self.listWidget.addItem(item)
+
+    def ui_select(self, item):
+        self.done(int(item.data(5)))
+        self.close()
+        self.destroy()

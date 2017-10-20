@@ -2662,3 +2662,63 @@ class Pack:
             return sql_info[0][0]
         else:
             return None
+
+    def copy_pack(self, copy_id):
+        query = """SELECT pack.Article_Parametr_Id, pack.Order_Id,
+                                pack.Note, pack.Size, pack.Client_Id, clients.Name, product_article.Article,
+                                product_article_size.Size, product_article_parametrs.Name, product_article.Name,
+                                product_article_parametrs.Barcode, product_article.Id, product_article_parametrs.Id, product_article_parametrs.Product_Note,
+                                product_article_parametrs.Client_Name
+                              FROM pack
+                              LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                              LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                              LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                              LEFT JOIN clients ON pack.Client_Id = clients.Id
+                              WHERE pack.Id = %s"""
+        sql_info = my_sql.sql_select(query, (copy_id,))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            print("Не смог получить данные пачки")
+            return False
+
+        self.__article_parametr = sql_info[0][0]
+        self.__order = sql_info[0][1]
+        self.__note = sql_info[0][2]
+        self.__size = sql_info[0][3]
+        self.__client_id = sql_info[0][4]
+        self.__client_name = sql_info[0][5]
+        self.__article = sql_info[0][6]
+        self.__article_size = sql_info[0][7]
+        self.__article_parametr_name = sql_info[0][6] + " (" + sql_info[0][7] + ") [" + sql_info[0][8] + "]"
+        self.__article_name = sql_info[0][9]
+        self.__article_barcode = sql_info[0][10]
+        self.__article_id = sql_info[0][11]
+        self.__article_parametr_id = sql_info[0][12]
+        self.__note_article = sql_info[0][13]
+        self.__article_client_name = sql_info[0][14]
+
+        query = """SELECT pack_operation.Position, pack_operation.Operation_id, pack_operation.Name, pack_operation.Price
+                      FROM pack_operation
+                        LEFT JOIN staff_worker_info ON pack_operation.Worker_Id = staff_worker_info.Id
+                      WHERE pack_operation.Pack_Id = %s"""
+        sql_info = my_sql.sql_select(query, (copy_id,))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            raise RuntimeError("Не смог получить операции пачки")
+
+        self.__operation = []
+        for item in sql_info:
+            operation = {"id": self.__new_operation_count,
+                         "position": item[0],
+                         "operation_id": item[1],
+                         "name": item[2],
+                         "worker_id": None,
+                         "worker_name": None,
+                         "date_make": None,
+                         "date_input": None,
+                         "value": self.__value_all,
+                         "price": item[3],
+                         "pay": 0}
+            self.__save_operation_sql.append(self.__new_operation_count)
+            self.__new_operation_count -= 1
+            self.__operation.append(operation)
+
+        self.take_article_accessories()

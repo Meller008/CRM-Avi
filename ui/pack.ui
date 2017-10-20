@@ -621,7 +621,7 @@ border-color: rgb(170, 0, 0);
         </layout>
        </item>
        <item row="0" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0,1,10,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0,1,0,10,0,0">
          <property name="spacing">
           <number>6</number>
          </property>
@@ -667,6 +667,19 @@ border-color: rgb(170, 0, 0);
            </property>
            <property name="readOnly">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pb_copy">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Скопировать</string>
            </property>
           </widget>
          </item>
@@ -1879,6 +1892,22 @@ border-color: rgb(170, 0, 0);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_copy</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_copy_pack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>278</x>
+     <y>44</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>159</x>
+     <y>-37</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_edit_date_make()</slot>
@@ -1911,5 +1940,6 @@ border-color: rgb(170, 0, 0);
   <slot>ui_del_material()</slot>
   <slot>ui_edit_print_label()</slot>
   <slot>ui_add_value()</slot>
+  <slot>ui_copy_pack()</slot>
  </slots>
 </ui>
