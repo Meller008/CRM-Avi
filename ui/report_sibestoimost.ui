@@ -240,7 +240,7 @@
       </column>
       <column>
        <property name="text">
-        <string>+обрезь</string>
+        <string>+доп тк.</string>
        </property>
        <property name="foreground">
         <brush brushstyle="SolidPattern">
@@ -254,7 +254,7 @@
       </column>
       <column>
        <property name="text">
-        <string>+доп тк.</string>
+        <string>+обрезь</string>
        </property>
        <property name="foreground">
         <brush brushstyle="SolidPattern">

@@ -2108,8 +2108,8 @@ class Pack:
                             LEFT JOIN transaction_records_material ON transaction_records_material.Cut_Material_Id = cut.Id
                             LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
                             LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
-                          WHERE pack.Id = %s"""
-            sql_info = my_sql.sql_select(query, (self.__id,))
+                          WHERE pack.Id = %s AND material_supplyposition.Material_NameId = %s"""
+            sql_info = my_sql.sql_select(query, (self.__id, self.__material_id))
             if "mysql.connector.errors" in str(type(sql_info)):
                 print("Не смог получить цену ткани")
                 return False

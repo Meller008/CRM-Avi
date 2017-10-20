@@ -125,11 +125,16 @@ class ReportSibestoimost(QMainWindow, sibest_class):
                 operation_price_piece = self.calc_operation_piece(pack_class.operations())
                 percent_damage = pack_class.percent_damage()
                 rest_percent = cut_class.rest_percent()
+
                 material_add_rest_in_piece = round(weight_piece + (weight_piece / 100 * rest_percent), 4)
+
                 price_material_add_rest_in_piece = round(material_add_rest_in_piece * material_price, 4)
-                add_material_weight, add_material_price_sum = self.calc_add_material_piece_wight_price(pack_class.add_materials())
+                add_material_weight, add_material_weight_rest, add_material_price_sum = self.calc_add_material_piece_wight_price(pack_class.add_materials())
                 all_material_price_in_piece = round(price_material_add_rest_in_piece + Decimal(add_material_price_sum / value), 4)
-                all_material_weight_in_piece = round(material_add_rest_in_piece + Decimal(add_material_weight / value), 4)
+
+                weight_piece_and_add_material = weight_piece + Decimal(add_material_weight / value)
+                all_material_weight_in_piece = round(weight_piece_and_add_material + Decimal((add_material_weight + add_material_weight_rest) / value), 4)
+                all_material_weight_in_piece = round(weight_piece_and_add_material + Decimal(add_material_weight_rest / value) + Decimal(weight_piece / 100 * rest_percent), 4)
 
                 sebest = Decimal(operation_price_piece + accessories_price_piece + all_material_price_in_piece)
                 sebest_add_percent = round(sebest + (sebest / 100 * Decimal(self.le_add_percent.text())), 4)
@@ -212,11 +217,11 @@ class ReportSibestoimost(QMainWindow, sibest_class):
                 item = QTableWidgetItem(str(weight_piece))
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, 18, item)
 
-                # Вставляем сколько ткани в штуке + обрези
-                item = QTableWidgetItem(str(material_add_rest_in_piece))
+                # Вставляем сколько ткани в штуке + доп ткани без обрези доп ткани
+                item = QTableWidgetItem(str(weight_piece_and_add_material))
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, 19, item)
 
-                # Вставляем сколько ткани в штуке + обрези + доп ткани
+                # Вставляем сколько ткани в штуке + доп ткани + обрези + обрези доп ткани
                 item = QTableWidgetItem(str(all_material_weight_in_piece))
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, 20, item)
 
@@ -276,11 +281,13 @@ class ReportSibestoimost(QMainWindow, sibest_class):
     def calc_add_material_piece_wight_price(self, add_material):
         sum_price = 0
         sum_weight = 0
+        sum_weight_rest = 0
         for item in add_material:
-            sum_weight += item["weight"] + item["weight_rest"]
+            sum_weight += item["weight"]
+            sum_weight_rest += item["weight_rest"]
             sum_price += (item["weight"] + item["weight_rest"]) * item["price"]
 
-        return (round(sum_weight, 4), round(sum_price, 4))
+        return (round(sum_weight, 4), round(sum_weight_rest, 4) ,round(sum_price, 4))
 
     def build_sql_where(self):
         where = ""
