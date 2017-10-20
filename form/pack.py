@@ -1,7 +1,7 @@
 from os import getcwd
 from form import staff, operation, order, supply_accessories
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QInputDialog
 from PyQt5.QtGui import QIcon, QBrush, QColor, QRegExpValidator
 from PyQt5.QtCore import Qt, QDate, QRegExp
 import re
@@ -453,6 +453,18 @@ class PackBrows(QDialog, pack_class):
         self.le_calc_many_percent.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(price_all_many + (price_all_many * percent / 100), 4))))
 
         self.le_calc_damage.setText(re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(material_price * value_damage, 4))))
+
+    def ui_add_value(self):
+        dialog = QInputDialog.getInt(self, "Введите сумму", "Введите на сколько пачка больше!", 0, 0, 150)
+        if not dialog[1]:
+            return False
+
+        try:
+            old_value = int(self.le_value_product.text())
+            self.le_value_product.setText(str(old_value + dialog[0]))
+            self.ui_edit_value_product()
+        except:
+            pass
 
     def ui_acc(self):
         cut_id = None
