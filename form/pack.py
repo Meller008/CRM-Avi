@@ -209,7 +209,7 @@ class PackBrows(QDialog, pack_class):
         self.le_client.setWhatsThis("")
 
     def ui_view_list_article(self):
-        self.article_list = article.ArticleList(self, True)
+        self.article_list = article.ArticleList(self, True, self.pack.article_id())
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 

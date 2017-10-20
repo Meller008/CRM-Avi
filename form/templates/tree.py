@@ -113,6 +113,7 @@ class TreeList(QMainWindow, tree_class):
 
         if self.select_item:
             self.open_id(self.select_item)
+            self.select_item = None
 
     def set_tree_info(self):  # заполняем девево
         self.tree = my_sql.sql_select(self.query_tree_select)
