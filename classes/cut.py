@@ -923,7 +923,7 @@ class Pack:
                              "worker_name": None,
                              "date_make": None,
                              "date_input": None,
-                             "value": 0,
+                             "value": self.__value_all,
                              "price": item[3],
                              "pay": 0}
                 self.__save_operation_sql.append(self.__new_operation_count)
