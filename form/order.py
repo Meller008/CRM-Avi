@@ -2056,6 +2056,36 @@ class Order(QMainWindow, order_class):
         f.write(xml)
         f.close()
 
+    def of_word_act(self, price):
+        path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Word(*.doc)")
+        if not path[0]:
+            return False
+
+        f = open(getcwd() + '/templates/order/act.xml', "r", -1, "utf-8")
+        xml = f.read()
+        f.close()
+
+        query = "SELECT Full_Name, Legal_Address, INN, KPP FROM clients WHERE Id = %s"
+        sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        adres = "%s %s ИНН/КПП %s/%s" % (sql_info[0][0], sql_info[0][1], sql_info[0][2], sql_info[0][3])
+        nds_sum = round(price - (price * 100 / 118), 2)
+        nds_text = "%s рублей %s копеек" % (int(nds_sum // 1), str(round(nds_sum - int(nds_sum), 2))[2:])
+
+        xml = xml.replace("?НОМЕР", self.le_number_doc.text())
+        xml = xml.replace("?ДАТА", self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        xml = xml.replace("?АДРЕС", adres)
+        xml = xml.replace("?ЦЕНА", str(price))
+        xml = xml.replace("?НДС", str(nds_sum))
+        xml = xml.replace("?СНДС", nds_text)
+
+        f = open(path[0], "w", -1, "utf-8")
+        f.write(xml)
+        f.close()
+
 
 class OrderFilter(QDialog, order_filter):
     def __init__(self, main):
@@ -2295,6 +2325,8 @@ class OrderDocList(QDialog, order_doc):
             self.sw_main.setCurrentIndex(4)
         elif doc_name == "Реестр":
             self.sw_main.setCurrentIndex(0)
+        elif doc_name == "Акт доставки":
+            self.sw_main.setCurrentIndex(5)
 
     def ui_acc(self):
         if self.lw_main.selectedItems()[0].text() == "Накладная":
@@ -2389,6 +2421,15 @@ class OrderDocList(QDialog, order_doc):
 
         elif self.lw_main.selectedItems()[0].text() == "Реестр":
             self.main.of_word_reestr()
+            self.close()
+            self.destroy()
+
+        elif self.lw_main.selectedItems()[0].text() == "Акт доставки":
+            try:
+                price = float(self.le_act_price.text())
+            except:
+                return False
+            self.main.of_word_act(price)
             self.close()
             self.destroy()
 
