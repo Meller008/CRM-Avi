@@ -514,11 +514,12 @@ class Article(QMainWindow, article_class):
                                           QMessageBox.No)
             if result == 16384:
                 self.save_sql()
+                self.get_start_sql_info()
         try:
             self.select_parametr_id = self.cb_parametrs.currentData()
         except:
             self.select_parametr_id = False
-        self.get_start_sql_info()
+        # self.get_start_sql_info()
         self.set_size_parametr()
         if self.tab_widget.currentIndex() == 2 and self.cb_parametrs.currentText() and self.cb_size.currentText():
             self.view_file_label()
@@ -660,12 +661,13 @@ class Article(QMainWindow, article_class):
                                           QMessageBox.No)
             if result == 16384:
                 self.save_sql()
+                self.get_start_sql_info()
         try:
             self.select_parametr_id = self.cb_parametrs.currentData()
         except:
             self.select_parametr_id = False
         self.set_parametr_info()
-        self.get_start_sql_info()
+        # self.get_start_sql_info()
         if self.tab_widget.currentIndex() == 2 and self.cb_parametrs.currentText() and self.cb_size.currentText():
             self.view_file_label()
         self.save_change = []  # Переменная для запоминания изменений
