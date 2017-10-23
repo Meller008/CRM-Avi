@@ -858,6 +858,11 @@ class PackOperation(QDialog, pack_operation_class):
             self.operation["worker_name"] = self.le_worker.text()
             self.operation["date_make"] = self.de_make.date()
             self.operation["date_input"] = self.de_input.date()
+        else:
+            self.operation["worker_id"] = None
+            self.operation["worker_name"] = None
+            self.operation["date_make"] = None
+            self.operation["date_input"] = None
 
         if self.le_price.text() != "" and self.le_price.text() != "None":
             self.operation["price"] = float(self.le_price.text().replace(",", "."))
