@@ -174,6 +174,10 @@ class Article(QMainWindow, article_class):
         self.access_hidden_calc(True)
         self.access()
 
+        # Если выбираеться артикул то кнопка принять должны быть активна
+        if dc_select:
+            self.pb_acc.setEnabled(True)
+
     def access(self):
         for item in User().access_list(self.__class__.__name__):
             a = getattr(self, item["atr1"])
