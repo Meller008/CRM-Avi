@@ -1268,7 +1268,7 @@ class Order(QMainWindow, order_class):
 
             sheet.row_dimensions[row_ex].height = 23
 
-            if row_break == 25:
+            if row_break == 25 and len(product) > 16:
                 sheet.page_breaks.append(Break(row_ex))
                 list_all += 1
                 row_break = 0
@@ -1277,7 +1277,7 @@ class Order(QMainWindow, order_class):
             row_ex += 1
             num += 1
 
-        if row_break + 8 > 25:
+        if row_break + 9 > 25:
             sheet.page_breaks.append(Break(row_ex-4))
             list_all += 1
 
