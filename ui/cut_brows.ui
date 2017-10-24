@@ -314,6 +314,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QToolButton" name="toolButton_8">
+          <property name="text">
+           <string>Экспорт пачек</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QToolButton" name="toolButton_3">
           <property name="enabled">
            <bool>false</bool>
@@ -606,7 +613,7 @@
    <slot>ui_view_list_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>395</x>
+     <x>459</x>
      <y>50</y>
     </hint>
     <hint type="destinationlabel">
@@ -622,8 +629,8 @@
    <slot>ui_view_list_worker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>726</x>
-     <y>56</y>
+     <x>804</x>
+     <y>50</y>
     </hint>
     <hint type="destinationlabel">
      <x>655</x>
@@ -654,8 +661,8 @@
    <slot>ui_add_pack()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>35</x>
-     <y>169</y>
+     <x>39</x>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -687,7 +694,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>127</x>
-     <y>169</y>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -703,7 +710,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>184</x>
-     <y>169</y>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -734,7 +741,7 @@
    <slot>ui_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>646</x>
+     <x>724</x>
      <y>419</y>
     </hint>
     <hint type="destinationlabel">
@@ -750,7 +757,7 @@
    <slot>ui_can()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>696</x>
+     <x>805</x>
      <y>419</y>
     </hint>
     <hint type="destinationlabel">
@@ -766,8 +773,8 @@
    <slot>ui_fast_filter()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>727</x>
-     <y>171</y>
+     <x>805</x>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>686</x>
@@ -782,8 +789,8 @@
    <slot>ui_fast_filter()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>678</x>
-     <y>171</y>
+     <x>762</x>
+     <y>153</y>
     </hint>
     <hint type="destinationlabel">
      <x>568</x>
@@ -798,8 +805,8 @@
    <slot>ui_print_passport()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>312</x>
-     <y>171</y>
+     <x>295</x>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>245</x>
@@ -814,8 +821,8 @@
    <slot>ui_print_cut()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>495</x>
-     <y>171</y>
+     <x>455</x>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>700</x>
@@ -830,8 +837,8 @@
    <slot>ui_print_label()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>407</x>
-     <y>171</y>
+     <x>378</x>
+     <y>152</y>
     </hint>
     <hint type="destinationlabel">
      <x>377</x>
@@ -852,6 +859,22 @@
     <hint type="destinationlabel">
      <x>-97</x>
      <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_8</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_export_pack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>503</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>928</x>
+     <y>106</y>
     </hint>
    </hints>
   </connection>
@@ -877,5 +900,6 @@
   <slot>ui_print_cut()</slot>
   <slot>ui_print_label()</slot>
   <slot>ui_edit_print()</slot>
+  <slot>ui_export_pack()</slot>
  </slots>
 </ui>

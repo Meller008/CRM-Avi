@@ -2,13 +2,13 @@ from os import getcwd
 from form import order, staff, print_label, article
 from datetime import datetime, date
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton, QLineEdit, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton, QLineEdit, QWidget, QSizePolicy, QFileDialog
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QObject
 from form.supply_material import MaterialName
 from form.pack import PackBrows
 import re
-from function import my_sql, barcode, files, table_to_html
+from function import my_sql, barcode, files, table_to_html, to_excel
 from classes import cut, print_qt
 from classes.my_class import User
 from form.templates import table
@@ -379,6 +379,11 @@ class CutBrows(QDialog, cut_brows_class):
         self.label_list = LabelList(self, self.cut)
         self.label_list.setModal(True)
         self.label_list.show()
+
+    def ui_export_pack(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tw_pack, path[0])
 
     def ui_fast_filter(self):
         if self.le_pack_number_filter.text():
