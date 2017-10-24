@@ -3,7 +3,7 @@ from form import article
 from form.pack import PackBrows
 from form.order import Order
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql
@@ -42,6 +42,9 @@ class Warehouse(article.ArticleList):
                                       FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
                                         LEFT JOIN product_article_warehouse ON product_article_parametrs.Id = product_article_warehouse.Id_Article_Parametr"""
+
+        self.query_table_all = self.query_table_select
+
         self.query_transfer_item = ""
         self.query_table_dell = ""
 
@@ -64,6 +67,16 @@ class Warehouse(article.ArticleList):
         self.pb_table_transfer.deleteLater()
         self.pb_table_double.deleteLater()
         self.pb_table_filter.deleteLater()
+
+        # Быстрый фильтр
+        self.le_fast_filter = QLineEdit()
+        self.le_fast_filter.setPlaceholderText("Артикул")
+        self.le_fast_filter.setMaximumWidth(150)
+        self.le_fast_filter.editingFinished.connect(self.fast_filter)
+        dummy = QWidget()
+        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        self.toolBar.addWidget(dummy)
+        self.toolBar.addWidget(self.le_fast_filter)
 
         self.pb_other.setText("Корректировка склада")
 
@@ -93,6 +106,16 @@ class Warehouse(article.ArticleList):
         self.warehouse_change = WarehouseChange(self, item_id, item_name)
         self.warehouse_change.setModal(True)
         self.warehouse_change.show()
+
+    def fast_filter(self):
+        # Блок условий артикула
+        if self.le_fast_filter.text() != '':
+            q_filter = " WHERE (product_article.Article LIKE '%s')" % ("%" + self.le_fast_filter.text() + "%", )
+            self.query_table_select = self.query_table_all + q_filter
+        else:
+            self.query_table_select = self.query_table_all
+
+        self.ui_update_table()
 
 
 class WarehouseChange(QDialog, warehouse_change):
