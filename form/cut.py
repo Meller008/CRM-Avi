@@ -814,7 +814,7 @@ class CutPassport(QDialog, cut_print_passport):
                             <td style="width: 60px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#size#</strong></td>
                             <td style="width: 60px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#cut#</strong></td>
                             <td style="width: 60px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#pack#</strong></td>
-                            <td style="width: 160px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;" rowspan="3"><strong><img src="#pac_barcode_src#" alt="lorem" width="150" height="70" /></strong></td>
+                            <td style="width: 160px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;" rowspan="3"><strong><img src="#pac_barcode_src#" alt="lorem" width="200" height="90" /></strong></td>
                             <td style="width: 130px; height: 10px; font-size: 18pt; text-align: center; vertical-align: middle;"><strong>#data#</strong></td>
                             </tr>
                             <tr>
