@@ -211,14 +211,14 @@ class CutBrows(QDialog, cut_brows_class):
         self.tw_pack.horizontalHeader().resizeSection(0, 25)
         self.tw_pack.horizontalHeader().resizeSection(1, 65)
         self.tw_pack.horizontalHeader().resizeSection(2, 35)
-        self.tw_pack.horizontalHeader().resizeSection(3, 145)
+        self.tw_pack.horizontalHeader().resizeSection(3, 90)
         self.tw_pack.horizontalHeader().resizeSection(4, 85)
         self.tw_pack.horizontalHeader().resizeSection(5, 35)
         self.tw_pack.horizontalHeader().resizeSection(6, 35)
         self.tw_pack.horizontalHeader().resizeSection(7, 55)
         self.tw_pack.horizontalHeader().resizeSection(8, 65)
         self.tw_pack.horizontalHeader().resizeSection(9, 65)
-        self.tw_pack.horizontalHeader().resizeSection(10, 165)
+        self.tw_pack.horizontalHeader().resizeSection(10, 200)
 
     def ui_edit_date_cut(self):
         if not self.insert_values_sql:
@@ -514,7 +514,7 @@ class CutBrows(QDialog, cut_brows_class):
                     new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 2, new_table_item)
 
-                    new_table_item = QTableWidgetItem(str(pack.parametr_name()))
+                    new_table_item = QTableWidgetItem(str(pack.parametr()))
                     new_table_item.setData(-2, pack_id)
                     new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 3, new_table_item)

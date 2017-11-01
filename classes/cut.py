@@ -888,7 +888,7 @@ class Pack:
         self.__material_id = sql_info[0][14]
         self.__article = sql_info[0][15]
         self.__article_size = sql_info[0][16]
-        self.__article_parametr_name = sql_info[0][15] + " (" + sql_info[0][16] + ") [" + sql_info[0][17] + "]"
+        self.__article_parametr_name = sql_info[0][17]
         self.__cut_date = sql_info[0][18]
         self.__article_name = sql_info[0][19]
         self.__article_barcode = sql_info[0][20]
@@ -2072,6 +2072,9 @@ class Pack:
         return self.__size
 
     def parametr_name(self):
+        return self.__article + " (" + self.__article_size + ") [" + self.__article_parametr_name + "]"
+
+    def parametr(self):
         return self.__article_parametr_name
 
     def parametr_id(self):

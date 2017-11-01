@@ -459,7 +459,7 @@
         </column>
         <column>
          <property name="text">
-          <string>Имя</string>
+          <string>Параметр</string>
          </property>
         </column>
         <column>
