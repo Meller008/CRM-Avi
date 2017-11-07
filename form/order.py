@@ -1277,7 +1277,7 @@ class Order(QMainWindow, order_class):
             row_ex += 1
             num += 1
 
-        if row_break + 9 > 25:
+        if row_break + 7 > 25:
             sheet.page_breaks.append(Break(row_ex-4))
             list_all += 1
 
