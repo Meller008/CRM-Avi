@@ -70,7 +70,7 @@
      <x>0</x>
      <y>0</y>
      <width>1414</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -205,6 +205,7 @@
     <addaction name="ma_rest_for_work"/>
     <addaction name="ma_sib_menu"/>
     <addaction name="ma_pack_accept"/>
+    <addaction name="ma_report_material_consumption"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -438,6 +439,14 @@
    </property>
    <property name="text">
     <string>Принятые пачки</string>
+   </property>
+  </action>
+  <action name="ma_report_material_consumption">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Расход материала</string>
    </property>
   </action>
  </widget>
@@ -1115,6 +1124,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_material_consumption</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_material_consumption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1159,5 +1184,6 @@
   <slot>view_report_sibestoimost()</slot>
   <slot>view_report_rest_for_work()</slot>
   <slot>view_report_pack_accept()</slot>
+  <slot>view_report_material_consumption()</slot>
  </slots>
 </ui>
