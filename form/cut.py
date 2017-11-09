@@ -895,7 +895,7 @@ class CutPassport(QDialog, cut_print_passport):
 
             barcode.generate(cod[-1])
             html = pack_html
-            html = html.replace("#art#", str(pack.article_name()))
+            html = html.replace("#art#", str(pack.parametr_name()))
             html = html.replace("#size#", str(pack.size()))
             html = html.replace("#cut#", str(pack.number_cut()))
             html = html.replace("#pack#", str(pack.number_pack()))

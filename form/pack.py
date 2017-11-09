@@ -524,7 +524,7 @@ class PackBrows(QDialog, pack_class):
         barcode.generate(cod)
 
         html = codecs.open(getcwd() + "/templates/pack/passport.html", encoding='utf-8').read()
-        html = html.replace("#art#", str(self.pack.article_name()))
+        html = html.replace("#art#", str(self.pack.parametr_name()))
         html = html.replace("#size#", str(self.pack.size()))
         html = html.replace("#cut#", str(self.pack.number_cut()))
         html = html.replace("#pack#", str(self.pack.number_pack()))
