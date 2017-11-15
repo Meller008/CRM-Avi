@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
+    <width>535</width>
     <height>637</height>
    </rect>
   </property>
@@ -136,7 +136,7 @@
           <property name="font">
            <font>
             <family>Tahoma</family>
-            <pointsize>9</pointsize>
+            <pointsize>8</pointsize>
            </font>
           </property>
           <property name="editTriggers">
@@ -189,7 +189,7 @@
           <property name="font">
            <font>
             <family>Tahoma</family>
-            <pointsize>9</pointsize>
+            <pointsize>8</pointsize>
            </font>
           </property>
           <property name="editTriggers">
@@ -233,7 +233,7 @@
        <attribute name="title">
         <string>Фурнитура</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
+       <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,5,2">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -254,38 +254,10 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>По</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Дата с</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="5">
            <widget class="QPushButton" name="pushButton_2">
             <property name="text">
              <string>Расчитать</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QDateEdit" name="dateEdit_3">
-            <property name="calendarPopup">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QDateEdit" name="dateEdit_4">
-            <property name="calendarPopup">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -302,10 +274,161 @@
             </property>
            </spacer>
           </item>
+          <item row="1" column="5">
+           <widget class="QPushButton" name="pushButton_6">
+            <property name="text">
+             <string>Подробно</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QPushButton" name="pushButton_7">
+            <property name="text">
+             <string>Печать</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QPushButton" name="pushButton_8">
+            <property name="text">
+             <string>Экспорт</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" rowspan="2">
+           <widget class="QDateEdit" name="de_accessories_to">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" rowspan="2">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>По</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="2">
+           <widget class="QDateEdit" name="de_accessories_from">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="2">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Дата с</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item row="1" column="0">
-         <widget class="QTableWidget" name="tw_accessories"/>
+         <widget class="QTableWidget" name="tw_accessories">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="tabKeyNavigation">
+           <bool>true</bool>
+          </property>
+          <property name="showDropIndicator" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="dragDropOverwriteMode">
+           <bool>true</bool>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderDefaultSectionSize">
+           <number>20</number>
+          </attribute>
+          <attribute name="verticalHeaderMinimumSectionSize">
+           <number>18</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Фурнитура</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Приход кол-во</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Приход руб</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Расход кол-во</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Расход руб</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QTableWidget" name="tw_accesories_info">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderDefaultSectionSize">
+           <number>20</number>
+          </attribute>
+          <attribute name="verticalHeaderMinimumSectionSize">
+           <number>18</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Название</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Расход кол-во</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Расход руб</string>
+           </property>
+          </column>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -323,11 +446,11 @@
    <slot>ui_calc_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>471</x>
-     <y>57</y>
+     <x>446</x>
+     <y>45</y>
     </hint>
     <hint type="destinationlabel">
-     <x>558</x>
+     <x>534</x>
      <y>45</y>
     </hint>
    </hints>
@@ -344,7 +467,39 @@
     </hint>
     <hint type="destinationlabel">
      <x>427</x>
-     <y>-56</y>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>390</x>
+     <y>38</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>391</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_accessories_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>419</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>414</x>
+     <y>-46</y>
     </hint>
    </hints>
   </connection>
@@ -352,5 +507,7 @@
  <slots>
   <slot>ui_calc_material()</slot>
   <slot>ui_calc_material_info()</slot>
+  <slot>ui_calc_accessories()</slot>
+  <slot>ui_calc_accessories_info()</slot>
  </slots>
 </ui>
