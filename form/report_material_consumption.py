@@ -25,6 +25,8 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
         self.de_material_to.setDate(QDate.currentDate())
         self.de_accessories_from.setDate(QDate.currentDate().addMonths(-1))
         self.de_accessories_to.setDate(QDate.currentDate())
+        self.de_comparing_from.setDate(QDate.currentDate().addMonths(-1))
+        self.de_comparing_to.setDate(QDate.currentDate())
 
         self.tw_material.horizontalHeader().resizeSection(0, 150)
         self.tw_material.horizontalHeader().resizeSection(1, 70)
@@ -45,6 +47,10 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
         self.tw_accesories_info.horizontalHeader().resizeSection(0, 90)
         self.tw_accesories_info.horizontalHeader().resizeSection(1, 80)
         self.tw_accesories_info.horizontalHeader().resizeSection(2, 80)
+
+        self.tw_comparing.horizontalHeader().resizeSection(0, 150)
+        self.tw_comparing.horizontalHeader().resizeSection(1, 70)
+        self.tw_comparing.horizontalHeader().resizeSection(2, 80)
 
     def ui_calc_material(self):
         # Расчет общего расхода ткани
@@ -399,3 +405,51 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
         text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sql_info[1], 2)))
         item = QTableWidgetItem(text)
         self.tw_accesories_info.setItem(self.tw_accesories_info.rowCount() - 1, 2, item)
+
+    def ui_calc_comparing(self):
+        # Расчет прочих затрат
+        self.tw_comparing.clearContents()
+        self.tw_comparing.setRowCount(0)
+
+        filter_date = (self.de_comparing_from.date().toString(Qt.ISODate), self.de_comparing_to.date().toString(Qt.ISODate))
+
+        query = """SELECT comparing_name.Name, SUM(comparing_supplyposition.Value), SUM(comparing_supplyposition.Value * comparing_supplyposition.Price)
+                    FROM comparing_supplyposition LEFT JOIN material_supply ON comparing_supplyposition.Material_SupplyId = material_supply.Id
+                      LEFT JOIN accessories_supply ON comparing_supplyposition.Accessories_SupplyId = accessories_supply.Id
+                      LEFT JOIN comparing_name ON comparing_supplyposition.Comparing_NameId = comparing_name.Id
+                      WHERE (material_supply.Data >= %s AND material_supply.Data <= %s) OR (accessories_supply.Data >= %s AND accessories_supply.Data <= %s)
+                      GROUP BY comparing_name.Id"""
+        sql_info = my_sql.sql_select(query, filter_date*2)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения прочих расходоа", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        self.tw_comparing.insertRow(self.tw_comparing.rowCount())
+
+        all_value = 0
+        all_sum = 0
+        for i in sql_info:
+            self.tw_comparing.insertRow(self.tw_comparing.rowCount())
+
+            item = QTableWidgetItem(str(i[0]))
+            self.tw_comparing.setItem(self.tw_comparing.rowCount() - 1, 0, item)
+
+            all_value += i[1]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(i[1], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_comparing.setItem(self.tw_comparing.rowCount() - 1, 1, item)
+
+            all_sum += i[2]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(i[2], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_comparing.setItem(self.tw_comparing.rowCount() - 1, 2, item)
+
+        self.tw_comparing.insertRow(self.tw_comparing.rowCount())
+
+        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_value, 2)))
+        item = QTableWidgetItem(text)
+        self.tw_comparing.setItem(self.tw_comparing.rowCount() - 1, 1, item)
+
+        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
+        item = QTableWidgetItem(text)
+        self.tw_comparing.setItem(self.tw_comparing.rowCount() - 1, 2, item)

@@ -432,6 +432,140 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Прочие расходы</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="6">
+           <widget class="QPushButton" name="pushButton_10">
+            <property name="text">
+             <string>Печать</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QPushButton" name="pushButton_11">
+            <property name="text">
+             <string>Экспорт</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <widget class="QPushButton" name="pushButton_9">
+            <property name="text">
+             <string>Расчитать</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Дата С</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDateEdit" name="de_comparing_from">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>По</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QDateEdit" name="de_comparing_to">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTableWidget" name="tw_comparing">
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderDefaultSectionSize">
+           <number>20</number>
+          </attribute>
+          <attribute name="verticalHeaderMinimumSectionSize">
+           <number>18</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Расход</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Сколько шт</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Сколько руб</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -503,11 +637,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_9</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_comparing()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>342</x>
+     <y>42</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>-87</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc_material()</slot>
   <slot>ui_calc_material_info()</slot>
   <slot>ui_calc_accessories()</slot>
   <slot>ui_calc_accessories_info()</slot>
+  <slot>ui_calc_comparing()</slot>
  </slots>
 </ui>
