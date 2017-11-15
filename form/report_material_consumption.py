@@ -279,6 +279,12 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
         item = QTableWidgetItem(text)
         self.tw_material_info.setItem(self.tw_material_info.rowCount() - 1, 2, item)
 
+    def ui_print_material(self):
+        head = "Расход ткани с %s По %s" % (self.de_material_from.date().toString("dd.MM.yyyy"), self.de_material_to.date().toString("dd.MM.yyyy"))
+        html = table_to_html.tab_html(self.tw_material, table_head=head)
+        html += table_to_html.tab_html(self.tw_material_info, table_head="Подробно")
+        self.print_class = print_qt.PrintHtml(self, html)
+
     def ui_calc_accessories(self):
         # Расчет общего расхода Фурнитуры
         query = """SELECT accessories_name.Id, accessories_name.Name, SUM(accessories_supplyposition.Value), 
@@ -406,6 +412,12 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
         item = QTableWidgetItem(text)
         self.tw_accesories_info.setItem(self.tw_accesories_info.rowCount() - 1, 2, item)
 
+    def ui_print_accessories(self):
+        head = "Расход фурнитуры с %s По %s" % (self.de_accessories_from.date().toString("dd.MM.yyyy"), self.de_accessories_to.date().toString("dd.MM.yyyy"))
+        html = table_to_html.tab_html(self.tw_accessories, table_head=head)
+        html += table_to_html.tab_html(self.tw_accesories_info, table_head="Подробно")
+        self.print_class = print_qt.PrintHtml(self, html)
+
     def ui_calc_comparing(self):
         # Расчет прочих затрат
         self.tw_comparing.clearContents()
@@ -453,3 +465,8 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
         text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
         item = QTableWidgetItem(text)
         self.tw_comparing.setItem(self.tw_comparing.rowCount() - 1, 2, item)
+
+    def ui_print_comparing(self):
+        head = "Прочие расходы с %s По %s" % (self.de_comparing_from.date().toString("dd.MM.yyyy"), self.de_comparing_to.date().toString("dd.MM.yyyy"))
+        html = table_to_html.tab_html(self.tw_comparing, table_head=head)
+        self.print_class = print_qt.PrintHtml(self, html)

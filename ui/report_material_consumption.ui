@@ -653,6 +653,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>484</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>484</x>
+     <y>-88</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_7</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>499</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>514</x>
+     <y>-27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_10</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print_comparing()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>34</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>-44</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc_material()</slot>
@@ -660,5 +708,8 @@
   <slot>ui_calc_accessories()</slot>
   <slot>ui_calc_accessories_info()</slot>
   <slot>ui_calc_comparing()</slot>
+  <slot>ui_print_material()</slot>
+  <slot>ui_print_accessories()</slot>
+  <slot>ui_print_comparing()</slot>
  </slots>
 </ui>
