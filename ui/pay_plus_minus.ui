@@ -138,7 +138,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_reason_plus"/>
+          <widget class="QLineEdit" name="le_reason_plus">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_2">
@@ -155,7 +159,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_work_plus"/>
+          <widget class="QLineEdit" name="le_work_plus">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton">
@@ -271,7 +279,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_work_minus"/>
+          <widget class="QLineEdit" name="le_work_minus">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_4">
@@ -288,7 +300,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_reason_minus"/>
+          <widget class="QLineEdit" name="le_reason_minus">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_3">
@@ -483,7 +499,11 @@
        <item row="1" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
-          <widget class="QLineEdit" name="le_road_reason"/>
+          <widget class="QLineEdit" name="le_road_reason">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_9">
@@ -561,7 +581,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_p_m_worker_minus"/>
+          <widget class="QLineEdit" name="le_p_m_worker_minus">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_5">
@@ -623,7 +647,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_p_m_reason_minus"/>
+          <widget class="QLineEdit" name="le_p_m_reason_minus">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_6">
@@ -653,7 +681,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_p_m_reason_plus"/>
+          <widget class="QLineEdit" name="le_p_m_reason_plus">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_8">
@@ -670,7 +702,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_p_m_worker_plus"/>
+          <widget class="QLineEdit" name="le_p_m_worker_plus">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_7">
@@ -745,7 +781,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_work_bye"/>
+          <widget class="QLineEdit" name="le_work_bye">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_13">
@@ -762,7 +802,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_material_name"/>
+          <widget class="QLineEdit" name="le_material_name">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_14">
@@ -786,7 +830,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="le_reason_bye"/>
+          <widget class="QLineEdit" name="le_reason_bye">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_12">
