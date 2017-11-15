@@ -1,12 +1,11 @@
 from os import getcwd
 import re
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QProgressDialog, QFileDialog
+from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QObject, QDate, QCoreApplication
+from PyQt5.QtCore import Qt, QDate
 from function import my_sql
-from classes import cut, print_qt
-from decimal import Decimal
+from classes import print_qt
 from function import table_to_html, to_excel
 
 material_consumption_class = loadUiType(getcwd() + '/ui/report_material_consumption.ui')[0]

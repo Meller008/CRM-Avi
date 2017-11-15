@@ -33,6 +33,7 @@ class PackBrows(QDialog, pack_class):
 
         self.insert_values_sql = False
         self.access_save_sql = True
+        self.reminder_make = False  # Переменная которая сообщает нужно ли выкинуть предупреждение о непринятой пачке
 
         # Прячем рвсчетную часть пачки (Открываем доступами) self.frame_calc.show()
         self.frame_calc.hide()
@@ -60,6 +61,10 @@ class PackBrows(QDialog, pack_class):
 
     def access_save(self, bool):
         self.access_save_sql = bool
+
+    # Функция включает предупреждение о забытии отметки о принятии пачки
+    def reminder_make_pack(self):
+        self.reminder_make = True
 
     def set_start_info(self):
         self.le_value_product.setValidator(QRegExpValidator(QRegExp("[0-9]{0,3}"), self))
@@ -470,6 +475,9 @@ class PackBrows(QDialog, pack_class):
             pass
 
     def ui_acc(self):
+        if self.check_make():
+            return False
+
         cut_id = None
         if self.pack.id() is None:
             cut_id = self.main.of_cut_id()
@@ -485,6 +493,9 @@ class PackBrows(QDialog, pack_class):
         self.destroy()
 
     def ui_can(self):
+        if self.check_make():
+            return False
+
         if self.pack.need_save_sql() and self.access_save_sql:
             result = QMessageBox.question(self, "Выйти?", "Есть несохраненая информация.\nТочно выйти без сохранения?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
@@ -758,6 +769,13 @@ class PackBrows(QDialog, pack_class):
 
     def set_value_pack(self):
         self.le_value_all.setText(str(self.pack.value_all()))
+
+    def check_make(self):
+        if self.reminder_make and not self.cb_date_make.isChecked():
+            QMessageBox.question(self, "Выйти?", "Вы не приняли пачку!\nНе забудьте про галочку!", QMessageBox.Ok)
+            self.reminder_make = False
+            return True
+        return False
 
     def of_tree_select_article(self, article):
         self.article_list.close()
