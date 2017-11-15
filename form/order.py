@@ -1432,7 +1432,8 @@ class Order(QMainWindow, order_class):
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                 return False
-            base = "Идентификатор государственного контракта, договора (соглашения): Договор поставки № " + str(sql_info[0][1]) + " от " + sql_info[0][2].strftime("%d.%m.%Y")
+            base = "Идентификатор государственного контракта, договора (соглашения) (при наличии): Договор поставки № " + str(sql_info[0][1]) + \
+                   " от " + sql_info[0][2].strftime("%d.%m.%Y")
             sheet["A14"] = base
 
             base = "№ поставщика: %s, № заказа: %s" % (str(sql_info[0][0]), self.le_number_order.text())
@@ -1555,7 +1556,8 @@ class Order(QMainWindow, order_class):
             sheet["A%s" % row_ex] = position["name"]
             sheet["A%s" % row_ex].font = font_7
             sheet["A%s" % row_ex].alignment = Alignment(wrapText=True)
-            sheet["E%s" % row_ex] = position["cod"]
+            sheet["E%s" % row_ex] = "-"
+            sheet["E%s" % row_ex].alignment = alg_center
             sheet["F%s" % row_ex] = "796"
             sheet["G%s" % row_ex] = "Шт."
             sheet["H%s" % row_ex] = position["value"]
