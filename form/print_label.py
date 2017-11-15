@@ -2,7 +2,7 @@ from os import getcwd, path, mkdir, listdir
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QListWidgetItem
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QDate
+from PyQt5.QtCore import QDate, QDateTime, Qt
 from function import my_sql
 import socket
 
@@ -135,6 +135,9 @@ class LabelSettings(QDialog, label_settings):
 
         conn.send(bytes(str(self.label_data), encoding='utf-8'))
         conn.send(b"data_ok")
+
+        print(QDateTime.currentDateTime().toString(Qt.ISODate))
+        print(self.label_data)
 
         # Если есть ID пачки то отправим информацию в БД что пачка напечатана!
         if self.label_data["pack_id"] != "None":
