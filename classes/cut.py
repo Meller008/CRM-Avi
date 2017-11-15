@@ -29,7 +29,7 @@ class Cut:
 
         self.__save_sql_info = False
 
-        self.__change_cut_weight = True
+        self.__change_cut_weight = True  # Показывает можно ли менять вес ткани в этом крое
         self.__error_value_material = False
         if id_сut is not None:
             self.take_sql_info(int(id_сut))
@@ -346,7 +346,7 @@ class Cut:
             # Смотрим записаную сумму списаний
             query = """SELECT SUM(transaction_records_material.Balance)
                           FROM transaction_records_material
-                          WHERE transaction_records_material.Cut_Material_Id = %s"""
+                          WHERE transaction_records_material.Cut_Material_Id = %s AND transaction_records_material.Note NOT LIKE '%доп. тк%'"""
             sql_info = my_sql.sql_select(query, (self.__id, ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 return [False, "Не смог получить сумму списаний ткани (изменение ткани)"]
@@ -380,7 +380,7 @@ class Cut:
                           FROM transaction_records_material
                             LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
                             LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
-                          WHERE transaction_records_material.Cut_Material_Id = %s
+                          WHERE transaction_records_material.Cut_Material_Id = %s AND transaction_records_material.Note NOT LIKE '%доп. тк%'
                           GROUP BY transaction_records_material.Supply_Balance_Id"""
             sql_info = my_sql.sql_select(query, (self.__id, ))
             if "mysql.connector.errors" in str(type(sql_info)):
@@ -396,7 +396,7 @@ class Cut:
             sql_connect_transaction = my_sql.sql_start_transaction()
             for transaction_id_all in transaction_list:
                 if transaction_id_all[0] != 0 and transaction_id_all[2] != self.__material_id:
-                    # возвращаем фурнитуру на баланс склада
+                    # возвращаем ткань на баланс склада
                     query = "UPDATE material_balance SET BalanceWeight = BalanceWeight + %s WHERE Id = %s"
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (-transaction_id_all[0], transaction_id_all[1]))
                     if "mysql.connector.errors" in str(type(sql_info)):
@@ -455,7 +455,7 @@ class Cut:
             query = """UPDATE cut
                           SET Material_Id = %s
                           WHERE Id = %s"""
-            sql_info = sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__material_id, self.__id))
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__material_id, self.__id))
             if "mysql.connector.errors" in str(type(sql_info)):
                 return [False, "Не смог изменить вид ткани в крое (изменение ткани)"]
 
@@ -466,7 +466,7 @@ class Cut:
             query = """UPDATE cut
                               SET Material_Id = %s
                           WHERE Id = %s"""
-            sql_info = sql_info = my_sql.sql_change(query, (self.__material_id, self.__id))
+            sql_info = my_sql.sql_change(query, (self.__material_id, self.__id))
             if "mysql.connector.errors" in str(type(sql_info)):
                 return [False, "Не смог изменить вид ткани в крое (изменение ткани)"]
 
@@ -687,7 +687,7 @@ class Cut:
 
             if self.__pack_id_dict or self.__weight_rest_old > 0:
                 self.__change_cut_weight = False
-                self.__error_value_material = True
+                # self.__error_value_material = True  Не знаю зачем я менял эту переменную!
 
             query = """SELECT Price
                         FROM material_name

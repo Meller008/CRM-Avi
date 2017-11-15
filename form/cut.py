@@ -233,9 +233,9 @@ class CutBrows(QDialog, cut_brows_class):
                 self.bu_pack_add.setEnabled(False)
                 self.bu_pack_change.setEnabled(False)
                 self.bu_pack_del.setEnabled(False)
-
                 self.le_weight_rest_cut.setText(str(self.cut.weight_rest_old()))
                 self.le_weight_rest_cut.setReadOnly(True)
+
                 self.le_weight_rest_cut.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
                 self.le_weight_rest_cut.setToolTip("При смене материала нельзя менять вес обрези!\n Изменения не сохранятся!")
             else:
