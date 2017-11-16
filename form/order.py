@@ -1380,7 +1380,7 @@ class Order(QMainWindow, order_class):
 
         book.save(path[0])
 
-    def of_ex_invoice(self, article, addres, unite, manager_name):
+    def of_ex_invoice(self, article, addres, unite):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1558,22 +1558,24 @@ class Order(QMainWindow, order_class):
             sheet["A%s" % row_ex].alignment = Alignment(wrapText=True)
             sheet["E%s" % row_ex] = "-"
             sheet["E%s" % row_ex].alignment = alg_center
-            sheet["F%s" % row_ex] = "796"
-            sheet["G%s" % row_ex] = "Шт."
-            sheet["H%s" % row_ex] = position["value"]
-            sheet["I%s" % row_ex] = moneyfmt.moneyfmt(position["price_no_nds"])
-            sheet["I%s" % row_ex].alignment = alg_right
-            sheet["J%s" % row_ex] = moneyfmt.moneyfmt(position["sum_no_nds"])
+            sheet["F%s" % row_ex] = position["cod"]
+
+            sheet["G%s" % row_ex] = "796"
+            sheet["H%s" % row_ex] = "Шт."
+            sheet["I%s" % row_ex] = position["value"]
+            sheet["J%s" % row_ex] = moneyfmt.moneyfmt(position["price_no_nds"])
             sheet["J%s" % row_ex].alignment = alg_right
-            sheet["K%s" % row_ex] = "без акциза"
-            sheet["K%s" % row_ex].font = font_7
-            sheet["L%s" % row_ex] = position["nds"]
-            sheet["M%s" % row_ex] = moneyfmt.moneyfmt(position["nds_sum"])
-            sheet["M%s" % row_ex].alignment = alg_right
-            sheet["N%s" % row_ex] = moneyfmt.moneyfmt(position["sum"])
+            sheet["K%s" % row_ex] = moneyfmt.moneyfmt(position["sum_no_nds"])
+            sheet["K%s" % row_ex].alignment = alg_right
+            sheet["L%s" % row_ex] = "без акциза"
+            sheet["L%s" % row_ex].font = font_7
+            sheet["M%s" % row_ex] = position["nds"]
+            sheet["N%s" % row_ex] = moneyfmt.moneyfmt(position["nds_sum"])
             sheet["N%s" % row_ex].alignment = alg_right
-            sheet["P%s" % row_ex] = "РФ"
-            sheet["P%s" % row_ex].alignment = alg_center
+            sheet["O%s" % row_ex] = moneyfmt.moneyfmt(position["sum"])
+            sheet["O%s" % row_ex].alignment = alg_right
+            sheet["Q%s" % row_ex] = "РФ"
+            sheet["Q%s" % row_ex].alignment = alg_center
 
             all_no_nds += position["sum_no_nds"]
             all_nds += round(position["nds_sum"], 2)
@@ -1594,33 +1596,30 @@ class Order(QMainWindow, order_class):
             list_all += 1
 
         # Формируем границы таблицы
-        for row in sheet.iter_rows(min_row=17, max_col=17, max_row=row_ex-1):
+        for row in sheet.iter_rows(min_row=17, max_col=18, max_row=row_ex-1):
             for cell in row:
                 cell.border = border_all
 
         # Запишем итог
-        sheet.merge_cells("A%s:H%s" % (row_ex, row_ex))
+        sheet.merge_cells("A%s:J%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "ВСЕГО К ОПЛАТЕ"
-        sheet["J%s" % row_ex] = moneyfmt.moneyfmt(all_no_nds)
-        sheet["J%s" % row_ex].alignment = alg_right
-        sheet["K%s" % row_ex] = "X"
-        sheet["K%s" % row_ex].alignment = alg_center
+        sheet["K%s" % row_ex] = moneyfmt.moneyfmt(all_no_nds)
+        sheet["K%s" % row_ex].alignment = alg_right
         sheet["L%s" % row_ex] = "X"
         sheet["L%s" % row_ex].alignment = alg_center
-        sheet["M%s" % row_ex] = moneyfmt.moneyfmt(all_nds)
-        sheet["M%s" % row_ex].alignment = alg_right
-        sheet["N%s" % row_ex] = moneyfmt.moneyfmt(all_sum)
+        sheet["M%s" % row_ex] = "X"
+        sheet["M%s" % row_ex].alignment = alg_center
+        sheet["N%s" % row_ex] = moneyfmt.moneyfmt(all_nds)
         sheet["N%s" % row_ex].alignment = alg_right
-        for row in sheet.iter_rows(min_row=row_ex, max_col=14):
+        sheet["O%s" % row_ex] = moneyfmt.moneyfmt(all_sum)
+        sheet["O%s" % row_ex].alignment = alg_right
+        for row in sheet.iter_rows(min_row=row_ex, max_col=15):
             for cell in row:
                 cell.border = border_all
 
         row_ex += 2
 
         sheet2 = book['низ']
-
-        # Вставляем имя менеджера
-        sheet2['H4'] = manager_name
 
         for row in sheet2.iter_rows(min_row=1, max_col=16, max_row=7):
             for cell in row:
@@ -2382,8 +2381,7 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            manager_name = self.cb_manager_name_2.currentText()
-            self.main.of_ex_invoice(article, addres, unite, manager_name)
+            self.main.of_ex_invoice(article, addres, unite)
             self.close()
             self.destroy()
 
