@@ -685,7 +685,6 @@ class CutFilter(QDialog, cut_filter):
 
     def ui_can(self):
         self.close()
-        self.destroy()
 
     def add_filter(self, where, add, and_add=True):
         if where:

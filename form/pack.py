@@ -1,7 +1,7 @@
 from os import getcwd
 from form import staff, operation, order, supply_accessories
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QInputDialog, QListWidgetItem
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QInputDialog, QListWidgetItem, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QBrush, QColor, QRegExpValidator
 from PyQt5.QtCore import Qt, QDate, QRegExp
 import re
@@ -11,12 +11,101 @@ from classes import cut, print_qt
 from form import clients, article, print_label, supply_material
 from function import barcode, files, my_sql
 from classes.my_class import User
+from form.templates import table
 
 pack_class = loadUiType(getcwd() + '/ui/pack.ui')[0]
 pack_operation_class = loadUiType(getcwd() + '/ui/pack_operation.ui')[0]
 pack_accessories_class = loadUiType(getcwd() + '/ui/pack_accsessories.ui')[0]
 pack_add_material = loadUiType(getcwd() + '/ui/pack_add_material.ui')[0]
 pack_list = loadUiType(getcwd() + '/ui/pack_list_number.ui')[0]
+pack_filter = loadUiType(getcwd() + '/ui/pack_filter.ui')[0]
+
+
+class PackList(table.TableList):
+    def set_settings(self):
+
+        self.setWindowTitle("Пачки")  # Имя окна
+        self.resize(900, 500)
+        self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
+        self.pb_add.deleteLater()
+        self.pb_dell.deleteLater()
+        self.toolBar.setStyleSheet("background-color: rgb(170, 0, 0);")  # Цвет бара
+
+        # Названия колонк (Имя, Длинна)
+        self.table_header_name = (("ID", 35), ("Крой", 60), ("Пачка", 60), ("Дата", 70), ("Артикул", 150), ("Ткань", 130), ("Штук", 60), ("Брак", 60), ("Вес", 70),
+                                  ("Дата приемки", 70), ("Дата проверки", 70))
+
+        # Быстрый фильтр
+        self.le_fast_filter = QLineEdit()
+        self.le_fast_filter.setPlaceholderText("id пачки")
+        self.le_fast_filter.setMaximumWidth(150)
+        self.le_fast_filter.editingFinished.connect(self.fast_filter)
+        dummy = QWidget()
+        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        self.toolBar.addWidget(dummy)
+        self.toolBar.addWidget(self.le_fast_filter)
+
+        self.filter = None
+        self.query_table_all = """SELECT pack.Id, pack.Id, pack.Cut_Id, pack.Number, cut.Date_Cut,
+                                        CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name,']'), material_name.Name, pack.Value_Pieces,
+                                        pack.Value_Damage, pack.Weight, pack.Date_Make, pack.Date_Coplete
+                                      FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                                        LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                                        LEFT JOIN material_name ON cut.Material_Id = material_name.Id"""
+
+        #  нулевой элемент должен быть ID
+        self.query_table_select = """SELECT pack.Id, pack.Id, pack.Cut_Id, pack.Number, cut.Date_Cut,
+                                        CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name,']'), material_name.Name, pack.Value_Pieces,
+                                        pack.Value_Damage, pack.Weight, pack.Date_Make, pack.Date_Coplete
+                                      FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                                        LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                                        LEFT JOIN material_name ON cut.Material_Id = material_name.Id"""
+
+        self.query_table_dell = ""
+
+    def ui_change_table_item(self, id=False):  # изменить элемент
+        if id:
+            item_id = id
+        else:
+            try:
+                item_id = self.table_widget.selectedItems()[0].data(5)
+            except:
+                QMessageBox.critical(self, "Ошибка ", "Выделите элемент который хотите изменить", QMessageBox.Ok)
+                return False
+
+        self.cut_window = PackBrows(self, pack_id=item_id)
+        self.cut_window.setModal(True)
+        self.cut_window.show()
+
+    def ui_filter(self):
+        if self.filter is None:
+            self.filter = PackFilter(self)
+            self.filter.start_settings()
+        self.filter.of_set_sql_query(self.query_table_all)
+        self.filter.setWindowModality(Qt.ApplicationModal)
+        self.filter.show()
+
+    def fast_filter(self):
+        # Блок условий id пачки
+        if self.le_fast_filter.text() != '':
+            q_filter = " WHERE (pack.Id = %s)" % self.le_fast_filter.text()
+            self.query_table_select = self.query_table_all + " " + q_filter
+        else:
+            self.query_table_select = self.query_table_all
+
+        self.ui_update()
+
+    def of_set_filter(self, sql):
+        self.query_table_select = sql
+        self.ui_update()
+
+    def of_save_pack_complete(self):
+        self.ui_update()
 
 
 class PackBrows(QDialog, pack_class):
@@ -75,6 +164,7 @@ class PackBrows(QDialog, pack_class):
         if self.pack.id() is not None:
             # Пачка не новая
             self.insert_values_sql = True
+            self.pb_article.setEnabled(False)
 
             self.pb_copy.hide()  # Скрыть кнопку копирования
 
@@ -1066,3 +1156,161 @@ class ListPackNumber(QDialog, pack_list):
         self.done(int(item.data(5)))
         self.close()
         self.destroy()
+
+
+class PackFilter(QDialog, pack_filter):
+    def __init__(self, main):
+        super(PackFilter, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+
+    def start_settings(self):
+        self.de_date_cut_from.setDate(QDate.currentDate())
+        self.de_date_cut_to.setDate(QDate.currentDate())
+        self.de_date_make_from.setDate(QDate.currentDate())
+        self.de_date_make_to.setDate(QDate.currentDate())
+        self.de_date_complete_from.setDate(QDate.currentDate())
+        self.de_date_complete_to.setDate(QDate.currentDate())
+
+    def ui_view_article(self):
+        self.article_list = article.ArticleList(self, True)
+        self.article_list.setWindowModality(Qt.ApplicationModal)
+        self.article_list.show()
+
+    def ui_view_client(self):
+        self.client_list = clients.ClientList(self, True)
+        self.client_list.setWindowModality(Qt.ApplicationModal)
+        self.client_list.show()
+
+    def ui_view_order(self):
+        self.order_list = order.OrderList(self, True)
+        self.order_list.setWindowModality(Qt.ApplicationModal)
+        self.order_list.show()
+
+    def ui_view_material(self):
+        self.material_name = supply_material.MaterialName(self, True)
+        self.material_name.setWindowModality(Qt.ApplicationModal)
+        self.material_name.show()
+
+    def ui_acc(self):
+        where = ""
+
+        # Блок условий ID пачки
+        if self.le_id_pack.text() != '':
+            where = self.add_filter(where, "(pack.Id = %s)" % self.le_id_pack.text())
+
+        # Блок  условий номера кроя
+        if self.le_cut_num.text() != '':
+            where = self.add_filter(where, "(pack.Cut_Id = %s)" % self.le_cut_num.text())
+
+        # Блок  условий выбора номера пачки
+        if self.le_pack_num.text() != '':
+            where = self.add_filter(where, "(pack.Number = %s)" % self.le_pack_num.text())
+
+        # Блок условий выбора артикула
+        if self.gb_article.isChecked() and self.le_art.text() != "":
+            if self.rb_art.isChecked():
+                where = self.add_filter(where, "(product_article.Id = %s)" % self.rb_art.whatsThis())
+            elif self.rb_size.isChecked():
+                where = self.add_filter(where, "(product_article_size.Id = %s)" % self.rb_size.whatsThis())
+            elif self.rb_parametr.isChecked():
+                where = self.add_filter(where, "(product_article_parametrs.Id = %s)" % self.rb_parametr.whatsThis())
+
+        # Блок  условий выбора клиента
+        if self.le_client.text() != "":
+            where = self.add_filter(where, "(pack.Client_Id = %s)" % self.le_client.whatsThis())
+
+        # Блок  условий выбора закза
+        if self.le_order.text() != "":
+            where = self.add_filter(where, "(pack.Order_Id = %s)" % self.le_order.whatsThis())
+
+        # Блок  условий выбора ткани
+        if self.le_material.text() != "":
+            where = self.add_filter(where, "(cut.Material_Id = %s)" % self.le_material.whatsThis())
+
+        # блок условий выбора веса
+        if self.le_weight_from.text() != "" and self.le_weight_to != "":
+            where = self.add_filter(where, "(pack.Weight BETWEEN %s AND %s)" % (self.le_weight_from.text(), self.le_weight_to.text()))
+
+        # Блок условий выбора колва
+        if self.le_value_from.text() != "" and self.le_value_to != "":
+            where = self.add_filter(where, "(pack.Value_Pieces BETWEEN %s AND %s)" % (self.le_value_from.text(), self.le_value_to.text()))
+
+        # Блок условий выбора брака
+        if self.le_damag_from.text() != "" and self.le_damag_to != "":
+            where = self.add_filter(where, "(pack.Weight BETWEEN %s AND %s)" % (self.le_damag_from.text(), self.le_damag_to.text()))
+
+        # Блок  условий даты коря
+        if self.gb_date_cut.isChecked():
+            sql_date = "(cut.Date_Cut >= '%s' AND cut.Date_Cut <= '%s')" % \
+                       (self.de_date_cut_from.date().toString(Qt.ISODate), self.de_date_cut_to.date().toString(Qt.ISODate))
+            where = self.add_filter(where, sql_date)
+
+        # Блок условий даты приемки
+        if self.gb_make.isChecked():
+            if self.cb_make.isChecked():
+                where = self.add_filter(where, "(pack.Date_Make IS NULL)")
+            else:
+                sql_date = "(pack.Date_Make >= '%s' AND pack.Date_Make <= '%s')" % \
+                           (self.de_date_make_from.date().toString(Qt.ISODate), self.de_date_make_to.date().toString(Qt.ISODate))
+                where = self.add_filter(where, sql_date)
+
+        # Блок условий даты проверки
+        if self.gb_complete.isChecked():
+            if self.cb_complete.isChecked():
+                where = self.add_filter(where, "(pack.Date_Coplete IS NULL)")
+            else:
+                sql_date = "(pack.Date_Coplete >= '%s' AND pack.Date_Copletee <= '%s')" % \
+                           (self.de_date_complete_from.date().toString(Qt.ISODate), self.de_date_complete_to.date().toString(Qt.ISODate))
+                where = self.add_filter(where, sql_date)
+
+        # Делаем замену так как Were должно быть перед Group by
+        if where:
+            self.sql_query_all = self.sql_query_all + " WHERE " + where
+
+        self.main.of_set_filter(self.sql_query_all)
+
+        self.close()
+
+    def ui_can(self):
+        self.close()
+
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where
+
+    def of_tree_select_article(self, article):
+        self.article_list.close()
+        self.article_list.destroy()
+
+        str_article = str(article["article"]) + " (" + str(article["size"]) + ") [" + str(article["parametr"]) + "]"
+        self.le_art.setWhatsThis(str(article["parametr_id"]))
+        self.le_art.setText(str_article)
+
+        self.rb_art.setWhatsThis(str(article["article_id"]))
+        self.rb_size.setWhatsThis(str(article["size_id"]))
+        self.rb_parametr.setWhatsThis(str(article["parametr_id"]))
+
+    def of_list_clients(self, client):
+        self.le_client.setText(client[1])
+        self.le_client.setWhatsThis(str(client[0]))
+
+    def of_tree_select_order(self, order):
+        self.le_order.setText(str(order[0]))
+        self.le_order.setWhatsThis(str(order[1]))
+
+    def of_list_material_name(self, item):
+        self.le_material.setWhatsThis(str(item[0]))
+        self.le_material.setText(item[1])
+
+    def of_set_sql_query(self, sql):
+        self.sql_query_all = sql

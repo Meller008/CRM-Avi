@@ -7,7 +7,7 @@ from form import login_window, provider, comparing, staff, program_settings, not
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
     warehouse_rest, supply_material, supply_accessories, scan_pack, settings_access
 from form import report_supply, report_cost_article, test_window, report_sibestoimost, report_rest_work,\
-    report_accept_pack
+    report_accept_pack, pack
 from form import staff_traffic, report_material_consumption
 from form import report_order
 from classes.my_class import User
@@ -30,8 +30,8 @@ class MainWindow(QMainWindow, main_class):
         self.show()
         self.setDisabled(True)
 
-        self.login = login_window.LoginWindow(self)
-        # self.admin_login()
+        # self.login = login_window.LoginWindow(self)
+        self.admin_login()
 
     def access(self):
         for item in User().access_list(self.__class__.__name__):
@@ -216,6 +216,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_cut_list)
         self.sub_cut_list.resize(self.cut_list.size())
         self.sub_cut_list.show()
+
+    def view_pack_list(self):
+        self.pack_list = pack.PackList()
+        self.sub_pack_list = QMdiSubWindow()
+        self.sub_pack_list.setWidget(self.pack_list)
+        self.mdi.addSubWindow(self.sub_pack_list)
+        self.sub_pack_list.resize(self.pack_list.size())
+        self.sub_pack_list.show()
 
     def view_pay_plus_minus(self):
         self.pay_plus_minus = pay.PayList()

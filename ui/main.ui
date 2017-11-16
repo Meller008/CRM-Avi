@@ -70,7 +70,7 @@
      <x>0</x>
      <y>0</y>
      <width>1414</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -151,6 +151,7 @@
     </property>
     <addaction name="ma_cut_list"/>
     <addaction name="ma_cut_mission_list"/>
+    <addaction name="ma_pack"/>
    </widget>
    <widget class="QMenu" name="menu_9">
     <property name="title">
@@ -447,6 +448,11 @@
    </property>
    <property name="text">
     <string>Расход материала</string>
+   </property>
+  </action>
+  <action name="ma_pack">
+   <property name="text">
+    <string>Пачки</string>
    </property>
   </action>
  </widget>
@@ -1140,6 +1146,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_pack</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_pack_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1185,5 +1207,6 @@
   <slot>view_report_rest_for_work()</slot>
   <slot>view_report_pack_accept()</slot>
   <slot>view_report_material_consumption()</slot>
+  <slot>view_pack_list()</slot>
  </slots>
 </ui>

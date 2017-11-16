@@ -785,7 +785,7 @@ border-color: rgb(170, 0, 0);
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton">
+          <widget class="QToolButton" name="pb_article">
            <property name="text">
             <string>...</string>
            </property>
@@ -1381,7 +1381,7 @@ border-color: rgb(170, 0, 0);
  <resources/>
  <connections>
   <connection>
-   <sender>toolButton</sender>
+   <sender>pb_article</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
    <slot>ui_view_list_article()</slot>
