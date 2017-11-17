@@ -33,9 +33,9 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
         self.tw_material.horizontalHeader().resizeSection(3, 70)
         self.tw_material.horizontalHeader().resizeSection(4, 80)
 
-        self.tw_material_info.horizontalHeader().resizeSection(0, 90)
-        self.tw_material_info.horizontalHeader().resizeSection(1, 80)
-        self.tw_material_info.horizontalHeader().resizeSection(2, 80)
+        self.tw_material_info.horizontalHeader().resizeSection(0, 100)
+        self.tw_material_info.horizontalHeader().resizeSection(1, 90)
+        self.tw_material_info.horizontalHeader().resizeSection(2, 90)
 
         self.tw_accessories.horizontalHeader().resizeSection(0, 150)
         self.tw_accessories.horizontalHeader().resizeSection(1, 85)
@@ -43,9 +43,9 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
         self.tw_accessories.horizontalHeader().resizeSection(3, 85)
         self.tw_accessories.horizontalHeader().resizeSection(4, 80)
 
-        self.tw_accesories_info.horizontalHeader().resizeSection(0, 90)
-        self.tw_accesories_info.horizontalHeader().resizeSection(1, 80)
-        self.tw_accesories_info.horizontalHeader().resizeSection(2, 80)
+        self.tw_accesories_info.horizontalHeader().resizeSection(0, 100)
+        self.tw_accesories_info.horizontalHeader().resizeSection(1, 90)
+        self.tw_accesories_info.horizontalHeader().resizeSection(2, 90)
 
         self.tw_comparing.horizontalHeader().resizeSection(0, 150)
         self.tw_comparing.horizontalHeader().resizeSection(1, 70)
@@ -70,10 +70,11 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                       LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                         LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
                         LEFT JOIN material_name ON material_supplyposition.Material_NameId = material_name.Id
-                      WHERE transaction_records_material.Note NOT LIKE 'Заказ %'
-                        AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= %s
+                      WHERE transaction_records_material.Cut_Material_Id IN (SELECT cut.Id FROM cut WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)
+                          OR transaction_records_material.Beika_Id IN (SELECT beika.Id FROM beika WHERE Date >= %s AND Date <= %s)
+                          OR (transaction_records_material.Note LIKE 'Продажа%' AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= %s)
                       GROUP BY material_name.Id"""
-        sql_material_out = my_sql.sql_select(query, (self.de_material_from.date().toString(Qt.ISODate), self.de_material_to.date().toString(Qt.ISODate)))
+        sql_material_out = my_sql.sql_select(query, (self.de_material_from.date().toString(Qt.ISODate), self.de_material_to.date().toString(Qt.ISODate))*3)
         if "mysql.connector.errors" in str(type(sql_material_out)):
             QMessageBox.critical(self, "Ошибка sql получения расходов ткани", sql_material_out.msg, QMessageBox.Ok)
             return False
@@ -159,7 +160,7 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                         LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                       WHERE Note LIKE '%пачк%'
-                        AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= %s"""
+                        AND transaction_records_material.Cut_Material_Id IN (SELECT cut.Id FROM cut WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)"""
         sql_info = my_sql.sql_select(query, filter_date)[0]
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения расхода на пачки", sql_info.msg, QMessageBox.Ok)
@@ -184,7 +185,7 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                         LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                       WHERE Note LIKE '%обрез%'
-                        AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= %s"""
+                        AND transaction_records_material.Cut_Material_Id IN (SELECT cut.Id FROM cut WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)"""
         sql_info = my_sql.sql_select(query, filter_date)[0]
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения расхода на обрезь", sql_info.msg, QMessageBox.Ok)
@@ -209,7 +210,7 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                         LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                       WHERE Note LIKE '%доп.%'
-                        AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= %s"""
+                        AND transaction_records_material.Cut_Material_Id IN (SELECT cut.Id FROM cut WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)"""
         sql_info = my_sql.sql_select(query, filter_date)[0]
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения расхода на доп ткань", sql_info.msg, QMessageBox.Ok)
@@ -234,7 +235,7 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                         LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                       WHERE Note LIKE '%бейк%'
-                        AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= %s"""
+                        AND transaction_records_material.Beika_Id IN (SELECT beika.Id FROM beika WHERE Date >= %s AND Date <= %s)"""
         sql_info = my_sql.sql_select(query, filter_date)[0]
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения расхода на бйеку", sql_info.msg, QMessageBox.Ok)
@@ -303,8 +304,10 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                       LEFT JOIN accessories_supplyposition ON accessories_balance.accessories_SupplyPositionId = accessories_supplyposition.Id
                         LEFT JOIN accessories_supply ON accessories_supplyposition.accessories_SupplyId = accessories_supply.Id
                         LEFT JOIN accessories_name ON accessories_supplyposition.accessories_NameId = accessories_name.Id
-                      WHERE transaction_records_accessories.Note NOT LIKE 'Заказ %' AND transaction_records_accessories.Note NOT LIKE '%нарезка%'
-                        AND transaction_records_accessories.Date >= %s AND transaction_records_accessories.Date <= %s
+                      WHERE transaction_records_accessories.Pack_Accessories_Id IN (SELECT pack_accessories.Id
+                                                                                      FROM pack_accessories LEFT JOIN pack ON pack_accessories.Pack_Id = pack.Id
+                                                                                        LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                                                                                      WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)
                       GROUP BY accessories_name.Id"""
         sql_material_out = my_sql.sql_select(query, (self.de_accessories_from.date().toString(Qt.ISODate), self.de_accessories_to.date().toString(Qt.ISODate)))
         if "mysql.connector.errors" in str(type(sql_material_out)):
@@ -391,8 +394,10 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                       FROM transaction_records_accessories
                         LEFT JOIN accessories_balance ON transaction_records_accessories.Supply_Balance_Id = accessories_balance.Id
                         LEFT JOIN accessories_supplyposition ON accessories_balance.accessories_SupplyPositionId = accessories_supplyposition.Id
-                      WHERE Note LIKE '%пачк%'
-                        AND transaction_records_accessories.Date >= %s AND transaction_records_accessories.Date <= %s"""
+                      WHERE transaction_records_accessories.Pack_Accessories_Id IN (SELECT pack_accessories.Id
+                                                                                      FROM pack_accessories LEFT JOIN pack ON pack_accessories.Pack_Id = pack.Id
+                                                                                        LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                                                                                      WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)"""
         sql_info = my_sql.sql_select(query, filter_date)[0]
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения расхода на пачки", sql_info.msg, QMessageBox.Ok)
