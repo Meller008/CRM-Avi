@@ -22,6 +22,8 @@ class SalaryList(QDialog, salary_list):
 
         self.set_size_table()
 
+        self.access()
+
     def access(self):
         for item in User().access_list(self.__class__.__name__):
             a = getattr(self, item["atr1"])
