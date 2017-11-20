@@ -109,7 +109,7 @@ class PackList(table.TableList):
 
 
 class PackBrows(QDialog, pack_class):
-    def __init__(self, main=None, pack=None, pack_id=None):
+    def __init__(self, main=None, pack=None, pack_id=None, save_pack=False):
         super(PackBrows, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
@@ -123,6 +123,7 @@ class PackBrows(QDialog, pack_class):
         self.insert_values_sql = False
         self.access_save_sql = True
         self.reminder_make = False  # Переменная которая сообщает нужно ли выкинуть предупреждение о непринятой пачке
+        self.save_pack = save_pack  # Переменная которая не даст сохранить пачку если она открыта не в крое
 
         # Прячем рвсчетную часть пачки (Открываем доступами) self.frame_calc.show()
         self.frame_calc.hide()
@@ -130,6 +131,9 @@ class PackBrows(QDialog, pack_class):
         self.set_start_info()
         self.set_size_table()
         self.access()
+
+        if not save_pack:  # Если пачка открыта не в крое то ее нельзя сохранять!
+            self.pb_acc.setEnabled(False)
 
     def access(self):
         for item in User().access_list(self.__class__.__name__):

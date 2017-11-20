@@ -199,6 +199,7 @@ class CutBrows(QDialog, cut_brows_class):
             self.le_weight_rest_cut.setText(str(self.cut.weight_rest()))
             self.le_all_weight_cut.setText(str(self.cut.weight_all()))
             self.le_rest_cut.setText(str(self.cut.percent_rest()))
+            self.le_pack_value.setText(str(self.cut.pack_value()))
             self.le_note_cut.setText(str(self.cut.note()))
             self.cb_print.setChecked(self.cut.print_passport())
 
@@ -283,7 +284,7 @@ class CutBrows(QDialog, cut_brows_class):
         self.pack.set_number_cut(self.cut.number())
         self.pack.set_material_id(self.cut.material_id())
 
-        self.pack_win = PackBrows(self, self.pack)
+        self.pack_win = PackBrows(self, self.pack, save_pack=True)
         self.pack_win.setModal(True)
         self.pack_win.show()
 
@@ -296,7 +297,7 @@ class CutBrows(QDialog, cut_brows_class):
 
         self.select_pack = id
 
-        self.pack_win = PackBrows(self, self.cut.pack(id))
+        self.pack_win = PackBrows(self, self.cut.pack(id), save_pack=True)
         self.pack_win.setModal(True)
         self.pack_win.show()
 
@@ -316,9 +317,14 @@ class CutBrows(QDialog, cut_brows_class):
                 return False
 
             self.cut.check_material_weight()
+            self.cut.check_pack_value()
             self.le_weight_cut.setText(str(self.cut.weight()))
+            self.le_pack_value.setText(str(self.cut.pack_value()))
             self.cut.take_pack_sql()
             self.set_pack()
+
+            # Отключем кнопку отмены для обязательсьва сохранить оновленый крой
+            self.pb_can.setEnabled(False)
             return True
         else:
             return False
@@ -327,7 +333,7 @@ class CutBrows(QDialog, cut_brows_class):
         if self.cut.change_cut_weight():
             self.select_pack = table_item.data(-2)
 
-            self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)))
+            self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)), save_pack=True)
             self.pack_win.setModal(True)
             self.pack_win.show()
 
@@ -604,12 +610,17 @@ class CutBrows(QDialog, cut_brows_class):
 
     def of_save_pack_complete(self):
         self.cut.check_material_weight()
+        self.cut.check_pack_value()
         self.le_weight_cut.setText(str(self.cut.weight()))
+        self.le_pack_value.setText(str(self.cut.pack_value()))
         self.cut.take_pack_sql()
         self.set_pack()
         self.cut.take_material_price()
         self.set_width_all()
         self.cut.set_material_id_old(self.cut.material_id())
+
+        # Отключем кнопку отмены для обязательсьва сохранить оновленый крой
+        self.pb_can.setEnabled(False)
 
     def of_print_complete(self):
         self.set_pack()

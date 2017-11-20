@@ -143,20 +143,13 @@
       </layout>
      </item>
      <item row="2" column="0">
-      <layout class="QGridLayout" name="gridLayout_5" columnstretch="1,1,1,1,7">
+      <layout class="QGridLayout" name="gridLayout_5" columnstretch="1,1,1,1,1,7">
        <property name="horizontalSpacing">
         <number>2</number>
        </property>
        <property name="verticalSpacing">
         <number>0</number>
        </property>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="le_weight_cut">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
         <widget class="QLineEdit" name="le_weight_rest_cut">
          <property name="text">
@@ -164,10 +157,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
-        <widget class="QLineEdit" name="le_rest_cut">
-         <property name="readOnly">
-          <bool>true</bool>
+       <item row="0" column="5">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Заметка&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -178,22 +171,12 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="4">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Заметка&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="le_weight_cut">
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Вес пачек&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="4">
-        <widget class="QLineEdit" name="le_note_cut"/>
        </item>
        <item row="0" column="3">
         <widget class="QLabel" name="label_8">
@@ -201,6 +184,16 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;% обрези&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLineEdit" name="le_rest_cut">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="QLineEdit" name="le_note_cut"/>
        </item>
        <item row="0" column="2">
         <widget class="QLabel" name="label_7">
@@ -225,6 +218,26 @@
           <bool>true</bool>
          </property>
         </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Вес пачек&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Пачек</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QLineEdit" name="le_pack_value"/>
        </item>
       </layout>
      </item>
@@ -402,7 +415,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="pb_can">
           <property name="text">
            <string>Отмена</string>
           </property>
@@ -519,7 +532,7 @@
  </widget>
  <tabstops>
   <tabstop>toolButton_4</tabstop>
-  <tabstop>pushButton_2</tabstop>
+  <tabstop>pb_can</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>le_number_cut</tabstop>
   <tabstop>de_cut_date</tabstop>
@@ -751,7 +764,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
+   <sender>pb_can</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
    <slot>ui_can()</slot>
