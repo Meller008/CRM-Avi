@@ -1,19 +1,13 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog, QProgressDialog
-from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 import re
 from decimal import Decimal
 import datetime
-import openpyxl
-from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
-from openpyxl.worksheet.pagebreak import Break
-from copy import copy
-from function import my_sql, to_excel
-from form.templates import table, list
-from form import clients, article
-import num2t4ru
+from function import my_sql
+from form.templates import table
 
 need_article = loadUiType(getcwd() + '/ui/report_need_article_order.ui')[0]
 
