@@ -284,7 +284,7 @@ class CutBrows(QDialog, cut_brows_class):
         self.pack.set_number_cut(self.cut.number())
         self.pack.set_material_id(self.cut.material_id())
 
-        self.pack_win = PackBrows(self, self.pack, save_pack=True)
+        self.pack_win = PackBrows(self, self.pack, save_pack_weight=True)
         self.pack_win.setModal(True)
         self.pack_win.show()
 
@@ -297,7 +297,7 @@ class CutBrows(QDialog, cut_brows_class):
 
         self.select_pack = id
 
-        self.pack_win = PackBrows(self, self.cut.pack(id), save_pack=True)
+        self.pack_win = PackBrows(self, self.cut.pack(id), save_pack_weight=True)
         self.pack_win.setModal(True)
         self.pack_win.show()
 
@@ -333,7 +333,7 @@ class CutBrows(QDialog, cut_brows_class):
         if self.cut.change_cut_weight():
             self.select_pack = table_item.data(-2)
 
-            self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)), save_pack=True)
+            self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)), save_pack_weight=True)
             self.pack_win.setModal(True)
             self.pack_win.show()
 
