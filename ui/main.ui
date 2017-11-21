@@ -457,6 +457,9 @@
    </property>
   </action>
   <action name="ma_report_profit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Прибыль</string>
    </property>

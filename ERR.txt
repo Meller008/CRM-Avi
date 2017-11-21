@@ -156,3 +156,179 @@ Time = 06.09.2017 14:55:24Traceback (most recent call last):
   File "/Applications/PyCharm.app/Contents/helpers/pydev/pydevd.py", line 748, in do_wait_suspend
     time.sleep(0.01)
 KeyboardInterrupt
+
+---===Error===---
+Time = 15.11.2017 15:57:01Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 381, in view_report_material_consumption
+    self.report_material_consumption = report_material_consumption.ReportMaterialConsumption()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_material_consumption.py", line 21, in __init__
+    self.start_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_material_consumption.py", line 28, in start_settings
+    self.de_comparing_from.setDate(QDate.currentDate().addMonths(-1))
+AttributeError: 'ReportMaterialConsumption' object has no attribute 'de_comparing_from'
+
+---===Error===---
+Time = 15.11.2017 16:03:06Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_material_consumption.py", line 429, in ui_calc_comparing
+    item = QTableWidgetItem(sql_info[0])
+TypeError: arguments did not match any overloaded call:
+  QTableWidgetItem(int type=QTableWidgetItem.Type): argument 1 has unexpected type 'tuple'
+  QTableWidgetItem(str, int type=QTableWidgetItem.Type): argument 1 has unexpected type 'tuple'
+  QTableWidgetItem(QIcon, str, int type=QTableWidgetItem.Type): argument 1 has unexpected type 'tuple'
+  QTableWidgetItem(QTableWidgetItem): argument 1 has unexpected type 'tuple'
+
+---===Error===---
+Time = 15.11.2017 16:05:14Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_material_consumption.py", line 444, in ui_calc_comparing
+    all_sum += i[3]
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 16.11.2017 14:24:44Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 221, in view_pack_list
+    self.pack_list = pack.PackList()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 24, in __init__
+    self.set_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 30, in set_settings
+    self.pb_del.deleteLater()
+AttributeError: 'PackList' object has no attribute 'pb_del'
+
+---===Error===---
+Time = 16.11.2017 14:25:23Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 221, in view_pack_list
+    self.pack_list = pack.PackList()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 24, in __init__
+    self.set_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 40, in set_settings
+    self.le_fast_filter.editingFinished.connect(self.fast_filter)
+AttributeError: 'PackList' object has no attribute 'fast_filter'
+
+---===Error===---
+Time = 16.11.2017 15:16:03Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 87, in ui_filter
+    self.filter.of_set_sql_query(self.query_table_all)
+AttributeError: 'PackFilter' object has no attribute 'of_set_sql_query'
+
+---===Error===---
+Time = 16.11.2017 15:17:58Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1065, in ui_acc
+    self.main.of_tree_select_article(article_info)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 1189, in of_tree_select_article
+    self.le_art.setWhatsThis(str(article["parametr_id"]))
+AttributeError: 'PackFilter' object has no attribute 'le_art'
+
+---===Error===---
+Time = 16.11.2017 15:18:32Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1065, in ui_acc
+    self.main.of_tree_select_article(article_info)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 1189, in of_tree_select_article
+    self.le_art.setWhatsThis(str(article["parametr_id"]))
+AttributeError: 'PackFilter' object has no attribute 'le_art'
+
+---===Error===---
+Time = 16.11.2017 17:19:42Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\cut.py", line 330, in ui_double_click_pack
+    self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)))
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 132, in __init__
+    self.access()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 136, in access
+    a = getattr(self, item["atr1"])
+AttributeError: 'PackBrows' object has no attribute 'toolButton'
+
+---===Error===---
+Time = 17.11.2017 14:41:37Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 253, in view_salary_work
+    self.salary_list = salary.SalaryList()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\salary.py", line 25, in __init__
+    self.access()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\salary.py", line 40, in access
+    a(val)
+TypeError: QWidget.setEnabled(bool): argument 1 has unexpected type 'str'
+
+---===Error===---
+Time = 17.11.2017 14:43:19Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 253, in view_salary_work
+    self.salary_list = salary.SalaryList()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\salary.py", line 25, in __init__
+    self.access()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\salary.py", line 40, in access
+    a(val)
+TypeError: QWidget.setEnabled(bool): argument 1 has unexpected type 'str'
+
+---===Error===---
+Time = 17.11.2017 17:02:55Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 46, in ui_calc
+    article_list[order_position[0]]["value"] += order_position[2]
+KeyError: 436
+
+---===Error===---
+Time = 17.11.2017 18:02:14Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 54, in ui_calc
+    sql_info = my_sql.sql_select(query, (key, self.de_date_to.date().toPyDateTime(), value["value"]))
+AttributeError: 'QDate' object has no attribute 'toPyDateTime'
+
+---===Error===---
+Time = 21.11.2017 12:41:23Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 336, in ui_double_click_pack
+    self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)), save_pack=True)
+TypeError: __init__() got an unexpected keyword argument 'save_pack'
+
+---===Error===---
+Time = 21.11.2017 15:23:22Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 101, in ui_calc
+    if sql_info[0][0]:
+IndexError: list index out of range
+
+---===Error===---
+Time = 21.11.2017 15:24:05Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 76, in ui_calc
+    sql_info = my_sql.sql_select(query, (sql_pack_id_info[0][i], ))
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 21.11.2017 15:26:21Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 136, in ui_calc
+    article_list[key]["seb"] = sum(sebest_pack_list) / len(sebest_pack_list)
+ZeroDivisionError: division by zero
+
+---===Error===---
+Time = 21.11.2017 16:21:41Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 106, in ui_calc
+    article_list[key]["seb"] = sum(sebest_pack_list) / len(sebest_pack_list)
+TypeError: unsupported operand type(s) for +: 'int' and 'list'
+
+---===Error===---
+Time = 21.11.2017 16:22:11Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_profit.py", line 106, in ui_calc
+    article_list[key]["seb"] = sum(sebest_pack_list) / len(sebest_pack_list)
+TypeError: unsupported operand type(s) for +: 'int' and 'list'
+
+---===Error===---
+Time = 21.11.2017 16:23:32Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 106, in ui_calc
+    article_list[key]["seb"] = sum(sebest_pack_list) / len(sebest_pack_list)
+TypeError: unsupported operand type(s) for +: 'int' and 'list'
+
+---===Error===---
+Time = 21.11.2017 16:40:33Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_profit.py", line 114, in ui_calc
+    self.tableWidget.insertRow(self.tw_material.rowCount())
+AttributeError: 'ReportProfit' object has no attribute 'tw_material'
+
+---===Error===---
+Time = 21.11.2017 16:41:09Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_profit.py", line 127, in ui_calc
+    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(article_list[key]["seb"], 2)))
+TypeError: type NoneType doesn't define __round__ method
+
+---===Error===---
+Time = 21.11.2017 17:36:01Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 61, in ui_calc
+    self.statusBar().showMessage("123")
+TypeError: 'QStatusBar' object is not callable
+
+---===Error===---
+Time = 21.11.2017 17:38:12Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_profit.py", line 61, in ui_calc
+    self.statusBar().showMessage("123")
+TypeError: 'QStatusBar' object is not callable
