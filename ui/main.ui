@@ -208,6 +208,7 @@
     <addaction name="ma_pack_accept"/>
     <addaction name="ma_report_material_consumption"/>
     <addaction name="ma_report_profit"/>
+    <addaction name="ma_report_performance_company"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -462,6 +463,11 @@
    </property>
    <property name="text">
     <string>Прибыль</string>
+   </property>
+  </action>
+  <action name="ma_report_performance_company">
+   <property name="text">
+    <string>Произведено</string>
    </property>
   </action>
  </widget>
@@ -1187,6 +1193,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_performance_company</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_performance_company()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1234,5 +1256,6 @@
   <slot>view_report_material_consumption()</slot>
   <slot>view_pack_list()</slot>
   <slot>view_report_profit()</slot>
+  <slot>view_report_performance_company()</slot>
  </slots>
 </ui>

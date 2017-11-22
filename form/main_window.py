@@ -7,7 +7,7 @@ from form import login_window, provider, comparing, staff, program_settings, not
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
     warehouse_rest, supply_material, supply_accessories, scan_pack, settings_access
 from form import report_supply, report_cost_article, test_window, report_sibestoimost, report_rest_work,\
-    report_accept_pack, pack, report_profit
+    report_accept_pack, pack, report_profit, report_performance_company
 from form import staff_traffic, report_material_consumption
 from form import report_order
 from classes.my_class import User
@@ -400,6 +400,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_report_profit)
         self.sub_report_profit.resize(self.report_profit.size())
         self.sub_report_profit.show()
+
+    def view_report_performance_company(self):
+        self.report_performance_company = report_performance_company.ReportPerformanceCompany()
+        self.sub_report_performance_company = QMdiSubWindow()
+        self.sub_report_performance_company.setWidget(self.report_performance_company)
+        self.mdi.addSubWindow(self.sub_report_performance_company)
+        self.sub_report_performance_company.resize(self.report_performance_company.size())
+        self.sub_report_performance_company.show()
 
     def view_test_window(self):
         self.test_window = test_window.TestWindow()
