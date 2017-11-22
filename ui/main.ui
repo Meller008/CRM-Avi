@@ -209,6 +209,7 @@
     <addaction name="ma_report_material_consumption"/>
     <addaction name="ma_report_profit"/>
     <addaction name="ma_report_performance_company"/>
+    <addaction name="ma_report_shipped_customer"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -466,8 +467,19 @@
    </property>
   </action>
   <action name="ma_report_performance_company">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Произведено</string>
+   </property>
+  </action>
+  <action name="ma_report_shipped_customer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Отгружено клиенту</string>
    </property>
   </action>
  </widget>
@@ -1209,6 +1221,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_shipped_customer</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_shipped_customer()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1257,5 +1285,6 @@
   <slot>view_pack_list()</slot>
   <slot>view_report_profit()</slot>
   <slot>view_report_performance_company()</slot>
+  <slot>view_report_shipped_customer()</slot>
  </slots>
 </ui>

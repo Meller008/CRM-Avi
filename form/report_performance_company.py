@@ -1,12 +1,10 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
-from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtWidgets import QMessageBox, QMainWindow
+from PyQt5.QtCore import QDate
+from PyQt5.QtGui import QIcon
 import re
 from function import my_sql
-from function import table_to_html, to_excel
-from classes import print_qt
 
 
 report_performance_company_class = loadUiType(getcwd() + '/ui/report_performance_company.ui')[0]
@@ -64,7 +62,7 @@ class ReportPerformanceCompany(QMainWindow, report_performance_company_class):
         text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(sql_info[0][0]))
         self.le_product.setText(text)
 
-        query = """SELECT s1 + s2 + s3 FROM
+        query = """SELECT ABS(s1) + ABS(s2) + ABS(s3) FROM
                   (SELECT SUM(transaction_records_material.Balance * material_supplyposition.Price) AS s1
                   FROM transaction_records_material LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
                   LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
