@@ -480,6 +480,10 @@ class Cut:
         sql_info = my_sql.sql_select(query, (self.__id, ))
         if "mysql.connector.errors" in str(type(sql_info)):
             return [False, "Не смог получить сумму списаний ткани (Это плохо к админу)"]
+
+        if self.__weight != sql_info[0][0]:
+            self.__save_sql_info = True
+
         if sql_info[0][0] is not None:
             self.__weight = sql_info[0][0]
         else:
@@ -487,6 +491,8 @@ class Cut:
         self.calc_width()
 
     def check_pack_value(self):
+        if self.__pack_value != len(self.__pack_id_dict):
+            self.__save_sql_info = True
         self.__pack_value = len(self.__pack_id_dict)
 
     def take_new_number_pack(self):
