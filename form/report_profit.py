@@ -9,7 +9,6 @@ from function import table_to_html, to_excel
 from classes import print_qt
 
 
-
 report_profit_class = loadUiType(getcwd() + '/ui/report_profit.ui')[0]
 
 
@@ -73,54 +72,96 @@ class ReportProfit(QMainWindow, report_profit_class):
             v = int(len(sql_pack_id_info)/5) + 1
 
             sebest_pack_list = []
+            if sql_pack_id_info:  # Если найдены предыдущие кроя! (Если нет то возьмем расчетную себестоимость из артикула)
+                for i in range(len(sql_pack_id_info)):
+                    if i % v != 0:
+                        continue
 
-            for i in range(len(sql_pack_id_info)):
-                if i % v != 0:
-                    continue
+                    pack_id = sql_pack_id_info[i][0]
+                    # Узнаем всю себестоимость
+                    query = """SELECT(
+                                      SELECT AVG(DISTINCT material_supplyposition.Price) * (SELECT (pack.Weight * (1 + cut.Rest_Percent / 100)) / pack.Value_Pieces
+                                                                                            FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                                                                                            WHERE pack.Id = pm.Id)
+                                      FROM pack LEFT JOIN transaction_records_material ON transaction_records_material.Cut_Material_Id = pack.Cut_Id
+                                        LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
+                                        LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
+                                      WHERE pack.Id = pm.Id AND transaction_records_material.Note NOT LIKE '%доп. тк%'
+                                      ),(
+                                          SELECT ((pack_add_material.Weight + pack_add_material.Weight_Rest) / pack.Value_Pieces) * pack_add_material.Price
+                                            FROM pack_add_material LEFT JOIN pack ON pack_add_material.Pack_Id = pack.Id
+                                            WHERE pack.Id = pm.Id
+                                      ),(
+                                          SELECT SUM(avg) FROM (
+                                            SELECT AVG(accessories_supplyposition.Price) * pack_accessories.Value_Thing AS avg
+                                            FROM pack
+                                              LEFT JOIN pack_accessories ON pack.Id = pack_accessories.Pack_Id
+                                              LEFT JOIN transaction_records_accessories ON transaction_records_accessories.Pack_Accessories_Id = pack_accessories.Id
+                                              LEFT JOIN accessories_balance ON transaction_records_accessories.Supply_Balance_Id = accessories_balance.Id
+                                              LEFT JOIN accessories_supplyposition ON accessories_balance.Accessories_SupplyPositionId = accessories_supplyposition.Id
+                                            WHERE pack.Id = %s
+                                            GROUP BY pack_accessories.Id) t
+                                      ),(
+                                          SELECT SUM(pack_operation.Price) FROM pack_operation WHERE pack_operation.Pack_Id = pm.Id
+                                )
+                                FROM pack as pm WHERE pm.Id = %s"""
+                    sql_info = my_sql.sql_select(query, (pack_id, pack_id))
+                    if "mysql.connector.errors" in str(type(sql_info)):
+                        QMessageBox.critical(self, "Ошибка sql получения средней цены ткани для кроя", sql_info.msg, QMessageBox.Ok)
+                        return False
 
-                pack_id = sql_pack_id_info[i][0]
-                # Узнаем всю себестоимость
-                query = """SELECT(
-                                  SELECT AVG(DISTINCT material_supplyposition.Price) * (SELECT (pack.Weight * (1 + cut.Rest_Percent / 100)) / pack.Value_Pieces
-                                                                                        FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
-                                                                                        WHERE pack.Id = pm.Id)
-                                  FROM pack LEFT JOIN transaction_records_material ON transaction_records_material.Cut_Material_Id = pack.Cut_Id
-                                    LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
-                                    LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
-                                  WHERE pack.Id = pm.Id AND transaction_records_material.Note NOT LIKE '%доп. тк%'
+                    sebest_pack_list.append(sum([0 if i is None else i for i in sql_info[0]]))
+
+                # Находим среднюю себестоимость на артикул
+                if sebest_pack_list:
+                    article_list[key]["seb"] = sum(sebest_pack_list) / len(sebest_pack_list)
+                else:
+                    article_list[key]["seb"] = None
+
+            else:  # Если нет прошлых краев, то возьмем расчетную себестоимость
+                # Узнаем всю расчетную себестоимость
+                query = """SELECT (
+                                      SELECT SUM(operations.Price)
+                                        FROM product_article_operation LEFT JOIN operations ON product_article_operation.Operation_Id = operations.Id
+                                        WHERE product_article_operation.Product_Article_Parametrs_Id = pr.Id
                                   ),(
-                                      SELECT ((pack_add_material.Weight + pack_add_material.Weight_Rest) / pack.Value_Pieces) * pack_add_material.Price
-                                        FROM pack_add_material LEFT JOIN pack ON pack_add_material.Pack_Id = pack.Id
-                                        WHERE pack.Id = pm.Id
+                                      SELECT SUM(s)
+                                      FROM (SELECT material_supplyposition.Price * product_article_material.Value AS s
+                                              FROM product_article_material
+                                                LEFT JOIN material_supplyposition ON product_article_material.Material_Id = material_supplyposition.Material_NameId
+                                                LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                                LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                                              WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Material_Id IS NOT NULL
+                                                AND material_balance.BalanceWeight > 0
+                                              GROUP BY product_article_material.Material_Id) t
                                   ),(
-                                      SELECT SUM(avg) FROM (
-                                        SELECT AVG(accessories_supplyposition.Price) * pack_accessories.Value_Thing AS avg
-                                        FROM pack
-                                          LEFT JOIN pack_accessories ON pack.Id = pack_accessories.Pack_Id
-                                          LEFT JOIN transaction_records_accessories ON transaction_records_accessories.Pack_Accessories_Id = pack_accessories.Id
-                                          LEFT JOIN accessories_balance ON transaction_records_accessories.Supply_Balance_Id = accessories_balance.Id
-                                          LEFT JOIN accessories_supplyposition ON accessories_balance.Accessories_SupplyPositionId = accessories_supplyposition.Id
-                                        WHERE pack.Id = %s
-                                        GROUP BY pack_accessories.Id) t
-                                  ),(
-                                      SELECT SUM(pack_operation.Price) FROM pack_operation WHERE pack_operation.Pack_Id = pm.Id
-                            )
-                            FROM pack as pm WHERE pm.Id = %s"""
-                sql_info = my_sql.sql_select(query, (pack_id, pack_id))
+                                      SELECT SUM(s)
+                                      FROM (SELECT accessories_supplyposition.Price * product_article_material.Value AS s
+                                              FROM product_article_material
+                                                LEFT JOIN accessories_supplyposition ON product_article_material.Accessories_Id = accessories_supplyposition.Accessories_NameId
+                                                LEFT JOIN accessories_supply ON accessories_supplyposition.Accessories_SupplyId = accessories_supply.Id
+                                                LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
+                                              WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Accessories_Id IS NOT NULL
+                                                    AND accessories_balance.BalanceValue > 0
+                                              GROUP BY product_article_material.Accessories_Id) t
+                                  )
+                              FROM product_article_parametrs AS pr WHERE pr.Id = %s"""
+                sql_info = my_sql.sql_select(query, (key, key, key))
                 if "mysql.connector.errors" in str(type(sql_info)):
-                    QMessageBox.critical(self, "Ошибка sql получения средней цены ткани для кроя", sql_info.msg, QMessageBox.Ok)
+                    QMessageBox.critical(self, "Ошибка sql получения расчетной себестоимости", sql_info.msg, QMessageBox.Ok)
                     return False
 
-                sebest_pack_list.append(sum([0 if i is None else i for i in sql_info[0]]))
-
-            # Находим среднюю себестоимость на артикул
-            if sebest_pack_list:
-                article_list[key]["seb"] = sum(sebest_pack_list) / len(sebest_pack_list)
-            else:
-                article_list[key]["seb"] = None
+                # Считаем себестоимость
+                if sql_info[0][0]:
+                    article_list[key]["seb"] = sql_info[0][0] + sql_info[0][1] + sql_info[0][2]
+                    article_list[key]["name"] = "Б/К " + article_list[key]["name"]
+                else:
+                    article_list[key]["seb"] = 0
+                    article_list[key]["name"] = "Б/К " + article_list[key]["name"]
 
             self.tableWidget.insertRow(self.tableWidget.rowCount())
 
+            # Вставляем расчитаный артикул
             # Цвет зависит от положительной или отрицательной прибыли
             if article_list[key]["seb"]:
                 profit = (article_list[key]["sum"] - (article_list[key]["seb"] * article_list[key]["value"]))
