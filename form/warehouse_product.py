@@ -266,7 +266,7 @@ class WarehouseInfo(QDialog, warehouse_info):
         self.order.show()
 
     def ui_calc_date(self):
-        query = """SELECT war.Value_In_Warehouse -(SELECT SUM(transaction_records_warehouse.Balance) FROM transaction_records_warehouse
+        query = """SELECT war.Value_In_Warehouse - (SELECT SUM(transaction_records_warehouse.Balance) FROM transaction_records_warehouse
                                                     WHERE transaction_records_warehouse.Article_Parametr_Id = war.Id_Article_Parametr
                                                       AND transaction_records_warehouse.Date > %s)
                       FROM product_article_warehouse AS war WHERE war.Id_Article_Parametr = %s"""
