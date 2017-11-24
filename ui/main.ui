@@ -210,6 +210,7 @@
     <addaction name="ma_report_profit"/>
     <addaction name="ma_report_performance_company"/>
     <addaction name="ma_report_shipped_customer"/>
+    <addaction name="ma_report_warehouse_date"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -480,6 +481,14 @@
    </property>
    <property name="text">
     <string>Отгружено клиенту</string>
+   </property>
+  </action>
+  <action name="ma_report_warehouse_date">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Остаток складов</string>
    </property>
   </action>
  </widget>
@@ -1237,6 +1246,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_warehouse_date</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_warehouse_balance_date()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1286,5 +1311,6 @@
   <slot>view_report_profit()</slot>
   <slot>view_report_performance_company()</slot>
   <slot>view_report_shipped_customer()</slot>
+  <slot>view_report_warehouse_balance_date()</slot>
  </slots>
 </ui>
