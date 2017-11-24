@@ -310,10 +310,11 @@ class WarehouseInfo(QDialog, warehouse_info):
             QMessageBox.critical(self, "Ошибка sql получения расчетной себестоимости + цены продажи", sql_info.msg, QMessageBox.Ok)
             return False
 
-        self.le_price_one.setText(str(sql_info[0][0]))
-        self.le_sebest_one.setText(str(sql_info[0][1]+ sql_info[0][2] + sql_info[0][3]))
-        self.le_price_many.setText(str(sql_info[0][0] * warehouse))
-        self.le_sebest_many.setText(str(sql_info[0][1]+ sql_info[0][2] + sql_info[0][3] * warehouse))
+        if warehouse:
+            self.le_price_one.setText(str(sql_info[0][0]))
+            self.le_sebest_one.setText(str(sql_info[0][1] + sql_info[0][2] + sql_info[0][3]))
+            self.le_price_many.setText(str(sql_info[0][0] * warehouse))
+            self.le_sebest_many.setText(str((sql_info[0][1] + sql_info[0][2] + sql_info[0][3]) * warehouse))
 
     def sql_info(self):
         query = """SELECT pack.Id, pack.Cut_Id, pack.Number, pack.Value_Pieces, cut.Date_Cut

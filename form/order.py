@@ -1929,7 +1929,7 @@ class Order(QMainWindow, order_class):
 
         book.save(path[0])
 
-    def of_ex_score(self, article):
+    def of_ex_score(self, article, unite):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1949,47 +1949,136 @@ class Order(QMainWindow, order_class):
             for cell in row:
                 cell.border = Border(top=Side(style='medium'), bottom=Side(style='medium'))
 
+        if unite:
+            query = """SELECT DISTINCT(product_article_parametrs.Client_code)
+                          FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+                          WHERE Order_Id = %s"""
+            unite_code_sql = my_sql.sql_select(query, (self.id, ))
+            if "mysql.connector.errors" in str(type(unite_code_sql)):
+                QMessageBox.critical(self, "Ошибка sql получения уникальных кодов", unite_code_sql.msg, QMessageBox.Ok)
+                return False
+
+            product = collections.OrderedDict()
+
+            for cod in unite_code_sql:
+                product[str(cod[0])] = {"name": None, "cod": str(cod[0]), "psb": None, "mest": 0, "value": 0, "price": None, "price_no_nds": None,
+                                        "sum_no_nds": 0, "nds": None, "sum": 0, "nds_sum": 0}
+
+            for row in range(self.tw_position.rowCount()):
+                query = "SELECT Client_code FROM product_article_parametrs WHERE Id = %s"
+                sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
+                    return False
+
+                # Проверяем находиться ли наный товар в списке объединяемых
+                cod = sql_info[0][0]
+                if cod not in product:
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Не найден код в словаре!", QMessageBox.Ok)
+                    return False
+
+                # Проверяем совпадают ли имена
+                if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text():
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Разные имена одинаковых кодов", QMessageBox.Ok)
+                    return False
+
+                # Проверяем совпадают ли цены
+                if product[cod]["price"] is not None and product[cod]["price"] != float(self.tw_position.item(row, 4).text()):
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Разная цена одинаковых кодов", QMessageBox.Ok)
+                    return False
+
+                # Проверяем совпадают ли psb
+                if product[cod]["psb"] is not None and product[cod]["psb"] != int(self.tw_position.item(row, 5).data(5)):
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Разный psb одинаковых кодов", QMessageBox.Ok)
+                    return False
+
+                # Проверяем совпадают ли НДС
+                if product[cod]["nds"] is not None and product[cod]["nds"] != int(self.tw_position.item(row, 4).data(5)):
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Разный НДС одинаковых кодов", QMessageBox.Ok)
+                    return False
+
+                # Вставляем статические параметры
+                product[cod]["name"] = self.tw_position.item(row, 3).text()
+                product[cod]["price"] = float(self.tw_position.item(row, 4).text())
+                product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
+                product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
+
+                # Сумируем кол-во
+                product[cod]["value"] += int(self.tw_position.item(row, 5).text())
+
+            # Пройдем по готовым обьединеным позициям и расчитаем цифры
+            for cod, cod_value in product.items():
+                if self.lb_client.whatsThis().find("no_nds") >= 0:
+                    cod_value["price_no_nds"], cod_value["sum_no_nds"], cod_value["nds_sum"], cod_value["sum"], cod_value["mest"] =\
+                        calc_price.calc_no_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
+                else:
+                    cod_value["price_no_nds"], cod_value["sum_no_nds"], cod_value["nds_sum"], cod_value["sum"], cod_value["mest"] =\
+                        calc_price.calc_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
+
+        else:
+            # если
+            product = collections.OrderedDict()
+            for row in range(self.tw_position.rowCount()):
+
+                product[row] = {"name": None, "cod": None, "psb": None, "mest": 0, "value": 0, "price": None,
+                                                                 "price_no_nds": None, "sum_no_nds": 0, "nds": None, "sum": 0, "nds_sum": 0}
+
+                # Делаем ссылку дя удобства
+                position = product[row]
+
+                query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
+                sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
+                    return False
+                if article:
+                    position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
+                    position["cod"] = sql_info[0][1]
+                else:
+                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["cod"] = sql_info[0][1]
+
+                position["nds"] = int(self.tw_position.item(row, 4).data(5))
+                position["price"] = float(self.tw_position.item(row, 4).text())
+                position["psb"] = int(self.tw_position.item(row, 5).data(5))
+                position["value"] += int(self.tw_position.item(row, 5).text())
+
+                if self.lb_client.whatsThis().find("no_nds") >= 0:
+                    position["price_no_nds"], position["sum_no_nds"], position["nds_sum"], position["sum"], position["mest"] =\
+                        calc_price.calc_no_nds(position["price"], position["value"], position["nds"], position["psb"])
+
+                else:
+                    position["price_no_nds"], position["sum_no_nds"], position["nds_sum"], position["sum"], position["mest"] =\
+                        calc_price.calc_nds(position["price"], position["value"], position["nds"], position["psb"])
+
         all_nds = 0
         all_sum = 0
 
         row_ex = 9
-        for row in range(self.tw_position.rowCount()):
-
-            query = "SELECT Barcode FROM product_article_parametrs WHERE Id = %s"
-            sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
-            if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
-                return False
-            if article:
-                name = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
-                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
-            else:
-                name = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
-
-            nds = self.tw_position.item(row, 4).data(5)
-            sum = round(int(self.tw_position.item(row, 5).text()) * float(self.tw_position.item(row, 4).text()), 2)
-            sum_no_nds = round(float(sum) - (float(sum) * float(nds)) / (100 + float(nds)), 2)
-
+        num = 1
+        for cod, position in product.items():
             sheet.merge_cells("D%s:E%s" % (row_ex, row_ex))
             sheet.merge_cells("F%s:G%s" % (row_ex, row_ex))
             sheet.merge_cells("H%s:I%s" % (row_ex, row_ex))
 
-            sheet["A%s" % row_ex] = row + 1
+            sheet["A%s" % row_ex] = num
             sheet["A%s" % row_ex].alignment = ald_center
-            sheet["B%s" % row_ex] = name
+            sheet["B%s" % row_ex] = position["name"]
             sheet["B%s" % row_ex].font = font_7
             sheet["B%s" % row_ex].alignment = Alignment(wrapText=True)
             sheet["C%s" % row_ex] = "шт."
-            sheet["D%s" % row_ex] = int(self.tw_position.item(row, 5).text())
-            sheet["F%s" % row_ex] = round(float(self.tw_position.item(row, 4).text()), 2)
-            sheet["H%s" % row_ex] = sum
+            sheet["D%s" % row_ex] = position["value"]
+            sheet["F%s" % row_ex] = position["price"]
+            sheet["H%s" % row_ex] = position["sum"]
 
-            all_nds += round(sum - sum_no_nds, 2)
-            all_sum += sum
+            all_nds += position["nds_sum"]
+            all_sum += position["sum"]
 
             sheet.row_dimensions[row_ex].height = 23
 
             row_ex += 1
+            num += 1
 
         for row in sheet.iter_rows(min_row=9, max_col=9, max_row=row_ex-1):
             for cell in row:
@@ -2415,7 +2504,12 @@ class OrderDocList(QDialog, order_doc):
             else:
                 article = True
 
-            self.main.of_ex_score(article)
+            if self.cb_unite_4.isChecked():
+                unite = True
+            else:
+                unite = False
+
+            self.main.of_ex_score(article, unite)
             self.close()
             self.destroy()
 
