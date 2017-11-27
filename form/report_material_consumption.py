@@ -72,7 +72,8 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                         LEFT JOIN material_name ON material_supplyposition.Material_NameId = material_name.Id
                       WHERE transaction_records_material.Cut_Material_Id IN (SELECT cut.Id FROM cut WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)
                           OR transaction_records_material.Beika_Id IN (SELECT beika.Id FROM beika WHERE Date >= %s AND Date <= %s)
-                          OR (transaction_records_material.Note LIKE 'Продажа%' AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= %s)
+                          OR (transaction_records_material.Note LIKE 'Продажа%' AND transaction_records_material.Date >= %s 
+                            AND transaction_records_material.Date <= DATE_FORMAT(%s,'%Y-%m-%d 23:59:59'))
                       GROUP BY material_name.Id"""
         sql_material_out = my_sql.sql_select(query, (self.de_material_from.date().toString(Qt.ISODate), self.de_material_to.date().toString(Qt.ISODate))*3)
         if "mysql.connector.errors" in str(type(sql_material_out)):
@@ -260,7 +261,7 @@ class ReportMaterialConsumption(QMainWindow, material_consumption_class):
                         LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                       WHERE Note LIKE '%продаж%'
-                        AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= %s"""
+                        AND transaction_records_material.Date >= %s AND transaction_records_material.Date <= DATE_FORMAT(%s,'%Y-%m-%d 23:59:59')"""
         sql_info = my_sql.sql_select(query, filter_date)[0]
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения расхода на продажу ткани", sql_info.msg, QMessageBox.Ok)
