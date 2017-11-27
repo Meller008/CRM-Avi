@@ -85,7 +85,7 @@ class ReportWarehouseBalanceDate(QMainWindow, report_warehouse_balance_date_clas
         query = """SELECT product_article_parametrs.Id, SUM(pack.Value_Pieces)
                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                       LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
-                      WHERE cut.Date_Cut <= %s AND pack.Date_Make > %s GROUP BY product_article_parametrs.Id"""
+                      WHERE cut.Date_Cut <= %s AND (pack.Date_Make > %s OR pack.Date_Make IS NULL) GROUP BY product_article_parametrs.Id"""
         sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), self.de_date_to.date().toPyDate()))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения артикулов в цеху", sql_info.msg, QMessageBox.Ok)
