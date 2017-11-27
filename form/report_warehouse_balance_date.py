@@ -34,12 +34,16 @@ class ReportWarehouseBalanceDate(QMainWindow, report_warehouse_balance_date_clas
         self.tableWidget.horizontalHeader().resizeSection(8, 95)
 
     def ui_calc(self):
+
+        self.tableWidget.clearContents()
+        self.tableWidget.setRowCount(0)
+
         query = """SELECT SUM(trm.Balance), SUM(trm.Balance * material_supplyposition.Price) AS sum_m
                       FROM transaction_records_material AS trm LEFT JOIN material_balance ON trm.Supply_Balance_Id = material_balance.Id
                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                         LEFT JOIN cut ON trm.Cut_Material_Id = cut.Id
                       WHERE cut.Date_Cut <= %s OR trm.Date <= %s"""
-        sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), self.de_date_to.date().toPyDate()))
+        sql_info = my_sql.sql_select(query, (self.de_date_to.date().addDays(1).toPyDate(), self.de_date_to.date().addDays(1).toPyDate()))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения остатков ткани", sql_info.msg, QMessageBox.Ok)
             return False
@@ -53,7 +57,7 @@ class ReportWarehouseBalanceDate(QMainWindow, report_warehouse_balance_date_clas
                         LEFT JOIN pack ON pack_accessories.Pack_Id = pack.Id
                         LEFT JOIN cut ON pack.Cut_Id = cut.Id
                       WHERE cut.Date_Cut <= %s OR tra.Date <= %s"""
-        sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), self.de_date_to.date().toPyDate()))
+        sql_info = my_sql.sql_select(query, (self.de_date_to.date().addDays(1).toPyDate(), self.de_date_to.date().addDays(1).toPyDate()))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения остатков фурнитуры", sql_info.msg, QMessageBox.Ok)
             return False
@@ -72,7 +76,7 @@ class ReportWarehouseBalanceDate(QMainWindow, report_warehouse_balance_date_clas
                         LEFT JOIN product_article_parametrs ON war.Id_Article_Parametr = product_article_parametrs.Id
                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id"""
-        sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), ))
+        sql_info = my_sql.sql_select(query, (self.de_date_to.date().addDays(1).toPyDate(), ))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения артикулов склада", sql_info.msg, QMessageBox.Ok)
             return False
