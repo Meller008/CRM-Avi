@@ -211,6 +211,7 @@
     <addaction name="ma_report_performance_company"/>
     <addaction name="ma_report_shipped_customer"/>
     <addaction name="ma_report_warehouse_date"/>
+    <addaction name="ma_report_reject"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -489,6 +490,11 @@
    </property>
    <property name="text">
     <string>Остаток складов</string>
+   </property>
+  </action>
+  <action name="ma_report_reject">
+   <property name="text">
+    <string>Отчет по браку</string>
    </property>
   </action>
  </widget>
@@ -1262,6 +1268,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_reject</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1312,5 +1334,6 @@
   <slot>view_report_performance_company()</slot>
   <slot>view_report_shipped_customer()</slot>
   <slot>view_report_warehouse_balance_date()</slot>
+  <slot>view_report_reject()</slot>
  </slots>
 </ui>

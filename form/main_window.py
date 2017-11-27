@@ -9,7 +9,7 @@ from form import article, order, cut, pay, salary, operation_list, warehouse_pro
 from form import report_supply, report_cost_article, test_window, report_sibestoimost, report_rest_work,\
     report_accept_pack, pack, report_profit, report_performance_company, report_shipped_to_customer
 from form import staff_traffic, report_material_consumption, report_warehouse_balance_date
-from form import report_order
+from form import report_order, report_reject
 from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
 import sys
@@ -424,6 +424,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_report_warehouse_balance_date)
         self.sub_report_warehouse_balance_date.resize(self.report_warehouse_balance_date.size())
         self.sub_report_warehouse_balance_date.show()
+
+    def view_report_reject(self):
+        self.report_reject = report_reject.ReportReject()
+        self.sub_report_reject = QMdiSubWindow()
+        self.sub_report_reject.setWidget(self.report_reject)
+        self.mdi.addSubWindow(self.sub_report_reject)
+        self.sub_report_reject.resize(self.report_reject.size())
+        self.sub_report_reject.show()
 
     def view_test_window(self):
         self.test_window = test_window.TestWindow()
