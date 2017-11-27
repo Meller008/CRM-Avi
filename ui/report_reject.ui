@@ -162,7 +162,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <resources/>
  <connections>
@@ -182,8 +182,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_calc_sum</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_sum()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>403</x>
+     <y>10</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>-56</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
+  <slot>ui_calc_sum()</slot>
  </slots>
 </ui>
