@@ -42,8 +42,9 @@ class ReportWarehouseBalanceDate(QMainWindow, report_warehouse_balance_date_clas
                       FROM transaction_records_material AS trm LEFT JOIN material_balance ON trm.Supply_Balance_Id = material_balance.Id
                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                         LEFT JOIN cut ON trm.Cut_Material_Id = cut.Id
-                      WHERE cut.Date_Cut <= %s OR trm.Date <= %s"""
-        sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), self.de_date_to.date().addDays(1).toPyDate()))
+                        LEFT JOIN beika ON trm.Beika_Id = beika.Id
+                      WHERE cut.Date_Cut <= %s OR trm.Date <= %s OR beika.Date <= %s"""
+        sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), self.de_date_to.date().addDays(1).toPyDate(), self.de_date_to.date().toPyDate()))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения остатков ткани", sql_info.msg, QMessageBox.Ok)
             return False
