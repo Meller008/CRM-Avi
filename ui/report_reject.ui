@@ -198,9 +198,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_10</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>471</x>
+     <y>10</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>468</x>
+     <y>-125</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
   <slot>ui_calc_sum()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>

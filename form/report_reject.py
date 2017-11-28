@@ -164,3 +164,8 @@ class ReportReject(QMainWindow, report_reject_class):
             item = QTableWidgetItem(str(all_sum))
             self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 5, item)
 
+    def ui_print(self):
+        head = "Брак предприятия %s-%s" % (self.de_date_from.date().toString(Qt.ISODate), self.de_date_to.date().toString(Qt.ISODate))
+        html = table_to_html.tab_html(self.tableWidget, table_head=head)
+        self.print_class = print_qt.PrintHtml(self, html)
+

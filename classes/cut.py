@@ -1147,7 +1147,7 @@ class Pack:
                             my_sql.sql_rollback_transaction(sql_connect_transaction)
                             return [False, "Не смог изменить баланс склада товара (Это плохо к админу)"]
 
-                        txt_note = "%s/%s - Принято упаковкой" % (self.__cut_id, self.__number_pack)
+                        txt_note = "%s/%s - Принята пачка" % (self.__cut_id, self.__number_pack)
                         query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note)
                                                             VALUES (%s, %s, %s, %s)"""
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__article_parametr, datetime.now(),
