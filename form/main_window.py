@@ -9,7 +9,7 @@ from form import article, order, cut, pay, salary, operation_list, warehouse_pro
 from form import report_supply, report_cost_article, test_window, report_sibestoimost, report_rest_work,\
     report_accept_pack, pack, report_profit, report_performance_company, report_shipped_to_customer
 from form import staff_traffic, report_material_consumption, report_warehouse_balance_date
-from form import report_order, report_reject
+from form import report_order, report_reject, transaction_warehouse
 from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
 import sys
@@ -296,6 +296,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_material_accessories)
         self.sub_material_accessories.resize(self.accessories_warehouse.size())
         self.sub_material_accessories.show()
+
+    def view_transaction_warehouse(self):
+        self.transaction_warehouse = transaction_warehouse.TransactionWarehouse()
+        self.sub_transaction_warehouse = QMdiSubWindow()
+        self.sub_transaction_warehouse.setWidget(self.transaction_warehouse)
+        self.mdi.addSubWindow(self.sub_transaction_warehouse)
+        self.sub_transaction_warehouse.resize(self.transaction_warehouse.size())
+        self.sub_transaction_warehouse.show()
 
     def view_beika(self):
         self.beika = beika.BeikaList()

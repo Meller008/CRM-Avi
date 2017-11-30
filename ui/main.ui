@@ -183,6 +183,7 @@
     <addaction name="ma_warehouse_accessories"/>
     <addaction name="ma_warehouse"/>
     <addaction name="ma_warehouse_rest"/>
+    <addaction name="ma_transaction_warehouse"/>
    </widget>
    <widget class="QMenu" name="menu_13">
     <property name="enabled">
@@ -498,6 +499,14 @@
    </property>
    <property name="text">
     <string>Отчет по браку</string>
+   </property>
+  </action>
+  <action name="ma_transaction_warehouse">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Транзакции</string>
    </property>
   </action>
  </widget>
@@ -1287,6 +1296,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_transaction_warehouse</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_transaction_warehouse()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1338,5 +1363,6 @@
   <slot>view_report_shipped_customer()</slot>
   <slot>view_report_warehouse_balance_date()</slot>
   <slot>view_report_reject()</slot>
+  <slot>view_transaction_warehouse()</slot>
  </slots>
 </ui>
