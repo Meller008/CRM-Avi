@@ -117,7 +117,7 @@
       <item row="1" column="4">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>На сумму</string>
+         <string>На сумму (расчет)</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
