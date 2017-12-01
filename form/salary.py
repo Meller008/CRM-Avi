@@ -3,10 +3,12 @@ from datetime import datetime
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog
 from PyQt5.QtGui import QIcon, QBrush, QColor
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDate
 from decimal import *
-from function import my_sql, to_excel
+from function import my_sql, to_excel, table_to_html
 from classes.my_class import User
+from classes import print_qt
+
 
 
 salary_list = loadUiType(getcwd() + '/ui/salary_work.ui')[0]
@@ -188,6 +190,15 @@ class SalaryList(QDialog, salary_list):
         self.tw_main_salary_history.horizontalHeader().resizeSection(5, 70)
         self.tw_main_salary_history.horizontalHeader().resizeSection(6, 60)
         self.tw_main_salary_history.horizontalHeader().resizeSection(7, 65)
+
+        self.tw_main_salary_2.horizontalHeader().resizeSection(0, 155)
+        self.tw_main_salary_2.horizontalHeader().resizeSection(1, 80)
+        self.tw_main_salary_2.horizontalHeader().resizeSection(2, 80)
+        self.tw_main_salary_2.horizontalHeader().resizeSection(3, 80)
+        self.tw_main_salary_2.horizontalHeader().resizeSection(4, 80)
+        self.tw_main_salary_2.horizontalHeader().resizeSection(5, 70)
+        self.tw_main_salary_2.horizontalHeader().resizeSection(6, 60)
+        self.tw_main_salary_2.horizontalHeader().resizeSection(7, 65)
 
         self.tw_many.horizontalHeader().resizeSection(0, 155)
 
@@ -583,6 +594,197 @@ class SalaryList(QDialog, salary_list):
         path = QFileDialog.getSaveFileName(self, "Сохранение")
         if path[0]:
             to_excel.table_to_excel(self.tw_many, path[0])
+
+    # предварительный расчет зп
+    def ui_calc_preliminary(self):
+        self.all_operation_preliminary = 0
+        self.all_plus_preliminary = 0
+        self.all_minus_preliminary = 0
+        self.salary_preliminary = []
+        query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pack_operation.Id, pack_operation.Price * pack_operation.Value,
+                        operations.Name ,pack_operation.Date_make, pack_operation.Date_Input, pack.Cut_Id, pack.Number
+                      FROM pack_operation LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
+                        LEFT JOIN operations ON pack_operation.Operation_id = operations.Id
+                        LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id
+                      WHERE pack_operation.Pay = 0 AND pack_operation.Worker_Id IS NOT NULL
+                      ORDER BY work_name, pack_operation.Date_Input"""
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            print("Не смог получить операции")
+            return False
+
+        previous_id = None
+        id_in_salary = []
+        for operation in sql_info:
+
+            if previous_id != operation[0]:
+                work = {
+                        "worker_id": operation[0],
+                        "worker_name": operation[1],
+                        "operation_sum": 0,
+                        "plus_sum": 0,
+                        "plus_value": 0,
+                        "minus_sum": 0,
+                        "minus_value": 0,
+                        "operation_list": [],
+                        "p_m_list": []
+                      }
+
+                self.salary_preliminary.append(work)
+                previous_id = operation[0]
+                id_in_salary.append(operation[0])
+
+                work["operation_list"].append([operation[2], operation[3], operation[4], operation[5], operation[6], operation[7], operation[8]])
+                work["operation_sum"] += operation[3]
+                self.all_operation_preliminary += operation[3]
+
+            else:
+                work["operation_list"].append([operation[2], operation[3], operation[4], operation[5], operation[6], operation[7], operation[8]])
+                work["operation_sum"] += operation[3]
+                self.all_operation_preliminary += operation[3]
+
+        query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pay_worker.Id, pay_reason.Name, pay_worker.Balance,
+                        pay_worker.Date_In_Pay, pay_worker.Note, admin.Last_Name
+                      FROM pay_worker
+                        LEFT JOIN staff_worker_info AS work ON pay_worker.Worker_Id = work.Id
+                        LEFT JOIN pay_reason ON pay_worker.Reason_Id = pay_reason.Id
+                        LEFT JOIN staff_worker_info AS admin ON pay_worker.Worker_Id_Insert = admin.Id
+                      WHERE Pay = 0
+                      ORDER BY work_name, pay_worker.Date_In_Pay"""
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            print("Не смог получить доплаты вычеты")
+            return False
+
+        previous_id = None
+
+        for p_m in sql_info:
+
+            if p_m[0] != previous_id and p_m[0] not in id_in_salary:
+                work = {
+                        "worker_id": p_m[0],
+                        "worker_name": p_m[1],
+                        "operation_sum": 0,
+                        "plus_sum": 0,
+                        "plus_value": 0,
+                        "minus_sum": 0,
+                        "minus_value": 0,
+                        "operation_list": [],
+                        "p_m_list": []
+                      }
+
+                self.salary_preliminary.append(work)
+                previous_id = p_m[0]
+
+                work["p_m_list"].append([p_m[2], p_m[3], p_m[4], p_m[5], p_m[6], p_m[7]])
+                if p_m[4] > 0:
+                    work["plus_sum"] += p_m[4]
+                    work["plus_value"] += 1
+                    self.all_plus_preliminary += p_m[4]
+                else:
+                    work["minus_sum"] += -p_m[4]
+                    work["minus_value"] += 1
+                    self.all_minus_preliminary += -p_m[4]
+
+            elif p_m[0] != previous_id and p_m[0] in id_in_salary:
+
+                # Если такой работник уже есть то ищем его
+                for work_pay in self.salary_preliminary:
+                    if work_pay["worker_id"] == p_m[0]:
+                        work = work_pay
+                        break
+                else:
+                    QMessageBox.critical(self, "Ошибка", "Не найден работник при Д/В", QMessageBox.Ok)
+                    return False
+
+                previous_id = p_m[0]
+
+                work["p_m_list"].append([p_m[2], p_m[3], p_m[4], p_m[5], p_m[6], p_m[7]])
+                if p_m[4] > 0:
+                    work["plus_sum"] += p_m[4]
+                    work["plus_value"] += 1
+                    self.all_plus_preliminary += p_m[4]
+                else:
+                    work["minus_sum"] += -p_m[4]
+                    work["minus_value"] += 1
+                    self.all_minus_preliminary += -p_m[4]
+
+            else:
+                previous_id = p_m[0]
+
+                work["p_m_list"].append([p_m[2], p_m[3], p_m[4], p_m[5], p_m[6], p_m[7]])
+                if p_m[4] > 0:
+                    work["plus_sum"] += p_m[4]
+                    work["plus_value"] += 1
+                    self.all_plus_preliminary += p_m[4]
+                else:
+                    work["minus_sum"] += -p_m[4]
+                    work["minus_value"] += 1
+                    self.all_minus_preliminary += -p_m[4]
+
+        self.tw_main_salary_2.clearContents()
+        self.tw_main_salary_2.setRowCount(0)
+
+        for row, salary in enumerate(self.salary_preliminary):
+            self.tw_main_salary_2.insertRow(row)
+
+            new_table_item = QTableWidgetItem(str(salary["worker_name"]))
+            new_table_item.setData(-2, salary["worker_id"])
+            self.tw_main_salary_2.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(salary["operation_sum"] + salary["plus_sum"] - salary["minus_sum"], 2)))
+            new_table_item.setData(-2, salary["worker_id"])
+            self.tw_main_salary_2.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(salary["operation_sum"], 2)))
+            new_table_item.setData(-2, salary["worker_id"])
+            self.tw_main_salary_2.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(salary["plus_sum"], 2)))
+            new_table_item.setData(-2, salary["worker_id"])
+            self.tw_main_salary_2.setItem(row, 3, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(round(salary["minus_sum"], 2)))
+            new_table_item.setData(-2, salary["worker_id"])
+            self.tw_main_salary_2.setItem(row, 4, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(len(salary["operation_list"])))
+            new_table_item.setData(-2, salary["worker_id"])
+            self.tw_main_salary_2.setItem(row, 5, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(salary["plus_value"]))
+            new_table_item.setData(-2, salary["worker_id"])
+            self.tw_main_salary_2.setItem(row, 6, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(salary["minus_value"]))
+            new_table_item.setData(-2, salary["worker_id"])
+            self.tw_main_salary_2.setItem(row, 7, new_table_item)
+
+        self.le_all_operation_2.setText(str(round(self.all_operation_preliminary, 2)))
+        self.le_all_plus_2.setText(str(round(self.all_plus_preliminary, 2)))
+        self.le_all_minus_2.setText(str(round(self.all_minus_preliminary, 2)))
+        self.le_all_sum_2.setText(str(round((self.all_operation_preliminary + self.all_plus_preliminary) - self.all_minus_preliminary, 2)))
+
+    def ui_export_preliminary_salary(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tw_main_salary_2, path[0])
+
+    def ui_print_preliminary_salary(self):
+        up_html = """
+          <table>
+          <tr> <th>Операции</th><th>Доплаты</th><th>Вычеты</th><th>Итогоу</th> </tr>
+          <tr> <td>#le_all_operation#</td><td>#le_all_plus#</td><td>#le_all_minus#</td><td>#le_all_sum#</td> </tr>
+          </table>"""
+        up_html = up_html.replace("#le_all_operation#", self.le_all_operation_2.text())
+        up_html = up_html.replace("#le_all_plus#", self.le_all_plus_2.text())
+        up_html = up_html.replace("#le_all_minus#", self.le_all_minus_2.text())
+        up_html = up_html.replace("#le_all_sum#", self.le_all_sum_2.text())
+
+        head = "Предварительный расчет зарплаты %s" % (QDate.currentDate().toString("dd.MM.yyyy"))
+
+        html = table_to_html.tab_html(self.tw_main_salary_2, table_head=head, up_template=up_html)
+        self.print_class = print_qt.PrintHtml(self, html)
 
 
 class SalaryInfo(QDialog, salary_work):
