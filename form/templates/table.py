@@ -2,6 +2,7 @@ from os import getcwd
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt, QDate
 from function import my_sql, to_excel, table_to_html
 from classes import print_qt
 from decimal import Decimal
@@ -83,14 +84,22 @@ class TableList(QMainWindow, table_list_class):
 
         for table_typle in self.table_items:
             self.table_widget.insertRow(self.table_widget.rowCount())
+
             for column in range(1, len(table_typle)):
+
                 if isinstance(table_typle[column], Decimal):
                     text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
+                    item = QTableWidgetItemFloat(text)
+
                 elif isinstance(table_typle[column], datetime.date):
-                    text = table_typle[column].strftime("%d.%m.%Y")
+                    date = QDate(table_typle[column].year, table_typle[column].month, table_typle[column].day)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, date)
+
                 else:
-                    text = str(table_typle[column])
-                item = QTableWidgetItem(text)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, table_typle[column])
+
                 item.setData(5, table_typle[0])
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 1, item)
 
@@ -158,3 +167,8 @@ class TableList(QMainWindow, table_list_class):
         path = QFileDialog.getSaveFileName(self, "Сохранение")
         if path[0]:
             to_excel.table_to_excel(self.table_widget, path[0])
+
+
+class QTableWidgetItemFloat(QTableWidgetItem):  # Класс итема для сортировки значений с разделением
+    def __lt__(self, other):
+        return float(self.text().replace(" ", "")) < float(other.text().replace(" ", ""))

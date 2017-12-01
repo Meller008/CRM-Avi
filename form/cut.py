@@ -114,13 +114,20 @@ class CutList(table.TableList):
                 color = QBrush(QColor(228, 242, 99, 255))
 
             for column in range(2, len(table_typle)):
+
                 if isinstance(table_typle[column], Decimal):
                     text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
+                    item = table.QTableWidgetItemFloat(text)
+
                 elif isinstance(table_typle[column], date):
-                    text = table_typle[column].strftime("%d.%m.%Y")
+                    date_text = QDate(table_typle[column].year, table_typle[column].month, table_typle[column].day)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, date_text)
+
                 else:
-                    text = str(table_typle[column])
-                item = QTableWidgetItem(text)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, table_typle[column])
+
                 item.setData(5, table_typle[0])
                 item.setBackground(color)
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 2, item)

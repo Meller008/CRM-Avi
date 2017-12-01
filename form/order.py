@@ -112,11 +112,17 @@ class OrderList(table.TableList):
 
                 if isinstance(table_typle[column], Decimal):
                     text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(table_typle[column]))
+                    item = table.QTableWidgetItemFloat(text)
+
                 elif isinstance(table_typle[column], datetime.date):
-                    text = table_typle[column].strftime("%d.%m.%Y")
+                    date = QDate(table_typle[column].year, table_typle[column].month, table_typle[column].day)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, date)
+
                 else:
-                    text = str(table_typle[column])
-                item = QTableWidgetItem(text)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, table_typle[column])
+
                 item.setData(5, table_typle[0])
                 item.setBackground(color)
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 1, item)
