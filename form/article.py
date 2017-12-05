@@ -14,7 +14,6 @@ article_change_operation_class = loadUiType(getcwd() + '/ui/article_change_opera
 article_change_material_class = loadUiType(getcwd() + '/ui/article_change_material.ui')[0]
 article_copy_parametr = loadUiType(getcwd() + '/ui/article_copy_parametr.ui')[0]
 article_filter = loadUiType(getcwd() + '/ui/article_filter.ui')[0]
-article_list_all = loadUiType(getcwd() + '/ui/article_list_all.ui')[0]
 
 
 class ArticleList(tree.TreeList):
