@@ -217,6 +217,14 @@ class MainWindow(QMainWindow, main_class):
         self.sub_cut_list.resize(self.cut_list.size())
         self.sub_cut_list.show()
 
+    def view_article_list(self):
+        self.article_list_all = article.ArticleListAll()
+        self.sub_article_list_all = QMdiSubWindow()
+        self.sub_article_list_all.setWidget(self.article_list_all)
+        self.mdi.addSubWindow(self.sub_article_list_all)
+        self.sub_article_list_all.resize(self.article_list_all.size())
+        self.sub_article_list_all.show()
+
     def view_pack_list(self):
         self.pack_list = pack.PackList()
         self.sub_pack_list = QMdiSubWindow()

@@ -64,6 +64,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -157,14 +158,10 @@
     <property name="title">
      <string>Разное</string>
     </property>
+    <addaction name="ma_audit_verification"/>
     <addaction name="ma_order_edi"/>
     <addaction name="ma_scan_pack"/>
-   </widget>
-   <widget class="QMenu" name="menu_10">
-    <property name="title">
-     <string>Аудит</string>
-    </property>
-    <addaction name="ma_audit_verification"/>
+    <addaction name="ma_article_list"/>
    </widget>
    <widget class="QMenu" name="menu_11">
     <property name="title">
@@ -223,9 +220,7 @@
    <addaction name="menu_13"/>
    <addaction name="menu_9"/>
    <addaction name="menu_3"/>
-   <addaction name="menu_10"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="ma_material">
    <property name="text">
     <string>Приход ткани</string>
@@ -507,6 +502,11 @@
    </property>
    <property name="text">
     <string>Транзакции</string>
+   </property>
+  </action>
+  <action name="ma_article_list">
+   <property name="text">
+    <string>Список всех артикулов</string>
    </property>
   </action>
  </widget>
@@ -1303,8 +1303,24 @@
    <slot>view_transaction_warehouse()</slot>
    <hints>
     <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
      <x>706</x>
      <y>356</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_article_list</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_article_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>706</x>
@@ -1364,5 +1380,6 @@
   <slot>view_report_warehouse_balance_date()</slot>
   <slot>view_report_reject()</slot>
   <slot>view_transaction_warehouse()</slot>
+  <slot>view_article_list()</slot>
  </slots>
 </ui>

@@ -1,5 +1,5 @@
 from os import getcwd, path, mkdir, listdir
-from form.templates import tree
+from form.templates import tree, table
 from form import operation, supply_material, supply_accessories, print_label
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem, QLineEdit, QWidget, QSizePolicy
@@ -14,6 +14,7 @@ article_change_operation_class = loadUiType(getcwd() + '/ui/article_change_opera
 article_change_material_class = loadUiType(getcwd() + '/ui/article_change_material.ui')[0]
 article_copy_parametr = loadUiType(getcwd() + '/ui/article_copy_parametr.ui')[0]
 article_filter = loadUiType(getcwd() + '/ui/article_filter.ui')[0]
+article_list_all = loadUiType(getcwd() + '/ui/article_list_all.ui')[0]
 
 
 class ArticleList(tree.TreeList):
@@ -1707,3 +1708,40 @@ class CopyParametr(QDialog, article_copy_parametr):
         self.done(-1)
         self.close()
         self.destroy()
+
+
+class ArticleListAll(table.TableList):
+    def set_settings(self):
+        self.setWindowTitle("Артикула")  # Имя окна
+        self.resize(1170, 500)
+        self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
+        self.pb_add.deleteLater()
+        self.pb_change.deleteLater()
+        self.pb_dell.deleteLater()
+        self.pb_filter.deleteLater()
+        self.toolBar.setStyleSheet("background-color: rgb(167, 183, 255);")  # Цвет бара
+
+        # Названия колонк (Имя, Длинна)
+        self.table_header_name = (("Арт.", 70), ("Раз.", 35), ("Параметр.", 135), ("Название", 235), ("Наз. клиента", 320), ("Штрих", 90),
+                                  ("Код кл.", 85), ("PCB", 30), ("Цена", 65), ("%НДС", 40))
+
+        self.filter = None
+        self.query_table_all = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
+                                    product_article.Name, product_article_parametrs.Client_Name, product_article_parametrs.Barcode,
+                                    product_article_parametrs.Client_code, product_article_parametrs.In_On_Place, product_article_parametrs.Price,
+                                    product_article_parametrs.NDS
+                                  FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                    LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                                  ORDER BY product_article.Article, product_article_size.Size, product_article_parametrs.Name"""
+
+        #  нулевой элемент должен быть ID
+        self.query_table_select = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
+                                        product_article.Name, product_article_parametrs.Client_Name, product_article_parametrs.Barcode,
+                                        product_article_parametrs.Client_code, product_article_parametrs.In_On_Place, product_article_parametrs.Price,
+                                        product_article_parametrs.NDS
+                                      FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                                      ORDER BY product_article.Article, product_article_size.Size, product_article_parametrs.Name"""
+
+        self.query_table_dell = ""
