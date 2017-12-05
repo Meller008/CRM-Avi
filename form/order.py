@@ -1087,6 +1087,10 @@ class Order(QMainWindow, order_class):
             if "mysql.connector.errors" in str(type(sql_adr)):
                 QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_adr.msg, QMessageBox.Ok)
                 return False
+
+            if not sql_adr:
+                QMessageBox.critical(self, "Нету адреса", "У клиента нету пункта разгрузки!", QMessageBox.Ok)
+                return False
             adr = sql_adr[0][0]
             kpp = sql_adr[0][1]
 
