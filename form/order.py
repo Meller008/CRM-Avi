@@ -1939,7 +1939,7 @@ class Order(QMainWindow, order_class):
 
         book.save(path[0])
 
-    def of_ex_score(self, article, unite):
+    def of_ex_score(self, article, unite, bank):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1951,6 +1951,16 @@ class Order(QMainWindow, order_class):
         ald_center = Alignment(horizontal="center")
         border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
         border_all_big = Border(left=Side(style='medium'), right=Side(style='medium'), top=Side(style='medium'), bottom=Side(style='medium'))
+
+        if bank == "ВТБ":
+            sheet["A2"] = "ИНН/КПП: 7703561330/773001001"
+            sheet["A3"] = "Расчетный счет: 40702810417030008128 в ВТБ 24 (ПАО) г. Москва"
+            sheet["A4"] = "Корр. счет: 30101810100000000716 БИК банка: 044525716"
+        elif bank == "Бинбанк":
+            sheet["A2"] = "ИНН/КПП: 7703561330/773001001"
+            sheet["A3"] = "Расчетный счет: 40702810600140100104 в БИНБАНК (ОАО) г. Москва"
+            sheet["A4"] = "Корр. счет: 30101810245250000117 БИК банка: 044525117"
+
 
         sheet["A5"] = "Счет № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
         sheet["A6"] = "Плательщик: " + self.le_client.text()
@@ -2519,7 +2529,9 @@ class OrderDocList(QDialog, order_doc):
             else:
                 unite = False
 
-            self.main.of_ex_score(article, unite)
+            bank = self.rb_score_bank.currentText()
+
+            self.main.of_ex_score(article, unite, bank)
             self.close()
             self.destroy()
 
