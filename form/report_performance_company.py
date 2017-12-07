@@ -1,10 +1,12 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem
-from PyQt5.QtCore import QDate
+from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtGui import QIcon
 import re
 from function import my_sql
+from function import table_to_html
+from classes import print_qt
 
 
 report_performance_company_class = loadUiType(getcwd() + '/ui/report_performance_company.ui')[0]
@@ -87,7 +89,7 @@ class ReportPerformanceCompany(QMainWindow, report_performance_company_class):
                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
-                      WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s
+                      WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s AND product_article_parametrs.Id IS NOT NULL 
                       GROUP BY product_article_parametrs.Id"""
         sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()))
         if "mysql.connector.errors" in str(type(sql_info)):
@@ -201,3 +203,22 @@ class ReportPerformanceCompany(QMainWindow, report_performance_company_class):
             self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 3, item)
 
             self.le_sum.setText(text)
+
+    def ui_print(self):
+        up_html = """
+          <table>
+          <tr> <th>Кроев</th><th>Пачек</th><th>Операций</th><th>Готовых изделий</th><th>Брака</th><th>На сумму (покроеную)</th> </tr>
+          <tr> <th>#le_cut#</th><th>#le_pack#</th><th>#le_operation#</th><th>#le_product#</th><th>#le_damage#</th><th>#le_sum#</th> </tr>
+          </table>"""
+        up_html = up_html.replace("#le_cut#", self.le_cut.text())
+        up_html = up_html.replace("#le_pack#", self.le_pack.text())
+        up_html = up_html.replace("#le_operation#", self.le_operation.text())
+        up_html = up_html.replace("#le_product#", self.le_product.text())
+        up_html = up_html.replace("#le_damage#", self.le_damage.text())
+        up_html = up_html.replace("#le_sum#", self.le_sum.text())
+
+        head = "Произведено компанией %s - %s" % (self.de_date_from.date().toString(Qt.ISODate), self.de_date_to.date().toString(Qt.ISODate))
+
+        html = table_to_html.tab_html(self.tableWidget, table_head=head, up_template=up_html)
+        self.print_class = print_qt.PrintHtml(self, html)
+

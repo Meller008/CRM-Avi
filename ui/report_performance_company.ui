@@ -299,8 +299,8 @@
    <slot>ui_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>304</x>
-     <y>13</y>
+     <x>444</x>
+     <y>15</y>
     </hint>
     <hint type="destinationlabel">
      <x>295</x>
@@ -308,8 +308,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_10</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>496</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>584</x>
+     <y>12</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>

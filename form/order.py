@@ -632,7 +632,7 @@ class Order(QMainWindow, order_class):
             self.save_change_order = True
 
     def ui_check_warehouse(self):
-        position_article_id = []
+        position_article_id = {}
 
         # Переберем таблицу и получим нужные ID для проверки слада
         for row in range(self.tw_position.rowCount()):
@@ -640,42 +640,17 @@ class Order(QMainWindow, order_class):
 
             self.tw_position.item(row, 1).setBackground(QBrush(QColor(252, 141, 141, 255)))
 
-            if table_item.data(-1) == "new":
-                if position_article_id.count(int(table_item.data(5))) == 0:
-                    position_article_id.append(int(table_item.data(5)))
-                else:
-                    name = str(
-                        self.tw_position.item(row, 0).text() + " (" + self.tw_position.item(row, 1).text() + ") [" + self.tw_position.item(row, 2).text() + "]")
-                    QMessageBox.critical(self, "Ошибка проверки", "Эта позиция встречается 2 раза\n%s" % name, QMessageBox.Ok)
-                    return False
-
-            elif table_item.data(-1) == "upd":
-                if position_article_id.count(int(table_item.data(5))) == 0:
-                    position_article_id.append(int(table_item.data(5)))
-                else:
-                    name = str(
-                        self.tw_position.item(row, 0).text() + " (" + self.tw_position.item(row, 1).text() + ") [" + self.tw_position.item(row, 2).text() + "]")
-                    QMessageBox.critical(self, "Ошибка проверки", "Эта позиция встречается 2 раза\n%s" % name, QMessageBox.Ok)
-                    return False
-
-            elif table_item.data(-1) == "del":
-                pass
-
-            elif table_item.data(-1) == "set":
-                if position_article_id.count(int(table_item.data(5))) == 0:
-                    position_article_id.append(int(table_item.data(5)))
-                else:
-                    name = str(
-                        self.tw_position.item(row, 0).text() + " (" + self.tw_position.item(row, 1).text() + ") [" + self.tw_position.item(row, 2).text() + "]")
-                    QMessageBox.critical(self, "Ошибка проверки", "Эта позиция встречается 2 раза\n%s" % name, QMessageBox.Ok)
-                    return False
+            if table_item.data(-1) == "del":
+               pass
             else:
-                QMessageBox.critical(self, "Ошибка проверки", "Позиция без состояния", QMessageBox.Ok)
-                return False
+                if position_article_id.get(int(table_item.data(5))) is None:
+                    position_article_id.update({int(table_item.data(5)): int(self.tw_position.item(row, 5).text())})
+                else:
+                    position_article_id[int(table_item.data(5))] += int(self.tw_position.item(row, 5).text())
 
         # Получим остатки склада
         query = "SELECT Id_Article_Parametr, Value_In_Warehouse FROM product_article_warehouse WHERE Id_Article_Parametr IN %s" % str(
-            tuple(position_article_id)).replace(",)", ")")
+            tuple(position_article_id.keys())).replace(",)", ")")
         sql_info = my_sql.sql_select(query)
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получение остатков склада", sql_info.msg, QMessageBox.Ok)
@@ -693,12 +668,13 @@ class Order(QMainWindow, order_class):
         for row in range(self.tw_position.rowCount()):
             table_item = self.tw_position.item(row, 2)
             if table_item.data(-1) != "del":
-                warehouse_id = [warehouse for warehouse in sql_info if warehouse[0] == int(table_item.data(5))][0]
 
-                value = warehouse_id[1] - int(self.tw_position.item(row, 5).text())
+                warehouse_sql = [warehouse for warehouse in sql_info if warehouse[0] == int(table_item.data(5))][0]
+
+                value = warehouse_sql[1] - position_article_id[int(table_item.data(5))]
                 if value >= 0:
                     color = color_yes
-                    note = "На складе %s" % warehouse_id[1]
+                    note = "На складе %s" % warehouse_sql[1]
                 else:
                     color = color_no
                     note = "Не хватает %s" % -value
