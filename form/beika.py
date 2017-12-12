@@ -357,9 +357,9 @@ class Beika(QDialog, beika):
                 avg_price = up / down
 
                 # Добавим приход фурнитуры
-                query = "INSERT INTO accessories_supply (Accessories_ProviderId, Data, Note) VALUES (%s, NOW(), %s)"
+                query = "INSERT INTO accessories_supply (Accessories_ProviderId, Data, Note) VALUES (%s, %s, %s)"
                 txt_note = "Приход с нарезки бейки №%s" % self.id
-                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (SUPPLY_PROVIDER_ID, txt_note))
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (SUPPLY_PROVIDER_ID, self.de_date.date.toPyDate(), txt_note))
                 if "mysql.connector.errors" in str(type(sql_info)):
                     my_sql.sql_rollback_transaction(sql_connect_transaction)
                     QMessageBox.critical(self, "Ошибка сохранения прихода", "Не смог сделать приход фурнитуры", QMessageBox.Ok)
