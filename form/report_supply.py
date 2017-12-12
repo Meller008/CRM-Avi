@@ -88,6 +88,7 @@ class ReportSupply(QMainWindow, report_supply_class):
 
         row = 0
         all_sum = 0
+        all_value = 0
         for material in sql_info:
             self.tw_material.insertRow(row)
             item = QTableWidgetItem(material[0])
@@ -106,6 +107,18 @@ class ReportSupply(QMainWindow, report_supply_class):
 
             row += 1
             all_sum += material[3]
+            all_value += material[1]
+
+        else:
+
+            self.tw_material.insertRow(row)
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_value, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_material.setItem(row, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_material.setItem(row, 3, item)
 
         text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
         self.le_material_sum.setText(text)
@@ -147,6 +160,7 @@ class ReportSupply(QMainWindow, report_supply_class):
 
         row = 0
         all_sum = 0
+        all_value = 0
         for accessories in sql_info:
             self.tw_accessories.insertRow(row)
             item = QTableWidgetItem(accessories[0])
@@ -165,6 +179,20 @@ class ReportSupply(QMainWindow, report_supply_class):
 
             row += 1
             all_sum += accessories[3]
+            all_value += accessories[1]
+
+        else:
+
+            self.tw_accessories.insertRow(row)
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_value, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories.setItem(row, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories.setItem(row, 3, item)
+
+
 
         text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
         self.le_accessories_sum.setText(text)
@@ -216,6 +244,7 @@ class ReportSupply(QMainWindow, report_supply_class):
 
         row = 0
         all_sum = 0
+        all_value = 0
         for comparing in sql_info:
             self.tw_comparing.insertRow(row)
             item = QTableWidgetItem(comparing[0])
@@ -234,6 +263,17 @@ class ReportSupply(QMainWindow, report_supply_class):
 
             row += 1
             all_sum += comparing[3]
+            all_value += comparing[1]
+        else:
+
+            self.tw_comparing.insertRow(row)
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_value, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_comparing.setItem(row, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_comparing.setItem(row, 3, item)
 
         text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 2)))
         self.le_comparing_sum.setText(text)
