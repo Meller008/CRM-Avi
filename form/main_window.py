@@ -8,7 +8,8 @@ from form import article, order, cut, pay, salary, operation_list, warehouse_pro
     warehouse_rest, supply_material, supply_accessories, scan_pack, settings_access
 from form import report_supply, report_cost_article, test_window, report_sibestoimost, report_rest_work,\
     report_accept_pack, pack, report_profit, report_performance_company, report_shipped_to_customer
-from form import staff_traffic, report_material_consumption, report_warehouse_balance_date
+from form import staff_traffic, report_material_consumption, report_warehouse_balance_date,\
+    report_all
 from form import report_order, report_reject, transaction_warehouse
 from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
@@ -448,6 +449,14 @@ class MainWindow(QMainWindow, main_class):
         self.mdi.addSubWindow(self.sub_report_reject)
         self.sub_report_reject.resize(self.report_reject.size())
         self.sub_report_reject.show()
+
+    def view_report_all(self):
+        self.view_report_all = report_all.ReportAll()
+        self.sub_view_report_all = QMdiSubWindow()
+        self.sub_view_report_all.setWidget(self.view_report_all)
+        self.mdi.addSubWindow(self.sub_view_report_all)
+        self.sub_view_report_all.resize(self.view_report_all.size())
+        self.sub_view_report_all.show()
 
     def view_test_window(self):
         self.test_window = test_window.TestWindow()

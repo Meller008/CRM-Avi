@@ -210,6 +210,7 @@
     <addaction name="ma_report_shipped_customer"/>
     <addaction name="ma_report_warehouse_date"/>
     <addaction name="ma_report_reject"/>
+    <addaction name="ma_report_all"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -507,6 +508,14 @@
   <action name="ma_article_list">
    <property name="text">
     <string>Список всех артикулов</string>
+   </property>
+  </action>
+  <action name="ma_report_all">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Отчет Отчетов</string>
    </property>
   </action>
  </widget>
@@ -1328,6 +1337,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_all</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_all()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1381,5 +1406,6 @@
   <slot>view_report_reject()</slot>
   <slot>view_transaction_warehouse()</slot>
   <slot>view_article_list()</slot>
+  <slot>view_report_all()</slot>
  </slots>
 </ui>
