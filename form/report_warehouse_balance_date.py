@@ -43,11 +43,11 @@ class ReportWarehouseBalanceDate(QMainWindow, report_warehouse_balance_date_clas
                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                         LEFT JOIN cut ON trm.Cut_Material_Id = cut.Id
                         LEFT JOIN beika ON trm.Beika_Id = beika.Id
-                      WHERE cut.Date_Cut <= %s OR trm.Date <= DATE_FORMAT(%s,'%Y-%m-%d 23:59:59') OR beika.Date <= %s
+                      WHERE cut.Date_Cut <= %s OR trm.Date <= DATE_FORMAT(%s,'%Y-%m-%d 23:59:59') OR (beika.Date <= %s AND beika.Finished = 1)
                       or trm.Supply_Balance_Id IN (SELECT material_balance.Id FROM material_supply 
                                                         LEFT JOIN material_supplyposition ON material_supply.Id = material_supplyposition.Material_SupplyId
                                                         LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
-                                                      WHERE material_supply.Data <= %s AND (trm.Note LIKE 'Заказ % - %' OR trm.Note LIKE '%Бейки%'))"""
+                                                      WHERE material_supply.Data <= %s AND (trm.Note LIKE 'Заказ % - %'))"""
         sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), ) * 4)
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения остатков ткани", sql_info.msg, QMessageBox.Ok)
@@ -65,7 +65,7 @@ class ReportWarehouseBalanceDate(QMainWindow, report_warehouse_balance_date_clas
                         or (tra.Supply_Balance_Id IN (SELECT accessories_balance.Id FROM accessories_supply 
                                                         LEFT JOIN accessories_supplyposition ON accessories_supply.Id = accessories_supplyposition.Accessories_SupplyId
                                                         LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
-                                                      WHERE accessories_supply.Data <= %s) and (tra.Note LIKE 'Заказ % - %' OR tra.Note LIKE '%Бейки%'))"""
+                                                      WHERE accessories_supply.Data <= %s) and (tra.Note LIKE 'Заказ % - %' or tra.Note LIKE '%бейки%'))"""
         sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), ) * 3)
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения остатков фурнитуры", sql_info.msg, QMessageBox.Ok)

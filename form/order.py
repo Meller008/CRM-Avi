@@ -895,9 +895,9 @@ class Order(QMainWindow, order_class):
                         return False
 
                 if shipped == 0:
-                    query = "INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note) VALUES (%s, NOW(), %s, %s)"
+                    query = "INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note, Code) VALUES (%s, NOW(), %s, %s, 311)"
                 else:
-                    query = "INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note) VALUES (%s, NOW(), -%s, %s)"
+                    query = "INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note, Code) VALUES (%s, NOW(), -%s, %s, 310)"
                 sql_info = my_sql.sql_many_transaction(sql_connect_transaction, query, sql_shipped_position)
                 if "mysql.connector.errors" in str(type(sql_info)):
                     my_sql.sql_rollback_transaction(sql_connect_transaction)

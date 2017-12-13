@@ -586,8 +586,8 @@ class MaterialSupply(QMainWindow, supply_material):
 
                     position_id = sql_info
 
-                    query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note)
-                                  VALUES ((SELECT material_balance.Id FROM material_balance WHERE material_balance.Material_SupplyPositionId = %s), %s, NOW(), %s)"""
+                    query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Code)
+                                  VALUES ((SELECT material_balance.Id FROM material_balance WHERE material_balance.Material_SupplyPositionId = %s), %s, NOW(), %s, 110)"""
                     txt_note = "Заказ %s - новый приход" % supply_id
                     sql_value = (position_id, Decimal(self.tw_position.item(row, 1).text().replace(" ", "")), txt_note)
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_value)
@@ -648,8 +648,8 @@ class MaterialSupply(QMainWindow, supply_material):
                             QMessageBox.critical(self, "Ошибка sql при изменении баланса материала", sql_info.msg, QMessageBox.Ok)
                             return False
 
-                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note)
-                                    VALUES ((SELECT material_balance.Id FROM material_balance WHERE material_balance.Material_SupplyPositionId = %s), %s, NOW(), %s)"""
+                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Code)
+                                    VALUES ((SELECT material_balance.Id FROM material_balance WHERE material_balance.Material_SupplyPositionId = %s), %s, NOW(), %s, 111)"""
                         txt_note = "Заказ %s - изменение прихода" % self.id
                         sql_value = (self.tw_position.item(row, 0).data(-1), change_value, txt_note)
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_value)
@@ -671,8 +671,8 @@ class MaterialSupply(QMainWindow, supply_material):
 
                         position_id = sql_info
 
-                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note)
-                                    VALUES ((SELECT material_balance.Id FROM material_balance WHERE material_balance.Material_SupplyPositionId = %s), %s, NOW(), %s)"""
+                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Code)
+                                    VALUES ((SELECT material_balance.Id FROM material_balance WHERE material_balance.Material_SupplyPositionId = %s), %s, NOW(), %s, 110)"""
                         txt_note = "Заказ %s - новый приход" % self.id
                         sql_value = (position_id, Decimal(self.tw_position.item(row, 1).text().replace(" ", "")), txt_note)
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_value)

@@ -288,7 +288,8 @@ class WarehouseTransaction(table.TableList):
             return False
 
         # Делаем запись о возврате
-        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id) VALUES (%s, %s, SYSDATE(), %s, NULL )"""
+        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id, Code) 
+                      VALUES (%s, %s, SYSDATE(), %s, NULL, 151)"""
         txt_note = "Отмена транзакции № %s" % sql_info_transaction[0][0]
         sql_values = (sql_info_transaction[0][1], fabs(sql_info_transaction[0][2]), txt_note)
         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)

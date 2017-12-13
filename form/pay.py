@@ -459,8 +459,8 @@ class PayBrows(QDialog, brows_pay):
                             QMessageBox.critical(self, "Ошибка sql Не смог забрать ткань с баланса", sql_info.msg, QMessageBox.Ok)
 
                         # Делаем запись о заборе ткани с баланса склада
-                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id)
-                                    VALUES (%s, %s, SYSDATE(), %s, NULL)"""
+                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id, Code)
+                                    VALUES (%s, %s, SYSDATE(), %s, NULL, 150)"""
                         txt_note = "Продажа ткани работнику № %s, ID вычета %s" % (self.le_work_bye.whatsThis(), id_pay)
                         sql_values = (sql_balance_material[0][0], -take_material_value, txt_note)
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)

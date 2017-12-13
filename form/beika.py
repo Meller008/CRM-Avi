@@ -334,8 +334,8 @@ class Beika(QDialog, beika):
                         return False
 
                     # Делаем запись о заборе ткани с баланса склада
-                    query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Beika_Id)
-                                  VALUES (%s, %s, SYSDATE(), %s, %s)"""
+                    query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Beika_Id, Code)
+                                  VALUES (%s, %s, SYSDATE(), %s, %s, 140)"""
                     txt_note = "На нарезку бейки №%s" % self.id
                     sql_values = (sql_balance_material[0][0], -take_material_value, txt_note, self.id)
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)
@@ -359,7 +359,7 @@ class Beika(QDialog, beika):
                 # Добавим приход фурнитуры
                 query = "INSERT INTO accessories_supply (Accessories_ProviderId, Data, Note) VALUES (%s, %s, %s)"
                 txt_note = "Приход с нарезки бейки №%s" % self.id
-                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (SUPPLY_PROVIDER_ID, self.de_date.date.toPyDate(), txt_note))
+                sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (SUPPLY_PROVIDER_ID, self.de_date.date().toPyDate(), txt_note))
                 if "mysql.connector.errors" in str(type(sql_info)):
                     my_sql.sql_rollback_transaction(sql_connect_transaction)
                     QMessageBox.critical(self, "Ошибка сохранения прихода", "Не смог сделать приход фурнитуры", QMessageBox.Ok)
@@ -396,8 +396,8 @@ class Beika(QDialog, beika):
                     QMessageBox.critical(self, "Ошибка сохранения прихода", "Не смог получить ID баланса через позицию прихода", QMessageBox.Ok)
                     return False
 
-                query = """INSERT INTO transaction_records_accessories (Supply_Balance_Id, Balance, Date, Note, Pack_Accessories_Id)
-                                  VALUES (%s, %s, SYSDATE(), %s, NULL)"""
+                query = """INSERT INTO transaction_records_accessories (Supply_Balance_Id, Balance, Date, Note, Pack_Accessories_Id, Code)
+                                  VALUES (%s, %s, SYSDATE(), %s, NULL, 240)"""
                 txt_note = "Нарезка бейки №%s" % self.id
                 sql_value = (sql_info[0][0], down, txt_note)
                 sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_value)
@@ -510,8 +510,8 @@ class Beika(QDialog, beika):
                             return False
 
                         # Делаем запись о возырате ткани на баланс склада
-                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Beika_Id)
-                                         VALUES (%s, %s, SYSDATE(), %s, %s)"""
+                        query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Beika_Id, Code)
+                                         VALUES (%s, %s, SYSDATE(), %s, %s, 141)"""
                         txt_note = "Отмена нарезки бейки №%s" % self.id
                         sql_values = (transaction_id_all[1], -transaction_id_all[0], txt_note, self.id)
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, sql_values)

@@ -159,8 +159,8 @@ class WarehouseChange(QDialog, warehouse_change):
                 QMessageBox.critical(self, "Ошибка sql изменение склада", sql_info.msg, QMessageBox.Ok)
                 return False
 
-            query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note)
-                        VALUES (%s, %s, %s, %s)"""
+            query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note, Code)
+                        VALUES (%s, %s, %s, %s, 350)"""
             sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.id, self.de_date_1.date().toString(QtCore.Qt.ISODate),
                                                                                       int(self.le_balance.text()), self.le_note_1.text()))
             if "mysql.connector.errors" in str(type(sql_info)):
@@ -182,8 +182,8 @@ class WarehouseChange(QDialog, warehouse_change):
                 QMessageBox.critical(self, "Ошибка sql изменение склада при перешитии", sql_info.msg, QMessageBox.Ok)
                 return False
 
-            query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note)
-                                    VALUES (%s, %s, %s, %s)"""
+            query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note, Code)
+                                    VALUES (%s, %s, %s, %s, 351)"""
             sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.id, self.de_date_2.date().toString(QtCore.Qt.ISODate),
                                                                                       -int(self.le_balance_2.text()), self.le_note_2.text()))
             if "mysql.connector.errors" in str(type(sql_info)):
@@ -201,8 +201,8 @@ class WarehouseChange(QDialog, warehouse_change):
                 QMessageBox.critical(self, "Ошибка sql изменение склада при перешитии", sql_info.msg, QMessageBox.Ok)
                 return False
 
-            query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note)
-                                                VALUES (%s, %s, %s, %s)"""
+            query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note, Code)
+                                                VALUES (%s, %s, %s, %s, 352)"""
             sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.le_art_name_plus.whatsThis(),
                                                                                       self.de_date_2.date().toString(QtCore.Qt.ISODate),
                                                                                       int(self.le_balance_2.text()), self.le_note_2.text()))
