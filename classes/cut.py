@@ -1211,21 +1211,22 @@ class Pack:
 
                 if self.__date_make_sql is not None and self.__date_make is not None:
                     # Если кол -во изменилось
-                    change_value =self.__value_all - self.__value_all_sql
+                    change_value = self.__value_all - self.__value_all_sql
                     query = "UPDATE product_article_warehouse SET Value_In_Warehouse = Value_In_Warehouse + %s WHERE Id_Article_Parametr = %s"
                     sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (change_value, self.__article_parametr))
                     if "mysql.connector.errors" in str(type(sql_info)):
                         my_sql.sql_rollback_transaction(sql_connect_transaction)
                         return [False, "Не смог изменить баланс склада товара (Это плохо к админу)"]
 
-                    txt_note = "%s/%s - Изменено кол-во принятой пачки" % (self.__cut_id, self.__number_pack)
-                    query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note, Code)
-                                                                                VALUES (%s, %s, %s, %s, 322)"""
-                    sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__article_parametr, datetime.now(),
-                                                                                              change_value, txt_note))
-                    if "mysql.connector.errors" in str(type(sql_info)):
-                        my_sql.sql_rollback_transaction(sql_connect_transaction)
-                        return [False, "Не смог записать изменение баланса склада товара (Это плохо к админу)"]
+                    if change_value != 0:
+                        txt_note = "%s/%s - Изменено кол-во принятой пачки" % (self.__cut_id, self.__number_pack)
+                        query = """INSERT INTO transaction_records_warehouse (Article_Parametr_Id, Date, Balance, Note, Code)
+                                                                                    VALUES (%s, %s, %s, %s, 322)"""
+                        sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__article_parametr, datetime.now(),
+                                                                                                  change_value, txt_note))
+                        if "mysql.connector.errors" in str(type(sql_info)):
+                            my_sql.sql_rollback_transaction(sql_connect_transaction)
+                            return [False, "Не смог записать изменение баланса склада товара (Это плохо к админу)"]
 
                 elif self.__date_make_sql is None and self.__date_make is not None:
                     # Если пачка проверилась
