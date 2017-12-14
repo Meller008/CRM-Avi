@@ -266,12 +266,14 @@ class Cut:
             change_value = -change_value
             # Ткани стало меньше будем возвращать
             # получим записаные расходы
-            query = """SELECT id, Supply_Balance_Id, SUM(Balance), Date
-                          FROM transaction_records_material
-                          WHERE Cut_Material_Id = %s
+            query = """SELECT transaction_records_material.id, transaction_records_material.Supply_Balance_Id, SUM(transaction_records_material.Balance),
+                              transaction_records_material.Date
+                          FROM transaction_records_material LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
+                            LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
+                          WHERE Cut_Material_Id = %s AND material_supplyposition.Material_NameId = %s
                           GROUP BY Supply_Balance_Id
                           ORDER BY Date DESC , transaction_records_material.Id DESC """
-            sql_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, (self.__id, ))
+            sql_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, (self.__id, self.__material_id))
             if "mysql.connector.errors" in str(type(sql_transaction)):
                 my_sql.sql_rollback_transaction(sql_connect_transaction)
                 return [False, "Не смог получить записи расходов при уменьшении ткани (Это плохо к админу)"]
