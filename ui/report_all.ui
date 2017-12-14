@@ -105,7 +105,7 @@
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -139,7 +139,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; color:#000000;&quot;&gt;(так же я вывожу сумму НЕ ЖИВЫх ТРАНЗАКЦИй &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; font-style:italic; color:#000000;&quot;&gt;Таблица 3 Колонки 2 и 3, &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; color:#000000;&quot;&gt;вам оно не поможет, но можете посмотреть для интереса :))&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я считаю по формуле: &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#0000ff;&quot;&gt;прошлый остаток&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt; + &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ff007f;&quot;&gt;приход материала&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt; - &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ffaa00;&quot;&gt;расход по типу расхода &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;=&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ffaa00;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#00aa00;&quot;&gt;Итого за перод!&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я для проверки считаю по формуле: &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#aa00ff;&quot;&gt;сумма всех транзакций - &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#00aa00;&quot;&gt;Итого за перод&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt; = Непонятная разница&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я для проверки считаю по формуле: &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#aa00ff;&quot;&gt;сумма всех транзакций - &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#00aa00;&quot;&gt;Итого за перод&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt; = Изменения которые происходили с ПРОШЛЫМИ закрытыми отчетами!&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; color:#000000;&quot;&gt;Это я делаю для проверки подсчетов! Что бы копеечки не пропало!!! Тем самым я сверяю мои програмные записи и ваши человеческие понимания!&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; color:#000000;&quot;&gt;В теории я смогу запоминать расчеты кнопочкой ... вы сможете загружать их из моей памяти!&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -388,10 +388,27 @@ p, li { white-space: pre-wrap; }
             <property name="spacing">
              <number>3</number>
             </property>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="le_transaction_balance_value">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
             <item row="5" column="0">
              <widget class="QLabel" name="label_12">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;По транзакциям&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Остаток по транзакциям&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Рубли</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -402,22 +419,8 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>Расход за период</string>
-              </property>
-             </widget>
-            </item>
             <item row="4" column="1">
              <widget class="QLineEdit" name="le_new_balance_value">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QLineEdit" name="le_transaction_balance_value">
               <property name="readOnly">
                <bool>true</bool>
               </property>
@@ -426,7 +429,7 @@ p, li { white-space: pre-wrap; }
             <item row="4" column="0">
              <widget class="QLabel" name="label_11">
               <property name="text">
-               <string>Итого за период</string>
+               <string>Остаток на дату</string>
               </property>
              </widget>
             </item>
@@ -460,7 +463,14 @@ p, li { white-space: pre-wrap; }
             <item row="6" column="0">
              <widget class="QLabel" name="label_13">
               <property name="text">
-               <string>Расхождение</string>
+               <string>Расхождение с транзак.</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Расход за период</string>
               </property>
              </widget>
             </item>
@@ -481,31 +491,18 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="label_14">
-              <property name="text">
-               <string>Рубли</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="1">
              <widget class="QLineEdit" name="le_last_balance_value"/>
             </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="le_last_balance_sum"/>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="le_supply_sum">
+            <item row="6" column="2">
+             <widget class="QLineEdit" name="le_difference_sum">
               <property name="readOnly">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="le_consumption_sum">
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="le_supply_sum">
               <property name="readOnly">
                <bool>true</bool>
               </property>
@@ -518,24 +515,13 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="5" column="2">
-             <widget class="QLineEdit" name="le_transaction_balance_sum">
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="le_last_balance_sum"/>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="le_consumption_sum">
               <property name="readOnly">
                <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2">
-             <widget class="QLineEdit" name="le_difference_sum">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1" colspan="2">
-             <widget class="QPushButton" name="pushButton_3">
-              <property name="text">
-               <string>Сохранить</string>
               </property>
              </widget>
             </item>
@@ -544,7 +530,7 @@ p, li { white-space: pre-wrap; }
               <item>
                <widget class="QLabel" name="label_15">
                 <property name="text">
-                 <string>Остаток</string>
+                 <string>Остаток прошлый</string>
                 </property>
                </widget>
               </item>
@@ -556,6 +542,20 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
              </layout>
+            </item>
+            <item row="5" column="2">
+             <widget class="QLineEdit" name="le_transaction_balance_sum">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1" colspan="2">
+             <widget class="QPushButton" name="pushButton_3">
+              <property name="text">
+               <string>Сохранить</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -592,8 +592,59 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_material_save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1063</x>
+     <y>666</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1160</x>
+     <y>660</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_view_save_report_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>784</x>
+     <y>524</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1264</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1091</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1098</x>
+     <y>-40</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
+  <slot>ui_material_save()</slot>
+  <slot>ui_view_save_report_material()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>
