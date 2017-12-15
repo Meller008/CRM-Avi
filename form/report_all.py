@@ -58,6 +58,14 @@ class ReportAll(QMainWindow, report_all_class):
         self.tw_accessories_3.horizontalHeader().resizeSection(3, 90)
         self.tw_accessories_3.horizontalHeader().resizeSection(4, 90)
 
+        self.tw_comparing_1.horizontalHeader().resizeSection(0, 150)
+        self.tw_comparing_1.horizontalHeader().resizeSection(1, 80)
+        self.tw_comparing_1.horizontalHeader().resizeSection(2, 80)
+
+        self.tw_comparing_2.horizontalHeader().resizeSection(0, 150)
+        self.tw_comparing_2.horizontalHeader().resizeSection(1, 80)
+        self.tw_comparing_2.horizontalHeader().resizeSection(2, 80)
+
     def ui_calc(self):
         index_tab = self.tabWidget.currentIndex()
 
@@ -65,6 +73,8 @@ class ReportAll(QMainWindow, report_all_class):
             self.calc_material()
         elif index_tab == 2:
             self.calc_accessories()
+        elif index_tab == 3:
+            self.calc_comparing()
 
     def ui_print(self):
         index_tab = self.tabWidget.currentIndex()
@@ -1016,6 +1026,103 @@ class ReportAll(QMainWindow, report_all_class):
 
         self.le_last_balance_value_accessories.setText(str(self.save_date_window.balance_value))
         self.le_last_balance_sum_accessories.setText(str(self.save_date_window.balance_sum))
+
+    # Расчет прочих расходов
+
+    def calc_comparing(self):
+        filter_date = (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate())
+
+        self.tw_comparing_1.clearContents()
+        self.tw_comparing_1.setRowCount(0)
+
+        # Получим расход на ткань
+        query = """SELECT comparing_name.Name, SUM(comparing_supplyposition.Value), SUM(comparing_supplyposition.Value * comparing_supplyposition.Price)
+                      FROM comparing_supplyposition
+                        LEFT JOIN comparing_name ON comparing_supplyposition.Comparing_NameId = comparing_name.Id
+                        LEFT JOIN material_supply ON comparing_supplyposition.Material_SupplyId = material_supply.Id
+                      WHERE comparing_supplyposition.Accessories_SupplyId IS NULL
+                            AND material_supply.Data BETWEEN %s AND %s
+                      GROUP BY comparing_name.Id"""
+        sql_info = my_sql.sql_select(query, filter_date)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получение расходов на ткань", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        all_sum_material, all_value_material = 0, 0
+
+        for com in sql_info:
+            self.tw_comparing_1.insertRow(self.tw_comparing_1.rowCount())
+
+            item = QTableWidgetItem(str(com[0]))
+            self.tw_comparing_1.setItem(self.tw_comparing_1.rowCount() - 1, 0, item)
+
+            all_value_material += com[1]
+            item = QTableWidgetItem(str(com[1]))
+            self.tw_comparing_1.setItem(self.tw_comparing_1.rowCount() - 1, 1, item)
+
+            all_sum_material += com[2]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(com[2], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_comparing_1.setItem(self.tw_comparing_1.rowCount() - 1, 2, item)
+
+        else:
+
+            self.tw_comparing_1.insertRow(self.tw_comparing_1.rowCount())
+
+            item = QTableWidgetItem(str(all_value_material))
+            self.tw_comparing_1.setItem(self.tw_comparing_1.rowCount() - 1, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum_material, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_comparing_1.setItem(self.tw_comparing_1.rowCount() - 1, 2, item)
+
+        # Получим расходы на фурнитуру
+        self.tw_comparing_2.clearContents()
+        self.tw_comparing_2.setRowCount(0)
+
+        # Получим расход на ткань
+        query = """SELECT comparing_name.Name, SUM(comparing_supplyposition.Value), SUM(comparing_supplyposition.Value * comparing_supplyposition.Price)
+                      FROM comparing_supplyposition
+                        LEFT JOIN comparing_name ON comparing_supplyposition.Comparing_NameId = comparing_name.Id
+                        LEFT JOIN accessories_supply ON comparing_supplyposition.accessories_SupplyId = accessories_supply.Id
+                      WHERE comparing_supplyposition.Accessories_SupplyId IS NULL
+                            AND accessories_supply.Data BETWEEN %s AND %s
+                      GROUP BY comparing_name.Id"""
+        sql_info = my_sql.sql_select(query, filter_date)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получение расходов на фурнитуру", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        all_sum_accessories, all_value_accessories = 0, 0
+
+        for com in sql_info:
+            self.tw_comparing_2.insertRow(self.tw_comparing_2.rowCount())
+
+            item = QTableWidgetItem(str(com[0]))
+            self.tw_comparing_2.setItem(self.tw_comparing_2.rowCount() - 1, 0, item)
+
+            all_value_accessories += com[1]
+            item = QTableWidgetItem(str(com[1]))
+            self.tw_comparing_2.setItem(self.tw_comparing_2.rowCount() - 1, 1, item)
+
+            all_sum_accessories += com[2]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(com[2], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_comparing_2.setItem(self.tw_comparing_2.rowCount() - 1, 2, item)
+
+        else:
+
+            self.tw_comparing_2.insertRow(self.tw_comparing_2.rowCount())
+
+            item = QTableWidgetItem(str(all_value_accessories))
+            self.tw_comparing_2.setItem(self.tw_comparing_2.rowCount() - 1, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum_accessories, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_comparing_2.setItem(self.tw_comparing_2.rowCount() - 1, 2, item)
+
+        self.le_comparing_sum.setText(str(all_sum_accessories + all_sum_material))
+
 
 
 class SaveReportMaterial(QDialog, save_report_material_class):
