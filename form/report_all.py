@@ -40,18 +40,41 @@ class ReportAll(QMainWindow, report_all_class):
         self.tw_material_3.horizontalHeader().resizeSection(2, 90)
         self.tw_material_3.horizontalHeader().resizeSection(3, 90)
         self.tw_material_3.horizontalHeader().resizeSection(4, 90)
+        
+        self.tw_accessories_1.horizontalHeader().resizeSection(0, 190)
+        self.tw_accessories_1.horizontalHeader().resizeSection(1, 90)
+        self.tw_accessories_1.horizontalHeader().resizeSection(2, 90)
+        self.tw_accessories_1.horizontalHeader().resizeSection(3, 40)
+        self.tw_accessories_1.horizontalHeader().resizeSection(4, 90)
+        self.tw_accessories_1.horizontalHeader().resizeSection(5, 90)
+
+        self.tw_accessories_2.horizontalHeader().resizeSection(0, 195)
+        self.tw_accessories_2.horizontalHeader().resizeSection(1, 90)
+        self.tw_accessories_2.horizontalHeader().resizeSection(2, 90)
+
+        self.tw_accessories_3.horizontalHeader().resizeSection(0, 190)
+        self.tw_accessories_3.horizontalHeader().resizeSection(1, 90)
+        self.tw_accessories_3.horizontalHeader().resizeSection(2, 90)
+        self.tw_accessories_3.horizontalHeader().resizeSection(3, 90)
+        self.tw_accessories_3.horizontalHeader().resizeSection(4, 90)
 
     def ui_calc(self):
         index_tab = self.tabWidget.currentIndex()
 
         if index_tab == 1:
             self.calc_material()
+        elif index_tab == 2:
+            self.calc_accessories()
 
     def ui_print(self):
         index_tab = self.tabWidget.currentIndex()
 
         if index_tab == 1:
             self.print_material()
+        elif index_tab == 2:
+            self.print_accessories()
+
+    # Расчет ткани
 
     def calc_material(self):
 
@@ -481,7 +504,7 @@ class ReportAll(QMainWindow, report_all_class):
                         OR trm.Supply_Balance_Id IN (SELECT material_balance.Id FROM material_supply
                                                           LEFT JOIN material_supplyposition ON material_supply.Id = material_supplyposition.Material_SupplyId
                                                           LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
-                                                        WHERE material_supply.Data <= %s AND (trm.Note LIKE 'Заказ % - %'))
+                                                        WHERE material_supply.Data <= %s AND trm.Code IN (110, 111))
                       GROUP BY Code"""
         date = (self.de_date_from.date().toPyDate(), self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate(),
                 self.de_date_to.date().toPyDate(), self.de_date_to.date().toPyDate(), self.de_date_to.date().toPyDate())
@@ -580,7 +603,7 @@ class ReportAll(QMainWindow, report_all_class):
         html = table_to_html.tab_html(self.tw_material_1, table_head="Приход + расход (Живой)", up_template=up_html)
         html += '<div style="display: inline-block; width: 100%">'
         html += table_to_html.tab_html(self.tw_material_2, table_head="Подробный расход (Живой)")
-        html += '</div> html += <div style="display: inline-block; width: 100%">'
+        html += '</div> <div style="display: inline-block; width: 100%">'
         html += table_to_html.tab_html(self.tw_material_3, table_head="Суммы транзакций  (Живой + Неживой) за месяц / всего ДО этой даты")
         html += '</div>'
         self.print_class = print_qt.PrintHtml(self, html)
@@ -614,6 +637,386 @@ class ReportAll(QMainWindow, report_all_class):
         self.le_last_balance_value.setText(str(self.save_date_window.balance_value))
         self.le_last_balance_sum.setText(str(self.save_date_window.balance_sum))
 
+    # Расчет фурнитуры
+
+    def calc_accessories(self):
+
+        try:
+            old_balance_value = Decimal(self.le_last_balance_value_accessories.text().replace(",", "."))
+            old_balance_sum = Decimal(self.le_last_balance_sum_accessories.text().replace(",", "."))
+        except:
+            QMessageBox.critical(self, "Ошибка баланса", "Что то не так с балансом! Не могу его получить!", QMessageBox.Ok)
+            return False
+
+        # Таблица 1
+        #
+        filter_date = (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate())
+        self.tw_accessories_1.clearContents()
+        self.tw_accessories_1.setRowCount(0)
+        material = {}
+
+        # Получим приходы
+        query = """SELECT accessories_name.Id, accessories_name.Name, SUM(accessories_supplyposition.Value), COUNT(accessories_supply.Id), 
+                          SUM(accessories_supplyposition.Value * accessories_supplyposition.Price)
+                      FROM accessories_supply LEFT JOIN accessories_supplyposition ON accessories_supply.Id = accessories_supplyposition.Accessories_SupplyId
+                        LEFT JOIN accessories_name ON accessories_supplyposition.Accessories_NameId = accessories_name.Id
+                      WHERE accessories_supply.Data BETWEEN %s AND %s
+                      GROUP BY accessories_name.Id"""
+        sql_info = my_sql.sql_select(query, filter_date)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получение приходов", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for material_in in sql_info:
+            new_tup = {'name': material_in[1], 'value_in': material_in[2], "sum_in": material_in[4], "pcs": material_in[3], 'value_out': 0, "sum_out": 0}
+            material.update({material_in[0]: new_tup})
+
+        # Получим расход
+        query = """SELECT accessories_name.Id, accessories_name.Name, SUM(transaction_records_accessories.Balance),
+                        SUM(transaction_records_accessories.Balance * accessories_supplyposition.Price)
+                      FROM transaction_records_accessories LEFT JOIN accessories_balance ON transaction_records_accessories.Supply_Balance_Id = accessories_balance.Id
+                      LEFT JOIN accessories_supplyposition ON accessories_balance.accessories_SupplyPositionId = accessories_supplyposition.Id
+                        LEFT JOIN accessories_supply ON accessories_supplyposition.accessories_SupplyId = accessories_supply.Id
+                        LEFT JOIN accessories_name ON accessories_supplyposition.accessories_NameId = accessories_name.Id
+                      WHERE transaction_records_accessories.Pack_Accessories_Id IN (SELECT pack_accessories.Id
+                                                                                      FROM pack_accessories LEFT JOIN pack ON pack_accessories.Pack_Id = pack.Id
+                                                                                        LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                                                                                      WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)
+                      GROUP BY accessories_name.Id"""
+        sql_info = my_sql.sql_select(query, filter_date)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения расходов", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        # Соединим расход с приходом
+        for material_out in sql_info:
+            if material.get(material_out[0]) is None:
+                new_tup = {'name': material_out[1], 'value_in': 0, "sum_in": 0, "pcs": 0, 'value_out': 0, "sum_out": 0}
+                material.update({material_out[0]: new_tup})
+
+            material[material_out[0]]["value_out"] += material_out[2]
+            material[material_out[0]]["sum_out"] += material_out[3]
+
+        # Вставим все в таблицу
+        all_value_in, all_sum_in, all_value_out, all_sum_out = 0, 0, 0, 0
+
+        for key, value in material.items():
+            self.tw_accessories_1.insertRow(self.tw_accessories_1.rowCount())
+
+            item = QTableWidgetItem(str(value["name"]))
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 0, item)
+
+            all_value_in += value["value_in"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["value_in"], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 1, item)
+
+            all_sum_in += value["sum_in"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["sum_in"], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 2, item)
+
+            item = QTableWidgetItem(str(value["pcs"]))
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 3, item)
+
+            all_value_out += value["value_out"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["value_out"], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 4, item)
+
+            all_sum_out += value["sum_out"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["sum_out"], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 5, item)
+
+        else:
+            self.tw_accessories_1.insertRow(self.tw_accessories_1.rowCount())
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_value_in, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum_in, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 2, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_value_out, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 4, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum_out, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_1.setItem(self.tw_accessories_1.rowCount() - 1, 5, item)
+
+            self.le_supply_value_accessories.setText(str(round(all_value_in, 2)))
+            self.le_supply_sum_accessories.setText(str(round(all_sum_in, 2)))
+            self.le_consumption_value_accessories.setText(str(round(all_value_out, 2)))
+            self.le_consumption_sum_accessories.setText(str(round(all_sum_out, 2)))
+
+        # Таблица 2
+        # Заполним подробный расход
+        self.tw_accessories_2.clearContents()
+        self.tw_accessories_2.setRowCount(0)
+
+        query = """SELECT Note, SUM(transaction_records_accessories.Balance), SUM(transaction_records_accessories.Balance * accessories_supplyposition.Price)
+                      FROM transaction_records_accessories
+                        LEFT JOIN accessories_balance ON transaction_records_accessories.Supply_Balance_Id = accessories_balance.Id
+                        LEFT JOIN accessories_supplyposition ON accessories_balance.accessories_SupplyPositionId = accessories_supplyposition.Id
+                      WHERE Code IN (220, 221, 222, 223, 224)
+                        AND transaction_records_accessories.Pack_Accessories_Id IN (SELECT pack_accessories.Id
+                                                                                      FROM pack_accessories LEFT JOIN pack ON pack_accessories.Pack_Id = pack.Id
+                                                                                        LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                                                                                      WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s)
+                        GROUP BY Code"""
+        sql_info = my_sql.sql_select(query, filter_date)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения расхода на пачки", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        all_info_value, all_info_sum = 0, 0
+
+        sum_value, sum_sum = 0, 0
+        self.tw_accessories_2.insertRow(self.tw_accessories_2.rowCount())
+        self.tw_accessories_2.setSpan(self.tw_accessories_2.rowCount() - 1, 0, 1, 3)
+        item = QTableWidgetItem("Пачки")
+        item.setTextAlignment(Qt.AlignHCenter)
+        self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 0, item)
+
+        for i in sql_info:
+            self.tw_accessories_2.insertRow(self.tw_accessories_2.rowCount())
+            item = QTableWidgetItem(i[0])
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 0, item)
+
+            sum_value += i[1] or 0
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(i[1] or 0, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 1, item)
+
+            sum_sum += i[2] or 0
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(i[2] or 0, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 2, item)
+
+        else:
+            all_info_value += sum_value
+            all_info_sum += sum_sum
+
+            self.tw_accessories_2.insertRow(self.tw_accessories_2.rowCount())
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_value, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sum, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 2, item)
+            
+        query = """SELECT Note, SUM(transaction_records_accessories.Balance), SUM(transaction_records_accessories.Balance * accessories_supplyposition.Price)
+               FROM transaction_records_accessories
+                 LEFT JOIN accessories_balance ON transaction_records_accessories.Supply_Balance_Id = accessories_balance.Id
+                 LEFT JOIN accessories_supplyposition ON accessories_balance.accessories_SupplyPositionId = accessories_supplyposition.Id
+               WHERE Code NOT IN (240, 220, 221, 222, 223, 224, 210, 211)
+                 AND transaction_records_accessories.Date >= %s AND transaction_records_accessories.Date <= DATE_FORMAT(%s,'%Y-%m-%d 23:59:59')
+                 GROUP BY Code"""
+        sql_info = my_sql.sql_select(query, filter_date)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения расхода прочего", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        sum_value, sum_sum = 0, 0
+        self.tw_accessories_2.insertRow(self.tw_accessories_2.rowCount())
+        self.tw_accessories_2.setSpan(self.tw_accessories_2.rowCount() - 1, 0, 1, 3)
+        item = QTableWidgetItem("Прочее")
+        item.setTextAlignment(Qt.AlignHCenter)
+        self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 0, item)
+
+        for i in sql_info:
+            self.tw_accessories_2.insertRow(self.tw_accessories_2.rowCount())
+            item = QTableWidgetItem(i[0])
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 0, item)
+
+            sum_value += i[1] or 0
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(i[1] or 0, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 1, item)
+
+            sum_sum += i[2] or 0
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(i[2] or 0, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 2, item)
+
+        else:
+            all_info_value += sum_value
+            all_info_sum += sum_sum
+
+            self.tw_accessories_2.insertRow(self.tw_accessories_2.rowCount())
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_value, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_sum, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 2, item)
+
+        # Отобразим сумму
+        self.tw_accessories_2.insertRow(self.tw_accessories_2.rowCount())
+        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_info_value, 2)))
+        item = QTableWidgetItem(text)
+        self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 1, item)
+
+        text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_info_sum, 2)))
+        item = QTableWidgetItem(text)
+        self.tw_accessories_2.setItem(self.tw_accessories_2.rowCount() - 1, 2, item)
+
+        # Таблица 3
+        # Заполним таблицу расхода по транзакциям
+        self.tw_accessories_3.clearContents()
+        self.tw_accessories_3.setRowCount(0)
+
+        query = """SELECT tra.Note, SUM(IF(tra.Date >= %s, tra.Balance, 0)), SUM(IF(tra.Date >= %s, tra.Balance * accessories_supplyposition.Price, 0)),
+                         SUM(tra.Balance), SUM(tra.Balance * accessories_supplyposition.Price) AS sum_m
+                      FROM transaction_records_accessories AS tra LEFT JOIN accessories_balance ON tra.Supply_Balance_Id = accessories_balance.Id
+                        LEFT JOIN accessories_supplyposition ON accessories_balance.Accessories_SupplyPositionId = accessories_supplyposition.Id
+                        LEFT JOIN pack_accessories ON tra.Pack_Accessories_Id = pack_accessories.Id
+                        LEFT JOIN pack ON pack_accessories.Pack_Id = pack.Id
+                        LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                      WHERE cut.Date_Cut <= %s OR tra.Date <= DATE_FORMAT(%s,'%Y-%m-%d 23:59:59') 
+                        or (tra.Supply_Balance_Id IN (SELECT accessories_balance.Id FROM accessories_supply 
+                                                        LEFT JOIN accessories_supplyposition ON accessories_supply.Id = accessories_supplyposition.Accessories_SupplyId
+                                                        LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
+                                                      WHERE accessories_supply.Data <= %s) and tra.Code IN (210, 211, 240))
+                      GROUP BY Code"""
+        date = (self.de_date_from.date().toPyDate(), self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate(),
+                self.de_date_to.date().toPyDate(), self.de_date_to.date().toPyDate())
+        sql_info = my_sql.sql_select(query, date)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения транзакций", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        all_transaction_value, all_transaction_sum, all_transaction_value_month, all_transaction_sum_month = 0, 0, 0, 0
+        for transaction in sql_info:
+            self.tw_accessories_3.insertRow(self.tw_accessories_3.rowCount())
+            item = QTableWidgetItem(transaction[0])
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 0, item)
+
+            all_transaction_value_month += transaction[1] or 0
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(transaction[1] or 0, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 1, item)
+
+            all_transaction_sum_month += transaction[2] or 0
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(transaction[2] or 0, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 2, item)
+
+            all_transaction_value += transaction[3] or 0
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(transaction[3] or 0, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 3, item)
+
+            all_transaction_sum += transaction[4] or 0
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(transaction[4] or 0, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 4, item)
+
+        else:
+            self.tw_accessories_3.insertRow(self.tw_accessories_3.rowCount())
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_transaction_value_month, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 1, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_transaction_sum_month, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 2, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_transaction_value, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 3, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_transaction_sum, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_accessories_3.setItem(self.tw_accessories_3.rowCount() - 1, 4, item)
+
+            self.le_transaction_balance_value_accessories.setText(str(round(all_transaction_value, 2)))
+            self.le_transaction_balance_sum_accessories.setText(str(round(all_transaction_sum, 2)))
+
+        balance_value = all_value_in + old_balance_value - -all_value_out
+        balance_sum = all_sum_in + old_balance_sum - -all_sum_out
+
+        self.le_new_balance_value_accessories.setText(str(round(balance_value, 2)))
+        self.le_new_balance_sum_accessories.setText(str(round(balance_sum, 2)))
+
+        difference_value = all_transaction_value - balance_value
+        difference_sum = all_transaction_sum - balance_sum
+
+        self.le_difference_value_accessories.setText(str(round(difference_value, 2)))
+        self.le_difference_sum_accessories.setText(str(round(difference_sum, 2)))
+
+    def print_accessories(self):
+        up_html = """
+          <table>
+          <caption>#head#</caption>
+          <tr> <th>Остаток прошлый кол-во</th><th>Приход кол-во</th><th>Расход кол-во</th><th>Остаток кол-во</th><th>Остаток транз. кол-во</th><th>Разница кол-во</th> </tr>
+          <tr> <td>#le_last_balance_value#</td><td>#le_supply_value#</td><td>#le_consumption_value#</td><td>#le_new_balance_value#</td><td>#le_transaction_balance_value#</td><td>#le_difference_value#</td> </tr>
+          
+          <tr> <th>Остаток прошлый рублей</th><th>Приход рублей</th><th>Расход рублей</th><th>Остаток рублей</th><th>Остаток транз. рублей</th><th>Разница рублей</th> </tr>
+          <tr> <td>#le_last_balance_sum#</td><td>#le_supply_sum#</td><td>#le_consumption_sum#</td><td>#le_new_balance_sum#</td><td>#le_transaction_balance_sum#</td><td>#le_difference_sum#</td> </tr>
+          </table>"""
+
+        head = "Отчет по фурнитуре %s - %s" % (self.de_date_from.date().toString(Qt.ISODate), self.de_date_to.date().toString(Qt.ISODate))
+        up_html = up_html.replace("#head#", head)
+        up_html = up_html.replace("#le_last_balance_value#", self.le_last_balance_value_accessories.text())
+        up_html = up_html.replace("#le_supply_value#", self.le_supply_value_accessories.text())
+        up_html = up_html.replace("#le_consumption_value#", self.le_consumption_value_accessories.text())
+        up_html = up_html.replace("#le_new_balance_value#", self.le_new_balance_value_accessories.text())
+        up_html = up_html.replace("#le_transaction_balance_value#", self.le_transaction_balance_value_accessories.text())
+        up_html = up_html.replace("#le_difference_value#", self.le_difference_value_accessories.text())
+
+        up_html = up_html.replace("#le_last_balance_sum#", self.le_last_balance_sum_accessories.text())
+        up_html = up_html.replace("#le_supply_sum#", self.le_supply_sum_accessories.text())
+        up_html = up_html.replace("#le_consumption_sum#", self.le_consumption_sum_accessories.text())
+        up_html = up_html.replace("#le_new_balance_sum#", self.le_new_balance_sum_accessories.text())
+        up_html = up_html.replace("#le_transaction_balance_sum#", self.le_transaction_balance_sum_accessories.text())
+        up_html = up_html.replace("#le_difference_sum#", self.le_difference_sum_accessories.text())
+
+        html = table_to_html.tab_html(self.tw_accessories_1, table_head="Приход + расход (Живой)", up_template=up_html)
+        html += '<div style="display: inline-block; width: 100%">'
+        html += table_to_html.tab_html(self.tw_accessories_2, table_head="Подробный расход (Живой)")
+        html += '</div> <div style="display: inline-block; width: 100%">'
+        html += table_to_html.tab_html(self.tw_accessories_3, table_head="Суммы транзакций  (Живой + Неживой) за месяц / всего ДО этой даты")
+        html += '</div>'
+        self.print_class = print_qt.PrintHtml(self, html)
+
+    def ui_accessories_save(self):
+        query = """INSERT INTO report_all_accessories_save (Date_Save, Date_From, Date_To, Last_Balance_Value, Last_Balance_Sum, Supply_Value,
+                                      Supply_Sum, Consumption_Value, Consumption_Sum, New_Balance_Value, New_Balance_Sum,
+                                      Transaction_Balance_Value, Transaction_Balance_Sum, Difference_Value, Difference_Sum)
+                      VALUES (NOW(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+
+        parametrs = (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate(), self.le_last_balance_value_accessories.text(),
+                     self.le_last_balance_sum_accessories.text(), self.le_supply_value_accessories.text(), self.le_supply_sum_accessories.text(),
+                     self.le_consumption_value_accessories.text(), self.le_consumption_sum_accessories.text(), self.le_new_balance_value_accessories.text(),
+                     self.le_new_balance_sum_accessories.text(), self.le_transaction_balance_value_accessories.text(),
+                     self.le_transaction_balance_sum_accessories.text(), self.le_difference_value_accessories.text(), self.le_difference_sum_accessories.text())
+
+        sql_info = my_sql.sql_change(query, parametrs)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql сохранения отчета!", sql_info.msg, QMessageBox.Ok)
+            return False
+        else:
+            QMessageBox.information(self, "Сохранено", "Отчет успешно сохранен!", QMessageBox.Ok)
+
+    def ui_view_save_report_accessories(self):
+        self.save_date_window = SaveReportMaterial("фурнитура")
+        self.save_date_window.setModal(True)
+        self.save_date_window.show()
+
+        if self.save_date_window.exec_() != 1:
+            return False
+
+        self.le_last_balance_value_accessories.setText(str(self.save_date_window.balance_value))
+        self.le_last_balance_sum_accessories.setText(str(self.save_date_window.balance_sum))
+
 
 class SaveReportMaterial(QDialog, save_report_material_class):
     def __init__(self, type_report):
@@ -631,7 +1034,7 @@ class SaveReportMaterial(QDialog, save_report_material_class):
         if self.type == "ткань":
             query = """SELECT Id, Date_Save FROM report_all_material_save ORDER BY Date_Save"""
         elif self.type == "фурнитура":
-            query = ""
+            query = """SELECT Id, Date_Save FROM report_all_accessories_save ORDER BY Date_Save"""
         else:
             QMessageBox.critical(self, "Ошибка типа", "Неизвестный тип", QMessageBox.Ok)
             return False
@@ -652,7 +1055,10 @@ class SaveReportMaterial(QDialog, save_report_material_class):
                             Difference_Value, Difference_Sum
                       FROM report_all_material_save WHERE Id = %s"""
         elif self.type == "фурнитура":
-            query = ""
+            query = """SELECT Date_From, Date_To, Last_Balance_Value, Last_Balance_Sum, Supply_Value, Supply_Sum, Consumption_Value,
+                            Consumption_Sum, New_Balance_Value, New_Balance_Sum, Transaction_Balance_Value, Transaction_Balance_Sum,
+                            Difference_Value, Difference_Sum
+                      FROM report_all_accessories_save WHERE Id = %s"""
         else:
             return False
 
@@ -699,7 +1105,13 @@ class SaveReportMaterial(QDialog, save_report_material_class):
         result = QMessageBox.question(self, "Удалить?", "Точно удалить запись?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
 
-            query = "DELETE FROM report_all_material_save WHERE Id = %s"
+            if self.type == "ткань":
+                query = "DELETE FROM report_all_material_save WHERE Id = %s"
+            elif self.type == "фурнитура":
+                query = "DELETE FROM report_all_accessories_save WHERE Id = %s"
+            else:
+                return False
+
             sql_info = my_sql.sql_change(query, (id, ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получения сохраненых данных", sql_info.msg, QMessageBox.Ok)
