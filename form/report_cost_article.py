@@ -55,7 +55,6 @@ class ReportCostArticle(QMainWindow, report_cost_article):
                   FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
                     LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id"""
 
-
         if self.le_article.text():
             query += " WHERE product_article.Id = %s" % self.le_article.whatsThis()
 

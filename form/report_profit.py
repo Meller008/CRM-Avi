@@ -38,7 +38,7 @@ class ReportProfit(QMainWindow, report_profit_class):
         article_list = {}
 
         query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name, ']'),
-                        order_position.Value, IF(clients.No_Nds, order_position.Price * (order_position.NDS / 100 + 1),order_position.Price)
+                        order_position.Value, IF(clients.No_Nds, order_position.Price * (order_position.NDS / 100 + 1), order_position.Price)
                       FROM order_position LEFT JOIN `order` ON order_position.Order_Id = `order`.Id
                         LEFT JOIN clients ON `order`.Client_Id = clients.Id
                         LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id

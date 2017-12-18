@@ -1,7 +1,7 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem, QDialog, QListWidgetItem
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql, table_to_html
 from decimal import Decimal
@@ -66,6 +66,35 @@ class ReportAll(QMainWindow, report_all_class):
         self.tw_comparing_2.horizontalHeader().resizeSection(1, 80)
         self.tw_comparing_2.horizontalHeader().resizeSection(2, 80)
 
+        self.tw_product_1.horizontalHeader().resizeSection(0, 140)
+        self.tw_product_1.horizontalHeader().resizeSection(1, 90)
+        self.tw_product_1.horizontalHeader().resizeSection(2, 75)
+        self.tw_product_1.horizontalHeader().resizeSection(3, 75)
+        self.tw_product_1.horizontalHeader().resizeSection(4, 75)
+        self.tw_product_1.horizontalHeader().resizeSection(5, 75)
+        self.tw_product_1.horizontalHeader().resizeSection(6, 75)
+
+        self.tw_product_2.horizontalHeader().resizeSection(0, 100)
+        self.tw_product_2.horizontalHeader().resizeSection(1, 60)
+        self.tw_product_2.horizontalHeader().resizeSection(2, 70)
+        self.tw_product_2.horizontalHeader().resizeSection(3, 70)
+        self.tw_product_2.horizontalHeader().resizeSection(4, 80)
+        self.tw_product_2.horizontalHeader().resizeSection(5, 80)
+        self.tw_product_2.horizontalHeader().resizeSection(6, 50)
+
+        self.tw_product_3.horizontalHeader().resizeSection(0, 150)
+        self.tw_product_3.horizontalHeader().resizeSection(1, 65)
+        self.tw_product_3.horizontalHeader().resizeSection(2, 70)
+        self.tw_product_3.horizontalHeader().resizeSection(3, 70)
+        self.tw_product_3.horizontalHeader().resizeSection(4, 95)
+        self.tw_product_3.horizontalHeader().resizeSection(5, 95)
+        self.tw_product_3.horizontalHeader().resizeSection(6, 70)
+        self.tw_product_3.horizontalHeader().resizeSection(7, 95)
+        self.tw_product_3.horizontalHeader().resizeSection(8, 95)
+
+        self.tw_product_4.horizontalHeader().resizeSection(0, 200)
+        self.tw_product_4.horizontalHeader().resizeSection(1, 80)
+
     def ui_calc(self):
         index_tab = self.tabWidget.currentIndex()
 
@@ -75,6 +104,8 @@ class ReportAll(QMainWindow, report_all_class):
             self.calc_accessories()
         elif index_tab == 3:
             self.calc_comparing()
+        elif index_tab == 4:
+            self.calc_production()
 
     def ui_print(self):
         index_tab = self.tabWidget.currentIndex()
@@ -83,6 +114,10 @@ class ReportAll(QMainWindow, report_all_class):
             self.print_material()
         elif index_tab == 2:
             self.print_accessories()
+        elif index_tab == 3:
+            self.print_comparing()
+        elif index_tab == 4:
+            self.print_production()
 
     # Расчет ткани
 
@@ -1123,6 +1158,562 @@ class ReportAll(QMainWindow, report_all_class):
 
         self.le_comparing_sum.setText(str(all_sum_accessories + all_sum_material))
 
+    def print_comparing(self):
+        up_html = """
+          <table>
+          <caption>#head#</caption>
+          <tr> <th>Сусса расходаов</th> </tr>
+          <tr> <td>#le_comparing_sum#</td> </tr>
+          </table>"""
+
+        head = "Отчет по прочим расходам %s - %s" % (self.de_date_from.date().toString(Qt.ISODate), self.de_date_to.date().toString(Qt.ISODate))
+        up_html = up_html.replace("#head#", head)
+        up_html = up_html.replace("#le_comparing_sum#", self.le_comparing_sum.text())
+
+        html = table_to_html.tab_html(self.tw_comparing_1, table_head="Расход на ткань",  up_template=up_html)
+        html += table_to_html.tab_html(self.tw_comparing_2, table_head="Расход на фурнитуру")
+
+        self.print_class = print_qt.PrintHtml(self, html)
+
+    # Расчет продукции
+    def calc_production(self):
+        self.tw_product_1.clearContents()
+        self.tw_product_1.setRowCount(0)
+
+        article_list = {}
+
+        # Получим произведеные артикула
+        query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name, ']'),
+                        SUM(pack.Value_Pieces - pack.Value_Damage)
+                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                        LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                      WHERE cut.Date_Cut >= %s AND cut.Date_Cut <= %s AND product_article_parametrs.Id IS NOT NULL 
+                      GROUP BY product_article_parametrs.Id"""
+        sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения покроеных пачек", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for order_position in sql_info:
+            if article_list.get(order_position[0]) is None:
+                new = {order_position[0]: {"name": order_position[1], "seb": 0, "value_in": order_position[2], "sum_in": 0, "value_out": 0, "sum_out": 0, "profit": 0}}
+                article_list.update(new)
+
+        # Получим проданые артикула
+        query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name, ']'),
+                        order_position.Value, IF(clients.No_Nds, order_position.Price * (order_position.NDS / 100 + 1), order_position.Price)
+                      FROM order_position LEFT JOIN `order` ON order_position.Order_Id = `order`.Id
+                        LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                        LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                      WHERE `order`.Date_Shipment >= %s AND `order`.Date_Shipment <= %s AND `order`.Shipped = 1"""
+        sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения проданых позиций", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for order_position in sql_info:
+            if article_list.get(order_position[0]) is None:
+                new = {order_position[0]: {"name": order_position[1], "seb": 0, "value_in": 0, "sum_in": 0, "value_out": order_position[2], "sum_out": order_position[3], "profit": 0}}
+                article_list.update(new)
+            else:
+                article_list[order_position[0]]["value_out"] += order_position[2]
+                article_list[order_position[0]]["sum_out"] += order_position[3] * order_position[2]
+
+        # Найдем себестоимость
+
+        all_value_in, all_sum_in, all_value_out, all_sum_out, all_profit = 0, 0, 0, 0, 0
+
+        for key, value in article_list.items():
+
+            self.statusBar.showMessage("Расчет артикула (таблица 1) %s" % value["name"])
+
+            # Возьмем то количество которое бвльше (Проданого или пороеного)
+            if value["value_out"] > value["value_in"]:
+                val_sql = value["value_out"]
+            else:
+                val_sql = value["value_in"]
+
+            query = """SELECT pack.Id FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id JOIN (SELECT @sum := 0) t
+                          WHERE pack.Article_Parametr_Id = %s AND cut.Date_Cut <= %s AND (@sum := @sum + pack.Value_Pieces) <= %s"""
+            sql_pack_id_info = my_sql.sql_select(query, (key, self.de_date_to.date().toPyDate(), val_sql + 200))
+            if "mysql.connector.errors" in str(type(sql_pack_id_info)):
+                QMessageBox.critical(self, "Ошибка sql получения id пачек для подсчета себестоимости", sql_pack_id_info.msg, QMessageBox.Ok)
+                return False
+
+            v = int(len(sql_pack_id_info)/5) + 1
+
+            sebest_pack_list = []
+            if sql_pack_id_info:  # Если найдены предыдущие кроя! (Если нет то возьмем расчетную себестоимость из артикула)
+                for i in range(len(sql_pack_id_info)):
+                    if i % v != 0:
+                        continue
+
+                    pack_id = sql_pack_id_info[i][0]
+                    # Узнаем всю себестоимость
+                    query = """SELECT(
+                                      SELECT AVG(DISTINCT material_supplyposition.Price) * (SELECT (pack.Weight * (1 + cut.Rest_Percent / 100)) / pack.Value_Pieces
+                                                                                            FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                                                                                            WHERE pack.Id = pm.Id)
+                                      FROM pack LEFT JOIN transaction_records_material ON transaction_records_material.Cut_Material_Id = pack.Cut_Id
+                                        LEFT JOIN material_balance ON transaction_records_material.Supply_Balance_Id = material_balance.Id
+                                        LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
+                                      WHERE pack.Id = pm.Id AND transaction_records_material.Note NOT LIKE '%доп. тк%'
+                                      ),(
+                                          SELECT ((pack_add_material.Weight + pack_add_material.Weight_Rest) / pack.Value_Pieces) * pack_add_material.Price
+                                            FROM pack_add_material LEFT JOIN pack ON pack_add_material.Pack_Id = pack.Id
+                                            WHERE pack.Id = pm.Id
+                                      ),(
+                                          SELECT SUM(avg) FROM (
+                                            SELECT AVG(accessories_supplyposition.Price) * pack_accessories.Value_Thing AS avg
+                                            FROM pack
+                                              LEFT JOIN pack_accessories ON pack.Id = pack_accessories.Pack_Id
+                                              LEFT JOIN transaction_records_accessories ON transaction_records_accessories.Pack_Accessories_Id = pack_accessories.Id
+                                              LEFT JOIN accessories_balance ON transaction_records_accessories.Supply_Balance_Id = accessories_balance.Id
+                                              LEFT JOIN accessories_supplyposition ON accessories_balance.Accessories_SupplyPositionId = accessories_supplyposition.Id
+                                            WHERE pack.Id = %s
+                                            GROUP BY pack_accessories.Id) t
+                                      ),(
+                                          SELECT SUM(pack_operation.Price) FROM pack_operation WHERE pack_operation.Pack_Id = pm.Id
+                                )
+                                FROM pack as pm WHERE pm.Id = %s"""
+                    sql_info = my_sql.sql_select(query, (pack_id, pack_id))
+                    if "mysql.connector.errors" in str(type(sql_info)):
+                        QMessageBox.critical(self, "Ошибка sql получения средней себестоимости", sql_info.msg, QMessageBox.Ok)
+                        return False
+
+                    sebest_pack_list.append(sum([0 if i is None else i for i in sql_info[0]]))
+
+                # Находим среднюю себестоимость на артикул
+                if sebest_pack_list:
+                    value["seb"] = sum(sebest_pack_list) / len(sebest_pack_list)
+
+            else:  # Если нет прошлых краев, то возьмем расчетную себестоимость
+                # Узнаем всю расчетную себестоимость
+                query = """SELECT (
+                                      SELECT SUM(operations.Price)
+                                        FROM product_article_operation LEFT JOIN operations ON product_article_operation.Operation_Id = operations.Id
+                                        WHERE product_article_operation.Product_Article_Parametrs_Id = pr.Id
+                                  ),(
+                                      SELECT SUM(s)
+                                      FROM (SELECT material_supplyposition.Price * product_article_material.Value AS s
+                                              FROM product_article_material
+                                                LEFT JOIN material_supplyposition ON product_article_material.Material_Id = material_supplyposition.Material_NameId
+                                                LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                                LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                                              WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Material_Id IS NOT NULL
+                                                AND material_balance.BalanceWeight > 0
+                                              GROUP BY product_article_material.Material_Id) t
+                                  ),(
+                                      SELECT SUM(s)
+                                      FROM (SELECT accessories_supplyposition.Price * product_article_material.Value AS s
+                                              FROM product_article_material
+                                                LEFT JOIN accessories_supplyposition ON product_article_material.Accessories_Id = accessories_supplyposition.Accessories_NameId
+                                                LEFT JOIN accessories_supply ON accessories_supplyposition.Accessories_SupplyId = accessories_supply.Id
+                                                LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
+                                              WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Accessories_Id IS NOT NULL
+                                                    AND accessories_balance.BalanceValue > 0
+                                              GROUP BY product_article_material.Accessories_Id) t
+                                  )
+                              FROM product_article_parametrs AS pr WHERE pr.Id = %s"""
+                sql_info = my_sql.sql_select(query, (key, key, key))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    QMessageBox.critical(self, "Ошибка sql получения расчетной себестоимости", sql_info.msg, QMessageBox.Ok)
+                    return False
+
+                # Считаем себестоимость
+                if sql_info[0][0]:
+                    article_list[key]["seb"] = sql_info[0][0] + sql_info[0][1] + sql_info[0][2]
+                    article_list[key]["name"] = "Б/К " + article_list[key]["name"]
+
+            # посчитаем весь артикул
+            value["sum_in"] = value["value_in"] * value["seb"]
+            value["profit"] = value["sum_out"] - (value["value_out"] * value["seb"])
+
+            # Вставим артикул
+
+            self.tw_product_1.insertRow(self.tw_product_1.rowCount())
+
+            item = QTableWidgetItem(str(value["name"]))
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 0, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["seb"], 2)))
+            item = QTableWidgetItem(str(text))
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 1, item)
+
+            all_value_in += value["value_in"]
+            item = QTableWidgetItem(str(value["value_in"]))
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 2, item)
+
+            all_sum_in += value["sum_in"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["sum_in"], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 3, item)
+
+            all_value_out += value["value_out"]
+            item = QTableWidgetItem(str(value["value_out"]))
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 4, item)
+
+            all_sum_out += value["sum_out"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["sum_out"], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 5, item)
+
+            all_profit += value["profit"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["profit"], 2)))
+            item = QTableWidgetItem(text)
+            if value["profit"] > 0:
+                color = QBrush(QColor(150, 255, 161, 255))
+            else:
+                color = QBrush(QColor(255, 255, 153, 255))
+
+            item.setBackground(color)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 6, item)
+
+        else:
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_value_in, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 2, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum_in, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 3, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_value_out, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 4, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum_out, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 5, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_profit, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 6, item)
+
+        # Заполним таблицу отгруженого клиенту
+        self.tw_product_2.clearContents()
+        self.tw_product_2.setRowCount(0)
+
+        query = """SELECT clients.Id, clients.Name, `order`.Number_Doc, `order`.Number_Order, `order`.Date_Shipment,
+                         `order`.Sum_Off_Nds, `order`.Sum_In_Nds, SUM(order_position.Value)
+                      FROM `order` LEFT JOIN order_position ON `order`.Id = order_position.Order_Id
+                        LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                      WHERE `order`.Date_Shipment >= %s AND `order`.Date_Shipment <= %s AND `order`.Shipped = 1 GROUP BY `order`.Id ORDER BY clients.Id"""
+        sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения отгруженных зказов", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        sum_off_nds, sum_in_nds, sum_value = 0, 0, 0
+        all_sum_off_nds, all_sum_in_nds, all_sum_value = 0, 0, 0
+        old_client_id = None
+        for order in sql_info:
+
+            if order[0] != old_client_id:  # Если новый клиент не равен предыдущемо делаем подсчет!
+
+                if old_client_id is None:  # Если это первая итерация то просто белем ID клиента и мдем дальше!
+                    old_client_id = order[0]
+
+                else:
+                    all_sum_off_nds += sum_off_nds
+                    all_sum_in_nds += sum_in_nds
+                    all_sum_value += sum_value
+
+                    self.tw_product_2.insertRow(self.tw_product_2.rowCount())
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_off_nds, 2)))
+                    item = QTableWidgetItem(text)
+                    item.setData(5, order[0])
+                    self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 4, item)
+
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_in_nds, 2)))
+                    item = QTableWidgetItem(text)
+                    item.setData(5, order[0])
+                    self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 5, item)
+
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(sum_value))
+                    item = QTableWidgetItem(text)
+                    item.setData(5, order[0])
+                    self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 6, item)
+
+                    sum_off_nds, sum_in_nds, sum_value = 0, 0, 0
+                    old_client_id = order[0]
+
+            self.tw_product_2.insertRow(self.tw_product_2.rowCount())
+
+            item = QTableWidgetItem(order[1])
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 0, item)
+
+            item = QTableWidgetItem(str(order[2]))
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 1, item)
+
+            item = QTableWidgetItem(str(order[3]))
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 2, item)
+
+            item = QTableWidgetItem(order[4].strftime("%d.%m.%Y"))
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 3, item)
+
+            sum_off_nds += order[5]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(order[5], 2)))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 4, item)
+
+            sum_in_nds += order[6]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(order[6], 2)))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 5, item)
+
+            sum_value += order[7]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(order[7]))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 6, item)
+
+        else:
+            # Вставляем сумму для последнего клиента
+            all_sum_off_nds += sum_off_nds
+            all_sum_in_nds += sum_in_nds
+            all_sum_value += sum_value
+
+            self.tw_product_2.insertRow(self.tw_product_2.rowCount())
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_off_nds, 2)))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 4, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sum_in_nds, 2)))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 5, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(sum_value))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 6, item)
+
+            # Вставляем итоговоую сумму
+            self.tw_product_2.insertRow(self.tw_product_2.rowCount())
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(all_sum_off_nds))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 4, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(all_sum_in_nds))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 5, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(all_sum_value))
+            item = QTableWidgetItem(text)
+            item.setData(5, order[0])
+            self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 6, item)
+
+        # Получим остаток склада
+        # Получаем артикула
+        article_list = {}
+
+        query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name, ']'),
+                        product_article_parametrs.Price,
+                        war.Value_In_Warehouse - IFNULL((SELECT SUM(transaction_records_warehouse.Balance) FROM transaction_records_warehouse
+                                                          WHERE transaction_records_warehouse.Article_Parametr_Id = war.Id_Article_Parametr
+                                                            AND transaction_records_warehouse.Date > %s), 0)
+                      FROM product_article_warehouse AS war
+                        LEFT JOIN product_article_parametrs ON war.Id_Article_Parametr = product_article_parametrs.Id
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id"""
+        sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения артикулов склада", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        # добавляем артикула в словарь
+        for article in sql_info:
+            article_list.update({article[0]: {"warehouse_value": article[3], "cut_value": 0, "seb": None, "price": article[2], "name": article[1]}})
+
+        # Смотрим сколько еще артикулов было в цеху на эту дату
+        query = """SELECT product_article_parametrs.Id, SUM(pack.Value_Pieces)
+                      FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
+                      LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
+                      WHERE cut.Date_Cut <= %s AND (pack.Date_Make > %s OR pack.Date_Make IS NULL) GROUP BY product_article_parametrs.Id"""
+        sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), self.de_date_to.date().toPyDate()))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения артикулов в цеху", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for article in sql_info:
+            article_list[article[0]]["cut_value"] = article[1]
+
+        # Считаем себестоимость
+        all_warehouse, all_warehouse_seb, all_warehouse_price = 0, 0, 0
+        all_cut, all_cut_seb, all_cut_price = 0, 0, 0
+        for key, value in article_list.items():
+
+            self.statusBar.showMessage("Расчет артикула (таблица 3) %s" % article_list[key]["name"])
+
+            if article_list[key]["warehouse_value"] == 0 and article_list[key]["cut_value"] == 0:
+                continue
+
+            query = """SELECT (
+                                  SELECT SUM(operations.Price)
+                                    FROM product_article_operation LEFT JOIN operations ON product_article_operation.Operation_Id = operations.Id
+                                    WHERE product_article_operation.Product_Article_Parametrs_Id = pr.Id
+                              ),(
+                                  SELECT SUM(s)
+                                  FROM (SELECT material_supplyposition.Price * product_article_material.Value AS s
+                                          FROM product_article_material
+                                            LEFT JOIN material_supplyposition ON product_article_material.Material_Id = material_supplyposition.Material_NameId
+                                            LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                            LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                                          WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Material_Id IS NOT NULL
+                                            AND material_balance.BalanceWeight > 0
+                                          GROUP BY product_article_material.Material_Id) t
+                              ),(
+                                  SELECT SUM(s)
+                                  FROM (SELECT accessories_supplyposition.Price * product_article_material.Value AS s
+                                          FROM product_article_material
+                                            LEFT JOIN accessories_supplyposition ON product_article_material.Accessories_Id = accessories_supplyposition.Accessories_NameId
+                                            LEFT JOIN accessories_supply ON accessories_supplyposition.Accessories_SupplyId = accessories_supply.Id
+                                            LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
+                                          WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Accessories_Id IS NOT NULL
+                                                AND accessories_balance.BalanceValue > 0
+                                          GROUP BY product_article_material.Accessories_Id) t
+                              )
+                          FROM product_article_parametrs AS pr WHERE pr.Id = %s"""
+            sql_info = my_sql.sql_select(query, (key, key, key))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения расчетной себестоимости", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            if sql_info[0][0]:
+                article_list[key]["seb"] = sql_info[0][0] + sql_info[0][1] + sql_info[0][2]
+            else:
+                article_list[key]["seb"] = 0
+
+            # Вставляем расчитаный артикул
+            self.tw_product_3.insertRow(self.tw_product_3.rowCount())
+
+            seb = article_list[key]["seb"]
+            price = article_list[key]["price"]
+
+            item = QTableWidgetItem(article_list[key]["name"])
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 0, item)
+
+            item = QTableWidgetItem(str(round(seb, 4)))
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 1, item)
+
+            item = QTableWidgetItem(str(price))
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 2, item)
+
+            all_warehouse += article_list[key]["warehouse_value"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(article_list[key]["warehouse_value"]))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 3, item)
+
+            all_warehouse_price += article_list[key]["warehouse_value"] * price
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(article_list[key]["warehouse_value"] * price, 4)))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 4, item)
+
+            all_warehouse_seb += article_list[key]["warehouse_value"] * seb
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(article_list[key]["warehouse_value"] * seb, 4)))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 5, item)
+
+            all_cut += article_list[key]["cut_value"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(article_list[key]["cut_value"]))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 6, item)
+
+            all_cut_price += article_list[key]["cut_value"] * price
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(article_list[key]["cut_value"] * price, 4)))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 7, item)
+
+            all_cut_seb += article_list[key]["cut_value"] * seb
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(article_list[key]["cut_value"] * seb, 4)))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 8, item)
+
+        else:
+            self.tw_product_3.insertRow(self.tw_product_3.rowCount())
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(all_warehouse))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 3, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_warehouse_price, 4)))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 4, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_warehouse_seb, 4)))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 5, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(all_cut))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 6, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_cut_price, 4)))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 7, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_cut_seb, 4)))
+            item = QTableWidgetItem(text)
+            self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 8, item)
+
+        # Получим суммы транзакций по групам
+        query = """SELECT Note, SUM(Balance) FROM transaction_records_warehouse WHERE Date >= %s AND Date <= %s GROUP BY Code"""
+        sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения суммы транзкций по групам", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        all_transaction = 0
+
+        for trans in sql_info:
+            self.tw_product_4.insertRow(self.tw_product_4.rowCount())
+
+            item = QTableWidgetItem(trans[0])
+            self.tw_product_4.setItem(self.tw_product_4.rowCount() - 1, 0, item)
+
+            all_transaction += trans[1]
+            item = QTableWidgetItem(str(trans[1]))
+            self.tw_product_4.setItem(self.tw_product_4.rowCount() - 1, 1, item)
+
+        else:
+            self.tw_product_4.insertRow(self.tw_product_4.rowCount())
+            item = QTableWidgetItem(str(all_transaction))
+            self.tw_product_4.setItem(self.tw_product_4.rowCount() - 1, 1, item)
+
+    def print_production(self):
+        up_html = """
+          <table>
+          <caption>#head#</caption>
+          </table>"""
+
+        head = "Отчет по продукции %s - %s" % (self.de_date_from.date().toString(Qt.ISODate), self.de_date_to.date().toString(Qt.ISODate))
+        up_html = up_html.replace("#head#", head)
+
+        html = table_to_html.tab_html(self.tw_product_1, table_head="Произведено / Продано (Себестоимость покроеная!)",  up_template=up_html)
+        html += '<div style="display: inline-block; width: 100%">'
+        html += table_to_html.tab_html(self.tw_product_2, table_head="Отгружено клиенту")
+        html += '</div> <div style="display: inline-block; width: 100%">'
+        html += table_to_html.tab_html(self.tw_product_3, table_head="Остаток склада (Себестоимость расчетная!)")
+        html += '</div> <div style="display: inline-block; width: 100%">'
+        html += table_to_html.tab_html(self.tw_product_4, table_head="Изменения по транзпкциям")
+        html += '</div>'
+
+        self.print_class = print_qt.PrintHtml(self, html)
 
 
 class SaveReportMaterial(QDialog, save_report_material_class):
