@@ -199,18 +199,30 @@
      <addaction name="ma_sibest"/>
      <addaction name="ma_report_cost_article"/>
     </widget>
-    <addaction name="ma_report_need_article_order"/>
-    <addaction name="ma_report_supply"/>
-    <addaction name="ma_rest_for_work"/>
-    <addaction name="ma_sib_menu"/>
-    <addaction name="ma_pack_accept"/>
-    <addaction name="ma_report_material_consumption"/>
-    <addaction name="ma_report_profit"/>
-    <addaction name="ma_report_performance_company"/>
-    <addaction name="ma_report_shipped_customer"/>
-    <addaction name="ma_report_warehouse_date"/>
+    <widget class="QMenu" name="menu_10">
+     <property name="title">
+      <string>Отчеты</string>
+     </property>
+     <widget class="QMenu" name="menu_15">
+      <property name="title">
+       <string>Отдельные</string>
+      </property>
+      <addaction name="ma_report_supply"/>
+      <addaction name="ma_report_material_consumption"/>
+      <addaction name="ma_report_performance_company"/>
+      <addaction name="ma_report_profit"/>
+      <addaction name="ma_report_shipped_customer"/>
+      <addaction name="ma_report_warehouse_date"/>
+     </widget>
+     <addaction name="ma_report_all"/>
+     <addaction name="menu_15"/>
+    </widget>
     <addaction name="ma_report_reject"/>
-    <addaction name="ma_report_all"/>
+    <addaction name="ma_rest_for_work"/>
+    <addaction name="ma_pack_accept"/>
+    <addaction name="ma_report_need_article_order"/>
+    <addaction name="ma_sib_menu"/>
+    <addaction name="menu_10"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_12"/>
@@ -462,7 +474,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Прибыль</string>
+    <string>Наценка</string>
    </property>
   </action>
   <action name="ma_report_performance_company">
