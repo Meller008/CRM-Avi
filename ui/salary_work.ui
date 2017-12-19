@@ -556,7 +556,92 @@
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,0,1,0">
+        <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,5,30,0,0">
+         <item row="2" column="4">
+          <widget class="QPushButton" name="pushButton_10">
+           <property name="text">
+            <string>Экспорт</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Операции</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="4">
+          <widget class="QPushButton" name="pushButton_8">
+           <property name="text">
+            <string>Печать</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Итого</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="le_all_plus_2">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>Вычеты</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <widget class="QPushButton" name="pushButton_9">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Расчитать</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="QDateEdit" name="de_date_make">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QCheckBox" name="cb_date_make">
+           <property name="text">
+            <string>Дата приемки</string>
+           </property>
+          </widget>
+         </item>
          <item row="2" column="1">
           <widget class="QLineEdit" name="le_all_minus_2">
            <property name="readOnly">
@@ -588,74 +673,6 @@
            </property>
            <property name="readOnly">
             <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string>Операции</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="le_all_plus_2">
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_16">
-           <property name="text">
-            <string>Вычеты</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>Итого</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="3">
-          <widget class="QPushButton" name="pushButton_10">
-           <property name="text">
-            <string>Экспорт</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3" rowspan="2">
-          <widget class="QPushButton" name="pushButton_9">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Расчитать</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="3">
-          <widget class="QPushButton" name="pushButton_8">
-           <property name="text">
-            <string>Печать</string>
            </property>
           </widget>
          </item>
@@ -888,8 +905,8 @@
    <slot>ui_calc_preliminary()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>723</x>
-     <y>50</y>
+     <x>763</x>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel">
      <x>709</x>
@@ -904,8 +921,8 @@
    <slot>ui_export_preliminary_salary()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>711</x>
-     <y>77</y>
+     <x>763</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
      <x>694</x>
@@ -926,6 +943,22 @@
     <hint type="destinationlabel">
      <x>665</x>
      <y>-68</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_date_make</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>de_date_make</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>626</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>705</x>
+     <y>32</y>
     </hint>
    </hints>
   </connection>

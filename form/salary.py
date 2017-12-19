@@ -24,6 +24,8 @@ class SalaryList(QDialog, salary_list):
 
         self.set_size_table()
 
+        self.de_date_make.setDate(QDate.currentDate())
+
         self.access()
 
     def access(self):
@@ -601,17 +603,30 @@ class SalaryList(QDialog, salary_list):
         self.all_plus_preliminary = 0
         self.all_minus_preliminary = 0
         self.salary_preliminary = []
-        query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pack_operation.Id, pack_operation.Price * pack_operation.Value,
-                        operations.Name ,pack_operation.Date_make, pack_operation.Date_Input, pack.Cut_Id, pack.Number
-                      FROM pack_operation LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
-                        LEFT JOIN operations ON pack_operation.Operation_id = operations.Id
-                        LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id
-                      WHERE pack_operation.Pay = 0 AND pack_operation.Worker_Id IS NOT NULL
-                      ORDER BY work_name, pack_operation.Date_Input"""
-        sql_info = my_sql.sql_select(query)
-        if "mysql.connector.errors" in str(type(sql_info)):
-            print("Не смог получить операции")
-            return False
+        if self.cb_date_make.isChecked():
+            query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pack_operation.Id, pack_operation.Price * pack_operation.Value,
+                            operations.Name ,pack_operation.Date_make, pack_operation.Date_Input, pack.Cut_Id, pack.Number
+                          FROM pack_operation LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
+                            LEFT JOIN operations ON pack_operation.Operation_id = operations.Id
+                            LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id
+                          WHERE pack_operation.Pay = 0 AND pack_operation.Worker_Id IS NOT NULL AND pack.Date_Make <= %s
+                          ORDER BY work_name, pack_operation.Date_Input"""
+            sql_info = my_sql.sql_select(query, (self.de_date_make.date().toPyDate(), ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                print("Не смог получить операции с датой проверки")
+                return False
+        else:
+            query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pack_operation.Id, pack_operation.Price * pack_operation.Value,
+                            operations.Name ,pack_operation.Date_make, pack_operation.Date_Input, pack.Cut_Id, pack.Number
+                          FROM pack_operation LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
+                            LEFT JOIN operations ON pack_operation.Operation_id = operations.Id
+                            LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id
+                          WHERE pack_operation.Pay = 0 AND pack_operation.Worker_Id IS NOT NULL
+                          ORDER BY work_name, pack_operation.Date_Input"""
+            sql_info = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(sql_info)):
+                print("Не смог получить операции")
+                return False
 
         previous_id = None
         id_in_salary = []
@@ -643,18 +658,32 @@ class SalaryList(QDialog, salary_list):
                 work["operation_sum"] += operation[3]
                 self.all_operation_preliminary += operation[3]
 
-        query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pay_worker.Id, pay_reason.Name, pay_worker.Balance,
-                        pay_worker.Date_In_Pay, pay_worker.Note, admin.Last_Name
-                      FROM pay_worker
-                        LEFT JOIN staff_worker_info AS work ON pay_worker.Worker_Id = work.Id
-                        LEFT JOIN pay_reason ON pay_worker.Reason_Id = pay_reason.Id
-                        LEFT JOIN staff_worker_info AS admin ON pay_worker.Worker_Id_Insert = admin.Id
-                      WHERE Pay = 0
-                      ORDER BY work_name, pay_worker.Date_In_Pay"""
-        sql_info = my_sql.sql_select(query)
-        if "mysql.connector.errors" in str(type(sql_info)):
-            print("Не смог получить доплаты вычеты")
-            return False
+        if self.cb_date_make.isChecked():
+            query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pay_worker.Id, pay_reason.Name, pay_worker.Balance,
+                            pay_worker.Date_In_Pay, pay_worker.Note, admin.Last_Name
+                          FROM pay_worker
+                            LEFT JOIN staff_worker_info AS work ON pay_worker.Worker_Id = work.Id
+                            LEFT JOIN pay_reason ON pay_worker.Reason_Id = pay_reason.Id
+                            LEFT JOIN staff_worker_info AS admin ON pay_worker.Worker_Id_Insert = admin.Id
+                          WHERE Pay = 0 AND pay_worker.Date_In_Pay <= %s
+                          ORDER BY work_name, pay_worker.Date_In_Pay"""
+            sql_info = my_sql.sql_select(query, (self.de_date_make.date().toPyDate(), ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                print("Не смог получить доплаты вычеты")
+                return False
+        else:
+            query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pay_worker.Id, pay_reason.Name, pay_worker.Balance,
+                            pay_worker.Date_In_Pay, pay_worker.Note, admin.Last_Name
+                          FROM pay_worker
+                            LEFT JOIN staff_worker_info AS work ON pay_worker.Worker_Id = work.Id
+                            LEFT JOIN pay_reason ON pay_worker.Reason_Id = pay_reason.Id
+                            LEFT JOIN staff_worker_info AS admin ON pay_worker.Worker_Id_Insert = admin.Id
+                          WHERE Pay = 0
+                          ORDER BY work_name, pay_worker.Date_In_Pay"""
+            sql_info = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(sql_info)):
+                print("Не смог получить доплаты вычеты")
+                return False
 
         previous_id = None
 
