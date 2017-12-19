@@ -161,17 +161,12 @@ class Staff(QMainWindow, staff_list_class):
             if select_work:
                 result = QMessageBox.question(self, "Удаление", "Точно удалить работника?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 if result == 16384:
-                    query = "SELECT Last_Name, First_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y') FROM staff_worker_info WHERE Id = %s"
-                    dir_name = my_sql.sql_select(query, (select_work, ))
-                    if "mysql.connector.errors" in str(type(dir_name)):
-                        QMessageBox.critical(self, "Ошибка sql", dir_name.msg, QMessageBox.Ok)
-                        return False
                     query = "DELETE FROM staff_worker_info WHERE Id = %s"
                     info_sql = my_sql.sql_change(query, (select_work, ))
                     if "mysql.connector.errors" in str(type(info_sql)):
                         QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
                         return False
-                    dir = dir_name[0][0] + " " + dir_name[0][1] + " " + dir_name[0][2]
+                    dir = select_work
                     rmdir(self.inspection_path(dir, "Путь корень рабочие"))
                     self.set_info()
         except:
@@ -294,6 +289,8 @@ class OneStaff(QMainWindow, one_staff_class):
         self.access_save_sql = True
         self.alert = []  # Массив для запоминания изменений
 
+        self.id_info = None
+
         self.access()
 
     def access(self):
@@ -321,8 +318,8 @@ class OneStaff(QMainWindow, one_staff_class):
             query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % sql_dir_name
             info_sql = my_sql.sql_select(query)
             if "mysql.connector.errors" in str(type(info_sql)):
-                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                        return False
+                QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                return False
             self.path_wor = info_sql[0][0]
             if not path.isdir("%s/%s" % (self.path_wor, dir_name)):
                 try:
@@ -421,25 +418,27 @@ class OneStaff(QMainWindow, one_staff_class):
         self.de_patent_ending.setDate(patent_date.addYears(1))
 
     def select_file(self, file):  # Открываем выбраный фаил
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
-        self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
-        if self.path:
-            file_name = file.text()
-            subprocess.Popen(r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\")), shell=True)
+        if self.id_info:
+            dir_name = self.id_info
+            self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
+            if self.path:
+                file_name = file.text()
+                subprocess.Popen(r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\")), shell=True)
 
     def open_dir(self):  # Открываем выбраную папку
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
-        self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
-        if self.path:
-            # subprocess.Popen(['explorer "' + self.path.replace("/", "\\") + '"'])
-            subprocess.Popen('explorer "%s"' % self.path.replace("/", "\\"))
+        if self.id_info:
+            dir_name = self.id_info
+            self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
+            if self.path:
+                # subprocess.Popen(['explorer "' + self.path.replace("/", "\\") + '"'])
+                subprocess.Popen('explorer "%s"' % self.path.replace("/", "\\"))
 
     def add_file(self):  # Добавляем файлы
         info = AddFile()
         if info.exec() == 0:
             return False
         new_r = path.splitext(info.path_copy_file.text())[1]
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         copy(info.path_copy_file.text(), self.inspection_path(dir_name, 'Путь корень рабочие') + "/" + info.le_new_file_name.text() + path.splitext(info.path_copy_file.text())[1])
         self.inspection_files(dir_name, 'Путь корень рабочие')
 
@@ -710,7 +709,7 @@ class OneStaff(QMainWindow, one_staff_class):
             self.le_notofication.setPlainText(sql_reply[0][1])
 
         # Заполняем список файлов
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
 
         self.pushButton.setEnabled(True)
@@ -773,23 +772,6 @@ class OneStaff(QMainWindow, one_staff_class):
         if self.change:  # Если мы изменяем а не добавляем работника
             if self.input_check():  # Проверка заполнености полей
                 if "info" in self.alert:  # Добаление основной информации
-
-                    # Если изменилось имя или фамилия или дата приема то переименовываем папку
-                    if self.le_info_last_name.text() != self.sql_l_name or self.le_info_first_name.text() != self.sql_f_name\
-                            or self.de_info_recruitment.date().toPyDate() != self.sql_r_date:
-                        try:
-                            query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % 'Путь корень рабочие'
-                            info_sql = my_sql.sql_select(query)
-                            if "mysql.connector.errors" in str(type(info_sql)):
-                                QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
-                                return False
-                            self.path_wor = info_sql[0][0]
-                            old_dir_name = self.path_wor + "/" + self.sql_l_name + " " + self.sql_f_name + " " + self.sql_r_date.strftime("%d.%m.%Y")
-                            new_dir_name = self.path_wor + "/" + self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + \
-                                           self.de_info_recruitment.date().toString("dd.MM.yyyy")
-                            rename(old_dir_name, new_dir_name)
-                        except:
-                            QMessageBox.critical(self, "Ошибка папок", "Я не смог изменить папку. Придется сделать вам самим! Не забудьте!", QMessageBox.Ok)
 
                     if self.rb_sex_m.isChecked():  # Узнаем пол работника
                         self.sex = "M"
@@ -1454,7 +1436,7 @@ class OneStaff(QMainWindow, one_staff_class):
         sheet['H60'] = date_now.toString("MM")
         sheet['Z60'] = date_now.toString("yy")
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю")
@@ -1464,7 +1446,7 @@ class OneStaff(QMainWindow, one_staff_class):
             elif option == "out":
                 file_name = "Уведомление о расторжении договора %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
                 book.save('%s/%s' % (self.path, file_name))
-            dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+            dir_name = self.id_info
             self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
             self.inspection_files(dir_name, 'Путь корень рабочие')
             self.statusBar().showMessage("Готово")
@@ -1691,7 +1673,7 @@ class OneStaff(QMainWindow, one_staff_class):
         img = Image('%s/staff/square.png' % self.path_templates)
         sheet.add_image(img, 'DJ79')
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -1773,7 +1755,7 @@ class OneStaff(QMainWindow, one_staff_class):
             xml = xml.replace("СТРАХОВКА", "")
             xml = xml.replace("?ПА", "")
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -1829,7 +1811,7 @@ class OneStaff(QMainWindow, one_staff_class):
         else:
             xml = xml.replace("?ДОЛЖНОСТЬ", self.cb_info_position.currentText())
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -1866,7 +1848,7 @@ class OneStaff(QMainWindow, one_staff_class):
         xml = xml.replace("?НОМЕР", self.le_passport_number.text().upper())
         xml = xml.replace("?ДАТАЗАЯВ", QDate().currentDate().toString("dd.MM.yyyy"))
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -1896,7 +1878,7 @@ class OneStaff(QMainWindow, one_staff_class):
 
         xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -1932,7 +1914,7 @@ class OneStaff(QMainWindow, one_staff_class):
         xml = xml.replace("?ФИ", self.le_info_last_name.text() + " " + self.le_info_first_name.text())
         xml = xml.replace("?ДАТА", info.de_in.date().toString("dd.MM.yyyy"))
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -2011,7 +1993,7 @@ class OneStaff(QMainWindow, one_staff_class):
         else:
             xml = xml.replace("?ПАТЕНТ", " ")
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -2090,7 +2072,7 @@ class OneStaff(QMainWindow, one_staff_class):
         xml = xml.replace("?ТРУДОВОЙДОГДАТА", contract_number[0][1].strftime("%d.%m.%Y"))
         xml = xml.replace("?ТРУДОВОЙДОГ", str(contract_number[0][0] + "/" + contract_number[0][1].strftime("%y")))
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -2166,7 +2148,7 @@ class OneStaff(QMainWindow, one_staff_class):
         xml = xml.replace("?ТРУДОВОЙДОГДАТА", contract_number[0][1].strftime("%d.%m.%Y"))
         xml = xml.replace("?ТРУДОВОЙДОГ", str(contract_number[0][0] + "/" + contract_number[0][1].strftime("%y")))
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
@@ -2209,7 +2191,7 @@ class OneStaff(QMainWindow, one_staff_class):
         xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
         xml = xml.replace("?СУМ", str(dialog[0]))
 
-        dir_name = self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.de_info_recruitment.date().toString("dd.MM.yyyy")
+        dir_name = self.id_info
         self.inspection_files(dir_name, 'Путь корень рабочие')
         if self.path:
             self.statusBar().showMessage("Сохраняю фаил")
