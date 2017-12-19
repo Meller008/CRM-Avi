@@ -225,7 +225,8 @@ class Order(QMainWindow, order_class):
 
     def start_set_sql_info(self):
         query = """SELECT `order`.Client_Id, clients.Name, `order`.Clients_Vendor_Id, `order`.Clients_Adress_Id, order_transport_company.Id,
-                    order_transport_company.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Order, `order`.Number_Doc, `order`.Note, `order`.Shipped
+                    order_transport_company.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Order, `order`.Number_Doc, `order`.Note, `order`.Shipped,
+                    `order`.Combined
                     FROM `order` LEFT JOIN order_transport_company ON `order`.Transport_Company_Id = order_transport_company.Id
                     LEFT JOIN clients ON `order`.Client_Id = clients.Id WHERE `order`.Id = %s"""
         sql_info = my_sql.sql_select(query, (self.id,))
@@ -262,6 +263,11 @@ class Order(QMainWindow, order_class):
         else:
             self.cb_shipping.setChecked(False)
             self.sql_shipped = False
+
+        if sql_info[0][12] == 1:
+            self.cb_combined.setChecked(True)
+        else:
+            self.cb_combined.setChecked(False)
 
         query = """SELECT order_position.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Id, product_article_parametrs.Name,
                     product_article_parametrs.Client_Name, order_position.Price, order_position.NDS, order_position.Value, order_position.In_On_Place,
@@ -784,19 +790,22 @@ class Order(QMainWindow, order_class):
             else:
                 shipped = 0
 
+            if self.cb_combined.isChecked():
+                combined = 1
+            else:
+                combined = 0
+
             if self.id:
                 if self.le_transport_company.text() == "":
                     tc_id = None
                 else:
                     tc_id = self.le_transport_company.whatsThis()
 
-
-
                 query = """UPDATE `order` SET Client_Id = %s, Clients_Vendor_Id = %s, Clients_Adress_Id = %s, Transport_Company_Id = %s, Date_Order = %s,
-                            Date_Shipment = %s, Number_Order = %s, Number_Doc = %s, Note = %s, Sum_In_Nds = %s, Sum_Off_Nds = %s WHERE Id = %s"""
+                            Date_Shipment = %s, Number_Order = %s, Number_Doc = %s, Note = %s, Sum_In_Nds = %s, Sum_Off_Nds = %s, Combined = %s WHERE Id = %s"""
                 parametrs = (self.le_client.whatsThis(), self.cb_clients_vendor.currentData(), self.cb_clients_adress.currentData(),
                              tc_id, self.de_date_order.date().toString(Qt.ISODate), self.de_date_shipment.date().toString(Qt.ISODate), self.le_number_order.text(),
-                             self.le_number_doc.text(), self.le_note.text(), self.le_sum_in_nds.text(), self.le_sum_no_nds.text(), self.id)
+                             self.le_number_doc.text(), self.le_note.text(), self.le_sum_in_nds.text(), self.le_sum_no_nds.text(), combined, self.id)
                 sql_info = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql изменения заказа", sql_info.msg, QMessageBox.Ok)
@@ -804,11 +813,12 @@ class Order(QMainWindow, order_class):
                 self.new_id = False
             else:
                 query = """INSERT INTO `order` (Client_Id, Clients_Vendor_Id, Clients_Adress_Id, Transport_Company_Id, Date_Order, Date_Shipment,
-                                                Number_Order, Number_Doc, Note, Shipped, Sum_In_Nds, Sum_Off_Nds) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s, %s)"""
+                                                Number_Order, Number_Doc, Note, Shipped, Sum_In_Nds, Sum_Off_Nds, Combined) 
+                                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s, %s, %s)"""
                 parametrs = (self.le_client.whatsThis(), self.cb_clients_vendor.currentData(), self.cb_clients_adress.currentData(),
                              self.le_transport_company.whatsThis(), self.de_date_order.date().toString(Qt.ISODate),
                              self.de_date_shipment.date().toString(Qt.ISODate), self.le_number_order.text(), self.le_number_doc.text(), self.le_note.text(),
-                             self.le_sum_in_nds.text(), self.le_sum_no_nds.text())
+                             self.le_sum_in_nds.text(), self.le_sum_no_nds.text(), combined)
                 sql_info = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql добавления заказа", sql_info.msg, QMessageBox.Ok)
@@ -916,33 +926,109 @@ class Order(QMainWindow, order_class):
         return True
 
     def calc_sum(self):
-
         old_sum = self.le_sum_in_nds.text()
+        if self.cb_combined.isChecked():
+            query = """SELECT DISTINCT(product_article_parametrs.Client_code)
+                          FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+                          WHERE Order_Id = %s"""
+            unite_code_sql = my_sql.sql_select(query, (self.id, ))
+            if "mysql.connector.errors" in str(type(unite_code_sql)):
+                QMessageBox.critical(self, "Ошибка sql получения уникальных кодов", unite_code_sql.msg, QMessageBox.Ok)
+                return False
 
-        if self.tw_position.rowCount() < 1:
-            return False
+            product = collections.OrderedDict()
 
-        sum_in_nds = 0
-        sum_of_nds = 0
-        for row in range(self.tw_position.rowCount()):
-            price = round(float(self.tw_position.item(row, 4).text()), 2)
-            value = float(self.tw_position.item(row, 5).text())
-            nds = float(self.tw_position.item(row, 4).data(5))
+            for cod in unite_code_sql:
+                product[str(cod[0])] = {"value": 0, "price": None, "price_no_nds": None, "sum_no_nds": 0, "nds": None, "sum": 0, "nds_sum": 0, "psb": 0}
 
-            if self.lb_client.whatsThis().find("no_nds") >= 0:
-                sum_of_nds += round(price * value, 2)
-                sum_in_nds += round((price * value) * (1 + nds / 100), 2)
-            else:
-                sum_in_nds += round(price * value, 2)
-                sum_of_nds += round(price * value - (price * value * nds) / (100 + nds), 2)
+            aricle = {}
+            query = """SELECT product_article_parametrs.Id ,product_article_parametrs.Client_code
+                          FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+                          WHERE Order_Id = %s"""
+            sql_info = my_sql.sql_select(query, (self.id, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения кодов всех артикулов", sql_info.msg, QMessageBox.Ok)
+                return False
 
-        self.le_sum_position.setText(str(self.tw_position.rowCount()))
-        self.le_sum_no_nds.setText(str(round(sum_of_nds, 2)))
-        self.le_sum_in_nds.setText(str(round(sum_in_nds, 2)))
-        self.le_sum_nds.setText(str(round(sum_in_nds - sum_of_nds, 2)))
+            for i in sql_info:
+                aricle.update({i[0]: i[1]})
 
-        if old_sum != self.le_sum_in_nds.text():
-            self.ui_order_info_edit()
+            for row in range(self.tw_position.rowCount()):
+                # Проверяем находиться ли наный товар в списке объединяемых
+                cod = aricle[int(self.tw_position.item(row, 2).data(5))]
+                if cod not in product:
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Не найден код в словаре!", QMessageBox.Ok)
+                    return False
+
+                # Проверяем совпадают ли цены
+                if product[cod]["price"] is not None and product[cod]["price"] != float(self.tw_position.item(row, 4).text()):
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Разная цена одинаковых кодов", QMessageBox.Ok)
+                    return False
+
+                # Проверяем совпадают ли НДС
+                if product[cod]["nds"] is not None and product[cod]["nds"] != int(self.tw_position.item(row, 4).data(5)):
+                    QMessageBox.critical(self, "Ошибка объединения кодов", "Разный НДС одинаковых кодов", QMessageBox.Ok)
+                    return False
+
+                # Вставляем статические параметры
+                product[cod]["price"] = float(self.tw_position.item(row, 4).text())
+                product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
+                product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
+
+                # Сумируем кол-во
+                product[cod]["value"] += int(self.tw_position.item(row, 5).text())
+
+            # Пройдем по готовым обьединеным позициям и расчитаем цифры
+            sum_in_nds = 0
+            sum_of_nds = 0
+            unit_position = 0
+            for cod, cod_value in product.items():
+                if self.lb_client.whatsThis().find("no_nds") >= 0:
+                    cod_value["price_no_nds"], cod_value["sum_no_nds"], cod_value["nds_sum"], cod_value["sum"], cod_value["mest"] =\
+                        calc_price.calc_no_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
+                else:
+                    cod_value["price_no_nds"], cod_value["sum_no_nds"], cod_value["nds_sum"], cod_value["sum"], cod_value["mest"] =\
+                        calc_price.calc_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
+
+                sum_of_nds += cod_value["sum_no_nds"]
+                sum_in_nds += cod_value["sum"]
+                unit_position += 1
+
+            self.le_sum_position.setText(str(self.tw_position.rowCount()))
+            self.le_sum_no_nds.setText(str(round(sum_of_nds, 2)))
+            self.le_sum_in_nds.setText(str(round(sum_in_nds, 2)))
+            self.le_sum_nds.setText(str(round(sum_in_nds - sum_of_nds, 2)))
+
+            if old_sum != self.le_sum_in_nds.text():
+                self.ui_order_info_edit()
+
+
+        else:
+
+            if self.tw_position.rowCount() < 1:
+                return False
+
+            sum_in_nds = 0
+            sum_of_nds = 0
+            for row in range(self.tw_position.rowCount()):
+                price = round(float(self.tw_position.item(row, 4).text()), 2)
+                value = float(self.tw_position.item(row, 5).text())
+                nds = float(self.tw_position.item(row, 4).data(5))
+
+                if self.lb_client.whatsThis().find("no_nds") >= 0:
+                    sum_of_nds += round(price * value, 2)
+                    sum_in_nds += round((price * value) * (1 + nds / 100), 2)
+                else:
+                    sum_in_nds += round(price * value, 2)
+                    sum_of_nds += round(price * value - (price * value * nds) / (100 + nds), 2)
+
+            self.le_sum_position.setText(str(self.tw_position.rowCount()))
+            self.le_sum_no_nds.setText(str(round(sum_of_nds, 2)))
+            self.le_sum_in_nds.setText(str(round(sum_in_nds, 2)))
+            self.le_sum_nds.setText(str(round(sum_in_nds - sum_of_nds, 2)))
+
+            if old_sum != self.le_sum_in_nds.text():
+                self.ui_order_info_edit()
 
     def of_list_clients(self, item):
         id_client, name_client = item
