@@ -71,6 +71,8 @@ class TableList(QMainWindow, table_list_class):
             i += 1
 
     def set_table_info(self):
+        self.table_widget.setSortingEnabled(False)
+
         self.table_items = my_sql.sql_select(self.query_table_select)
         if "mysql.connector.errors" in str(type(self.table_items)):
                 QMessageBox.critical(self, "Ошибка sql получение таблицы", self.table_items.msg, QMessageBox.Ok)
@@ -102,6 +104,8 @@ class TableList(QMainWindow, table_list_class):
 
                 item.setData(5, table_typle[0])
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, column - 1, item)
+
+        self.table_widget.setSortingEnabled(True)
 
     def ui_add_table_item(self):  # Добавить предмет
         id = False
