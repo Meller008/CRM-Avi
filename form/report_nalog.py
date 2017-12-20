@@ -36,7 +36,7 @@ class ReportNalog(QMainWindow, report_nalog_class):
 
         query = """SELECT Last_Name, First_Name, Date_Recruitment, If(`Leave` = 0, NULL, Date_Leave)
                     FROM staff_worker_info
-                    WHERE Date_Recruitment <= %s AND (Date_Leave >= %s OR `Leave` = 0 )"""
+                    WHERE Date_Recruitment <= %s AND (Date_Leave >= %s OR `Leave` = 0 ) ORDER BY Last_Name, First_Name"""
         sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), self.de_date_from.date().toPyDate()))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения работников", sql_info.msg, QMessageBox.Ok)
