@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql
 from classes import print_qt
-from function import table_to_html, to_excel
+from function import table_to_html
 
 material_consumption_class = loadUiType(getcwd() + '/ui/report_material_consumption.ui')[0]
 

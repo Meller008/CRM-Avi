@@ -1,11 +1,10 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow
 from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtGui import QIcon, QBrush, QColor
-import re
+from PyQt5.QtGui import QIcon
 from function import my_sql
-from function import table_to_html, to_excel
+from function import table_to_html
 from classes import print_qt
 
 
