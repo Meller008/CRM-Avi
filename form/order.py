@@ -210,18 +210,13 @@ class Order(QMainWindow, order_class):
 
             self.sql_shipped = False
 
+            self.sql_date_shipment = None
+            self.sql_number_doc = None
+
             self.de_date_order.setDate(QDate.currentDate())
             self.de_date_shipment.setDate(QDate.currentDate())
 
-            query = "SELECT IFNULL(MAX(Number_Doc + 1), 'No Number') FROM `order` WHERE YEAR(Date_Order) = %s"
-            sql_info = my_sql.sql_select(query, (QDate.currentDate().year(),))
-            if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получения нового номера документа", sql_info.msg, QMessageBox.Ok)
-                return False
-            if sql_info[0][0] == "No Number":
-                self.le_number_doc.setText("1")
-            else:
-                self.le_number_doc.setText(str(sql_info[0][0]))
+            self.ui_change_date_shipment()
 
     def start_set_sql_info(self):
         query = """SELECT `order`.Client_Id, clients.Name, `order`.Clients_Vendor_Id, `order`.Clients_Adress_Id, order_transport_company.Id,
@@ -248,6 +243,10 @@ class Order(QMainWindow, order_class):
 
         self.de_date_order.setDate(sql_info[0][6])
         self.de_date_shipment.setDate(sql_info[0][7])
+
+        # Запомним дату и номер для выдачи заказов
+        self.sql_date_shipment = sql_info[0][7]
+        self.sql_number_doc = str(sql_info[0][9])
 
         self.le_number_order.setText(sql_info[0][8])
         self.le_number_doc.setText(str(sql_info[0][9]))
@@ -621,17 +620,35 @@ class Order(QMainWindow, order_class):
         return True
 
     def ui_change_date_shipment(self):
-        if self.le_number_doc.text() and self.id:
-            return False
-        query = "SELECT IFNULL(MAX(Number_Doc + 1), 'No Number') FROM `order` WHERE YEAR(Date_Order) = %s"
-        sql_info = my_sql.sql_select(query, (self.de_date_shipment.date().year(),))
-        if "mysql.connector.errors" in str(type(sql_info)):
-            QMessageBox.critical(self, "Ошибка sql получения нового номера документа", sql_info.msg, QMessageBox.Ok)
-            return False
-        if sql_info[0][0] == "No Number":
-            self.le_number_doc.setText("1")
+
+        # новый заказ
+        if self.sql_date_shipment is None:
+            query = "SELECT IFNULL(MAX(Number_Doc + 1), 'No Number') FROM `order` WHERE YEAR(Date_Shipment) = %s"
+            sql_info = my_sql.sql_select(query, (self.de_date_shipment.date().year(),))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения нового номера документа", sql_info.msg, QMessageBox.Ok)
+                return False
+            if sql_info[0][0] == "No Number":
+                self.le_number_doc.setText("1")
+            else:
+                self.le_number_doc.setText(str(sql_info[0][0]))
         else:
-            self.le_number_doc.setText(str(sql_info[0][0]))
+            # Старый заказ и год отгрузки такой же как и в БД
+            if self.sql_date_shipment.year == self.de_date_shipment.date().year():
+                self.le_number_doc.setText(self.sql_number_doc)
+
+            else:  # Заказ старый но новый год в дате
+                query = "SELECT IFNULL(MAX(Number_Doc + 1), 'No Number') FROM `order` WHERE YEAR(Date_Shipment) = %s"
+                sql_info = my_sql.sql_select(query, (self.de_date_shipment.date().year(),))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    QMessageBox.critical(self, "Ошибка sql получения нового номера документа", sql_info.msg, QMessageBox.Ok)
+                    return False
+                if sql_info[0][0] == "No Number":
+                    self.le_number_doc.setText("1")
+                else:
+                    self.le_number_doc.setText(str(sql_info[0][0]))
+
+        self.ui_order_info_edit()
 
     def ui_order_info_edit(self):
         if not self.save_change_order:
