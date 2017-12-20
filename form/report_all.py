@@ -1217,7 +1217,7 @@ class ReportAll(QMainWindow, report_all_class):
 
         for order_position in sql_info:
             if article_list.get(order_position[0]) is None:
-                new = {order_position[0]: {"name": order_position[1], "seb": 0, "value_in": 0, "sum_in": 0, "value_out": order_position[2], "sum_out": order_position[3], "profit": 0}}
+                new = {order_position[0]: {"name": order_position[1], "seb": 0, "value_in": 0, "sum_in": 0, "value_out": order_position[2], "sum_out": order_position[3] * order_position[2], "profit": 0}}
                 article_list.update(new)
             else:
                 article_list[order_position[0]]["value_out"] += order_position[2]
