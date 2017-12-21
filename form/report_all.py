@@ -66,13 +66,14 @@ class ReportAll(QMainWindow, report_all_class):
         self.tw_comparing_2.horizontalHeader().resizeSection(1, 80)
         self.tw_comparing_2.horizontalHeader().resizeSection(2, 80)
 
-        self.tw_product_1.horizontalHeader().resizeSection(0, 140)
-        self.tw_product_1.horizontalHeader().resizeSection(1, 90)
-        self.tw_product_1.horizontalHeader().resizeSection(2, 75)
+        self.tw_product_1.horizontalHeader().resizeSection(0, 120)
+        self.tw_product_1.horizontalHeader().resizeSection(1, 50)
+        self.tw_product_1.horizontalHeader().resizeSection(2, 50)
         self.tw_product_1.horizontalHeader().resizeSection(3, 75)
-        self.tw_product_1.horizontalHeader().resizeSection(4, 75)
+        self.tw_product_1.horizontalHeader().resizeSection(4, 50)
         self.tw_product_1.horizontalHeader().resizeSection(5, 75)
         self.tw_product_1.horizontalHeader().resizeSection(6, 75)
+        self.tw_product_1.horizontalHeader().resizeSection(7, 75)
 
         self.tw_product_2.horizontalHeader().resizeSection(0, 100)
         self.tw_product_2.horizontalHeader().resizeSection(1, 60)
@@ -1184,7 +1185,7 @@ class ReportAll(QMainWindow, report_all_class):
 
         # Получим произведеные артикула
         query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name, ']'),
-                        SUM(pack.Value_Pieces - pack.Value_Damage)
+                        SUM(pack.Value_Pieces - pack.Value_Damage), product_article_parametrs.Price
                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
@@ -1198,12 +1199,13 @@ class ReportAll(QMainWindow, report_all_class):
 
         for order_position in sql_info:
             if article_list.get(order_position[0]) is None:
-                new = {order_position[0]: {"name": order_position[1], "seb": 0, "value_in": order_position[2], "sum_in": 0, "value_out": 0, "sum_out": 0, "profit": 0}}
+                new = {order_position[0]: {"name": order_position[1], "seb": 0, "value_in": order_position[2], "sum_in": 0,
+                                           "value_out": 0, "sum_out": 0, "profit": 0, "seb_out": 0, "price": order_position[3]}}
                 article_list.update(new)
 
         # Получим проданые артикула
         query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name, ']'),
-                        order_position.Value, IF(clients.No_Nds, order_position.Price * (order_position.NDS / 100 + 1), order_position.Price)
+                        order_position.Value, IF(clients.No_Nds, order_position.Price * (order_position.NDS / 100 + 1), order_position.Price), product_article_parametrs.Price
                       FROM order_position LEFT JOIN `order` ON order_position.Order_Id = `order`.Id
                         LEFT JOIN clients ON `order`.Client_Id = clients.Id
                         LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
@@ -1217,7 +1219,8 @@ class ReportAll(QMainWindow, report_all_class):
 
         for order_position in sql_info:
             if article_list.get(order_position[0]) is None:
-                new = {order_position[0]: {"name": order_position[1], "seb": 0, "value_in": 0, "sum_in": 0, "value_out": order_position[2], "sum_out": order_position[3] * order_position[2], "profit": 0}}
+                new = {order_position[0]: {"name": order_position[1], "seb": 0, "value_in": 0, "sum_in": 0, "price": order_position[4],
+                                           "value_out": order_position[2], "sum_out": order_position[3] * order_position[2], "profit": 0, "seb_out": 0}}
                 article_list.update(new)
             else:
                 article_list[order_position[0]]["value_out"] += order_position[2]
@@ -1225,7 +1228,7 @@ class ReportAll(QMainWindow, report_all_class):
 
         # Найдем себестоимость
 
-        all_value_in, all_sum_in, all_value_out, all_sum_out, all_profit = 0, 0, 0, 0, 0
+        all_value_in, all_sum_in, all_value_out, all_sum_out, all_profit, all_seb_out, all_sun_sel_in = 0, 0, 0, 0, 0, 0, 0
 
         for key, value in article_list.items():
 
@@ -1332,6 +1335,9 @@ class ReportAll(QMainWindow, report_all_class):
             # посчитаем весь артикул
             value["sum_in"] = value["value_in"] * value["seb"]
             value["profit"] = value["sum_out"] - (value["value_out"] * value["seb"])
+            value["seb_out"] += value["value_out"] * value["seb"]
+
+            all_sun_sel_in += value["value_in"] * value["price"]  # Считаем сколько покроили в рублях на продажу
 
             # Вставим артикул
 
@@ -1357,10 +1363,15 @@ class ReportAll(QMainWindow, report_all_class):
             item = QTableWidgetItem(str(value["value_out"]))
             self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 4, item)
 
+            all_seb_out += value["seb_out"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["seb_out"], 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 5, item)
+
             all_sum_out += value["sum_out"]
             text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["sum_out"], 2)))
             item = QTableWidgetItem(text)
-            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 5, item)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 6, item)
 
             all_profit += value["profit"]
             text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(value["profit"], 2)))
@@ -1371,7 +1382,7 @@ class ReportAll(QMainWindow, report_all_class):
                 color = QBrush(QColor(255, 255, 153, 255))
 
             item.setBackground(color)
-            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 6, item)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 7, item)
 
         else:
 
@@ -1387,13 +1398,24 @@ class ReportAll(QMainWindow, report_all_class):
             item = QTableWidgetItem(text)
             self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 4, item)
 
-            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum_out, 2)))
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_seb_out, 2)))
             item = QTableWidgetItem(text)
             self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 5, item)
 
-            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_profit, 2)))
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum_out, 2)))
             item = QTableWidgetItem(text)
             self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 6, item)
+
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_profit, 2)))
+            item = QTableWidgetItem(text)
+            self.tw_product_1.setItem(self.tw_product_1.rowCount() - 1, 7, item)
+
+            self.le_supply_value_article.setText(str(all_value_in))
+            self.le_supply_sum_seb_article.setText(str(round(all_sum_in, 2)))
+            self.le_supply_sum_price_article.setText(str(round(all_sun_sel_in, 2)))
+            self.le_supply_sum_balance_article.setText(str(round(all_sun_sel_in - all_sum_in, 2)))
+
+            self.le_sel_value_article.setText(str(all_value_out))
 
         # Заполним таблицу отгруженого клиенту
         self.tw_product_2.clearContents()
@@ -1517,6 +1539,13 @@ class ReportAll(QMainWindow, report_all_class):
             item = QTableWidgetItem(text)
             item.setData(5, order[0])
             self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 6, item)
+
+            self.le_sel_sum_price_article.setText(str(round(all_sum_in_nds, 2)))
+            self.le_sel_sum_seb_article.setText(str(round(all_seb_out, 2)))
+            self.le_sel_sum_balance_article.setText(str(round(all_sum_in_nds - all_seb_out, 2)))
+
+            self.le_warehouse1_value_article.setText(str(all_value_in - all_value_out))
+            self.le_warehouse1_sum_article.setText(str(round(all_sum_in - all_sum_in_nds, 2)))
 
         # Получим остаток склада
         # Получаем артикула
@@ -1671,6 +1700,8 @@ class ReportAll(QMainWindow, report_all_class):
             item = QTableWidgetItem(text)
             self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 8, item)
 
+
+
         # Получим суммы транзакций по групам
         query = """SELECT Note, SUM(Balance) FROM transaction_records_warehouse WHERE Date >= %s AND Date <= %s GROUP BY Code"""
         sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()))
@@ -1679,6 +1710,9 @@ class ReportAll(QMainWindow, report_all_class):
             return False
 
         all_transaction = 0
+
+        self.tw_product_4.clearContents()
+        self.tw_product_4.setRowCount(0)
 
         for trans in sql_info:
             self.tw_product_4.insertRow(self.tw_product_4.rowCount())

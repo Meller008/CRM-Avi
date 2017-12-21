@@ -1223,7 +1223,7 @@ p, li { white-space: pre-wrap; }
             </column>
             <column>
              <property name="text">
-              <string>Себест(покр)</string>
+              <string>Себест</string>
              </property>
             </column>
             <column>
@@ -1256,7 +1256,21 @@ p, li { white-space: pre-wrap; }
             </column>
             <column>
              <property name="text">
-              <string>Продано шт</string>
+              <string>Продано</string>
+             </property>
+             <property name="foreground">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>108</red>
+                <green>150</green>
+                <blue>108</blue>
+               </color>
+              </brush>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По себест.</string>
              </property>
              <property name="foreground">
               <brush brushstyle="SolidPattern">
@@ -1576,6 +1590,286 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
          </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_6">
+       <attribute name="title">
+        <string>Продукция ИТОГО</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_16">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>1</number>
+        </property>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_15">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_44">
+            <property name="text">
+             <string>Разница остатков (ж-т)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_43">
+            <property name="text">
+             <string>Остаток транзакций</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QLineEdit" name="le_warehouse2_value_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QLineEdit" name="le_difference_warehouse_value">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="2">
+           <widget class="QLineEdit" name="le_warehouse2_sum_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="2">
+           <widget class="QLineEdit" name="le_warehouse1_sum_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="le_supply_sum_seb_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="le_last_balance_value_article"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_37">
+            <property name="text">
+             <string>Произвели по себест</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QLineEdit" name="le_warehouse1_value_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_39">
+            <property name="text">
+             <string>Остаток живой</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_36">
+            <property name="text">
+             <string>Рубли</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_40">
+            <property name="text">
+             <string>Продали по продажной</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="le_supply_value_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_38">
+            <property name="text">
+             <string>Себестоимость проданого</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="le_sel_value_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_35">
+            <property name="text">
+             <string>Прибыль</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="1">
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_41">
+            <property name="text">
+             <string>Количество</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="le_last_balance_sum_article"/>
+          </item>
+          <item row="5" column="2">
+           <widget class="QLineEdit" name="le_sel_sum_price_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="2">
+           <widget class="QLineEdit" name="le_difference_warehouse_sum">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_42">
+              <property name="text">
+               <string>Остаток прошлый</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="toolButton_3">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="11" column="1" colspan="2">
+           <widget class="QPushButton" name="pushButton_5">
+            <property name="text">
+             <string>Сохранить</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QLineEdit" name="le_sel_sum_seb_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="2">
+           <widget class="QLineEdit" name="le_sel_sum_balance_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_45">
+            <property name="text">
+             <string>Произвели по продаже</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QLineEdit" name="le_supply_sum_price_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLineEdit" name="le_supply_sum_balance_article">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_46">
+            <property name="text">
+             <string>Прибыль прогнозируемая</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
