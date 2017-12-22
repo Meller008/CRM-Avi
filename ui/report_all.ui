@@ -152,7 +152,10 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я беру продыные клиенту товары (&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#000000;&quot;&gt;Таблица 2&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я беру остаток склада и считаю РАСЧЕТНУЮ себестоимость (Остаток склада расчитывается по транзакциям!) (&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#000000;&quot;&gt;Таблица 3&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я беру списания за выбраный период по транзакциям (&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#000000;&quot;&gt;Таблица 4&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#000000;&quot;&gt;-Дальше инструкций пока нет!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#000000;&quot;&gt;-&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;Я сумирую все значения в следующей вкладке&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я сумирую живой остаток &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#0000ff;&quot;&gt;прошлый остаток +&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ff0000;&quot;&gt;покроеные - &lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#6c966c;&quot;&gt;проданые&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt; СЕБЕСТОИМОСТИ (&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#000000;&quot;&gt;Из таблиц 1-2&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я сумирую не живой остаток по СЕБЕСТОИМОСТИ (&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#000000;&quot;&gt;Из таблицы 3&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;-Я считаю разницу между живым и неживым остатком&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt; font-weight:600; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; color:#000000;&quot;&gt;г) Сумирование итого&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -1054,6 +1057,120 @@ p, li { white-space: pre-wrap; }
             </column>
            </widget>
           </item>
+          <item row="1" column="1">
+           <layout class="QGridLayout" name="gridLayout_10">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item row="5" column="2">
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="le_comparing_sum">
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLabel" name="label_29">
+              <property name="text">
+               <string>Итого расходов</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_47">
+              <property name="text">
+               <string>Расход на ткань</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="label_48">
+              <property name="text">
+               <string>Расход на фурнитуру</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_50">
+              <property name="text">
+               <string>Рубли</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QPushButton" name="pushButton_6">
+              <property name="text">
+               <string>Сохранить</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="le_comparing_accessories">
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="le_comparing_material">
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>Расходы на фурнитуру</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <widget class="QTableWidget" name="tw_comparing_1">
             <property name="font">
@@ -1095,60 +1212,6 @@ p, li { white-space: pre-wrap; }
               <string>Сумма</string>
              </property>
             </column>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <layout class="QGridLayout" name="gridLayout_10">
-            <item row="1" column="2">
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="label_29">
-              <property name="text">
-               <string>Итого расходов</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLineEdit" name="le_comparing_sum">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_30">
-            <property name="text">
-             <string>Расходы на фурнитуру</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
            </widget>
           </item>
          </layout>
@@ -1647,6 +1710,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="9" column="1">
            <widget class="QLineEdit" name="le_warehouse2_value_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1654,6 +1723,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="10" column="1">
            <widget class="QLineEdit" name="le_difference_warehouse_value">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1661,6 +1736,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="9" column="2">
            <widget class="QLineEdit" name="le_warehouse2_sum_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1668,6 +1749,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="8" column="2">
            <widget class="QLineEdit" name="le_warehouse1_sum_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1675,13 +1762,26 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="2" column="2">
            <widget class="QLineEdit" name="le_supply_sum_seb_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="le_last_balance_value_article"/>
+           <widget class="QLineEdit" name="le_last_balance_value_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_37">
@@ -1692,6 +1792,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="8" column="1">
            <widget class="QLineEdit" name="le_warehouse1_value_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1723,6 +1829,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="2" column="1">
            <widget class="QLineEdit" name="le_supply_value_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1737,6 +1849,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="5" column="1">
            <widget class="QLineEdit" name="le_sel_value_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1773,10 +1891,23 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QLineEdit" name="le_last_balance_sum_article"/>
+           <widget class="QLineEdit" name="le_last_balance_sum_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item row="5" column="2">
            <widget class="QLineEdit" name="le_sel_sum_price_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1784,6 +1915,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="10" column="2">
            <widget class="QLineEdit" name="le_difference_warehouse_sum">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1816,6 +1953,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="6" column="2">
            <widget class="QLineEdit" name="le_sel_sum_seb_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1823,6 +1966,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="7" column="2">
            <widget class="QLineEdit" name="le_sel_sum_balance_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1837,6 +1986,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="3" column="2">
            <widget class="QLineEdit" name="le_supply_sum_price_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1844,6 +1999,12 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="4" column="2">
            <widget class="QLineEdit" name="le_supply_sum_balance_article">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -1873,6 +2034,992 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_8">
+       <attribute name="title">
+        <string>ИТОГО</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_20">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="horizontalSpacing">
+         <number>0</number>
+        </property>
+        <property name="verticalSpacing">
+         <number>10</number>
+        </property>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="0">
+         <spacer name="verticalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_19">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_54">
+            <property name="text">
+             <string>Ткань</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_58">
+            <property name="text">
+             <string>Остаток</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QLabel" name="label_62">
+            <property name="text">
+             <string>Корретировки -</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QLabel" name="label_63">
+            <property name="text">
+             <string>Итого</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_55">
+            <property name="text">
+             <string>Фурнитура</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_56">
+            <property name="text">
+             <string>Итого</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_59">
+            <property name="text">
+             <string>Рублей</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_60">
+            <property name="text">
+             <string>Корректировки +</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="label_61">
+            <property name="text">
+             <string>Рублей</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" colspan="2">
+           <widget class="QLabel" name="label_57">
+            <property name="text">
+             <string>Приход</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" colspan="2">
+           <widget class="QLabel" name="label_64">
+            <property name="text">
+             <string>Расход</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="le_last_balance_material_total">
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="le_last_balance_accessories_total">
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="le_last_balance_total">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="le_supply_sum_material_total">
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="le_adjustments_plus_material">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLineEdit" name="le_consumption_sum_material_total">
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5">
+           <widget class="QLineEdit" name="le_adjustments_minus_material">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <widget class="QLineEdit" name="le_transaction_balance_material">
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="6">
+           <widget class="QLineEdit" name="le_transaction_balance_total">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="5">
+           <widget class="QLineEdit" name="le_adjustments_minus_total">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QLineEdit" name="le_consumption_sum_total">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QLineEdit" name="le_adjustments_plus_total">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLineEdit" name="le_supply_sum_total">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QLineEdit" name="le_supply_sum_accessories_total">
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QLineEdit" name="le_adjustments_plus_accessories">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QLineEdit" name="le_consumption_sum_accessories_total">
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="5">
+           <widget class="QLineEdit" name="le_adjustments_minus_accessories">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="6">
+           <widget class="QLineEdit" name="le_transaction_balance_accessories">
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout_21">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_66">
+            <property name="text">
+             <string>Прибыль с продаж</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="7">
+           <widget class="QLabel" name="label_67">
+            <property name="text">
+             <string>Итого</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLineEdit" name="le_old_balance_article_total">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_68">
+            <property name="text">
+             <string>Сумма покроеного себест.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_69">
+            <property name="text">
+             <string>Прошлый баланс</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QLabel" name="label_65">
+            <property name="text">
+             <string>Корректировки -</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="7">
+           <widget class="QLineEdit" name="le_warehouse2_sum_article_total">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="le_profit_article_total">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QLabel" name="label_71">
+            <property name="text">
+             <string>Себестоимость проданого</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5">
+           <widget class="QLineEdit" name="le_sel_sum_seb_article_total">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLineEdit" name="le_sel_sum_price_article_total">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="le_supply_sum_seb_article_total">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="label_70">
+            <property name="text">
+             <string>Продано на сумму</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_72">
+            <property name="text">
+             <string>Корректировки +</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="le_adjustments_plus_article_total">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="8">
+           <widget class="QLabel" name="label_73">
+            <property name="text">
+             <string>Продукция</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <widget class="QLineEdit" name="le_adjustments_minus_article_total">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_7">
+       <attribute name="title">
+        <string>Прошлые расчеты</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_18">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_17">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QToolButton" name="toolButton_4">
+              <property name="text">
+               <string>Удалить</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_49">
+              <property name="text">
+               <string>Ткань</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="5" column="0">
+           <widget class="QTableWidget" name="tw_save_comparing">
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>20</number>
+            </attribute>
+            <attribute name="verticalHeaderMinimumSectionSize">
+             <number>18</number>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Сохранено</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Период С</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Затраты на тк.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Затраты на фур.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Сумма затрат</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QTableWidget" name="tw_save_product">
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>20</number>
+            </attribute>
+            <attribute name="verticalHeaderMinimumSectionSize">
+             <number>18</number>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Сохранено</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Период С</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток пр.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток пр. Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Произвели</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По себест.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По продаже</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Прибыль</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Продали</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По продажной</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По себест.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Прибыль</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Осаток</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток тр.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток тр. Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Разница</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Разница Р</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QTableWidget" name="tw_save_accessories">
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>20</number>
+            </attribute>
+            <attribute name="verticalHeaderMinimumSectionSize">
+             <number>18</number>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Сохранено</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Период С</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток пр.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток пр. Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Приход</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Приход Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Расход</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Расход Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток тр.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток тр. Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Разница</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Разница Р</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QTableWidget" name="tw_save_material">
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>20</number>
+            </attribute>
+            <attribute name="verticalHeaderMinimumSectionSize">
+             <number>18</number>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Сохранено</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Период С</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>По</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток пр.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток пр. Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Приход</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Приход Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Расход</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Расход Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток тр.</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Остаток тр. Р</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Разница</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Разница Р</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QToolButton" name="toolButton_5">
+              <property name="text">
+               <string>Удалить</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_51">
+              <property name="text">
+               <string>Фурнитура</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QToolButton" name="toolButton_6">
+              <property name="text">
+               <string>Удалить</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_53">
+              <property name="text">
+               <string>Прочие расходы</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="6" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QToolButton" name="toolButton_7">
+              <property name="text">
+               <string>Удалить</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_52">
+              <property name="text">
+               <string>Продукция</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -1888,8 +3035,8 @@ p, li { white-space: pre-wrap; }
    <slot>ui_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>973</x>
-     <y>10</y>
+     <x>1126</x>
+     <y>12</y>
     </hint>
     <hint type="destinationlabel">
      <x>972</x>
@@ -1920,8 +3067,8 @@ p, li { white-space: pre-wrap; }
    <slot>ui_view_save_report_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>784</x>
-     <y>524</y>
+     <x>850</x>
+     <y>544</y>
     </hint>
     <hint type="destinationlabel">
      <x>1264</x>
@@ -1936,8 +3083,8 @@ p, li { white-space: pre-wrap; }
    <slot>ui_print()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1091</x>
-     <y>11</y>
+     <x>1207</x>
+     <y>13</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -1968,12 +3115,124 @@ p, li { white-space: pre-wrap; }
    <slot>ui_view_save_report_accessories()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>780</x>
-     <y>520</y>
+     <x>850</x>
+     <y>544</y>
     </hint>
     <hint type="destinationlabel">
      <x>1342</x>
      <y>382</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_comparing_save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1151</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1301</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_product_save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>513</x>
+     <y>309</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>589</x>
+     <y>-78</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_view_save_report_product()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>280</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>-50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_del_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>24</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-92</x>
+     <y>60</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_del_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>19</x>
+     <y>243</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-47</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_del_comparing()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>36</x>
+     <y>436</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-46</x>
+     <y>439</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_7</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_del_product()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>27</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-31</x>
+     <y>623</y>
     </hint>
    </hints>
   </connection>
@@ -1985,5 +3244,12 @@ p, li { white-space: pre-wrap; }
   <slot>ui_print()</slot>
   <slot>ui_accessories_save()</slot>
   <slot>ui_view_save_report_accessories()</slot>
+  <slot>ui_comparing_save()</slot>
+  <slot>ui_product_save()</slot>
+  <slot>ui_view_save_report_product()</slot>
+  <slot>ui_del_material()</slot>
+  <slot>ui_del_accessories()</slot>
+  <slot>ui_del_comparing()</slot>
+  <slot>ui_del_product()</slot>
  </slots>
 </ui>

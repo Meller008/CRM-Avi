@@ -6,10 +6,12 @@ from PyQt5.QtCore import Qt, QDate
 from function import my_sql, table_to_html
 from decimal import Decimal
 from classes import print_qt
+import datetime
 import re
 
 report_all_class = loadUiType(getcwd() + '/ui/report_all.ui')[0]
 save_report_material_class = loadUiType(getcwd() + '/ui/save_report_material.ui')[0]
+save_report_article_class = loadUiType(getcwd() + '/ui/save_report_article.ui')[0]
 
 
 class ReportAll(QMainWindow, report_all_class):
@@ -96,6 +98,67 @@ class ReportAll(QMainWindow, report_all_class):
         self.tw_product_4.horizontalHeader().resizeSection(0, 200)
         self.tw_product_4.horizontalHeader().resizeSection(1, 80)
 
+        self.tw_save_material.horizontalHeader().resizeSection(0, 70)
+        self.tw_save_material.horizontalHeader().resizeSection(1, 70)
+        self.tw_save_material.horizontalHeader().resizeSection(2, 70)
+        self.tw_save_material.horizontalHeader().resizeSection(3, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(4, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(5, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(6, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(7, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(8, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(9, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(10, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(11, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(12, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(13, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(14, 85)
+        self.tw_save_material.horizontalHeader().resizeSection(15, 85)
+
+        self.tw_save_accessories.horizontalHeader().resizeSection(0, 70)
+        self.tw_save_accessories.horizontalHeader().resizeSection(1, 70)
+        self.tw_save_accessories.horizontalHeader().resizeSection(2, 70)
+        self.tw_save_accessories.horizontalHeader().resizeSection(3, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(4, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(5, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(6, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(7, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(8, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(9, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(10, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(11, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(12, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(13, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(14, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(15, 85)
+
+        self.tw_save_accessories.horizontalHeader().resizeSection(0, 70)
+        self.tw_save_accessories.horizontalHeader().resizeSection(1, 70)
+        self.tw_save_accessories.horizontalHeader().resizeSection(2, 70)
+        self.tw_save_accessories.horizontalHeader().resizeSection(3, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(4, 85)
+        self.tw_save_accessories.horizontalHeader().resizeSection(5, 85)
+
+        self.tw_save_product.horizontalHeader().resizeSection(0, 70)
+        self.tw_save_product.horizontalHeader().resizeSection(1, 70)
+        self.tw_save_product.horizontalHeader().resizeSection(2, 70)
+        self.tw_save_product.horizontalHeader().resizeSection(3, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(4, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(5, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(6, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(7, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(8, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(9, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(10, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(11, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(12, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(13, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(14, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(15, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(16, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(17, 85)
+        self.tw_save_product.horizontalHeader().resizeSection(18, 85)
+
     def ui_calc(self):
         index_tab = self.tabWidget.currentIndex()
 
@@ -105,8 +168,12 @@ class ReportAll(QMainWindow, report_all_class):
             self.calc_accessories()
         elif index_tab == 3:
             self.calc_comparing()
-        elif index_tab == 4:
+        elif index_tab == 4 or index_tab == 5:
             self.calc_production()
+        elif index_tab == 6:
+            self.calc_total()
+        elif index_tab == 7:
+            self.view_save()
 
     def ui_print(self):
         index_tab = self.tabWidget.currentIndex()
@@ -117,8 +184,10 @@ class ReportAll(QMainWindow, report_all_class):
             self.print_accessories()
         elif index_tab == 3:
             self.print_comparing()
-        elif index_tab == 4:
+        elif index_tab == 4 or index_tab == 5:
             self.print_production()
+        elif index_tab == 7:
+            self.print_save()
 
     # Расчет ткани
 
@@ -130,6 +199,8 @@ class ReportAll(QMainWindow, report_all_class):
         except:
             QMessageBox.critical(self, "Ошибка баланса", "Что то не так с балансом! Не могу его получить!", QMessageBox.Ok)
             return False
+
+        self.le_last_balance_material_total.setText(str(round(old_balance_sum, 2)))
 
         # Таблица 1
         #
@@ -235,6 +306,9 @@ class ReportAll(QMainWindow, report_all_class):
             self.le_supply_sum.setText(str(round(all_sum_in, 2)))
             self.le_consumption_value.setText(str(round(all_value_out, 2)))
             self.le_consumption_sum.setText(str(round(all_sum_out, 2)))
+
+            self.le_supply_sum_material_total.setText(str(round(all_sum_in, 2)))
+            self.le_consumption_sum_material_total.setText(str(round(all_sum_out, 2)))
 
         # Таблица 2
         # Заполним подробный расход
@@ -619,6 +693,12 @@ class ReportAll(QMainWindow, report_all_class):
         self.le_difference_value.setText(str(round(difference_value, 2)))
         self.le_difference_sum.setText(str(round(difference_sum, 2)))
 
+        self.le_transaction_balance_material.setText(str(round(all_transaction_sum, 2)))
+        if difference_sum > 0:
+            self.le_adjustments_plus_material.setText(str(round(difference_sum, 2)))
+        elif difference_sum < 0:
+            self.le_adjustments_minus_material.setText(str(round(difference_sum, 2)))
+
     def print_material(self):
         up_html = """
           <table>
@@ -693,6 +773,8 @@ class ReportAll(QMainWindow, report_all_class):
         except:
             QMessageBox.critical(self, "Ошибка баланса", "Что то не так с балансом! Не могу его получить!", QMessageBox.Ok)
             return False
+
+        self.le_last_balance_accessories_total.setText(str(round(old_balance_sum, 2)))
 
         # Таблица 1
         #
@@ -798,6 +880,9 @@ class ReportAll(QMainWindow, report_all_class):
             self.le_supply_sum_accessories.setText(str(round(all_sum_in, 2)))
             self.le_consumption_value_accessories.setText(str(round(all_value_out, 2)))
             self.le_consumption_sum_accessories.setText(str(round(all_sum_out, 2)))
+
+            self.le_supply_sum_accessories_total.setText(str(round(all_sum_in, 2)))
+            self.le_consumption_sum_accessories_total.setText(str(round(all_sum_out, 2)))
 
         # Таблица 2
         # Заполним подробный расход
@@ -998,6 +1083,13 @@ class ReportAll(QMainWindow, report_all_class):
         self.le_difference_value_accessories.setText(str(round(difference_value, 2)))
         self.le_difference_sum_accessories.setText(str(round(difference_sum, 2)))
 
+        self.le_transaction_balance_accessories.setText(str(round(all_transaction_sum, 2)))
+
+        if difference_sum > 0:
+            self.le_adjustments_plus_accessories.setText(str(round(difference_sum, 2)))
+        elif difference_sum < 0:
+            self.le_adjustments_minus_accessories.setText(str(round(difference_sum, 2)))
+
     def print_accessories(self):
         up_html = """
           <table>
@@ -1112,6 +1204,8 @@ class ReportAll(QMainWindow, report_all_class):
             item = QTableWidgetItem(text)
             self.tw_comparing_1.setItem(self.tw_comparing_1.rowCount() - 1, 2, item)
 
+            self.le_comparing_material.setText(str(round(all_sum_material, 2)))
+
         # Получим расходы на фурнитуру
         self.tw_comparing_2.clearContents()
         self.tw_comparing_2.setRowCount(0)
@@ -1157,6 +1251,8 @@ class ReportAll(QMainWindow, report_all_class):
             item = QTableWidgetItem(text)
             self.tw_comparing_2.setItem(self.tw_comparing_2.rowCount() - 1, 2, item)
 
+            self.le_comparing_accessories.setText(str(round(all_sum_accessories, 2)))
+
         self.le_comparing_sum.setText(str(all_sum_accessories + all_sum_material))
 
     def print_comparing(self):
@@ -1176,8 +1272,31 @@ class ReportAll(QMainWindow, report_all_class):
 
         self.print_class = print_qt.PrintHtml(self, html)
 
+    def ui_comparing_save(self):
+        query = """INSERT INTO report_all_comparing_save (Date_Save, Date_From, Date_To, Comparing_Material, Comparing_Accessories, Comparing_Sum)
+                    VALUES (NOW(), %s, %s, %s, %s, %s)"""
+
+        parametrs = (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate(),
+                     self.le_comparing_material.text(), self.le_comparing_accessories.text(), self.le_comparing_sum.text())
+
+        sql_info = my_sql.sql_change(query, parametrs)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql сохранения отчета!", sql_info.msg, QMessageBox.Ok)
+            return False
+        else:
+            QMessageBox.information(self, "Сохранено", "Отчет успешно сохранен!", QMessageBox.Ok)
+
     # Расчет продукции
     def calc_production(self):
+        try:
+            old_balance_value = Decimal(self.le_last_balance_value_article.text().replace(",", "."))
+            old_balance_sum = Decimal(self.le_last_balance_sum_article.text().replace(",", "."))
+        except:
+            QMessageBox.critical(self, "Ошибка баланса", "Что то не так с балансом! Не могу его получить!\nПроверьте следующую вкладку", QMessageBox.Ok)
+            return False
+
+        self.le_old_balance_article_total.setText(str(old_balance_sum))
+
         self.tw_product_1.clearContents()
         self.tw_product_1.setRowCount(0)
 
@@ -1415,6 +1534,8 @@ class ReportAll(QMainWindow, report_all_class):
             self.le_supply_sum_price_article.setText(str(round(all_sun_sel_in, 2)))
             self.le_supply_sum_balance_article.setText(str(round(all_sun_sel_in - all_sum_in, 2)))
 
+            self.le_supply_sum_seb_article_total.setText(str(round(all_sum_in, 2)))
+
             self.le_sel_value_article.setText(str(all_value_out))
 
         # Заполним таблицу отгруженого клиенту
@@ -1544,8 +1665,13 @@ class ReportAll(QMainWindow, report_all_class):
             self.le_sel_sum_seb_article.setText(str(round(all_seb_out, 2)))
             self.le_sel_sum_balance_article.setText(str(round(all_sum_in_nds - all_seb_out, 2)))
 
-            self.le_warehouse1_value_article.setText(str(all_value_in - all_value_out))
-            self.le_warehouse1_sum_article.setText(str(round(all_sum_in - all_sum_in_nds, 2)))
+            self.le_sel_sum_price_article_total.setText(str(round(all_sum_in_nds, 2)))
+            self.le_sel_sum_seb_article_total.setText(str(round(all_seb_out, 2)))
+
+            warehouse1_value = (old_balance_value + all_value_in) - all_value_out
+            warehouse1_sum = (old_balance_sum + all_sum_in) - all_seb_out
+            self.le_warehouse1_value_article.setText(str(warehouse1_value))
+            self.le_warehouse1_sum_article.setText(str(round(all_sum_in - all_seb_out, 2)))
 
         # Получим остаток склада
         # Получаем артикула
@@ -1700,6 +1826,17 @@ class ReportAll(QMainWindow, report_all_class):
             item = QTableWidgetItem(text)
             self.tw_product_3.setItem(self.tw_product_3.rowCount() - 1, 8, item)
 
+            warehouse2_value = all_warehouse + all_cut
+            warehouse2_sum = all_cut_seb + all_warehouse_seb
+
+            self.le_warehouse2_value_article.setText(str(warehouse2_value))
+            self.le_warehouse2_sum_article.setText(str(round(warehouse2_sum, 2)))
+
+            self.le_warehouse2_sum_article_total.setText(str(round(warehouse2_sum, 2)))
+
+            self.le_difference_warehouse_value.setText(str(warehouse2_value - warehouse1_value))
+            self.le_difference_warehouse_sum.setText(str(round(warehouse2_sum - warehouse1_sum, 2)))
+
 
 
         # Получим суммы транзакций по групам
@@ -1733,10 +1870,41 @@ class ReportAll(QMainWindow, report_all_class):
         up_html = """
           <table>
           <caption>#head#</caption>
+          <tr> <th>Произвели шт.</th> <th>Произвели по себест</th><th>Произвели по продаже</th><th>Прибыль прогнозируемая</th> </tr>
+          <tr> <td>#le_supply_value_article#</td><td>#le_supply_sum_seb_article#</td><td>#le_supply_sum_price_article#</td><td>#le_supply_sum_balance_article#</td> </tr>
+          
+          <tr> <th>Продали шт.</th> <th>Продали по себест</th><th>Продали по продажной</th><th>Прибыль</th> </tr>
+          <tr> <td>#le_sel_value_article#</td><td>#le_sel_sum_price_article#</td><td>#le_sel_sum_seb_article#</td><td>#le_sel_sum_balance_article#</td> </tr>
+          </table>
+          <table>       
+          <tr> <th> </th> <th>Остаток штук</th> <th>Остаток рублей</th> </tr>
+          <tr> <th>Прошлый</th><td>#le_last_balance_value_article#</td><td>#le_last_balance_sum_article#</td> </tr>
+          <tr> <th>Живой</th><td>#le_warehouse1_value_article#</td><td>#le_warehouse1_sum_article#</td> </tr>
+          <tr> <th>Не живой</th><td>#le_warehouse2_value_article#</td><td>#le_warehouse2_sum_article#</td> </tr>
+          <tr> <th>Разница</th><td>#le_difference_warehouse_value#</td><td>#le_difference_warehouse_sum#</td> </tr>
           </table>"""
 
         head = "Отчет по продукции %s - %s" % (self.de_date_from.date().toString(Qt.ISODate), self.de_date_to.date().toString(Qt.ISODate))
         up_html = up_html.replace("#head#", head)
+
+        up_html = up_html.replace("#le_supply_value_article#", self.le_supply_value_article.text())
+        up_html = up_html.replace("#le_supply_sum_seb_article#", self.le_supply_sum_seb_article.text())
+        up_html = up_html.replace("#le_supply_sum_price_article#", self.le_supply_sum_price_article.text())
+        up_html = up_html.replace("#le_supply_sum_balance_article#", self.le_supply_sum_balance_article.text())
+
+        up_html = up_html.replace("#le_sel_value_article#", self.le_sel_value_article.text())
+        up_html = up_html.replace("#le_sel_sum_price_article#", self.le_sel_sum_price_article.text())
+        up_html = up_html.replace("#le_sel_sum_seb_article#", self.le_sel_sum_seb_article.text())
+        up_html = up_html.replace("#le_sel_sum_balance_article#", self.le_sel_sum_balance_article.text())
+
+        up_html = up_html.replace("#le_last_balance_value_article#", self.le_last_balance_value_article.text())
+        up_html = up_html.replace("#le_last_balance_sum_article#", self.le_last_balance_sum_article.text())
+        up_html = up_html.replace("#le_warehouse1_value_article#", self.le_warehouse1_value_article.text())
+        up_html = up_html.replace("#le_warehouse1_sum_article#", self.le_warehouse1_sum_article.text())
+        up_html = up_html.replace("#le_warehouse2_value_article#", self.le_warehouse2_value_article.text())
+        up_html = up_html.replace("#le_warehouse2_sum_article#", self.le_warehouse2_sum_article.text())
+        up_html = up_html.replace("#le_difference_warehouse_value#", self.le_difference_warehouse_value.text())
+        up_html = up_html.replace("#le_difference_warehouse_sum#", self.le_difference_warehouse_sum.text())
 
         html = table_to_html.tab_html(self.tw_product_1, table_head="Произведено / Продано (Себестоимость покроеная!)",  up_template=up_html)
         html += '<div style="display: inline-block; width: 100%">'
@@ -1748,6 +1916,328 @@ class ReportAll(QMainWindow, report_all_class):
         html += '</div>'
 
         self.print_class = print_qt.PrintHtml(self, html)
+
+    def ui_product_save(self):
+        query = """INSERT INTO report_all_article_save (Date_Save, Date_From, Date_To, Last_Balance_Value_Article, Last_Balance_Sum_Article,
+                                                        Supply_Value_Article, Supply_Sum_Seb_Article,
+                                                        Supply_Sum_Price_Article, Supply_Sum_Balance_Article, Sel_Value_Article,
+                                                        Sel_Sum_Price_Article, Sel_Sum_Seb_Article, Sel_Sum_Balance_Article,
+                                                        Warehouse1_Value_Article, Warehouse1_Sum_Article, Warehouse2_Value_Article,
+                                                        Warehouse2_Sum_Article, Difference_Warehouse_Value, Difference_Warehouse_Sum)
+                      VALUES (NOW(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+
+        parametrs = (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate(), self.le_last_balance_value_article.text(),
+                     self.le_last_balance_sum_article.text(), self.le_supply_value_article.text(),
+                     self.le_supply_sum_seb_article.text(), self.le_supply_sum_price_article.text(), self.le_supply_sum_balance_article.text(),
+                     self.le_sel_value_article.text(), self.le_sel_sum_price_article.text(), self.le_sel_sum_seb_article.text(),
+                     self.le_sel_sum_balance_article.text(), self.le_warehouse1_value_article.text(),
+                     self.le_warehouse1_sum_article.text(), self.le_warehouse2_value_article.text(), self.le_warehouse2_sum_article.text(),
+                     self.le_difference_warehouse_value.text(), self.le_difference_warehouse_sum.text())
+
+        sql_info = my_sql.sql_change(query, parametrs)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql сохранения отчета!", sql_info.msg, QMessageBox.Ok)
+            return False
+        else:
+            QMessageBox.information(self, "Сохранено", "Отчет успешно сохранен!", QMessageBox.Ok)
+
+    def ui_view_save_report_product(self):
+        self.save_date_window = SaveReportArticle()
+        self.save_date_window.setModal(True)
+        self.save_date_window.show()
+
+        if self.save_date_window.exec_() != 1:
+            return False
+
+        self.le_last_balance_value_article.setText(str(self.save_date_window.balance_value))
+        self.le_last_balance_sum_article.setText(str(self.save_date_window.balance_sum))
+
+    # Расчет ИТОГО
+    def calc_total(self):
+        try:
+            i1 = float(self.le_last_balance_material_total.text())
+            i2 = float(self.le_last_balance_accessories_total.text())
+            self.le_last_balance_total.setText(str(round(i1 + i2, 2)))
+
+            i1 = float(self.le_supply_sum_material_total.text())
+            i2 = float(self.le_supply_sum_accessories_total.text())
+            self.le_supply_sum_total.setText(str(round(i1 + i2, 2)))
+
+            i1 = float(self.le_adjustments_plus_material.text())
+            i2 = float(self.le_adjustments_plus_accessories.text())
+            self.le_adjustments_plus_total.setText(str(round(i1 + i2, 2)))
+
+            i1 = float(self.le_consumption_sum_material_total.text())
+            i2 = float(self.le_consumption_sum_accessories_total.text())
+            self.le_consumption_sum_total.setText(str(round(i1 + i2, 2)))
+
+            i1 = float(self.le_adjustments_minus_material.text())
+            i2 = float(self.le_adjustments_minus_accessories.text())
+            self.le_adjustments_minus_total.setText(str(round(i1 + i2, 2)))
+
+            i1 = float(self.le_transaction_balance_material.text())
+            i2 = float(self.le_transaction_balance_accessories.text())
+            self.le_transaction_balance_total.setText(str(round(i1 + i2, 2)))
+        except:
+            QMessageBox.critical(self, "Ошибка подсчета", "Чего то не хватает в материалах", QMessageBox.Ok)
+            return False
+
+        try:
+            i1 = float(self.le_sel_sum_price_article_total.text())
+            i2 = float(self.le_sel_sum_seb_article_total.text())
+            self.le_profit_article_total.setText(str(round(i1 - i2, 2)))
+
+            i0 = float(self.le_old_balance_article_total.text())
+
+            i1 = float(self.le_supply_sum_seb_article_total.text())
+            i2 = float(self.le_profit_article_total.text())
+
+            i3 = float(self.le_sel_sum_price_article_total.text())
+
+            i4 = float(self.le_warehouse2_sum_article_total.text())
+
+            ii = i4 - (i0 + i1 + i2) - i3
+
+            if ii > 0:
+                self.le_adjustments_plus_article_total.setText(str(round(ii, 2)))
+            elif ii < 0:
+                self.le_adjustments_minus_article_total.setText(str(round(ii, 2)))
+
+        except:
+            QMessageBox.critical(self, "Ошибка подсчета", "Чего то не хватает в продукции", QMessageBox.Ok)
+            return False
+
+    # Прошлые расчеты
+    def view_save(self):
+
+        self.tw_save_material.clearContents()
+        self.tw_save_material.setRowCount(0)
+        self.tw_save_accessories.clearContents()
+        self.tw_save_accessories.setRowCount(0)
+        self.tw_save_comparing.clearContents()
+        self.tw_save_comparing.setRowCount(0)
+        self.tw_save_product.clearContents()
+        self.tw_save_product.setRowCount(0)
+
+
+        query = """SELECT Id, Date_Save, Date_From, Date_To, Last_Balance_Value, Last_Balance_Sum, Supply_Value, Supply_Sum, Consumption_Value,
+                        Consumption_Sum, New_Balance_Value, New_Balance_Sum, Transaction_Balance_Value, Transaction_Balance_Sum,
+                        Difference_Value, Difference_Sum
+                      FROM report_all_material_save"""
+
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения сохраненых данных ткани", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for table_typle in sql_info:
+            self.tw_save_material.insertRow(self.tw_save_material.rowCount())
+
+            for column in range(1, len(table_typle)):
+
+                if isinstance(table_typle[column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(table_typle[column], 2)))
+                    item = QTableWidgetItem(text)
+
+                elif isinstance(table_typle[column], datetime.date):
+                    date = QDate(table_typle[column].year, table_typle[column].month, table_typle[column].day)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, date)
+
+                else:
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, table_typle[column])
+
+                item.setData(5, table_typle[0])
+                self.tw_save_material.setItem(self.tw_save_material.rowCount() - 1, column - 1, item)
+
+        query = """SELECT Id, Date_Save Date_From, Date_To, Last_Balance_Value, Last_Balance_Sum, Supply_Value, Supply_Sum, Consumption_Value,
+                        Consumption_Sum, New_Balance_Value, New_Balance_Sum, Transaction_Balance_Value, Transaction_Balance_Sum,
+                        Difference_Value, Difference_Sum
+                      FROM report_all_accessories_save"""
+
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения сохраненых данных фурнитуры", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for table_typle in sql_info:
+            self.tw_save_accessories.insertRow(self.tw_save_accessories.rowCount())
+
+            for column in range(1, len(table_typle)):
+
+                if isinstance(table_typle[column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(table_typle[column], 2)))
+                    item = QTableWidgetItem(text)
+
+                elif isinstance(table_typle[column], datetime.date):
+                    date = QDate(table_typle[column].year, table_typle[column].month, table_typle[column].day)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, date)
+
+                else:
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, table_typle[column])
+
+                item.setData(5, table_typle[0])
+                self.tw_save_accessories.setItem(self.tw_save_accessories.rowCount() - 1, column - 1, item)
+
+        query = """SELECT Id, Date_Save, Date_From, Date_To, Comparing_Material, Comparing_Accessories, Comparing_Sum
+                      FROM report_all_comparing_save"""
+
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения сохраненых прочих растрат", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for table_typle in sql_info:
+            self.tw_save_comparing.insertRow(self.tw_save_comparing.rowCount())
+
+            for column in range(1, len(table_typle)):
+
+                if isinstance(table_typle[column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(table_typle[column], 2)))
+                    item = QTableWidgetItem(text)
+
+                elif isinstance(table_typle[column], datetime.date):
+                    date = QDate(table_typle[column].year, table_typle[column].month, table_typle[column].day)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, date)
+
+                else:
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, table_typle[column])
+
+                item.setData(5, table_typle[0])
+                self.tw_save_comparing.setItem(self.tw_save_comparing.rowCount() - 1, column - 1, item)
+
+        query = """SELECT Id, Date_Save, Date_From, Date_To, Last_Balance_Value_Article, Last_Balance_Sum_Article, Supply_Value_Article,
+                            Supply_Sum_Seb_Article, Supply_Sum_Price_Article, Supply_Sum_Balance_Article, Sel_Value_Article,
+                            Sel_Sum_Price_Article, Sel_Sum_Seb_Article, Sel_Sum_Balance_Article, Warehouse1_Value_Article, Warehouse1_Sum_Article,
+                            Warehouse2_Value_Article, Warehouse2_Sum_Article, Difference_Warehouse_Value, Difference_Warehouse_Sum
+                      FROM report_all_article_save"""
+
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения сохраненых артикулов", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for table_typle in sql_info:
+            self.tw_save_product.insertRow(self.tw_save_product.rowCount())
+
+            for column in range(1, len(table_typle)):
+
+                if isinstance(table_typle[column], Decimal):
+                    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(table_typle[column], 2)))
+                    item = QTableWidgetItem(text)
+
+                elif isinstance(table_typle[column], datetime.date):
+                    date = QDate(table_typle[column].year, table_typle[column].month, table_typle[column].day)
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, date)
+
+                else:
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, table_typle[column])
+
+                item.setData(5, table_typle[0])
+                self.tw_save_product.setItem(self.tw_save_product.rowCount() - 1, column - 1, item)
+
+    def print_save(self):
+        up_html = """
+          <table>
+          <caption>#head#</caption>
+          </table>"""
+
+        head = "Все отчеты"
+        up_html = up_html.replace("#head#", head)
+
+        html = table_to_html.tab_html(self.tw_save_material, table_head="Ткань", up_template=up_html)
+        html += '<div style="display: inline-block; width: 100%">'
+        html += table_to_html.tab_html(self.tw_save_accessories, table_head="Фурнитуры")
+        html += '</div> <div style="display: inline-block; width: 100%">'
+        html += table_to_html.tab_html(self.tw_save_comparing, table_head="Прочие")
+        html += '</div> <div style="display: inline-block; width: 100%">'
+        html += table_to_html.tab_html(self.tw_save_product, table_head="Продукция")
+        html += '</div>'
+
+        self.print_class = print_qt.PrintHtml(self, html)
+
+    def ui_del_material(self):
+        try:
+            id = self.tw_save_material.currentItem().data(5)
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите запись", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Удалить?", "Точно удалить запись?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+
+            query = "DELETE FROM report_all_material_save WHERE Id = %s"
+
+            sql_info = my_sql.sql_change(query, (id, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql удаления записи ткани", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            self.view_save()
+
+    def ui_del_accessories(self):
+        try:
+            id = self.tw_save_accessories.currentItem().data(5)
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите запись", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Удалить?", "Точно удалить запись?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+
+            query = "DELETE FROM report_all_accessories_save WHERE Id = %s"
+
+            sql_info = my_sql.sql_change(query, (id, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql удаления записи фурнитуры", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            self.view_save()
+
+    def ui_del_comparing(self):
+        try:
+            id = self.tw_save_comparing.currentItem().data(5)
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите запись", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Удалить?", "Точно удалить запись?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+
+            query = "DELETE FROM report_all_comparing_save WHERE Id = %s"
+
+            sql_info = my_sql.sql_change(query, (id, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql удаления записи прочего", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            self.view_save()
+
+    def ui_del_product(self):
+        try:
+            id = self.tw_save_product.currentItem().data(5)
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите запись", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Удалить?", "Точно удалить запись?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+
+            query = "DELETE FROM report_all_accessories_save WHERE Id = %s"
+
+            sql_info = my_sql.sql_change(query, (id, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql удаления записи продукции", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            self.view_save()
 
 
 class SaveReportMaterial(QDialog, save_report_material_class):
@@ -1843,6 +2333,93 @@ class SaveReportMaterial(QDialog, save_report_material_class):
                 query = "DELETE FROM report_all_accessories_save WHERE Id = %s"
             else:
                 return False
+
+            sql_info = my_sql.sql_change(query, (id, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения сохраненых данных", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            self.start_sql_info()
+
+
+class SaveReportArticle(QDialog, save_report_article_class):
+    def __init__(self):
+        super(SaveReportArticle, self).__init__()
+        self.setupUi(self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.start_sql_info()
+
+    def start_sql_info(self):
+        self.listWidget.clear()
+
+        query = """SELECT Id, Date_Save FROM report_all_article_save ORDER BY Date_Save"""
+
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения сохраненых дат", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for save_date in sql_info:
+            item = QListWidgetItem(save_date[1].strftime("%d.%m.%Y %H:%M:%S"))
+            item.setData(5, save_date[0])
+            self.listWidget.addItem(item)
+
+    def ui_select_date(self, item):
+        query = """SELECT Date_From, Date_To, Last_Balance_Value_Article, Last_Balance_Sum_Article, Supply_Value_Article,
+                            Supply_Sum_Seb_Article, Supply_Sum_Price_Article, Supply_Sum_Balance_Article, Sel_Value_Article,
+                            Sel_Sum_Price_Article, Sel_Sum_Seb_Article, Sel_Sum_Balance_Article, Warehouse1_Value_Article, Warehouse1_Sum_Article,
+                            Warehouse2_Value_Article, Warehouse2_Sum_Article, Difference_Warehouse_Value, Difference_Warehouse_Sum
+                  FROM report_all_article_save WHERE Id = %s"""
+
+        sql_info = my_sql.sql_select(query, (item.data(5), ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения сохраненых данных", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        if not sql_info:
+            return False
+
+        sql_info = sql_info[0]
+
+        self.balance_value = sql_info[14]
+        self.balance_sum = sql_info[15]
+
+        self.de_from.setDate(sql_info[0])
+        self.de_to.setDate(sql_info[1])
+        self.le_last_balance_value_article.setText(str(sql_info[2]))
+        self.le_last_balance_sum_article.setText(str(sql_info[3]))
+        self.le_supply_value_article.setText(str(sql_info[4]))
+        self.le_supply_sum_seb_article.setText(str(sql_info[5]))
+        self.le_supply_sum_price_article.setText(str(sql_info[6]))
+        self.le_supply_sum_balance_article.setText(str(sql_info[7]))
+        self.le_sel_value_article.setText(str(sql_info[8]))
+        self.le_sel_sum_price_article.setText(str(sql_info[9]))
+        self.le_sel_sum_seb_article.setText(str(sql_info[10]))
+        self.le_sel_sum_balance_article.setText(str(sql_info[11]))
+        self.le_warehouse1_value_article.setText(str(sql_info[12]))
+        self.le_warehouse1_sum_article.setText(str(sql_info[13]))
+        self.le_warehouse2_value_article.setText(str(sql_info[14]))
+        self.le_warehouse2_sum_article.setText(str(sql_info[15]))
+        self.le_difference_warehouse_value.setText(str(sql_info[16]))
+        self.le_difference_warehouse_sum.setText(str(sql_info[17]))
+
+    def ui_acc(self):
+        self.done(1)
+        self.close()
+        self.destroy()
+
+    def ui_del(self):
+        try:
+            id = self.listWidget.currentItem().data(5)
+        except:
+            QMessageBox.information(self, "Ошибка", "Выберите запись", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Удалить?", "Точно удалить запись?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+
+            query = "DELETE FROM report_all_article_save WHERE Id = %s"
 
             sql_info = my_sql.sql_change(query, (id, ))
             if "mysql.connector.errors" in str(type(sql_info)):
