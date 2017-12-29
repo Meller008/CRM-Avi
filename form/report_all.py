@@ -1670,8 +1670,8 @@ class ReportAll(QMainWindow, report_all_class):
 
             warehouse1_value = (old_balance_value + all_value_in) - all_value_out
             warehouse1_sum = (old_balance_sum + all_sum_in) - all_seb_out
-            self.le_warehouse1_value_article.setText(str(warehouse1_value))
-            self.le_warehouse1_sum_article.setText(str(round(all_sum_in - all_seb_out, 2)))
+            self.le_warehouse1_value_article.setText(str(round(warehouse1_value, 2)))
+            self.le_warehouse1_sum_article.setText(str(round(warehouse1_sum, 2)))
 
         # Получим остаток склада
         # Получаем артикула
