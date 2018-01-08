@@ -219,6 +219,7 @@
     </widget>
     <addaction name="ma_report_reject"/>
     <addaction name="ma_rest_for_work"/>
+    <addaction name="ma_report_article_day"/>
     <addaction name="ma_pack_accept"/>
     <addaction name="ma_report_need_article_order"/>
     <addaction name="ma_sib_menu"/>
@@ -537,6 +538,14 @@
    </property>
    <property name="text">
     <string>Налог работнику</string>
+   </property>
+  </action>
+  <action name="ma_report_article_day">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Покроено в день</string>
    </property>
   </action>
  </widget>
@@ -1390,6 +1399,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_report_article_day</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_report_article_day()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1445,5 +1470,6 @@
   <slot>view_article_list()</slot>
   <slot>view_report_all()</slot>
   <slot>view_report_nalog()</slot>
+  <slot>view_report_article_day()</slot>
  </slots>
 </ui>
