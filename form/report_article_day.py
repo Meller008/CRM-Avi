@@ -31,12 +31,13 @@ class ReportArticleDay(QMainWindow, report_article_day_class):
     def ui_calc(self):
         self.tableWidget.clearContents()
         self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(3)
 
         article_list = {}
         dat_start, dat_stop = self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()
         date_dict = {"article": None, "size": None, "param": None}
 
-        while dat_start < dat_stop:
+        while dat_start <= dat_stop:
             date_dict.update({dat_start: 0})
 
             col = self.tableWidget.columnCount()
@@ -62,6 +63,9 @@ class ReportArticleDay(QMainWindow, report_article_day_class):
             return False
 
         for art in sql_info:
+            if art[0] is None:
+                continue
+
             if article_list.get(art[0]) is None:
                 new_art = date_dict.copy()
                 new_art.update({"article": art[1], "size": art[2], "param": art[3]})
