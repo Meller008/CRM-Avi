@@ -75,7 +75,7 @@ class OrderList(table.TableList):
                 QMessageBox.critical(self, "Ошибка ", "Выделите элемент который хотите изменить", QMessageBox.Ok)
                 return False
 
-        self.order = Order(0, item_id)
+        self.order = Order(self, item_id)
         self.order.setWindowModality(Qt.ApplicationModal)
         self.order.show()
 
