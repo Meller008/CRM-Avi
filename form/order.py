@@ -802,6 +802,25 @@ class Order(QMainWindow, order_class):
     def save_sql(self):
         if self.save_change_order:
 
+            # Проверка номера документа
+            query = "SELECT Id FROM `order` WHERE Number_Doc = %s AND YEAR(Date_Shipment) = %s"
+            sql_info = my_sql.sql_select(query, (int(self.le_number_doc.text()), self.de_date_shipment.date().year()))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql проверки номера документа", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            if self.id:
+                if len(sql_info) > 1:
+                    QMessageBox.critical(self, "Ошибка номера документа", "Этот номер задвоен!!! Проверить номера!!!", QMessageBox.Ok)
+                    return False
+                elif len(sql_info) == 1 and sql_info[0][0] != int(self.id):
+                    QMessageBox.critical(self, "Ошибка номера документа", "Такой номер в этом году уже используется!", QMessageBox.Ok)
+                    return False
+            else:
+                if sql_info:
+                    QMessageBox.critical(self, "Ошибка номера документа", "Такой номер в этом году уже есть!", QMessageBox.Ok)
+                    return False
+
             if self.cb_shipping.isChecked():
                 shipped = 1
             else:
