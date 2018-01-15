@@ -1638,6 +1638,26 @@ class OneStaff(QMainWindow, one_staff_class):
             sheet['%s%s' % (col[i], 50)] = t
             i += 1
 
+        # Заполнение предыдущего метса пребывания
+        col = ("Q", "T", "W", "Z", "AC", "AF", "AI", "AL", "AO", "AR", "AU", "AX", "BA", "BD", "BG", "BJ", "BM", "BP", "BS")
+        text = info.te_old_addres.toPlainText().upper()
+        line_text = text.split('\n')
+        if len(line_text) > 3:
+            QMessageBox.critical(self, "Ошибка", "кол-во строк в прежнем месте больше 3", QMessageBox.Ok)
+            return False
+        row = 57
+        for line in line_text:
+            text = tuple(line)
+            if len(text) > len(col):
+                QMessageBox.critical(self, "Ошибка", "Прежний адрес длиннее строки ввода", QMessageBox.Ok)
+                return False
+            i = 0
+            for t in text:
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], row)] = t
+                i += 1
+            row += 2
+
         sheet = book["s2"]
 
         col = ("CH", "CK", "CT", "CW", "DC", "DF", "DI", "DL")
@@ -1645,7 +1665,7 @@ class OneStaff(QMainWindow, one_staff_class):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 65)] = t
+            sheet['%s%s' % (col[i], 67)] = t
             i += 1
 
         # Вставляем черные квадраты
