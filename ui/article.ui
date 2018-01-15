@@ -324,6 +324,13 @@
               </property>
              </spacer>
             </item>
+            <item>
+             <widget class="QToolButton" name="pb_calc_material">
+              <property name="text">
+               <string>Расчитать</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -1535,8 +1542,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_calc_nds()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>385</x>
-     <y>201</y>
+     <x>465</x>
+     <y>206</y>
     </hint>
     <hint type="destinationlabel">
      <x>663</x>
@@ -1576,6 +1583,22 @@ font: 8pt &quot;Tahoma&quot;;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_calc_material</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>474</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>645</x>
+     <y>255</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_add_size()</slot>
@@ -1610,5 +1633,6 @@ font: 8pt &quot;Tahoma&quot;;</string>
   <slot>ui_change_curent()</slot>
   <slot>ui_print_label()</slot>
   <slot>ui_print()</slot>
+  <slot>ui_calc_material()</slot>
  </slots>
 </ui>

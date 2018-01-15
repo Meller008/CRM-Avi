@@ -8,6 +8,7 @@ from PyQt5 import QtCore
 from function import my_sql, table_to_html
 from classes.my_class import User
 from classes import print_qt
+from decimal import Decimal
 
 article_class = loadUiType(getcwd() + '/ui/article.ui')[0]
 article_change_operation_class = loadUiType(getcwd() + '/ui/article_change_operation.ui')[0]
@@ -206,10 +207,12 @@ class Article(QMainWindow, article_class):
             self.tw_materials.setColumnHidden(3, True)
             self.label_11.hide()
             self.le_cost_price.hide()
+            self.pb_calc_material.hide()
         else:
             self.tw_materials.setColumnHidden(3, False)
             self.label_11.show()
             self.le_cost_price.show()
+            self.pb_calc_material.show()
 
     def set_start_settings(self):
         # Ширина материалов
@@ -310,20 +313,12 @@ class Article(QMainWindow, article_class):
         self.article_operations = sql_info
 
         query = """SELECT product_article_material.Product_Article_Parametrs_Id, product_article_material.Id, product_article_material.Material_Id,
-                    material_name.Name, product_article_material.Value, material_supplyposition.Price
+                    material_name.Name, product_article_material.Value
                     FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
                     LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
                     LEFT JOIN product_article_material ON product_article_parametrs.Id = product_article_material.Product_Article_Parametrs_Id
                     LEFT JOIN material_name ON product_article_material.Material_Id = material_name.Id
-                    LEFT JOIN material_supplyposition ON material_name.Id = material_supplyposition.Material_NameId
-                    LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
-                    WHERE product_article.Id = %s AND product_article_material.Material_Id IS NOT NULL
-                    AND (material_supply.Data = (SELECT min(material_supply.Data) FROM material_supply
-                    LEFT JOIN material_supplyposition ON material_supply.Id = material_supplyposition.Material_SupplyId
-                    LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
-                    WHERE material_balance.BalanceWeight > 0 AND material_supplyposition.Material_NameId = product_article_material.Material_Id)
-                    OR material_supply.Data IS NULL)
-                    GROUP BY product_article_material.Id"""
+                    WHERE product_article.Id = %s AND product_article_material.Material_Id IS NOT NULL"""
         sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения материала", sql_info.msg, QMessageBox.Ok)
@@ -331,20 +326,12 @@ class Article(QMainWindow, article_class):
         self.article_material = sql_info
 
         query = """SELECT product_article_material.Product_Article_Parametrs_Id, product_article_material.Id,product_article_material.Accessories_Id,
-                    accessories_name.Name, product_article_material.Value, accessories_supplyposition.Price
+                    accessories_name.Name, product_article_material.Value
                     FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
                     LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
                     LEFT JOIN product_article_material ON product_article_parametrs.Id = product_article_material.Product_Article_Parametrs_Id
                     LEFT JOIN accessories_name ON product_article_material.Accessories_Id = accessories_name.Id
-                    LEFT JOIN accessories_supplyposition ON accessories_name.Id = accessories_supplyposition.accessories_NameId
-                    LEFT JOIN accessories_supply ON accessories_supplyposition.Accessories_SupplyId = accessories_supply.Id
-                    WHERE product_article.Id = %s AND product_article_material.Accessories_Id IS NOT NULL
-                    AND (accessories_supply.Data = (SELECT MIN(accessories_supply.Data) FROM accessories_supply
-                    LEFT JOIN accessories_supplyposition ON accessories_supply.Id = accessories_supplyposition.Accessories_SupplyId
-                    LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
-                    WHERE accessories_balance.BalanceValue > 0 AND accessories_supplyposition.Accessories_NameId = product_article_material.Accessories_Id)
-                    OR accessories_supply.Data IS NULL)
-                    GROUP BY product_article_material.Id"""
+                    WHERE product_article.Id = %s AND product_article_material.Accessories_Id IS NOT NULL"""
         sql_info = my_sql.sql_select(query, (self.id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения аксесуаров", sql_info.msg, QMessageBox.Ok)
@@ -434,14 +421,6 @@ class Article(QMainWindow, article_class):
                     new_item.setData(-2, material[1])
                     new_item.setBackground(QBrush(QColor(153, 221, 255, 255)))
                     self.tw_materials.setItem(self.tw_materials.rowCount() - 1, i - 3, new_item)
-                else:
-                    material_price = material[5] if (material[5] is not None) else 0
-                    new_item = QTableWidgetItem(str(round(material[4] * material_price, 4)))
-                    new_item.setData(5, material[2])
-                    new_item.setData(-1, status_sql)
-                    new_item.setData(-2, material[1])
-                    new_item.setBackground(QBrush(QColor(153, 221, 255, 255)))
-                    self.tw_materials.setItem(self.tw_materials.rowCount() - 1, 3, new_item)
 
         for accessories in self.article_accessories:
             if select_param_id == accessories[0]:
@@ -454,14 +433,7 @@ class Article(QMainWindow, article_class):
                     new_item.setData(-2, accessories[1])
                     new_item.setBackground(QBrush(QColor(252, 163, 255, 255)))
                     self.tw_materials.setItem(self.tw_materials.rowCount() - 1, i - 3, new_item)
-                else:
-                    accessories_price = accessories[5] if (accessories[5] is not None) else 0
-                    new_item = QTableWidgetItem(str(round(accessories[4] * accessories_price, 4)))
-                    new_item.setData(5, accessories[2])
-                    new_item.setData(-1, status_sql)
-                    new_item.setData(-2, accessories[1])
-                    new_item.setBackground(QBrush(QColor(252, 163, 255, 255)))
-                    self.tw_materials.setItem(self.tw_materials.rowCount() - 1, 3, new_item)
+
         self.calc()
         if not other_param_id:
             if "parametr" in self.save_change:
@@ -1035,6 +1007,56 @@ class Article(QMainWindow, article_class):
             nds = 10
         self.sb_no_nds.setValue(round(price - (price * nds) / (100 + nds), 4))
 
+    def ui_calc_material(self):
+        select_param_id = self.cb_parametrs.currentData()
+        query = """SELECT product_article_material.Id, (SELECT material_supplyposition.Price
+                                        FROM material_supplyposition LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                          LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                                        WHERE material_supplyposition.Material_NameId = product_article_material.Material_Id AND material_balance.BalanceWeight > 0
+                                        ORDER BY material_supply.Data LIMIT 1)
+                        FROM product_article_material
+                        WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Material_Id IS NOT NULL"""
+        sql_info_material = my_sql.sql_select(query, (select_param_id,))
+        if "mysql.connector.errors" in str(type(sql_info_material)):
+            QMessageBox.critical(self, "Ошибка sql получения цен на ткань", sql_info_material.msg, QMessageBox.Ok)
+            return False
+
+        query = """SELECT product_article_material.Id, (SELECT accessories_supplyposition.Price
+                              FROM accessories_supplyposition LEFT JOIN accessories_supply ON accessories_supplyposition.accessories_SupplyId = accessories_supply.Id
+                                LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.accessories_SupplyPositionId
+                              WHERE accessories_supplyposition.accessories_NameId = product_article_material.Accessories_Id AND accessories_balance.BalanceValue > 0
+                              ORDER BY accessories_supply.Data LIMIT 1)
+                        FROM product_article_material
+                        WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Accessories_Id IS NOT NULL"""
+        sql_info_accessories = my_sql.sql_select(query, (select_param_id,))
+        if "mysql.connector.errors" in str(type(sql_info_accessories)):
+            QMessageBox.critical(self, "Ошибка sql получения цен на фурнитуру", sql_info_accessories.msg, QMessageBox.Ok)
+            return False
+
+        sql_info = sql_info_material + sql_info_accessories
+
+        for row in range(self.tw_materials.rowCount()):
+            id = int(self.tw_materials.item(row, 0).data(-2))
+            material_id = self.tw_materials.item(row, 0).data(5)
+            status_sql = self.tw_materials.item(row, 0).data(-1)
+            price = [i[1] for i in sql_info if i[0] == id][0]
+            value = Decimal(self.tw_materials.item(row, 1).text())
+            sum = value * price
+
+            new_item = QTableWidgetItem(str(price))
+            new_item.setData(5, material_id)
+            new_item.setData(-1, status_sql)
+            new_item.setData(-2, id)
+            self.tw_materials.setItem(row, 2, new_item)
+
+            new_item = QTableWidgetItem(str(sum))
+            new_item.setData(5, material_id)
+            new_item.setData(-1, status_sql)
+            new_item.setData(-2, id)
+            self.tw_materials.setItem(row, 3, new_item)
+
+        self.calc()
+
     def ui_acc(self):
         if not self.dc_select:
             if self.save_sql():
@@ -1320,7 +1342,11 @@ class Article(QMainWindow, article_class):
 
         for row in range(self.tw_materials.rowCount()):
             if not self.tw_materials.isRowHidden(row):
-                price_all_material += float(self.tw_materials.item(row, 3).text())
+                try:
+                    price_all_material += float(self.tw_materials.item(row, 3).text())
+                except:
+                    self.le_cost_price.setText("Нет расчета")
+                    return False
 
         all_price = price_all_material + price_all_operations
         self.le_cost_price.setText(str(round(all_price, 4)))
