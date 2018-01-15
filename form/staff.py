@@ -1670,6 +1670,8 @@ class OneStaff(QMainWindow, one_staff_class):
 
         # Вставляем черные квадраты
         self.path_templates = getcwd() + '/templates'
+
+        sheet = book["s1"]
         img = Image('%s/staff/square.png' % self.path_templates)
         sheet.add_image(img, 'E7')
         img = Image('%s/staff/square.png' % self.path_templates)
@@ -1687,11 +1689,11 @@ class OneStaff(QMainWindow, one_staff_class):
         img = Image('%s/staff/square.png' % self.path_templates)
         sheet.add_image(img, 'DJ3')
         img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'E79')
+        sheet.add_image(img, 'E81')
         img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'CO79')
+        sheet.add_image(img, 'CO81')
         img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'DJ79')
+        sheet.add_image(img, 'DJ81')
 
         dir_name = self.id_info
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
