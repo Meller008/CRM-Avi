@@ -2062,7 +2062,7 @@ class Order(QMainWindow, order_class):
         sheet["A5"] = "Счет № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
         sheet["A6"] = "Плательщик: " + self.le_client.text()
 
-        for row in sheet.iter_rows(min_row=5, max_col=9, max_row=5):
+        for row in sheet.iter_rows(min_row=5, max_col=7, max_row=5):
             for cell in row:
                 cell.border = Border(top=Side(style='medium'), bottom=Side(style='medium'))
 
@@ -2176,8 +2176,6 @@ class Order(QMainWindow, order_class):
         num = 1
         for cod, position in product.items():
             sheet.merge_cells("D%s:E%s" % (row_ex, row_ex))
-            sheet.merge_cells("F%s:G%s" % (row_ex, row_ex))
-            sheet.merge_cells("H%s:I%s" % (row_ex, row_ex))
 
             sheet["A%s" % row_ex] = num
             sheet["A%s" % row_ex].alignment = ald_center
@@ -2187,7 +2185,9 @@ class Order(QMainWindow, order_class):
             sheet["C%s" % row_ex] = "шт."
             sheet["D%s" % row_ex] = position["value"]
             sheet["F%s" % row_ex] = position["price"]
-            sheet["H%s" % row_ex] = position["sum"]
+            sheet["F%s" % row_ex].number_format = "#,##0.00"
+            sheet["G%s" % row_ex] = position["sum"]
+            sheet["G%s" % row_ex].number_format = "#,##0.00"
 
             all_nds += position["nds_sum"]
             all_sum += position["sum"]
@@ -2197,22 +2197,22 @@ class Order(QMainWindow, order_class):
             row_ex += 1
             num += 1
 
-        for row in sheet.iter_rows(min_row=9, max_col=9, max_row=row_ex-1):
+        for row in sheet.iter_rows(min_row=9, max_col=7, max_row=row_ex-1):
             for cell in row:
                 cell.border = border_all
 
         # сумма товаров
-        sheet.merge_cells("A%s:G%s" % (row_ex, row_ex))
-        sheet.merge_cells("H%s:I%s" % (row_ex, row_ex))
+        sheet.merge_cells("A%s:F%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "Итого:"
-        sheet["H%s" % row_ex] = all_sum
+        sheet["G%s" % row_ex] = all_sum
+        sheet["G%s" % row_ex].number_format = "#,##0.00"
         row_ex += 1
 
-        sheet.merge_cells("A%s:G%s" % (row_ex, row_ex))
-        sheet.merge_cells("H%s:I%s" % (row_ex, row_ex))
+        sheet.merge_cells("A%s:F%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "В том числе НДС:"
-        sheet["H%s" % row_ex] = all_nds
-        for row in sheet.iter_rows(min_row=row_ex-1, max_col=9, max_row=row_ex):
+        sheet["G%s" % row_ex] = all_nds
+        sheet["G%s" % row_ex].number_format = "#,##0.00"
+        for row in sheet.iter_rows(min_row=row_ex-1, max_col=7, max_row=row_ex):
             for cell in row:
                 cell.border = border_all_big
         row_ex += 2
@@ -2220,13 +2220,13 @@ class Order(QMainWindow, order_class):
         # сумма прописью
         int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
         exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
-        sheet.merge_cells("A%s:I%s" % (row_ex, row_ex))
+        sheet.merge_cells("A%s:F%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "Сумма к оплате: " + num2t4ru.decimal2text(Decimal(str(all_sum)), int_units=int_units, exp_units=exp_units)
         row_ex += 1
 
         int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
         exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
-        sheet.merge_cells("A%s:I%s" % (row_ex, row_ex))
+        sheet.merge_cells("A%s:F%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "В том числе НДС: " + num2t4ru.decimal2text(Decimal(str(all_nds)), int_units=int_units, exp_units=exp_units)
         row_ex += 2
 
