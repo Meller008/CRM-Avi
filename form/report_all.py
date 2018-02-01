@@ -1675,6 +1675,9 @@ class ReportAll(QMainWindow, report_all_class):
 
         # Получим остаток склада
         # Получаем артикула
+        self.tw_product_3.clearContents()
+        self.tw_product_3.setRowCount(0)
+
         article_list = {}
 
         query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name, ']'),
