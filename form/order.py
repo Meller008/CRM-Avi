@@ -1007,7 +1007,7 @@ class Order(QMainWindow, order_class):
                     return False
 
                 # Вставляем статические параметры
-                product[cod]["price"] = float(self.tw_position.item(row, 4).text())
+                product[cod]["price"] = float(self.tw_position.item(row, 4).text().replace(",", "."))
                 product[cod]["nds"] = int(self.tw_position.item(row, 4).data(5))
                 product[cod]["psb"] = int(self.tw_position.item(row, 5).data(5))
 
@@ -1047,8 +1047,8 @@ class Order(QMainWindow, order_class):
             sum_in_nds = 0
             sum_of_nds = 0
             for row in range(self.tw_position.rowCount()):
-                price = round(float(self.tw_position.item(row, 4).text()), 2)
-                value = float(self.tw_position.item(row, 5).text())
+                price = round(float(self.tw_position.item(row, 4).text().replace(",", ".")), 2)
+                value = float(self.tw_position.item(row, 5).text().replace(",", "."))
                 nds = float(self.tw_position.item(row, 4).data(5))
 
                 if self.lb_client.whatsThis().find("no_nds") >= 0:
