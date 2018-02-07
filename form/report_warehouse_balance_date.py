@@ -1,11 +1,11 @@
 from os import getcwd
 from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem, QFileDialog
 from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtGui import QIcon
 import re
 from function import my_sql
-from function import table_to_html
+from function import table_to_html, to_excel
 from classes import print_qt
 
 
@@ -240,3 +240,8 @@ class ReportWarehouseBalanceDate(QMainWindow, report_warehouse_balance_date_clas
 
         html = table_to_html.tab_html(self.tableWidget, table_head=head, up_template=up_html)
         self.print_class = print_qt.PrintHtml(self, html)
+
+    def ui_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tableWidget, path[0])

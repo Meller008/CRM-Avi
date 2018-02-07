@@ -35,10 +35,10 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="pushButton_9">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Расчитать</string>
+         <string>Расчет на дату</string>
         </property>
        </widget>
       </item>
@@ -55,13 +55,6 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Расчет на дату</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QDateEdit" name="de_date_to">
         <property name="calendarPopup">
@@ -69,10 +62,24 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="4">
+      <item row="0" column="5">
        <widget class="QPushButton" name="pushButton_10">
         <property name="text">
          <string>Печать</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="pushButton_9">
+        <property name="text">
+         <string>Расчитать</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>В excel</string>
         </property>
        </widget>
       </item>
@@ -274,8 +281,8 @@
    <slot>ui_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>721</x>
-     <y>20</y>
+     <x>720</x>
+     <y>22</y>
     </hint>
     <hint type="destinationlabel">
      <x>248</x>
@@ -299,9 +306,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_export()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>766</x>
+     <y>17</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>780</x>
+     <y>-91</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
   <slot>ui_print()</slot>
+  <slot>ui_export()</slot>
  </slots>
 </ui>
