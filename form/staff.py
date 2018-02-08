@@ -917,7 +917,7 @@ class OneStaff(QMainWindow, one_staff_class):
                     elif "login" in self.delete:
                         query = """DELETE FROM staff_worker_login WHERE Worker_Info_Id = %s"""
                         parametrs = (self.id_info, )
-                elif not self.rb_leave.isChecked() and self.le_login_login.text():  # Если логин надо добавить
+                elif self.le_login_login.text():  # Если логин надо добавить
                     query = "INSERT INTO staff_worker_login (Worker_Info_Id, Login, Password) VALUES (%s, %s, %s)"
                     parametrs = (self.id_info, self.le_login_login.text(), self.le_login_password.text())
                 try:
