@@ -387,10 +387,13 @@ class StaffTrafficCalc(QDialog, staff_traffic_calc):
         self.tw_calc_traffic.horizontalHeader().resizeSection(0, 40)
         self.tw_calc_traffic.horizontalHeader().resizeSection(1, 110)
         self.tw_calc_traffic.horizontalHeader().resizeSection(2, 110)
-        self.tw_calc_traffic.horizontalHeader().resizeSection(3, 60)
+        self.tw_calc_traffic.horizontalHeader().resizeSection(3, 110)
+        self.tw_calc_traffic.horizontalHeader().resizeSection(4, 110)
+        self.tw_calc_traffic.horizontalHeader().resizeSection(5, 70)
+        self.tw_calc_traffic.horizontalHeader().resizeSection(6, 150)
 
     def calc(self):
-        query = """SELECT staff_worker_traffic.Table_Data
+        query = """SELECT staff_worker_traffic.Table_Data, staff_worker_traffic.Data, staff_worker_traffic.Note
                           FROM staff_worker_traffic LEFT JOIN staff_worker_info ON staff_worker_traffic.Worker_Id = staff_worker_info.Id
                           WHERE staff_worker_traffic.Worker_Id = %s AND DATE_FORMAT(staff_worker_traffic.Data, '%Y%m') = %s
                           ORDER BY staff_worker_traffic.Data"""
@@ -401,37 +404,56 @@ class StaffTrafficCalc(QDialog, staff_traffic_calc):
             return False
 
         first_date = None
+        first_date_fact = None
+        first_date_note = ""
+
         all_work_time = []
         day = 0
-        for date in sql_traffic:
+        for date_list in sql_traffic:
 
-            if date[0] is None:
+            if date_list[0] is None:
                 QMessageBox.critical(self, "Ошибка дат", "Скорее всего подтвержденны не все даты!", QMessageBox.Ok)
                 return False
 
             if not first_date:  # Берем одну дату как первую
-                first_date = date[0]
+                first_date = date_list[0]
+                first_date_fact = date_list[1]
+                first_date_note = date_list[2] or ""
                 continue
 
             self.tw_calc_traffic.insertRow(self.tw_calc_traffic.rowCount())
-            last_date = date[0]
+            last_date = date_list[0]
+            last_date_fact = date_list[1]
+            last_date_note = date_list[2] or ""
 
             day += 1
             new_table_item = QTableWidgetItem(str(day))
             self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 0, new_table_item)
 
-            new_table_item = QTableWidgetItem(first_date.strftime("%d.%m.%Y %H:%M:%S"))
+            new_table_item = QTableWidgetItem(first_date_fact.strftime("%d.%m.%Y %H:%M:%S"))
             self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 1, new_table_item)
 
-            new_table_item = QTableWidgetItem(last_date.strftime("%d.%m.%Y %H:%M:%S"))
+            new_table_item = QTableWidgetItem(first_date.strftime("%d.%m.%Y %H:%M:%S"))
             self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(last_date_fact.strftime("%d.%m.%Y %H:%M:%S"))
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 3, new_table_item)
+
+            new_table_item = QTableWidgetItem(last_date.strftime("%d.%m.%Y %H:%M:%S"))
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 4, new_table_item)
 
             work_time = last_date.replace(second=0, microsecond=0) - first_date.replace(second=0, microsecond=0)
             all_work_time.append(work_time)
             new_table_item = QTableWidgetItem(str(work_time))
-            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 3, new_table_item)
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 5, new_table_item)
+
+            new_table_item = QTableWidgetItem(first_date_note + "   " + last_date_note)
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 6, new_table_item)
 
             first_date = None
+            first_date_fact = None
+            first_date_note = ""
+
 
         else:
             self.tw_calc_traffic.insertRow(self.tw_calc_traffic.rowCount())
@@ -440,7 +462,7 @@ class StaffTrafficCalc(QDialog, staff_traffic_calc):
                 all_time += time
 
             new_table_item = QTableWidgetItem(str(all_time.total_seconds()/3600))
-            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 3, new_table_item)
+            self.tw_calc_traffic.setItem(self.tw_calc_traffic.rowCount()-1, 5, new_table_item)
 
     def ui_export(self):
         path = QFileDialog.getSaveFileName(self, "Сохранение")

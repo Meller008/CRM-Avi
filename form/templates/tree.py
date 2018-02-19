@@ -473,7 +473,6 @@ class TreeTransfer(QDialog, transfer_class):
             add_item = QTreeWidgetItem((search_tuple[2], ))
             add_item.setData(0, 5, search_tuple[0])
             item.addChild(add_item)
-            self.tree.remove(search_tuple)
             return True
         else:
             for number_child in range(item.childCount()):

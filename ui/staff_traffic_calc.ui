@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
+    <width>762</width>
     <height>427</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Часы работника</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -56,17 +56,32 @@
      </column>
      <column>
       <property name="text">
-       <string>Приход</string>
+       <string>Приход фак.</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Уход</string>
+       <string>Приход таб.</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Уход фак.</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Уход таб.</string>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Часы</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Комментарий</string>
       </property>
      </column>
     </widget>
