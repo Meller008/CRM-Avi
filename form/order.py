@@ -2059,7 +2059,7 @@ class Order(QMainWindow, order_class):
             sheet["A3"] = "Расчетный счет: 40702810600140100104 в БИНБАНК (ПАО) г. Москва"
             sheet["A4"] = "Корр. счет: 30101810245250000117 БИК банка: 044525117"
 
-        sheet["A5"] = "Счет № %s от %s г." % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        sheet["A5"] = "Счет № %s от %s г." % (self.le_number_doc.text(), self.de_date_order.date().toString("dd.MM.yyyy"))
         sheet["A6"] = "Плательщик: " + self.le_client.text()
 
         for row in sheet.iter_rows(min_row=5, max_col=7, max_row=5):
