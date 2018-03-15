@@ -1,18 +1,15 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QTableWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import QDate, Qt
 from function import my_sql
 
-warehouse_change = loadUiType(getcwd() + '/ui/warehouse_rest_change.ui')[0]
-warehouse_info = loadUiType(getcwd() + '/ui/warehouse_rest.ui')[0]
 
-
-class WarehouseRest(QMainWindow, warehouse_info):
+class WarehouseRest(QMainWindow):
     def __init__(self):
         super(WarehouseRest, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/warehouse_rest.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_size_table()
@@ -115,10 +112,10 @@ class WarehouseRest(QMainWindow, warehouse_info):
         self.warehouse_change.show()
 
 
-class WarehouseChange(QDialog, warehouse_change):
+class WarehouseChange(QDialog):
     def __init__(self, main):
         super(WarehouseChange, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/warehouse_rest_change.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main

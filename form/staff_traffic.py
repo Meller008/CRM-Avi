@@ -1,7 +1,7 @@
 from os import getcwd
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDialog
-from PyQt5.uic import loadUiType
-from PyQt5.QtGui import QBrush, QColor, QIcon, QTextCharFormat, QTextDocument
+from PyQt5.uic import loadUi
+from PyQt5.QtGui import QBrush, QColor, QIcon, QTextCharFormat
 from PyQt5.QtCore import Qt, QDate, QDateTime, QTime
 from function import my_sql, table_to_html
 from form import staff
@@ -9,11 +9,6 @@ from form.templates import table
 from datetime import timedelta
 from function import to_excel
 from classes import print_qt
-
-staff_card = loadUiType(getcwd() + '/ui/staff_card.ui')[0]
-staff_traffic = loadUiType(getcwd() + '/ui/staff_traffic.ui')[0]
-staff_traffic_data = loadUiType(getcwd() + '/ui/staff_traffic_data.ui')[0]
-staff_traffic_calc = loadUiType(getcwd() + '/ui/staff_traffic_calc.ui')[0]
 
 
 class StaffCardList(table.TableList):
@@ -63,10 +58,10 @@ class StaffCardList(table.TableList):
         self.change_card.show()
 
 
-class StaffTraffic(QDialog, staff_traffic):
+class StaffTraffic(QDialog):
     def __init__(self):
         super(StaffTraffic, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/staff_traffic.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.sql_traffic = None
@@ -247,10 +242,10 @@ class StaffTraffic(QDialog, staff_traffic):
         self.set_work_traffic(item[0])
 
 
-class StaffTrafficData(QDialog, staff_traffic_data):
+class StaffTrafficData(QDialog):
     def __init__(self, main, worker_id, traffic_id=None, date=None):
         super(StaffTrafficData, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/staff_traffic_data.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -318,10 +313,10 @@ class StaffTrafficData(QDialog, staff_traffic_data):
         self.destroy()
 
 
-class ChangeCard(QDialog, staff_card):
+class ChangeCard(QDialog):
     def __init__(self, main, id=None):
         super(ChangeCard, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/staff_card.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main
         self.id = id
@@ -372,10 +367,10 @@ class ChangeCard(QDialog, staff_card):
         self.le_worker.setText(item[1])
 
 
-class StaffTrafficCalc(QDialog, staff_traffic_calc):
+class StaffTrafficCalc(QDialog):
     def __init__(self, main, id, date):
         super(StaffTrafficCalc, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/staff_traffic_calc.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main
         self.id = id

@@ -1,18 +1,16 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QMainWindow
 from PyQt5.QtGui import QIcon
 import json
 import openpyxl
 from openpyxl.styles import Border, Side, Alignment
 
-order_edi_class = loadUiType(getcwd() + '/ui/input_order_edi.ui')[0]
 
-
-class OrderEDI(QMainWindow, order_edi_class):
+class OrderEDI(QMainWindow):
     def __init__(self):
         super(OrderEDI, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/input_order_edi.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.start_settings()
 

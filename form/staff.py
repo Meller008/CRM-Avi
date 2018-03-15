@@ -1,7 +1,7 @@
-from os import getcwd, path, mkdir, listdir, rmdir, rename
+from os import getcwd, path, mkdir, listdir, rmdir
 from shutil import copy
 from form.templates import list
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog, QLineEdit, QWidget, QSizePolicy, QButtonGroup, QInputDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
@@ -12,21 +12,10 @@ import subprocess
 from classes.my_class import User
 
 
-staff_list_class = loadUiType(getcwd() + '/ui/staff.ui')[0]
-one_staff_class = loadUiType(getcwd() + '/ui/add_work.ui')[0]
-country_class = loadUiType(getcwd() + '/ui/country.ui')[0]
-position_class = loadUiType(getcwd() + '/ui/staff_position.ui')[0]
-exel_info_class = loadUiType(getcwd() + '/ui/exel_info.ui')[0]
-info_date_class = loadUiType(getcwd() + '/ui/exel_info_date.ui')[0]
-add_file_date_class = loadUiType(getcwd() + '/ui/work_add_file.ui')[0]
-staff_filter = loadUiType(getcwd() + '/ui/staff_filter.ui')[0]
-info_date_number_class = loadUiType(getcwd() + '/ui/exel_info_date_and_number.ui')[0]
-
-
-class Staff(QMainWindow, staff_list_class):
+class Staff(QMainWindow):
     def __init__(self, main=None, dc_select=False):
         super(Staff, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/staff.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main
         self.dc_select = dc_select
@@ -279,10 +268,10 @@ class Staff(QMainWindow, staff_list_class):
         self.set_info()
 
 
-class OneStaff(QMainWindow, one_staff_class):
+class OneStaff(QMainWindow):
     def __init__(self, main, change=False):
         super(OneStaff, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/add_work.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.change = change  # Запоминаем это добаление работника или изменение
         self.m = main
@@ -2244,10 +2233,10 @@ class OneStaff(QMainWindow, one_staff_class):
             e.accept()
 
 
-class StaffFilter(QDialog, staff_filter):
+class StaffFilter(QDialog):
     def __init__(self, main):
         super(StaffFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/staff_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -2378,10 +2367,10 @@ class Country(list.ListItems):
         self.change_country.show()
 
 
-class ChangeCountry(QDialog, country_class):  # Ввод и изменение гражданств
+class ChangeCountry(QDialog):  # Ввод и изменение гражданств
     def __init__(self, main, id=None):
         super(ChangeCountry, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/country.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -2476,12 +2465,12 @@ class StaffPosition(list.ListItems):
         self.change_provider.show()
 
 
-class ChangePosition(QDialog, position_class):
+class ChangePosition(QDialog):
     def __init__(self, main, id=None):
         super(ChangePosition, self).__init__()
         self.main = main
         self.id = id
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/staff_position.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.change_on = False
 
@@ -2524,10 +2513,10 @@ class ChangePosition(QDialog, position_class):
             pass
 
 
-class ExelInfo(QDialog, exel_info_class):
+class ExelInfo(QDialog):
     def __init__(self, birthplace):
         super(ExelInfo, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/exel_info.ui', self)
         to_date = QDate.currentDate()
         self.de_in.setDate(to_date)
         self.de_from.setDate(to_date)
@@ -2537,20 +2526,20 @@ class ExelInfo(QDialog, exel_info_class):
         self.show()
 
 
-class InfoDate(QDialog, info_date_class):
+class InfoDate(QDialog):
     def __init__(self, date_in):
         super(InfoDate, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/exel_info_date.ui', self)
         self.de_in.setDate(date_in)
         self.setModal(True)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.show()
 
 
-class InfoDateNumber(QDialog, info_date_number_class):
+class InfoDateNumber(QDialog):
     def __init__(self, date_in, number):
         super(InfoDateNumber, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/exel_info_date_and_number.ui', self)
         self.de_in.setDate(date_in)
         self.le_number.setText(str(number))
         self.setModal(True)
@@ -2558,10 +2547,10 @@ class InfoDateNumber(QDialog, info_date_number_class):
         self.show()
 
 
-class AddFile(QDialog, add_file_date_class):
+class AddFile(QDialog):
     def __init__(self):
         super(AddFile, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/work_add_file.ui', self)
         self.setModal(True)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.show()

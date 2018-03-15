@@ -1,14 +1,11 @@
 from os import getcwd
 from form import staff
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from form.pack import PackBrows
 from form.templates import table
-
-
-operation_pack_filter = loadUiType(getcwd() + '/ui/operation_pack_filter.ui')[0]
 
 
 class PayList(table.TableList):
@@ -79,10 +76,10 @@ class PayList(table.TableList):
         self.ui_update()
 
 
-class PayListFilter(QDialog, operation_pack_filter):
+class PayListFilter(QDialog):
     def __init__(self, main):
         super(PayListFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/operation_pack_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main

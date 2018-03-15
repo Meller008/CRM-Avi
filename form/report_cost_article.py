@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
@@ -7,13 +7,11 @@ from form import article
 from function import my_sql
 import re
 
-report_cost_article = loadUiType(getcwd() + '/ui/report_cost_article.ui')[0]
 
-
-class ReportCostArticle(QMainWindow, report_cost_article):
+class ReportCostArticle(QMainWindow):
     def __init__(self):
         super(ReportCostArticle, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_cost_article.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_table_size()

@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog, QPushButton
 from PyQt5.QtCore import Qt, QDate, QDateTime, QObject
 from PyQt5.QtGui import QIcon, QBrush, QColor
@@ -18,12 +18,6 @@ import num2t4ru
 from classes.my_class import User
 
 import collections
-
-position_class = loadUiType(getcwd() + '/ui/order_position.ui')[0]
-order_class = loadUiType(getcwd() + '/ui/order.ui')[0]
-order_doc = loadUiType(getcwd() + '/ui/order_doc_list.ui')[0]
-order_filter = loadUiType(getcwd() + '/ui/order_filter.ui')[0]
-import_edi = loadUiType(getcwd() + '/ui/order_import_edi.ui')[0]
 
 
 class OrderList(table.TableList):
@@ -140,10 +134,10 @@ class OrderList(table.TableList):
         self.ui_update()
 
 
-class Order(QMainWindow, order_class):
+class Order(QMainWindow):
     def __init__(self, main_class=0, id=False):
         super(Order, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/order.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.id = id
         self.main = main_class
@@ -2294,10 +2288,10 @@ class Order(QMainWindow, order_class):
         f.close()
 
 
-class OrderFilter(QDialog, order_filter):
+class OrderFilter(QDialog):
     def __init__(self, main):
         super(OrderFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/order_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -2400,10 +2394,10 @@ class OrderFilter(QDialog, order_filter):
         self.le_client.setWhatsThis(str(id_client))
 
 
-class Position(QDialog, position_class):
+class Position(QDialog):
     def __init__(self):
         super(Position, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/order_position.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
     def ui_calculation(self):
@@ -2511,10 +2505,10 @@ class TransportCompanyName(list.ListItems):
                             "lb_note": "Подробность"}
 
 
-class OrderDocList(QDialog, order_doc):
+class OrderDocList(QDialog):
     def __init__(self, main):
         super(OrderDocList, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/order_doc_list.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -2651,10 +2645,10 @@ class OrderDocList(QDialog, order_doc):
         self.destroy()
 
 
-class ImportEDI(QDialog, import_edi):
+class ImportEDI(QDialog):
     def __init__(self, main):
         super(ImportEDI, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/order_import_edi.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.login = {'Name': '4607191149998EC', 'Password': '3NxK8bAyG'}

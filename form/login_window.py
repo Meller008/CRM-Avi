@@ -1,18 +1,16 @@
 from os import getcwd
 from PyQt5.QtWidgets import QDialog, QMessageBox
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from function import my_sql
 from PyQt5.QtGui import QIcon
 from classes.my_class import User
 
-login_class, login_base_class = loadUiType(getcwd() + '/ui/login.ui')
 
-
-class LoginWindow(QDialog, login_class):
+class LoginWindow(QDialog):
     def __init__(self, *args):
         self.main = args[0]
         super(LoginWindow, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/login.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.setModal(True)
         self.show()

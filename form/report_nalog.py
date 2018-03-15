@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem, QFileDialog
 from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtGui import QIcon, QColor, QBrush
@@ -8,13 +8,11 @@ from function import table_to_html, to_excel
 from classes import print_qt
 import calendar
 
-report_nalog_class = loadUiType(getcwd() + '/ui/report_nalog.ui')[0]
 
-
-class ReportNalog(QMainWindow, report_nalog_class):
+class ReportNalog(QMainWindow):
     def __init__(self):
         super(ReportNalog, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_nalog.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_start_settings()

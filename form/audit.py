@@ -1,23 +1,19 @@
 from os import getcwd
 from datetime import datetime
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QFileDialog, QMainWindow, QMessageBox
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QDate
 import re
-import json
 import openpyxl
-import random
 
 from function import my_sql
 
-verification_class = loadUiType(getcwd() + '/ui/audit_verification.ui')[0]
 
-
-class AuditVerification(QMainWindow, verification_class):
+class AuditVerification(QMainWindow):
     def __init__(self):
         super(AuditVerification, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/audit_verification.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.de_date.setDate(QDate.currentDate())
 

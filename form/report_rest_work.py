@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
@@ -7,14 +7,11 @@ from function import my_sql, table_to_html
 from classes import print_qt
 from decimal import Decimal
 
-rest_work_class = loadUiType(getcwd() + '/ui/report_rest_work.ui')[0]
-rest_one_work_class = loadUiType(getcwd() + '/ui/report_rest_one_work.ui')[0]
 
-
-class ReportRestWork(QMainWindow, rest_work_class):
+class ReportRestWork(QMainWindow):
     def __init__(self):
         super(ReportRestWork, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_rest_work.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.start_settings()
@@ -107,10 +104,10 @@ class ReportRestWork(QMainWindow, rest_work_class):
         self.print_class = print_qt.PrintHtml(self, html)
 
 
-class RestOneWork(QDialog, rest_one_work_class):
+class RestOneWork(QDialog):
     def __init__(self, work_id, date_from, date_to):
         super(RestOneWork, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_rest_one_work.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.start_settings()

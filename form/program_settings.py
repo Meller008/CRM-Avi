@@ -1,18 +1,14 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox
 from function import my_sql
 
 
-settings_path = loadUiType(getcwd() + '/ui/program_settings_path.ui')[0]
-settings_road = loadUiType(getcwd() + '/ui/program_settings_road.ui')[0]
-
-
-class SettingsPath(QDialog, settings_path):
+class SettingsPath(QDialog):
     def __init__(self):
         super(SettingsPath, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/program_settings_path.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.set_info()
 
@@ -50,10 +46,10 @@ class SettingsPath(QDialog, settings_path):
             return False
 
 
-class SettingsRoad(QDialog, settings_road):
+class SettingsRoad(QDialog):
     def __init__(self):
         super(SettingsRoad, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/program_settings_road.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.set_info()
 

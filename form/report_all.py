@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem, QDialog, QListWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate
@@ -9,15 +9,11 @@ from classes import print_qt
 import datetime
 import re
 
-report_all_class = loadUiType(getcwd() + '/ui/report_all.ui')[0]
-save_report_material_class = loadUiType(getcwd() + '/ui/save_report_material.ui')[0]
-save_report_article_class = loadUiType(getcwd() + '/ui/save_report_article.ui')[0]
 
-
-class ReportAll(QMainWindow, report_all_class):
+class ReportAll(QMainWindow):
     def __init__(self):
         super(ReportAll, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_all.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.start_settings()
@@ -2243,10 +2239,10 @@ class ReportAll(QMainWindow, report_all_class):
             self.view_save()
 
 
-class SaveReportMaterial(QDialog, save_report_material_class):
+class SaveReportMaterial(QDialog):
     def __init__(self, type_report):
         super(SaveReportMaterial, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/save_report_material.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.type = type_report
@@ -2345,10 +2341,10 @@ class SaveReportMaterial(QDialog, save_report_material_class):
             self.start_sql_info()
 
 
-class SaveReportArticle(QDialog, save_report_article_class):
+class SaveReportArticle(QDialog):
     def __init__(self):
         super(SaveReportArticle, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/save_report_article.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.start_sql_info()

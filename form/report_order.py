@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
@@ -9,13 +9,11 @@ import datetime
 from function import my_sql
 from form.templates import table
 
-need_article = loadUiType(getcwd() + '/ui/report_need_article_order.ui')[0]
 
-
-class NeedArticleOrder(QMainWindow, need_article):
+class NeedArticleOrder(QMainWindow):
     def __init__(self):
         super(NeedArticleOrder, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_need_article_order.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.start_settings()
 

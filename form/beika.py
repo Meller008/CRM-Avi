@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QListWidgetItem
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QIcon
@@ -9,10 +9,6 @@ from math import fabs
 from function import my_sql
 from form.templates import table, list
 from form import supply_accessories, supply_material, staff
-
-
-beika_settings = loadUiType(getcwd() + '/ui/beika_settings.ui')[0]
-beika = loadUiType(getcwd() + '/ui/beika.ui')[0]
 
 # ID поставщика Авидевелопмент в фурнитуре
 SUPPLY_PROVIDER_ID = 23
@@ -75,10 +71,10 @@ class BeikaList(table.TableList):
         self.settings.show()
 
 
-class BeikaSettings(QDialog, beika_settings):
+class BeikaSettings(QDialog):
     def __init__(self):
         super(BeikaSettings, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/beika_settings.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_start_settings()
@@ -168,10 +164,10 @@ class BeikaSettings(QDialog, beika_settings):
         self.set_start_settings()
 
 
-class Beika(QDialog, beika):
+class Beika(QDialog):
     def __init__(self, main, id=False):
         super(Beika, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/beika.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main

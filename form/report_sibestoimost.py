@@ -1,6 +1,6 @@
 from os import getcwd
 from form import article
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QProgressDialog, QFileDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QObject, QDate, QCoreApplication
@@ -9,13 +9,11 @@ from classes import cut, print_qt
 from decimal import Decimal
 from function import table_to_html, to_excel
 
-sibest_class = loadUiType(getcwd() + '/ui/report_sibestoimost.ui')[0]
 
-
-class ReportSibestoimost(QMainWindow, sibest_class):
+class ReportSibestoimost(QMainWindow):
     def __init__(self):
         super(ReportSibestoimost, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_sibestoimost.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.start_settings()

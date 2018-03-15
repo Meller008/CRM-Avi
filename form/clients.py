@@ -2,18 +2,13 @@ from os import getcwd, path, mkdir, listdir
 from datetime import datetime
 from shutil import copy
 from form import staff
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QDate
 from function import my_sql
 from form.templates import list
 import subprocess
-
-
-client_class = loadUiType(getcwd() + '/ui/client.ui')[0]
-client_adress_class = loadUiType(getcwd() + '/ui/client_adres.ui')[0]
-client_number_class = loadUiType(getcwd() + '/ui/client_number.ui')[0]
 
 
 class ClientList(list.ListItems):
@@ -60,10 +55,10 @@ class ClientList(list.ListItems):
             self.destroy()
 
 
-class Client(QDialog, client_class):
+class Client(QDialog):
     def __init__(self, m, select_id="new"):
         super(Client, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/client.ui', self)
         self.setModal(True)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.m = m
@@ -399,17 +394,17 @@ class Client(QDialog, client_class):
             pass
 
 
-class ClientAdress(QDialog, client_adress_class):
+class ClientAdress(QDialog):
     def __init__(self):
         super(ClientAdress, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/client_adres.ui', self)
         self.setModal(True)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
 
-class ClientNumber(QDialog, client_number_class):
+class ClientNumber(QDialog):
     def __init__(self):
         super(ClientNumber, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/client_number.ui', self)
         self.setModal(True)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))

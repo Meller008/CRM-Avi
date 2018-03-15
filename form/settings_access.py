@@ -1,24 +1,16 @@
 from os import getcwd
-from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem
-from PyQt5.uic import loadUiType
-from PyQt5.QtGui import QBrush, QColor, QIcon
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.uic import loadUi
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt
 from function import my_sql
-from form import provider, comparing
-from form.templates import table, list
-from decimal import Decimal
-import re
-from form import order, staff
+from form import staff
 
 
-access = loadUiType(getcwd() + '/ui/program_settings_access.ui')[0]
-access_one = loadUiType(getcwd() + '/ui/program_settings_access_one.ui')[0]
-
-
-class Access(QDialog, access):
+class Access(QDialog):
     def __init__(self):
         super(Access, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/program_settings_access.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.start_settings()
@@ -154,10 +146,10 @@ class Access(QDialog, access):
             self.ui_select_position()
 
 
-class AccessPosition(QDialog, access_one):
+class AccessPosition(QDialog):
     def __init__(self, main, id=False, worker=None, position=None):
         super(AccessPosition, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/program_settings_access_one.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main

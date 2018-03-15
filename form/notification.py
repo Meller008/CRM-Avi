@@ -1,18 +1,16 @@
 from os import getcwd
 from PyQt5.QtWidgets import QMessageBox, QDialog, QTableWidgetItem, QTableWidgetSelectionRange
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from form import staff
 from PyQt5.QtGui import QIcon, QTextCharFormat, QColor, QBrush
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql
 
-work_notif_calendar_class, work_notif_calendar_base_class = loadUiType(getcwd() + '/ui/work_notification_calendar.ui')
 
-
-class WorkCalendar(QDialog, work_notif_calendar_class):
+class WorkCalendar(QDialog):
     def __init__(self):
         super(WorkCalendar, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/work_notification_calendar.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.calendar.setGridVisible(True)
         self.tableWidget.horizontalHeader().resizeSection(0, 30)

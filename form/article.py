@@ -1,7 +1,7 @@
 from os import getcwd, path, mkdir, listdir
 from form.templates import tree, table
 from form import operation, supply_material, supply_accessories, print_label
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
@@ -9,12 +9,6 @@ from function import my_sql, table_to_html
 from classes.my_class import User
 from classes import print_qt
 from decimal import Decimal
-
-article_class = loadUiType(getcwd() + '/ui/article.ui')[0]
-article_change_operation_class = loadUiType(getcwd() + '/ui/article_change_operation.ui')[0]
-article_change_material_class = loadUiType(getcwd() + '/ui/article_change_material.ui')[0]
-article_copy_parametr = loadUiType(getcwd() + '/ui/article_copy_parametr.ui')[0]
-article_filter = loadUiType(getcwd() + '/ui/article_filter.ui')[0]
 
 
 class ArticleList(tree.TreeList):
@@ -154,10 +148,10 @@ class ArticleList(tree.TreeList):
         self.ui_update_table()
 
 
-class Article(QMainWindow, article_class):
+class Article(QMainWindow):
     def __init__(self, main, id=False, tree_id=False, dc_select=False):
         super(Article, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/article.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.access_save_sql = True
         self.main = main
@@ -1494,10 +1488,10 @@ class Article(QMainWindow, article_class):
         self.calc()
 
 
-class ArticleFilter(QDialog, article_filter):
+class ArticleFilter(QDialog):
     def __init__(self, main):
         super(ArticleFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/article_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -1557,10 +1551,10 @@ class ArticleFilter(QDialog, article_filter):
         self.sql_query_all = sql
 
 
-class ChangeOperation(QDialog, article_change_operation_class):
+class ChangeOperation(QDialog):
     def __init__(self):
         super(ChangeOperation, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/article_change_operation.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.access()
@@ -1605,10 +1599,10 @@ class ChangeOperation(QDialog, article_change_operation_class):
         self.le_operation.setWhatsThis(str(item[0]))
 
 
-class ChangeMaterial(QDialog, article_change_material_class):
+class ChangeMaterial(QDialog):
     def __init__(self, variant):
         super(ChangeMaterial, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/article_change_material.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.variant = variant
 
@@ -1661,10 +1655,10 @@ class ChangeMaterial(QDialog, article_change_material_class):
         self.le_material.setWhatsThis(str(1))
 
 
-class CopyParametr(QDialog, article_copy_parametr):
+class CopyParametr(QDialog):
     def __init__(self, main):
         super(CopyParametr, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/article_copy_parametr.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main
         self.set_size_parametr()

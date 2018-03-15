@@ -1,7 +1,7 @@
 from os import getcwd
 from form import staff, supply_material
 from datetime import datetime
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate
@@ -11,9 +11,6 @@ from decimal import Decimal
 from function import my_sql
 from form.templates import table, list
 from classes.my_class import User
-
-brows_pay = loadUiType(getcwd() + '/ui/pay_plus_minus.ui')[0]
-pay_filter = loadUiType(getcwd() + '/ui/pay_plus_minus_filter.ui')[0]
 
 
 class PayList(table.TableList):
@@ -130,10 +127,10 @@ class PayList(table.TableList):
         self.ui_update()
 
 
-class PayBrows(QDialog, brows_pay):
+class PayBrows(QDialog):
     def __init__(self, main=None, id=None):
         super(PayBrows, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/pay_plus_minus.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.menu_text = None
@@ -632,10 +629,10 @@ class PayBrows(QDialog, brows_pay):
         self.ui_change_weight()
 
 
-class PayFilter(QDialog, pay_filter):
+class PayFilter(QDialog):
     def __init__(self, main):
         super(PayFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/pay_plus_minus_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main

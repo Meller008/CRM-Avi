@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem
 from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtGui import QIcon
@@ -9,13 +9,10 @@ from function import table_to_html
 from classes import print_qt
 
 
-report_performance_company_class = loadUiType(getcwd() + '/ui/report_performance_company.ui')[0]
-
-
-class ReportPerformanceCompany(QMainWindow, report_performance_company_class):
+class ReportPerformanceCompany(QMainWindow):
     def __init__(self):
         super(ReportPerformanceCompany, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_performance_company.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_start_settings()

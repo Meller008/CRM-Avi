@@ -1,6 +1,6 @@
 from os import getcwd
 from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtGui import QBrush, QColor, QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql
@@ -9,11 +9,6 @@ from form.templates import table, list
 from decimal import Decimal
 import datetime
 import re
-
-
-supply_accessories = loadUiType(getcwd() + '/ui/supply_material.ui')[0]
-supply_accessories_position = loadUiType(getcwd() + '/ui/supply_material_position.ui')[0]
-supply_accessories_filter = loadUiType(getcwd() + '/ui/supply_filter.ui')[0]
 
 # ID поставщика бейщиков для скрытия лишних строк
 SUPPLY_PROVIDER_ID = 23
@@ -192,10 +187,10 @@ class AccessoriesSupplyList(table.TableList):
         self.ui_update()
 
 
-class AccessoriesSupply(QMainWindow, supply_accessories):
+class AccessoriesSupply(QMainWindow):
     def __init__(self, main, id=False):
         super(AccessoriesSupply, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/supply_material.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -830,10 +825,10 @@ class AccessoriesSupply(QMainWindow, supply_accessories):
         self.le_provider.setText(item[1])
 
 
-class AccessoriesSupplyPosition(QDialog, supply_accessories_position):
+class AccessoriesSupplyPosition(QDialog):
     def __init__(self, item=None):
         super(AccessoriesSupplyPosition, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/supply_material_position.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.item = item
@@ -934,10 +929,10 @@ class AccessoriesSupplyPosition(QDialog, supply_accessories_position):
         self.le_name_material.setText(item[0])
 
 
-class AccessoriesSupplyFilter(QDialog, supply_accessories_filter):
+class AccessoriesSupplyFilter(QDialog):
     def __init__(self, main):
         super(AccessoriesSupplyFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/supply_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -1067,10 +1062,10 @@ class AccessoriesName(list.ListItems):
             self.destroy()
 
 
-class ComparingPosition(QDialog, supply_accessories_position):
+class ComparingPosition(QDialog):
     def __init__(self, item=None):
         super(ComparingPosition, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/supply_material_position.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.item = item

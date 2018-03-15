@@ -1,18 +1,16 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql
 import datetime
 
-report_accept_pack_class = loadUiType(getcwd() + '/ui/report_accept_pack.ui')[0]
 
-
-class ReportAcceptPack(QMainWindow, report_accept_pack_class):
+class ReportAcceptPack(QMainWindow):
     def __init__(self):
         super(ReportAcceptPack, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_accept_pack.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.start_settings()

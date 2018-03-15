@@ -1,6 +1,6 @@
 from os import getcwd
 from datetime import datetime
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem, QFileDialog
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate
@@ -10,16 +10,10 @@ from classes.my_class import User
 from classes import print_qt
 
 
-
-salary_list = loadUiType(getcwd() + '/ui/salary_work.ui')[0]
-salary_work = loadUiType(getcwd() + '/ui/salary_work_info.ui')[0]
-salary_history = loadUiType(getcwd() + '/ui/salary_history.ui')[0]
-
-
-class SalaryList(QDialog, salary_list):
+class SalaryList(QDialog):
     def __init__(self):
         super(SalaryList, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/salary_work.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_size_table()
@@ -816,10 +810,10 @@ class SalaryList(QDialog, salary_list):
         self.print_class = print_qt.PrintHtml(self, html)
 
 
-class SalaryInfo(QDialog, salary_work):
+class SalaryInfo(QDialog):
     def __init__(self, work):
         super(SalaryInfo, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/salary_work_info.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.work = work
@@ -896,10 +890,10 @@ class SalaryInfo(QDialog, salary_work):
         self.destroy()
 
 
-class SalaryHistory(QDialog, salary_history):
+class SalaryHistory(QDialog):
     def __init__(self):
         super(SalaryHistory, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/salary_history.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.set_sql_salary_date()
 

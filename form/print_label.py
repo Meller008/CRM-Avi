@@ -1,5 +1,5 @@
 from os import getcwd, path, mkdir, listdir
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QListWidgetItem
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QDate, QDateTime, Qt
@@ -7,16 +7,13 @@ from function import my_sql
 import socket
 
 
-label_settings = loadUiType(getcwd() + '/ui/print_birk_settings.ui')[0]
-label_file = loadUiType(getcwd() + '/ui/print_birk_file.ui')[0]
-
 IP_SERV_LABEL = "192.168.1.3"
 
 
-class LabelFile(QDialog, label_file):
+class LabelFile(QDialog):
     def __init__(self, article_parametr_id, path_name, data=None):
         super(LabelFile, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/print_birk_file.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.data = data
@@ -91,10 +88,10 @@ class LabelFile(QDialog, label_file):
             return self.path
 
 
-class LabelSettings(QDialog, label_settings):
+class LabelSettings(QDialog):
     def __init__(self, path, data=None):
         super(LabelSettings, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/print_birk_settings.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.label_data = {"label_path": path.replace("/", '\\'),

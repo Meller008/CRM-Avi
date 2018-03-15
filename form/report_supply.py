@@ -1,22 +1,18 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog
+from PyQt5.uic import loadUi
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QMainWindow
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QDate, Qt
 from form import supply_material, supply_accessories, provider, comparing
-from function import my_sql, to_excel, table_to_html
+from function import my_sql, table_to_html
 from classes import print_qt
-from decimal import Decimal
-import datetime
 import re
 
-report_supply_class = loadUiType(getcwd() + '/ui/report_supply.ui')[0]
 
-
-class ReportSupply(QMainWindow, report_supply_class):
+class ReportSupply(QMainWindow):
     def __init__(self):
         super(ReportSupply, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_supply.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_start_settings()

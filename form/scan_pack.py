@@ -1,5 +1,5 @@
 from os import getcwd
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
@@ -8,14 +8,10 @@ from function import my_sql
 from classes.my_class import User
 
 
-scan_pack = loadUiType(getcwd() + '/ui/scan_pack.ui')[0]
-list_article = loadUiType(getcwd() + '/ui/scan_pack_list_article.ui')[0]
-
-
-class ScanPack(QDialog, scan_pack):
+class ScanPack(QDialog):
     def __init__(self):
         super(ScanPack, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/scan_pack.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.scan_article = True
@@ -88,10 +84,10 @@ class ScanPack(QDialog, scan_pack):
         event.accept()
 
 
-class ListArticle(QDialog, list_article):
+class ListArticle(QDialog):
     def __init__(self):
         super(ListArticle, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/scan_pack_list_article.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.tw_list_article.horizontalHeader().resizeSection(0, 40)

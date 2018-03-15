@@ -1,6 +1,6 @@
 from os import getcwd
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow, QLabel
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from function import my_sql
 from form import login_window, provider, comparing, staff, program_settings, notification, \
     clients, operation, other, audit, warehouse_material, warehouse_accessories
@@ -15,14 +15,12 @@ from classes.my_class import User
 from PyQt5.QtGui import QIcon, QBrush, QImage
 import sys
 
-main_class = loadUiType(getcwd() + '/ui/main.ui')[0]
 
-
-class MainWindow(QMainWindow, main_class):
+class MainWindow(QMainWindow):
     def __init__(self, *args):
 
         super(MainWindow, self).__init__(*args)
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/main.ui', self)
         self.mdi.setBackground(QBrush(QImage(getcwd() + "/images/logo.png")))
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 

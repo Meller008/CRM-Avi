@@ -1,7 +1,7 @@
 from os import getcwd
 from form import order, staff, print_label, article
 from datetime import datetime, date
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QPushButton, QLineEdit, QWidget, QSizePolicy, QFileDialog
 from PyQt5.QtGui import QIcon, QFont, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QObject
@@ -14,14 +14,6 @@ from classes.my_class import User
 from form.templates import table
 import codecs
 from decimal import Decimal
-
-cut_brows_class = loadUiType(getcwd() + '/ui/cut_brows.ui')[0]
-cut_filter = loadUiType(getcwd() + '/ui/cut_filter.ui')[0]
-
-cut_list_mission_class = loadUiType(getcwd() + '/ui/cut_list_mission.ui')[0]
-new_cut_mission_class = loadUiType(getcwd() + '/ui/cut_new_mission.ui')[0]
-edit_cut_mission_class = loadUiType(getcwd() + '/ui/cut_edit_mission.ui')[0]
-cut_print_passport = loadUiType(getcwd() + '/ui/cut_print_passport.ui')[0]
 
 
 class CutList(table.TableList):
@@ -150,11 +142,13 @@ class CutList(table.TableList):
         self.ui_update()
 
 
-class CutBrows(QDialog, cut_brows_class):
+class CutBrows(QDialog):
     def __init__(self, main=None, cut_id=None):
         super(CutBrows, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/cut_brows.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.setWindowFlags(Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint)
 
         self.access_save_sql = True
         self.insert_values_sql = False
@@ -633,10 +627,10 @@ class CutBrows(QDialog, cut_brows_class):
         self.set_pack()
 
 
-class CutFilter(QDialog, cut_filter):
+class CutFilter(QDialog):
     def __init__(self, main):
         super(CutFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/cut_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -735,10 +729,10 @@ class CutFilter(QDialog, cut_filter):
         self.le_art.setText(str_article)
 
 
-class CutPassport(QDialog, cut_print_passport):
+class CutPassport(QDialog):
     def __init__(self, main, cut):
         super(CutPassport, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/cut_print_passport.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -978,10 +972,10 @@ class LabelList(CutPassport):
         self.main.of_print_complete()
 
 
-class CutListMission(QMainWindow, cut_list_mission_class):
+class CutListMission(QMainWindow):
     def __init__(self):
         super(CutListMission, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/cut_list_mission.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.set_start_settings()
         self.get_start_sql_info()
@@ -1034,10 +1028,10 @@ class CutListMission(QMainWindow, cut_list_mission_class):
         self.edit_cut_mission.show()
 
 
-class NewCutMission(QDialog, new_cut_mission_class):
+class NewCutMission(QDialog):
     def __init__(self):
         super(NewCutMission, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/cut_new_mission.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_start_settings()
@@ -1280,10 +1274,10 @@ class NewCutMission(QDialog, new_cut_mission_class):
         self.tw_position_list.setItem(self.row_change_material, 6, table_item)
 
 
-class EditCutMission(QDialog, edit_cut_mission_class):
+class EditCutMission(QDialog):
     def __init__(self, main, id):
         super(EditCutMission, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/cut_edit_mission.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main
         self.id = id

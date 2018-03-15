@@ -1,6 +1,5 @@
 from os import getcwd
-import re
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QMainWindow,  QTableWidgetItem, QFileDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
@@ -9,13 +8,11 @@ from classes import print_qt
 from function import table_to_html, to_excel
 from datetime import timedelta
 
-report_article_day_class = loadUiType(getcwd() + '/ui/report_article_day.ui')[0]
 
-
-class ReportArticleDay(QMainWindow, report_article_day_class):
+class ReportArticleDay(QMainWindow):
     def __init__(self):
         super(ReportArticleDay, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/report_article_day.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.start_settings()

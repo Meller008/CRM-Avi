@@ -1,6 +1,6 @@
 from os import getcwd
-from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem, QLineEdit, QSizePolicy, QWidget
-from PyQt5.uic import loadUiType
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox, QTableWidgetItem
+from PyQt5.uic import loadUi
 from PyQt5.QtGui import QBrush, QColor, QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql
@@ -8,11 +8,6 @@ from form import provider, comparing
 from form.templates import table, list
 from decimal import Decimal
 import re
-
-
-supply_material = loadUiType(getcwd() + '/ui/supply_material.ui')[0]
-supply_material_position = loadUiType(getcwd() + '/ui/supply_material_position.ui')[0]
-supply_material_filter = loadUiType(getcwd() + '/ui/supply_filter.ui')[0]
 
 
 class MaterialSupplyList(table.TableList):
@@ -149,10 +144,10 @@ class MaterialSupplyList(table.TableList):
         self.ui_update()
 
 
-class MaterialSupply(QMainWindow, supply_material):
+class MaterialSupply(QMainWindow):
     def __init__(self, main, id=False):
         super(MaterialSupply, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/supply_material.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -778,10 +773,10 @@ class MaterialSupply(QMainWindow, supply_material):
         self.le_provider.setText(item[1])
 
 
-class MaterialSupplyPosition(QDialog, supply_material_position):
+class MaterialSupplyPosition(QDialog):
     def __init__(self, item=None):
         super(MaterialSupplyPosition, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/supply_material_position.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.item = item
@@ -880,10 +875,10 @@ class MaterialSupplyPosition(QDialog, supply_material_position):
         self.le_name_material.setText(item[0])
 
 
-class MaterialSupplyFilter(QDialog, supply_material_filter):
+class MaterialSupplyFilter(QDialog):
     def __init__(self, main):
         super(MaterialSupplyFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/supply_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -1013,10 +1008,10 @@ class MaterialName(list.ListItems):
             self.destroy()
 
 
-class ComparingPosition(QDialog, supply_material_position):
+class ComparingPosition(QDialog):
     def __init__(self, item=None):
         super(ComparingPosition, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/supply_material_position.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.item = item

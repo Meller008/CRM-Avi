@@ -1,6 +1,6 @@
 from os import getcwd
 from form import staff, operation, order, supply_accessories
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QInputDialog, QListWidgetItem, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QBrush, QColor, QRegExpValidator
 from PyQt5.QtCore import Qt, QDate, QRegExp
@@ -12,13 +12,6 @@ from form import clients, article, print_label, supply_material
 from function import barcode, files, my_sql
 from classes.my_class import User
 from form.templates import table
-
-pack_class = loadUiType(getcwd() + '/ui/pack.ui')[0]
-pack_operation_class = loadUiType(getcwd() + '/ui/pack_operation.ui')[0]
-pack_accessories_class = loadUiType(getcwd() + '/ui/pack_accsessories.ui')[0]
-pack_add_material = loadUiType(getcwd() + '/ui/pack_add_material.ui')[0]
-pack_list = loadUiType(getcwd() + '/ui/pack_list_number.ui')[0]
-pack_filter = loadUiType(getcwd() + '/ui/pack_filter.ui')[0]
 
 
 class PackList(table.TableList):
@@ -108,10 +101,10 @@ class PackList(table.TableList):
         self.ui_update()
 
 
-class PackBrows(QDialog, pack_class):
+class PackBrows(QDialog):
     def __init__(self, main=None, pack=None, pack_id=None, save_pack_weight=False):
         super(PackBrows, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/pack.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -901,10 +894,10 @@ class PackBrows(QDialog, pack_class):
         self.pack.set_order(order[1])
 
 
-class PackOperation(QDialog, pack_operation_class):
+class PackOperation(QDialog):
     def __init__(self, operation=None):
         super(PackOperation, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/pack_operation.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.de_make.setDate(QDate.currentDate())
         self.de_input.setDate(QDate.currentDate())
@@ -1025,10 +1018,10 @@ class PackOperation(QDialog, pack_operation_class):
         self.le_worker.setText(worker[1])
 
 
-class PackAccessories(QDialog, pack_accessories_class):
+class PackAccessories(QDialog):
     def __init__(self, accessories=None):
         super(PackAccessories, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/pack_accsessories.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         if accessories is None:
@@ -1095,10 +1088,10 @@ class PackAccessories(QDialog, pack_accessories_class):
         self.le_accessories.setWhatsThis(str(accessories[0]))
 
 
-class PackAddMaterial(QDialog, pack_add_material):
+class PackAddMaterial(QDialog):
     def __init__(self):
         super(PackAddMaterial, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/pack_add_material.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
     def ui_view_material(self):
@@ -1130,10 +1123,10 @@ class PackAddMaterial(QDialog, pack_add_material):
         self.le_material.setText(item[1])
 
 
-class ListPackNumber(QDialog, pack_list):
+class ListPackNumber(QDialog):
     def __init__(self, cut_id):
         super(ListPackNumber, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/pack_list_number.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.cut_id = cut_id
 
@@ -1162,10 +1155,10 @@ class ListPackNumber(QDialog, pack_list):
         self.destroy()
 
 
-class PackFilter(QDialog, pack_filter):
+class PackFilter(QDialog):
     def __init__(self, main):
         super(PackFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/pack_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main

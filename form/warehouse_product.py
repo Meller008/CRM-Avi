@@ -2,15 +2,11 @@ from os import getcwd
 from form import article
 from form.pack import PackBrows
 from form.order import Order
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QLineEdit, QWidget, QSizePolicy
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql
-
-
-warehouse_change = loadUiType(getcwd() + '/ui/warehouse_product_change.ui')[0]
-warehouse_info = loadUiType(getcwd() + '/ui/warehouse_product_info.ui')[0]
 
 
 # Просто перепишем окно отображения артикулов под склад.
@@ -118,10 +114,10 @@ class Warehouse(article.ArticleList):
         self.ui_update_table()
 
 
-class WarehouseChange(QDialog, warehouse_change):
+class WarehouseChange(QDialog):
     def __init__(self, main, id, name):
         super(WarehouseChange, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/warehouse_product_change.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
@@ -226,10 +222,10 @@ class WarehouseChange(QDialog, warehouse_change):
         self.le_art_name_plus.setWhatsThis(str(item[1]))
 
 
-class WarehouseInfo(QDialog, warehouse_info):
+class WarehouseInfo(QDialog):
     def __init__(self, id):
         super(WarehouseInfo, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/warehouse_product_info.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.id = id

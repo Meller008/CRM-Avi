@@ -1,15 +1,12 @@
 from os import getcwd
 from form.templates import tree
 from form.templates import list
-from PyQt5.uic import loadUiType
+from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from function import my_sql
 from classes.my_class import User
-
-operation_class = loadUiType(getcwd() + '/ui/operation_change.ui')[0]
-operation_filter = loadUiType(getcwd() + '/ui/operation_filter.ui')[0]
 
 
 class OperationList(tree.TreeList):
@@ -149,10 +146,10 @@ class OperationList(tree.TreeList):
         self.ui_update_table()
 
 
-class Operation(QDialog, operation_class):
+class Operation(QDialog):
     def __init__(self, main, id=False, tree_id=False):
         super(Operation, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/operation_change.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.main = main
         self.id = id
@@ -238,10 +235,10 @@ class Operation(QDialog, operation_class):
             self.destroy()
 
 
-class OperationFilter(QDialog, operation_filter):
+class OperationFilter(QDialog,):
     def __init__(self, main):
         super(OperationFilter, self).__init__()
-        self.setupUi(self)
+        loadUi(getcwd() + '/ui/operation_filter.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.main = main
