@@ -10,7 +10,7 @@ import openpyxl
 from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
 from openpyxl.worksheet.pagebreak import Break
 from copy import copy
-from function import my_sql, to_excel, table_to_html, moneyfmt, calc_price
+from function import my_sql, to_excel, table_to_html, moneyfmt, calc_price, str_to
 from classes import print_qt
 from form.templates import table, list
 from form import clients, article, print_label
@@ -794,6 +794,16 @@ class Order(QMainWindow):
         self.destroy()
 
     def save_sql(self):
+        if not self.save_change_order:  # Если нечего сохранять то проверим цену!
+            query = "SELECT Sum_In_Nds, Sum_Off_Nds FROM `order` WHERE Id = %s"
+            sql_info = my_sql.sql_select(query, (self.id,))
+
+            if not sql_info:
+                self.save_change_order = True
+
+            if sql_info[0][0] != str_to.str_to_decimal(self.le_sum_in_nds.text()) or sql_info[0][1] != str_to.str_to_decimal(self.le_sum_no_nds.text()):
+                self.save_change_order = True
+
         if self.save_change_order:
 
             # Проверка номера документа
