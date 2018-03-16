@@ -47,7 +47,7 @@ class PackList(table.TableList):
                                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
-                                        LEFT JOIN material_name ON cut.Material_Id = material_name.Id"""
+                                        LEFT JOIN material_name ON cut.Material_Id = material_name.Id LIMIT 10000"""
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT pack.Id, pack.Id, pack.Cut_Id, pack.Number, cut.Date_Cut,
@@ -57,7 +57,7 @@ class PackList(table.TableList):
                                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
-                                        LEFT JOIN material_name ON cut.Material_Id = material_name.Id"""
+                                        LEFT JOIN material_name ON cut.Material_Id = material_name.Id LIMIT 10000"""
 
         self.query_table_dell = ""
 
@@ -1265,7 +1265,7 @@ class PackFilter(QDialog):
 
         # Делаем замену так как Were должно быть перед Group by
         if where:
-            self.sql_query_all = self.sql_query_all + " WHERE " + where
+            self.sql_query_all = self.sql_query_all.replace("LIMIT", " WHERE " + where + " LIMIT ")
 
         self.main.of_set_filter(self.sql_query_all)
 

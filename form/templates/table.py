@@ -15,7 +15,7 @@ table_list_class = loadUiType(getcwd() + '/ui/templates ui/table.ui')[0]
 
 
 class TableList(QMainWindow, table_list_class):
-    def __init__(self, main_class=0, dc_select=False, other=None):
+    def __init__(self, main_class=0, dc_select=False, other=None, no_start_set=False):
         super(TableList, self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
@@ -24,7 +24,8 @@ class TableList(QMainWindow, table_list_class):
         self.other_value = other
         self.set_settings()
         self.set_table_header()
-        self.set_table_info()
+        if not no_start_set:
+            self.set_table_info()
         self.access()
 
     def access(self):

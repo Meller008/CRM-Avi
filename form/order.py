@@ -31,7 +31,7 @@ class OrderList(table.TableList):
 
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата поствки", 70), ("№ док.", 50), ("Позиций", 50),
-                                  ("Стоймость", 105), ("Стоймость без ндс", 105), ("Примечание", 150), ("Отгр.", 40))
+                                  ("Стоимость", 105), ("Стоимость без ндс", 105), ("Примечание", 150), ("Отгр.", 40))
 
         self.filter = None
         self.query_table_all = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,

@@ -265,7 +265,7 @@ class MainWindow(QMainWindow):
         self.sub_salary_list.show()
 
     def view_pack_operation_list(self):
-        self.operation_list = operation_list.PayList()
+        self.operation_list = operation_list.PayList(no_start_set=True)
         self.sub_operation_list = QMdiSubWindow()
         self.sub_operation_list.setWidget(self.operation_list)
         self.mdi.addSubWindow(self.sub_operation_list)

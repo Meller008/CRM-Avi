@@ -38,7 +38,7 @@ class PayList(table.TableList):
                                         LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id
                                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
-                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id"""
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id LIMIT 50000"""
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT pack.Id, CONCAT(product_article.Article, ' ', product_article_size.Size, ' ', product_article_parametrs.Name),
@@ -51,7 +51,7 @@ class PayList(table.TableList):
                                         LEFT JOIN staff_worker_info AS work ON pack_operation.Worker_Id = work.Id
                                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
-                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id"""
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id LIMIT 50000"""
 
         self.query_table_dell = ""
 
@@ -154,7 +154,7 @@ class PayListFilter(QDialog):
             where = self.add_filter(where, "(pack_operation.Worker_Id = %s)" % self.le_work.whatsThis())
 
         if where:
-            self.sql_query_all = self.sql_query_all + " WHERE " + where
+            self.sql_query_all = self.sql_query_all.replace("LIMIT", " WHERE " + where + " LIMIT ")
 
         self.main.of_set_filter(self.sql_query_all)
 
