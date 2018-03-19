@@ -2144,6 +2144,15 @@ class OneStaff(QMainWindow):
             QMessageBox.critical(self, "Ошибка sql", contract_number.msg, QMessageBox.Ok)
             return False
 
+        if not contract_number[0][1]:
+            QMessageBox.critical(self, "№ договора", "У этого работника нет трудового договора!\nВведите его в следующем окне!", QMessageBox.Ok)
+            info = InfoDateNumber(QDate.currentDate(), "Нет")
+            if info.exec() == 0:
+                self.statusBar().showMessage("Отмена")
+                return False
+
+            contract_number = ((info.le_number.text(), info.de_in.date().toPyDate()), )
+
         self.statusBar().showMessage("Открываю шаблон")
         f = open(getcwd() + '/templates/staff/order_on_dismissal.xml', "r", -1, "utf-8")
         xml = f.read()
