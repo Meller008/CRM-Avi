@@ -679,7 +679,7 @@ class Article(QMainWindow):
                 self.tw_materials.removeRow(row)
             else:
                 self.tw_materials.setRowHidden(row, True)
-                for col in range(1):
+                for col in range(2):
                     self.tw_materials.item(row, col).setData(-1, "del")
             self.calc()
 
