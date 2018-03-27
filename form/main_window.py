@@ -1,7 +1,8 @@
 from os import getcwd
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QMdiSubWindow, QLabel
 from PyQt5.uic import loadUi
-from function import my_sql
+from PyQt5.QtGui import QIcon, QBrush, QImage
 from form import login_window, provider, comparing, staff, program_settings, notification, \
     clients, operation, other, audit, warehouse_material, warehouse_accessories
 from form import article, order, cut, pay, salary, operation_list, warehouse_product, beika,\
@@ -11,20 +12,23 @@ from form import report_supply, report_cost_article, test_window, report_sibesto
 from form import staff_traffic, report_material_consumption, report_warehouse_balance_date,\
     report_all, report_nalog, report_article_day
 from form import report_order, report_reject, transaction_warehouse
+from function import my_sql
 from classes.my_class import User
-from PyQt5.QtGui import QIcon, QBrush, QImage
 import sys
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, *args):
-
-        super(MainWindow, self).__init__(*args)
+    def __init__(self, win_arg):
+        super(MainWindow, self).__init__()
         loadUi(getcwd() + '/ui/main.ui', self)
         self.mdi.setBackground(QBrush(QImage(getcwd() + "/images/logo.png")))
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.menu_3.setEnabled(False)
+
+        if "-FS" in win_arg:
+            self.arg_FS()
+
 
         self.show()
         self.setDisabled(True)
@@ -505,3 +509,6 @@ class MainWindow(QMainWindow):
     def closeEvent(self, e):
         e.accept()
         sys.exit()
+
+    def arg_FS(self):
+        self.setWindowState(Qt.WindowMaximized)
