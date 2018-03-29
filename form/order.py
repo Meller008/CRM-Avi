@@ -611,6 +611,7 @@ class Order(QMainWindow):
         self.save_change_order_position = True
 
         self.calc_sum()
+        self.cb_shipping.setEnabled(False)
         return True
 
     def ui_change_date_shipment(self):
@@ -701,7 +702,7 @@ class Order(QMainWindow):
                     self.tw_position.item(row, col).setBackground(color)
                     self.tw_position.item(row, col).setToolTip(note)
 
-        if not error:
+        if not error and not self.save_change_order_position:
             self.cb_shipping.setEnabled(True)
 
     def ui_export(self):
