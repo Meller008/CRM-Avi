@@ -994,6 +994,8 @@ class Order(QMainWindow):
                 aricle.update({i[0]: i[1]})
 
             for row in range(self.tw_position.rowCount()):
+                if self.tw_position.isRowHidden(row):
+                    continue  # Если строка крыта то мы ее не считаем!!!
                 # Проверяем находиться ли наный товар в списке объединяемых
                 cod = aricle[int(self.tw_position.item(row, 2).data(5))]
                 if cod not in product:
@@ -1051,6 +1053,8 @@ class Order(QMainWindow):
             sum_in_nds = 0
             sum_of_nds = 0
             for row in range(self.tw_position.rowCount()):
+                if self.tw_position.isRowHidden(row):
+                    continue  # Если строка крыта то мы ее не считаем!!!
                 price = round(float(self.tw_position.item(row, 4).text().replace(",", ".")), 2)
                 value = float(self.tw_position.item(row, 5).text().replace(",", "."))
                 nds = float(self.tw_position.item(row, 4).data(5))
