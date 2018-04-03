@@ -1855,6 +1855,10 @@ class Pack:
         if sql_info[0][0] > 0:
             return [False, "Есть оплаченые операции! Пачку нельзя удалить."]
 
+        # Проверим не принята ли пачка или не проверена
+        if self.__date_make is not None or self.__date_complete is not None:
+            return [False, "Пачка принята или проверана! Пачку нельзя удалить!"]
+
         # Начнем транзакцию
         sql_connect_transaction = my_sql.sql_start_transaction()
 

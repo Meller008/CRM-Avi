@@ -176,11 +176,19 @@
     <property name="title">
      <string>Склады</string>
     </property>
+    <widget class="QMenu" name="menu_16">
+     <property name="title">
+      <string>Проверки</string>
+     </property>
+     <addaction name="ma_transaction_warehouse"/>
+     <addaction name="ma_test_material"/>
+     <addaction name="ma_test_accessories"/>
+    </widget>
     <addaction name="ma_warehouse_material"/>
     <addaction name="ma_warehouse_accessories"/>
     <addaction name="ma_warehouse"/>
     <addaction name="ma_warehouse_rest"/>
-    <addaction name="ma_transaction_warehouse"/>
+    <addaction name="menu_16"/>
    </widget>
    <widget class="QMenu" name="menu_13">
     <property name="enabled">
@@ -546,6 +554,16 @@
    </property>
    <property name="text">
     <string>Покроено в день</string>
+   </property>
+  </action>
+  <action name="ma_test_material">
+   <property name="text">
+    <string>Проверка ткани</string>
+   </property>
+  </action>
+  <action name="ma_test_accessories">
+   <property name="text">
+    <string>Проверка фурнитуры</string>
    </property>
   </action>
  </widget>
@@ -1415,6 +1433,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_test_material</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_test_warehouse_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1471,5 +1505,6 @@
   <slot>view_report_all()</slot>
   <slot>view_report_nalog()</slot>
   <slot>view_report_article_day()</slot>
+  <slot>view_test_warehouse_material()</slot>
  </slots>
 </ui>
