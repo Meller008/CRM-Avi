@@ -189,6 +189,10 @@ class TestWarehouseMaterial(QMainWindow):
             else:
                 self.tableWidget.setRowHidden(row, True)
 
+    def of_change_cut_complete(self):
+        # Нужна для принятия кроя
+        pass
+
 
 class TransactionView(table.TableList):
     def set_settings(self):

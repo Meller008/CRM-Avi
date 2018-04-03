@@ -176,7 +176,10 @@
     <property name="title">
      <string>Склады</string>
     </property>
-    <widget class="QMenu" name="menu_16">
+    <widget class="QMenu" name="ma_test_warehouse_menu">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Проверки</string>
      </property>
@@ -188,7 +191,7 @@
     <addaction name="ma_warehouse_accessories"/>
     <addaction name="ma_warehouse"/>
     <addaction name="ma_warehouse_rest"/>
-    <addaction name="menu_16"/>
+    <addaction name="ma_test_warehouse_menu"/>
    </widget>
    <widget class="QMenu" name="menu_13">
     <property name="enabled">
