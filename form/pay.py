@@ -447,7 +447,7 @@ class PayBrows(QDialog):
                         else:
                             # Если в этом балансе меньше чем нам надо
                             take_material_value = sql_balance_material[0][1]
-                            change_value -= sql_balance_material[0][1]
+                            change_value -= float(sql_balance_material[0][1])
                         # Забираем возможное кол-во
                         query = "UPDATE material_balance SET BalanceWeight = BalanceWeight - %s WHERE Id = %s"
                         sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (take_material_value, sql_balance_material[0][0]))
