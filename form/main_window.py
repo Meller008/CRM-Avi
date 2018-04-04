@@ -324,6 +324,22 @@ class MainWindow(QMainWindow):
         self.sub_test_warehouse_material.resize(self.test_warehouse_material.size())
         self.sub_test_warehouse_material.show()
 
+    def view_test_warehouse_accessories(self):
+        self.test_warehouse_accessories = test_warehouse.TestWarehouseAccessories()
+        self.sub_test_warehouse_accessories = QMdiSubWindow()
+        self.sub_test_warehouse_accessories.setWidget(self.test_warehouse_accessories)
+        self.mdi.addSubWindow(self.sub_test_warehouse_accessories)
+        self.sub_test_warehouse_accessories.resize(self.test_warehouse_accessories.size())
+        self.sub_test_warehouse_accessories.show()
+
+    def view_test_fast_warehouse(self):
+        self.test_fast_warehouse = test_warehouse.TestFastWarehouse()
+        self.sub_test_fast_warehouse = QMdiSubWindow()
+        self.sub_test_fast_warehouse.setWidget(self.test_fast_warehouse)
+        self.mdi.addSubWindow(self.sub_test_fast_warehouse)
+        self.sub_test_fast_warehouse.resize(self.test_fast_warehouse.size())
+        self.sub_test_fast_warehouse.show()
+
     def view_beika(self):
         self.beika = beika.BeikaList()
         self.sub_beika = QMdiSubWindow()

@@ -512,3 +512,255 @@ class ChangeTransaction(QDialog):
     def ui_can(self):
         self.close()
         self.destroy()
+
+
+# Тест фурнитуры
+class TestWarehouseAccessories(QMainWindow):
+    def __init__(self):
+        super(TestWarehouseAccessories, self).__init__()
+        loadUi(getcwd() + '/ui/test_accessories.ui', self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.set_start_settings()
+
+    def set_start_settings(self):
+        self.toolBar.setStyleSheet("background-color: rgb(50, 50, 50);")  # Цвет бара
+
+        self.de_date_from.setDate(QDate.currentDate().addMonths(-3))
+
+        self.tableWidget.horizontalHeader().resizeSection(0, 40)
+        self.tableWidget.horizontalHeader().resizeSection(1, 90)
+        self.tableWidget.horizontalHeader().resizeSection(2, 90)
+
+    def ui_test(self):
+        self.tableWidget.clearContents()
+        self.tableWidget.setRowCount(0)
+
+        # Проверим нужно ли применять фильтр
+        if self.rb_filter_no.isChecked():
+            query = "SELECT pack.Id FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id ORDER BY cut.Id"
+        elif self.rb_filter_date.isChecked():
+            query = "SELECT pack.Id FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id WHERE cut.Date_Cut >= '%s' ORDER BY cut.Id" % self.de_date_from.date().toString(Qt.ISODate)
+        elif self.rb_filter_num.isChecked():
+            query = "SELECT pack.Id FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id WHERE cut.Id >= %s ORDER BY cut.Id" % self.le_cut_num.text()
+        else:
+            QMessageBox.critical(self, "Фильтр", "Что то не так с фильтром", QMessageBox.Ok)
+            return False
+
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получение приходов материала", sql_info.msg, QMessageBox.Ok)
+                return False
+
+        pack_id_list = [i[0] for i in sql_info]
+        pack_id_list_str = str(pack_id_list).replace("[", "").replace("]", "").replace("None,", "")
+
+        # Проверим записаные суммы в крое
+        query = """SELECT Pack_Id, SUM(Value * Value_Thing)
+                    FROM pack_accessories
+                    WHERE Pack_Id IN (%s)
+                    GROUP BY pack_accessories.Pack_Id""" % pack_id_list_str
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql 1", sql_info.msg, QMessageBox.Ok)
+                return False
+
+        res1 = sql_info
+
+        # Проверим сумму взятую с пачек
+        query = """SELECT pack_accessories.Pack_Id, SUM(Balance)
+                    FROM transaction_records_accessories
+                      LEFT JOIN pack_accessories ON transaction_records_accessories.Pack_Accessories_Id = pack_accessories.Id
+                    WHERE pack_accessories.Pack_Id IN (%s)
+                    GROUP BY pack_accessories.Pack_Id""" % pack_id_list_str
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql 2", sql_info.msg, QMessageBox.Ok)
+                return False
+
+        res2 = sql_info
+        res = {}
+        for i in res1+res2:
+            res.setdefault(i[0], []).append(i[1])
+
+        for key, val in res.items():
+            self.statusBar.showMessage("Расчет пачки %s" % key)
+
+            if val[0] == -val[1]:
+                color = QBrush(QColor(150, 255, 161, 255))
+                status = 1
+
+            else:
+                color = QBrush(QColor(252, 141, 141, 255))
+                status = 2
+
+            self.tableWidget.insertRow(self.tableWidget.rowCount())
+
+            item = QTableWidgetItem(str(key))
+            item.setData(5, key)
+            item.setData(-1, status)
+            item.setBackground(color)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, item)
+
+            item = QTableWidgetItem(str(val[0]))
+            item.setData(-1, status)
+            item.setBackground(color)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 1, item)
+
+            item = QTableWidgetItem(str(val[1]))
+            item.setData(-1, status)
+            item.setBackground(color)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 2, item)
+
+    def ui_view_transaction(self):
+        pass
+
+    def ui_select_cut(self):
+        pass
+
+    def ui_filter_table(self):
+        for row in range(self.tableWidget.rowCount()):
+            status = self.tableWidget.item(row, 0).data(-1)
+            if status == 1 and self.cb_good.isChecked():
+                self.tableWidget.setRowHidden(row, False)
+            elif status == 2 and self.cb_waring.isChecked():
+                self.tableWidget.setRowHidden(row, False)
+            elif status == 3 and self.cb_error.isChecked():
+                self.tableWidget.setRowHidden(row, False)
+            else:
+                self.tableWidget.setRowHidden(row, True)
+
+    def of_change_cut_complete(self):
+        # Нужна для принятия кроя
+        pass
+
+
+# Быстрый тест складов
+class TestFastWarehouse(QMainWindow):
+    def __init__(self):
+        super(TestFastWarehouse, self).__init__()
+        loadUi(getcwd() + '/ui/fast_test_warehouse.ui', self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.test()
+
+    def test(self):
+        # Вес пачек
+        query = "SELECT SUM(pack.Weight) FROM pack"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес пачек", sql_info.msg, QMessageBox.Ok)
+            return False
+        pack_w = sql_info[0][0]
+
+        # Вес доп материала
+        query = "SELECT SUM(Weight + Weight_Rest) FROM pack_add_material"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес доп материала", sql_info.msg, QMessageBox.Ok)
+            return False
+        pack_ad = sql_info[0][0]
+
+        # Вес обрези
+        query = "SELECT SUM(cut.Weight_Rest) FROM cut"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес обрези", sql_info.msg, QMessageBox.Ok)
+            return False
+        cut_w = sql_info[0][0]
+
+        # Вес бейки
+        query = "SELECT SUM(Value) FROM beika WHERE Finished = 1"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес бейки", sql_info.msg, QMessageBox.Ok)
+            return False
+        beika = sql_info[0][0]
+
+        # Вес проданого
+        query = "SELECT SUM(Balance) FROM transaction_records_material WHERE Code IN (150, 151)"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес проданого", sql_info.msg, QMessageBox.Ok)
+            return False
+        sel = -sql_info[0][0]
+
+        all_w = pack_w + pack_ad + cut_w + beika + sel
+
+        # Вес списано
+        query = "SELECT SUM(Balance) FROM transaction_records_material WHERE Code NOT IN (110, 111)"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес списаного", sql_info.msg, QMessageBox.Ok)
+            return False
+        trans = -sql_info[0][0]
+
+        # Всего пришло
+        query = "SELECT SUM(Weight) FROM material_supplyposition"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес прихода", sql_info.msg, QMessageBox.Ok)
+            return False
+        supply = sql_info[0][0]
+
+        # Вес склада
+        query = "SELECT SUM(BalanceWeight) FROM material_balance"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес склада", sql_info.msg, QMessageBox.Ok)
+            return False
+        warehouse = sql_info[0][0]
+
+        self.le_w_pack.setText(str(pack_w))
+        self.le_w_add.setText(str(pack_ad))
+        self.le_w_rest.setText(str(cut_w))
+        self.le_w_beika.setText(str(beika))
+        self.le_w_sell.setText(str(sel))
+        self.le_w_sum.setText(str(all_w))
+        self.le_w_trans.setText(str(trans))
+        self.le_w_diff.setText(str(trans - all_w))
+        self.le_w_supply.setText(str(supply))
+        self.le_w_warehouse.setText(str(warehouse))
+        self.le_w_diff_w.setText(str(warehouse - (supply - all_w)))
+
+        # кол-ов в пачках
+        query = "SELECT SUM(Value * Value_Thing) FROM pack_accessories"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql кол-во в пачках", sql_info.msg, QMessageBox.Ok)
+            return False
+        pack_v = sql_info[0][0]
+
+        # кол-во списано
+        query = "SELECT SUM(Balance) FROM transaction_records_accessories WHERE Code NOT IN (210, 211, 240)"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес доп материала", sql_info.msg, QMessageBox.Ok)
+            return False
+        trans = -sql_info[0][0]
+
+        # кол-во пришло
+        query = "SELECT SUM(Value) FROM accessories_supplyposition"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес обрези", sql_info.msg, QMessageBox.Ok)
+            return False
+        sup = sql_info[0][0]
+
+        # Кол-во на складе
+        query = "SELECT SUM(BalanceValue) FROM accessories_balance"
+        sql_info = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql вес бейки", sql_info.msg, QMessageBox.Ok)
+            return False
+        war = sql_info[0][0]
+
+        self.le_f_pack.setText(str(pack_v))
+        self.le_f_trans.setText(str(trans))
+        self.le_f_diff.setText(str(trans - pack_v))
+        self.le_f_supply.setText(str(sup))
+        self.le_f_warehouse.setText(str(war))
+        self.le_f_diff_w.setText(str(war - (sup - pack_v)))
+
+
+

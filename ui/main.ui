@@ -184,6 +184,7 @@
       <string>Проверки</string>
      </property>
      <addaction name="ma_transaction_warehouse"/>
+     <addaction name="ma_fast_test_warehouse"/>
      <addaction name="ma_test_material"/>
      <addaction name="ma_test_accessories"/>
     </widget>
@@ -567,6 +568,14 @@
   <action name="ma_test_accessories">
    <property name="text">
     <string>Проверка фурнитуры</string>
+   </property>
+  </action>
+  <action name="ma_fast_test_warehouse">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Быстрая проверка</string>
    </property>
   </action>
  </widget>
@@ -1452,6 +1461,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_test_accessories</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_test_warehouse_accessories()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ma_fast_test_warehouse</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_test_fast_warehouse()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1509,5 +1550,7 @@
   <slot>view_report_nalog()</slot>
   <slot>view_report_article_day()</slot>
   <slot>view_test_warehouse_material()</slot>
+  <slot>view_test_warehouse_accessories()</slot>
+  <slot>view_test_fast_warehouse()</slot>
  </slots>
 </ui>
