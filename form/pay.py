@@ -375,8 +375,8 @@ class PayBrows(QDialog):
                 sql_values = []
                 for row in range(self.tw_road.rowCount()):
 
-                    work_id = self.tw_road.item(row, 0).data(-2)
-                    balance = self.tw_road.item(row, 3).text()
+                    work_id = self.tw_road.item(row, 0).data(-2).replace(',', ".")
+                    balance = self.tw_road.item(row, 3).text().replace(',', ".")
 
                     if float(balance) > 0:
                         sql_values.append((work_id, User().id(), self.le_road_reason.whatsThis(), balance.replace(",", "."),
