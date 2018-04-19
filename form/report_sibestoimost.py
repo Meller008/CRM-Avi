@@ -131,7 +131,7 @@ class ReportSibestoimost(QMainWindow):
                 all_material_price_in_piece = round(price_material_add_rest_in_piece + Decimal(add_material_price_sum / value), 4)
 
                 weight_piece_and_add_material = weight_piece + Decimal(add_material_weight / value)
-                all_material_weight_in_piece = round(weight_piece_and_add_material + Decimal((add_material_weight + add_material_weight_rest) / value), 4)
+                # all_material_weight_in_piece = round(weight_piece_and_add_material + Decimal((add_material_weight + add_material_weight_rest) / value), 4)
                 all_material_weight_in_piece = round(weight_piece_and_add_material + Decimal(add_material_weight_rest / value) + Decimal(weight_piece / 100 * rest_percent), 4)
 
                 sebest = Decimal(operation_price_piece + accessories_price_piece + all_material_price_in_piece)

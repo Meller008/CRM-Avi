@@ -189,7 +189,11 @@ class StaffTraffic(QDialog):
                     else:
                         tab_date = trafic[2].replace(minute=0)
                         hour_up = trafic[2].hour + 1
-                        tab_date = tab_date.replace(hour=hour_up)
+                        if hour_up < 24:
+                            tab_date = tab_date.replace(hour=hour_up)
+                        else:
+                            day = trafic[2].day
+                            tab_date = tab_date.replace(day=day + 1, hour=hour_up-24)
 
                     table_date.append((tab_date, trafic[0]))
 
@@ -276,7 +280,11 @@ class StaffTrafficData(QDialog):
                 else:
                     tab_date = sql_traffic[0][1].replace(minute=0)
                     hour_up = sql_traffic[0][1].hour + 1
-                    tab_date = tab_date.replace(hour=hour_up)
+                    if hour_up < 24:
+                        tab_date = tab_date.replace(hour=hour_up)
+                    else:
+                        day = sql_traffic[0][1].day
+                        tab_date = tab_date.replace(day=day + 1, hour=hour_up-24)
 
                 self.dt_tabel_date.setDateTime(tab_date)
 
