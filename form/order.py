@@ -801,9 +801,11 @@ class Order(QMainWindow):
 
             if not sql_info:
                 self.save_change_order = True
+                self.save_change_order_position = True
 
             if sql_info[0][0] != str_to.str_to_decimal(self.le_sum_in_nds.text()) or sql_info[0][1] != str_to.str_to_decimal(self.le_sum_no_nds.text()):
                 self.save_change_order = True
+                self.save_change_order_position = True
 
         if self.save_change_order:
 
@@ -865,6 +867,7 @@ class Order(QMainWindow):
                     QMessageBox.critical(self, "Ошибка sql добавления заказа", sql_info.msg, QMessageBox.Ok)
                     return False
                 self.new_id = sql_info
+
         if self.save_change_order_position or self.sql_shipped != self.cb_shipping.isChecked():
 
             if self.cb_shipping.isChecked():
