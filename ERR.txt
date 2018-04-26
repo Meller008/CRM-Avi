@@ -569,3 +569,681 @@ Time = 05.12.2017 15:15:10Traceback (most recent call last):
   File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1721, in set_settings
     self.pb_del.deleteLater()
 AttributeError: 'ArticleListAll' object has no attribute 'pb_del'
+
+---===Error===---
+Time = 07.12.2017 18:16:51Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 714, in ui_check_warehouse
+    self.tw_position.item(value["row"], col).setBackground(color)
+TypeError: 'int' object is not subscriptable
+
+---===Error===---
+Time = 07.12.2017 18:33:14Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 703, in ui_check_warehouse
+    value = warehouse_sql[1] - tup_value["value"]
+TypeError: 'int' object is not subscriptable
+
+---===Error===---
+Time = 07.12.2017 18:48:41Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_performance_company.py", line 111, in ui_calc
+    sql_pack_id_info = my_sql.sql_select(query, (key, self.de_date_to.date().toPyDate(), value["value"] + 200))
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+
+---===Error===---
+Time = 12.12.2017 15:03:43Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_warehouse_balance_date.py", line 51, in ui_calc
+    sql_info = my_sql.sql_select(query, self.de_date_to.date().toPyDate()*4)
+TypeError: unsupported operand type(s) for *: 'datetime.date' and 'int'
+
+---===Error===---
+Time = 12.12.2017 16:14:31Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\beika.py", line 362, in ui_acc
+    sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (SUPPLY_PROVIDER_ID, self.de_date.date.toPyDate(), txt_note))
+AttributeError: 'builtin_function_or_method' object has no attribute 'toPyDate'
+
+---===Error===---
+Time = 13.12.2017 15:08:30Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 454, in view_report_all
+    self.view_report_all = report_all.ReportAll()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 18, in __init__
+    self.start_settings()
+AttributeError: 'ReportAll' object has no attribute 'start_settings'
+
+---===Error===---
+Time = 13.12.2017 16:00:19Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 35, in ui_calc
+    self.calc_material()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 49, in calc_material
+    sql_info = my_sql.sql_select(query, (self.de_material_from.date().toPyDate(), self.de_material_to.toPyDate()))
+AttributeError: 'ReportAll' object has no attribute 'de_material_from'
+
+---===Error===---
+Time = 13.12.2017 16:01:08Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 35, in ui_calc
+    self.calc_material()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 49, in calc_material
+    sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_from.toPyDate()))
+AttributeError: 'QDateEdit' object has no attribute 'toPyDate'
+
+---===Error===---
+Time = 13.12.2017 16:27:41Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 39, in ui_calc
+    self.calc_material()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 247, in calc_material
+    all_info_value += sql_info[0]
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'NoneType'
+
+---===Error===---
+Time = 13.12.2017 16:29:24Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 39, in ui_calc
+    self.calc_material()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 248, in calc_material
+    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(sql_info[0], 2)))
+TypeError: type NoneType doesn't define __round__ method
+
+---===Error===---
+Time = 13.12.2017 16:54:02Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 39, in ui_calc
+    self.calc_material()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 170, in calc_material
+    sum_value += i[0] or 0
+TypeError: unsupported operand type(s) for +=: 'int' and 'str'
+
+---===Error===---
+Time = 13.12.2017 16:54:49Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 39, in ui_calc
+    self.calc_material()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 173, in calc_material
+    sum_value += i[1] or 0
+TypeError: unsupported operand type(s) for +=: 'int' and 'str'
+
+---===Error===---
+Time = 13.12.2017 17:47:55Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 39, in ui_calc
+    self.calc_material()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 481, in calc_material
+    all_transaction_value += i[3] or 0
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 13.12.2017 19:35:08Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 45, in ui_calc
+    self.calc_material()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 533, in calc_material
+    balance_value = all_value_in + old_balance_value - all_value_out
+TypeError: unsupported operand type(s) for +: 'decimal.Decimal' and 'float'
+
+---===Error===---
+Time = 14.12.2017 13:44:22Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 609, in ui_select_date
+    sql_info = my_sql.sql_select(query, item.data(5))[0]
+TypeError: 'ProgrammingError' object does not support indexing
+
+---===Error===---
+Time = 14.12.2017 13:56:56Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 609, in ui_select_date
+    sql_info = my_sql.sql_select(query, item.data(5))[0]
+TypeError: 'ProgrammingError' object does not support indexing
+
+---===Error===---
+Time = 14.12.2017 17:14:22Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 67, in ui_calc
+    self.calc_accessories()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 669, in calc_accessories
+    new_tup = {'name': material_in[1], 'value_in': material_in[2], "sum_in": material_in[4], "pcs": material_in[3], 'value_out': 0, "sum_out": 0}
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 15.12.2017 18:19:58Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_all.py", line 77, in ui_calc
+    self.calc_comparing()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_all.py", line 1125, in calc_comparing
+    self.le_comparing_sum.setText()
+TypeError: QLineEdit.setText(str): not enough arguments
+
+---===Error===---
+Time = 15.12.2017 18:20:41Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 77, in ui_calc
+    self.calc_comparing()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 1124, in calc_comparing
+    self.le_comparing_sum.setText(all_sum_accessories + all_sum_material)
+TypeError: QLineEdit.setText(str): argument 1 has unexpected type 'decimal.Decimal'
+
+---===Error===---
+Time = 15.12.2017 18:21:45Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 77, in ui_calc
+    self.calc_comparing()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 1124, in calc_comparing
+    self.le_comparing_sum.setText(all_sum_accessories + all_sum_material)
+TypeError: QLineEdit.setText(str): argument 1 has unexpected type 'decimal.Decimal'
+
+---===Error===---
+Time = 18.12.2017 19:06:11Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 108, in ui_calc
+    self.calc_production()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 1444, in calc_production
+    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(range(order[5], 2)))
+TypeError: 'decimal.Decimal' object cannot be interpreted as an integer
+
+---===Error===---
+Time = 18.12.2017 19:08:51Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 108, in ui_calc
+    self.calc_production()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_all.py", line 1456, in calc_production
+    text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(range(order[5], 2)))
+TypeError: 'decimal.Decimal' object cannot be interpreted as an integer
+
+---===Error===---
+Time = 19.12.2017 16:50:06Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 84, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 78, in ui_change_table_item
+    self.order = Order(0, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 155, in __init__
+    self.start_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 202, in start_settings
+    self.start_set_sql_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 356, in start_set_sql_info
+    self.calc_sum()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 920, in calc_sum
+    if self.cb_combined.isChecked():
+AttributeError: 'Order' object has no attribute 'cb_combined'
+
+---===Error===---
+Time = 19.12.2017 16:50:46Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 591, in ui_double_click_position
+    self.ui_change_position(row)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 586, in ui_change_position
+    self.calc_sum()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 948, in calc_sum
+    if product[cod]["name"] is not None and product[cod]["name"] != self.tw_position.item(row, 3).text():
+KeyError: 'name'
+
+---===Error===---
+Time = 19.12.2017 16:51:23Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 591, in ui_double_click_position
+    self.ui_change_position(row)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 586, in ui_change_position
+    self.calc_sum()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 972, in calc_sum
+    calc_price.calc_no_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
+  File "C:/Users/Meller/Desktop/CRM-Avi\function\calc_price.py", line 18, in calc_no_nds
+    no_nds_price = round(float(price), 2)
+TypeError: float() argument must be a string or a number, not 'NoneType'
+
+---===Error===---
+Time = 19.12.2017 16:57:01Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 591, in ui_double_click_position
+    self.ui_change_position(row)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 586, in ui_change_position
+    self.calc_sum()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 972, in calc_sum
+    calc_price.calc_no_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
+  File "C:/Users/Meller/Desktop/CRM-Avi\function\calc_price.py", line 18, in calc_no_nds
+    no_nds_price = round(float(price), 2)
+TypeError: float() argument must be a string or a number, not 'NoneType'
+
+---===Error===---
+Time = 19.12.2017 16:59:09Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 591, in ui_double_click_position
+    self.ui_change_position(row)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 586, in ui_change_position
+    self.calc_sum()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 972, in calc_sum
+    calc_price.calc_no_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
+  File "C:/Users/Meller/Desktop/CRM-Avi\function\calc_price.py", line 18, in calc_no_nds
+    no_nds_price = round(float(price), 2)
+TypeError: float() argument must be a string or a number, not 'NoneType'
+
+---===Error===---
+Time = 19.12.2017 17:56:38Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 84, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 78, in ui_change_table_item
+    self.order = Order(0, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 155, in __init__
+    self.start_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 202, in start_settings
+    self.start_set_sql_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 267, in start_set_sql_info
+    if sql_info[0][13] == 1:
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 20.12.2017 14:07:15Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 649, in ui_change_date_shipment
+    sql_info = my_sql.sql_select(query, (self.de_date_shipment.date().year(),))
+UnboundLocalError: local variable 'query' referenced before assignment
+
+---===Error===---
+Time = 20.12.2017 16:25:51Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_nalog.py", line 41, in ui_calc
+    sql_info = my_sql.sql_select(query, (self.de_date_to.date.toPyDate(), self.de_date_from.date.toPyDate()))
+AttributeError: 'builtin_function_or_method' object has no attribute 'toPyDate'
+
+---===Error===---
+Time = 20.12.2017 16:26:40Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_nalog.py", line 58, in ui_calc
+    if work[3] >= self.de_date_from.date().toPyDate():
+TypeError: unorderable types: NoneType() >= datetime.date()
+
+---===Error===---
+Time = 20.12.2017 16:41:51Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_nalog.py", line 47, in ui_calc
+    day_mon = calendar.monthrange(self.de_date_from.date().toPyDate().year, self.de_date_from.date().toPyDate().mouth)
+AttributeError: 'datetime.date' object has no attribute 'mouth'
+
+---===Error===---
+Time = 20.12.2017 16:42:37Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_nalog.py", line 70, in ui_calc
+    str_nal = str(range(nal - ((day_mon - day) * (nal/day_mon)), 2))
+TypeError: unsupported operand type(s) for -: 'tuple' and 'int'
+
+---===Error===---
+Time = 20.12.2017 16:43:07Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_nalog.py", line 70, in ui_calc
+    str_nal = str(range(nal - ((day_mon - day) * (nal/day_mon)), 2))
+TypeError: 'float' object cannot be interpreted as an integer
+
+---===Error===---
+Time = 20.12.2017 16:45:17Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_nalog.py", line 83, in ui_calc
+    item = QTableWidgetItem(work[3].strftime("%d.%m.%Y"))
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+---===Error===---
+Time = 20.12.2017 16:46:03Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_nalog.py", line 83, in ui_calc
+    item = QTableWidgetItem(work[3].strftime("%d.%m.%Y") or "ÕÂ Û‚ÓÎÂÌ")
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+---===Error===---
+Time = 08.01.2018 18:28:12Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_article_day.py", line 69, in ui_calc
+    article_list[art[0]][art[4]] = art[5]
+TypeError: 'NoneType' object does not support item assignment
+
+---===Error===---
+Time = 08.01.2018 18:28:54Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_article_day.py", line 69, in ui_calc
+    article_list[art[0]][art[4]] = art[5]
+TypeError: 'NoneType' object does not support item assignment
+
+---===Error===---
+Time = 08.01.2018 18:49:35Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_article_day.py", line 95, in ui_calc
+    item = QTableWidgetItem(article_list[art_param][search_date])
+KeyError: None
+
+---===Error===---
+Time = 08.01.2018 19:04:31Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_article_day.py", line 107, in ui_export
+    to_excel.table_to_excel(self.tw_position, path[0])
+AttributeError: 'ReportArticleDay' object has no attribute 'tw_position'
+
+---===Error===---
+Time = 09.01.2018 12:38:03Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_article_day.py", line 90, in ui_calc
+    art_param = self.tableWidget.item(row, 0).data(5)
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 15.01.2018 16:34:54Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 657, in ui_select_parametr
+    self.set_parametr_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 422, in set_parametr_info
+    material_price = material[5] if (material[5] is not None) else 0
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 15.01.2018 16:36:08Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 642, in ui_select_parametr
+    self.set_parametr_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 434, in set_parametr_info
+    self.calc()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1292, in calc
+    price_all_material += float(self.tw_materials.item(row, 3).text())
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 15.01.2018 17:13:42Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1039, in ui_calc_material
+    parametr_id = int(self.tw_materials.item(row, 0).data(-1))
+ValueError: invalid literal for int() with base 10: 'set'
+
+---===Error===---
+Time = 15.01.2018 17:15:28Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1040, in ui_calc_material
+    price = [i[1] for i in sql_info if i[0] == id][0]
+IndexError: list index out of range
+
+---===Error===---
+Time = 15.01.2018 17:22:07Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1043, in ui_calc_material
+    sum = value * price
+TypeError: unsupported operand type(s) for *: 'float' and 'decimal.Decimal'
+
+---===Error===---
+Time = 16.01.2018 19:31:30Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 2049, in build_word_order_on_reception
+    doc_number_sql = my_sql.sql_select(query, ("ÔËÍ‡Á.ÔËÂÏ", self.QDate.currentDate().year()))
+AttributeError: 'OneStaff' object has no attribute 'QDate'
+
+---===Error===---
+Time = 16.01.2018 19:35:35Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 2054, in build_word_order_on_reception
+    doc_number = doc_number_sql[0][0] + 1
+TypeError: Can't convert 'int' object to str implicitly
+
+---===Error===---
+Time = 16.01.2018 19:50:52Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1734, in build_word_in
+    doc_number = doc_number[0][0] + 1
+TypeError: Can't convert 'int' object to str implicitly
+
+---===Error===---
+Time = 08.02.2018 18:00:19Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\report_warehouse_balance_date.py", line 108, in ui_calc
+    article_list[article[0]]["cut_value"] = article[1]
+KeyError: None
+
+---===Error===---
+Time = 15.03.2018 17:45:01Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 128, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 85, in ui_change_table_item
+    self.cut_window = CutBrows(self, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 157, in __init__
+    self.setupUi(self)
+AttributeError: 'CutBrows' object has no attribute 'setupUi'
+
+---===Error===---
+Time = 19.03.2018 17:45:04Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 2159, in build_word_order_on_dismissal
+    xml = xml.replace("?“–”ƒŒ¬Œ…ƒŒ√ƒ¿“¿", contract_number[0][1].strftime("%d.%m.%Y"))
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+---===Error===---
+Time = 19.03.2018 17:51:28Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 2168, in build_word_order_on_dismissal
+    xml = xml.replace("?“–”ƒŒ¬Œ…ƒŒ√ƒ¿“¿", contract_number[0][1].strftime("%d.%m.%Y"))
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+---===Error===---
+Time = 19.03.2018 17:52:59Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 2168, in build_word_order_on_dismissal
+    xml = xml.replace("?“–”ƒŒ¬Œ…ƒŒ√ƒ¿“¿", contract_number[0][1].strftime("%d.%m.%Y"))
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+---===Error===---
+Time = 19.03.2018 17:54:30Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 2168, in build_word_order_on_dismissal
+    xml = xml.replace("?“–”ƒŒ¬Œ…ƒŒ√ƒ¿“¿", contract_number[0][1].strftime("%d.%m.%Y"))
+AttributeError: 'str' object has no attribute 'strftime'
+
+---===Error===---
+Time = 26.03.2018 16:37:28Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 683, in ui_dell_material
+    self.tw_materials.item(row, col).setData(-1, "del")
+AttributeError: 'NoneType' object has no attribute 'setData'
+
+---===Error===---
+Time = 26.03.2018 16:38:52Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 683, in ui_dell_material
+    self.tw_materials.item(row, col).setData(-1, "del")
+AttributeError: 'NoneType' object has no attribute 'setData'
+
+---===Error===---
+Time = 02.04.2018 16:44:59Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 82, in ui_test
+    res2 += sql_info[0][0]
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'NoneType'
+
+---===Error===---
+Time = 02.04.2018 16:45:52Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 97, in ui_test
+    elif res1 != res2 == -res3:
+TypeError: bad operand type for unary -: 'NoneType'
+
+---===Error===---
+Time = 02.04.2018 16:48:45Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 108, in ui_test
+    item.setBackground(color)
+UnboundLocalError: local variable 'color' referenced before assignment
+
+---===Error===---
+Time = 02.04.2018 16:50:25Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 108, in ui_test
+    item.setBackground(color)
+UnboundLocalError: local variable 'color' referenced before assignment
+
+---===Error===---
+Time = 02.04.2018 17:29:35Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 470, in ui_acc
+    self.main.of_change_cut_complete()
+AttributeError: 'TestWarehouseMaterial' object has no attribute 'of_change_cut_complete'
+
+---===Error===---
+Time = 02.04.2018 18:25:05Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 205, in ui_other
+    self.transaction_pack = TransactionPack(self.other_value)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 219, in __init__
+    self.calc()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 253, in calc
+    i["balance"] += transaction[1]
+TypeError: unsupported operand type(s) for +=: 'NoneType' and 'decimal.Decimal'
+
+---===Error===---
+Time = 02.04.2018 18:25:47Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 205, in ui_other
+    self.transaction_pack = TransactionPack(self.other_value)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 219, in __init__
+    self.calc()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 254, in calc
+    i["balance"] += transaction[1]
+TypeError: unsupported operand type(s) for +=: 'NoneType' and 'decimal.Decimal'
+
+---===Error===---
+Time = 02.04.2018 18:36:28Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 205, in ui_other
+    self.transaction_pack = TransactionPack(self.other_value)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 219, in __init__
+    self.calc()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 266, in calc
+    if -sql_info[0][0] == item["balance"]:
+IndexError: list index out of range
+
+---===Error===---
+Time = 02.04.2018 18:53:37Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 205, in ui_other
+    self.transaction_pack = TransactionPack(self.other_value)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 219, in __init__
+    self.calc()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 277, in calc
+    item = QTableWidgetItem(str(item["count"]))
+TypeError: 'QTableWidgetItem' object is not subscriptable
+
+---===Error===---
+Time = 02.04.2018 18:56:48Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 205, in ui_other
+    self.transaction_pack = TransactionPack(self.other_value)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 219, in __init__
+    self.calc()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 285, in calc
+    if sql_info[0][0]:
+IndexError: list index out of range
+
+---===Error===---
+Time = 02.04.2018 18:57:14Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 205, in ui_other
+    self.transaction_pack = TransactionPack(self.other_value)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 219, in __init__
+    self.calc()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 266, in calc
+    if sql_info and -sql_info[0][0] == item["balance"]:
+TypeError: bad operand type for unary -: 'NoneType'
+
+---===Error===---
+Time = 02.04.2018 18:59:41Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 205, in ui_other
+    self.transaction_pack = TransactionPack(self.other_value)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 219, in __init__
+    self.calc()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 266, in calc
+    if sql_info and sql_info[0][0] and -sql_info[0][0] == item["balance"]:
+TypeError: 'QTableWidgetItem' object is not subscriptable
+
+---===Error===---
+Time = 02.04.2018 19:44:57Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 129, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 240, in ui_change_table_item
+    self.transaction_change = ChangeTransaction(item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 362, in __init__
+    self.set_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 377, in set_info
+    self.le_id.setText(sql_info[0][0])
+TypeError: QLineEdit.setText(str): argument 1 has unexpected type 'int'
+
+---===Error===---
+Time = 02.04.2018 19:45:40Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 129, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 240, in ui_change_table_item
+    self.transaction_change = ChangeTransaction(item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 362, in __init__
+    self.set_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 380, in set_info
+    self.le_material.setText(str(sql_info[0][3]))
+AttributeError: 'ChangeTransaction' object has no attribute 'le_material'
+
+---===Error===---
+Time = 03.04.2018 17:26:19Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 470, in ui_acc
+    self.main.of_change_cut_complete()
+AttributeError: 'TestWarehouseMaterial' object has no attribute 'of_change_cut_complete'
+
+---===Error===---
+Time = 03.04.2018 17:51:22Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1081, in ui_acc
+    self.main.of_tree_select_article(article_info)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 880, in of_tree_select_article
+    self.set_operation_name()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 749, in set_operation_name
+    new_table_item = QTableWidgetItem(str(round(dict["price"] * dict["value"], 4)))
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+
+---===Error===---
+Time = 03.04.2018 18:10:54Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\test_warehouse.py", line 394, in ui_view_transaction
+    list_id = [self.id, self.tableWidget.item(row, 0).data(5)]
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 03.04.2018 18:25:24Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 470, in ui_acc
+    self.main.of_change_cut_complete()
+AttributeError: 'TestWarehouseMaterial' object has no attribute 'of_change_cut_complete'
+
+---===Error===---
+Time = 04.04.2018 13:30:35Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 328, in view_test_warehouse_accessories
+    self.test_warehouse_accessories = test_warehouse.TestWarehouseAccessories()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 521, in __init__
+    loadUi(getcwd() + '/ui/test_accessories.ui.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 972, in parse
+    document = parse(filename)
+  File "C:\Python34\lib\xml\etree\ElementTree.py", line 1186, in parse
+    tree.parse(source, parser)
+  File "C:\Python34\lib\xml\etree\ElementTree.py", line 587, in parse
+    source = open(source, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Meller\\Desktop\\CRM-Avi/ui/test_accessories.ui.ui'
+
+---===Error===---
+Time = 04.04.2018 15:25:00Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 557, in ui_test
+    pack_id_list = sum(sql_info, [])
+TypeError: can only concatenate list (not "tuple") to list
+
+---===Error===---
+Time = 04.04.2018 15:28:47Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 588, in ui_test
+    a = filter(lambda s: s[0] == pack[0], res2)
+TypeError: 'int' object is not iterable
+
+---===Error===---
+Time = 04.04.2018 15:33:12Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 611, in ui_test
+    item = QTableWidgetItem(str(trans_sum[1]))
+IndexError: list index out of range
+
+---===Error===---
+Time = 04.04.2018 15:44:03Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\test_warehouse.py", line 588, in ui_test
+    if res1 == -res2:
+TypeError: bad operand type for unary -: 'list'
+
+---===Error===---
+Time = 04.04.2018 16:28:51Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\test_warehouse.py", line 586, in ui_test
+    for key, val in res:
+TypeError: 'int' object is not iterable
+
+---===Error===---
+Time = 04.04.2018 16:35:15Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\test_warehouse.py", line 586, in ui_test
+    for key, val in res:
+TypeError: 'int' object is not iterable
+
+---===Error===---
+Time = 04.04.2018 17:01:52Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 586, in ui_test
+    for key, val in res:
+TypeError: 'int' object is not iterable
+
+---===Error===---
+Time = 04.04.2018 17:02:48Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\test_warehouse.py", line 589, in ui_test
+    if val[0] == -val[1]:
+TypeError: bad operand type for unary -: 'tuple'
+
+---===Error===---
+Time = 04.04.2018 17:03:17Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\test_warehouse.py", line 589, in ui_test
+    if val[0] == -val[1]:
+TypeError: bad operand type for unary -: 'tuple'
+
+---===Error===---
+Time = 04.04.2018 17:41:04Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 336, in view_test_fast_warehouse
+    self.test_fast_warehouse = test_warehouse.TestFastWarehouse()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 645, in __init__
+    self.test()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\test_warehouse.py", line 722, in test
+    self.le_w_supply.setText(str(supply))
+AttributeError: 'TestFastWarehouse' object has no attribute 'le_w_supply'
+
+---===Error===---
+Time = 19.04.2018 17:43:47Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff_traffic.py", line 192, in ui_set_date_month
+    tab_date = tab_date.replace(hour=hour_up)
+ValueError: hour must be in 0..23
+
+---===Error===---
+Time = 19.04.2018 17:45:58Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff_traffic.py", line 192, in ui_set_date_month
+    tab_date = tab_date.replace(hour=hour_up)
+ValueError: hour must be in 0..23
+
+---===Error===---
+Time = 19.04.2018 17:50:55Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff_traffic.py", line 174, in ui_change_date
+    self.cut_passport = StaffTrafficData(self, int(self.le_worker.whatsThis()), id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff_traffic.py", line 260, in __init__
+    self.set_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff_traffic.py", line 283, in set_settings
+    tab_date = tab_date.replace(hour=hour_up)
+ValueError: hour must be in 0..23

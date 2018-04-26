@@ -534,7 +534,7 @@ class MaterialSupply(QMainWindow):
             if table_item.data(-3) == "material":
                 if table_item.data(-2) == "upd"or table_item.data(-2) == "set":
                     # Если это сохраненая позиция
-                    if str(self.tw_position.item(row, 1).data(5)) != self.tw_position.item(row, 4).text():
+                    if str(self.tw_position.item(row, 1).text()) != self.tw_position.item(row, 4).text():
                         # Если на складе и в приходе кол-во не равно то нельзя удалять!
                         QMessageBox.critical(self, "Ошибка удаления", "Нельзя удалить позицию которая пошла в работу!", QMessageBox.Ok)
                         return False

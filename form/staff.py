@@ -1055,8 +1055,8 @@ class OneStaff(QMainWindow):
             book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_out.xlsx')
         sheet = book['s1']
 
-        col = ("Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX",
-               "CA", "CD", "CG", "CJ", "CM", "CP", "CS", "CV", "CY", "DB", "DE", "DH", "DK", "DN", "DQ", "DT", "DW")
+        col = ("U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ", "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE",
+               "DI", "DM", "DQ", "DU", "DY", "EC")
 
         text = tuple(self.le_info_last_name.text().upper())
         if len(text) > len(col):
@@ -1065,7 +1065,7 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 53)] = t
+            sheet['%s%s' % (col[i], 60)] = t
             i += 1
 
         text = tuple(self.le_info_first_name.text().upper())
@@ -1075,8 +1075,11 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 55)] = t
+            sheet['%s%s' % (col[i], 62)] = t
             i += 1
+
+        col = ("AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ", "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE",
+               "DI", "DM", "DQ", "DU", "DY", "EC")
 
         text = tuple(self.le_info_middle_name.text().upper())
         if len(text) > len(col):
@@ -1085,7 +1088,7 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 57)] = t
+            sheet['%s%s' % (col[i], 64)] = t
             i += 1
 
         text = tuple(self.cb_info_country.currentText().upper())
@@ -1095,7 +1098,7 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 59)] = t
+            sheet['%s%s' % (col[i], 66)] = t
             i += 1
 
         # col = ("Y61", "AB61", "AE61", "AH61", "AK61", "AN61", "AQ61", "AT61", "AW61", "AZ61", "BC61", "BF61", "BI61", "BL61", "BO61", "BR61", "BU61", "BX61", "CA61",
