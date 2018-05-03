@@ -1247,3 +1247,47 @@ Time = 19.04.2018 17:50:55Traceback (most recent call last):
   File "C:/Users/Meller/Desktop/CRM-Avi\form\staff_traffic.py", line 283, in set_settings
     tab_date = tab_date.replace(hour=hour_up)
 ValueError: hour must be in 0..23
+
+---===Error===---
+Time = 28.04.2018 14:00:49Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1028, in exel_in
+    self.build_new_exel("in")
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1053, in build_new_exel
+    book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_in.xlsx')
+  File "C:\Python34\lib\site-packages\openpyxl\reader\excel.py", line 171, in load_workbook
+    archive = _validate_archive(filename)
+  File "C:\Python34\lib\site-packages\openpyxl\reader\excel.py", line 118, in _validate_archive
+    archive = ZipFile(filename, 'r', ZIP_DEFLATED)
+  File "C:\Python34\lib\zipfile.py", line 923, in __init__
+    self.fp = io.open(file, modeDict[mode])
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Meller\\Desktop\\CRM-Avi/templates/staff/notif_in.xlsx'
+
+---===Error===---
+Time = 28.04.2018 14:02:02Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1028, in exel_in
+    self.build_new_exel("in")
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1359, in build_new_exel
+    sheet['%s' % (col[m][n])] = t
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 03.05.2018 14:43:09Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1028, in exel_in
+    self.build_new_exel("in")
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1359, in build_new_exel
+    sheet['%s' % (col[m][n])] = t
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 03.05.2018 15:56:52Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1028, in exel_in
+    self.build_new_exel("in")
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff.py", line 1250, in build_new_exel
+    sheet['%s' % col[i]] = text[n]
+  File "C:\Python34\lib\site-packages\openpyxl\worksheet\worksheet.py", line 380, in __setitem__
+    self[key].value = value
+  File "C:\Python34\lib\site-packages\openpyxl\worksheet\worksheet.py", line 357, in __getitem__
+    min_col, min_row, max_col, max_row = range_boundaries(key)
+  File "C:\Python34\lib\site-packages\openpyxl\utils\cell.py", line 135, in range_boundaries
+    raise ValueError("{0} is not a valid coordinate or range")
+ValueError: {0} is not a valid coordinate or range

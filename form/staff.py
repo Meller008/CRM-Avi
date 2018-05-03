@@ -1234,7 +1234,9 @@ class OneStaff(QMainWindow):
             n += 1
             i += 1
 
-        col = ("A16", "E16", "I16", "M16", "Q16", "U16", "Y16", "AC16", "AG16", "AK16", "AO16", "AS16", "AW16", "BA16", "BE16", "BI16", "BM16", "BQ16",
+        col = ("BI14", "BM14", "BQ14",
+               "BU14", "BY14", "CC14", "CG14", "CK14", "CO14", "CS14", "CW14", "DA14", "DE14", "DI14", "DM14", "DQ14", "DU14", "DY14", "EC14",
+               "A16", "E16", "I16", "M16", "Q16", "U16", "Y16", "AC16", "AG16", "AK16", "AO16", "AS16", "AW16", "BA16", "BE16", "BI16", "BM16", "BQ16",
                "BU16", "BY16", "CC16", "CG16", "CK16", "CO16", "CS16", "CW16", "DA16", "DE16", "DI16", "DM16", "DQ16", "DU16", "DY16", "EC16")
         if m < len(text):
             if len(text) - m > len(col):
