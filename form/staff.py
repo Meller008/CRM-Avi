@@ -1374,7 +1374,7 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 44)] = t
+            sheet['%s%s' % (col[i], 39)] = t
             i += 1
 
         # Дата работы / увольнения
@@ -1389,7 +1389,7 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 50)] = t
+            sheet['%s%s' % (col[i], 47)] = t
             i += 1
 
         # вставляем сегоднюшнюю дату
