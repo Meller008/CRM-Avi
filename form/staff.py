@@ -1170,7 +1170,7 @@ class OneStaff(QMainWindow):
             sheet['%s%s' % (col[i], 4)] = t
             i += 1
 
-        col = ("CN", "CR", "DY", "DC", "DJ", "DN", "DR", "DV")
+        col = ("CN", "CR", "CY", "DC", "DJ", "DN", "DR", "DV")
         text = tuple(self.de_passport_issued.date().toString("ddMMyyyy"))
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Дата выдачи паспорта длиннее строки ввода", QMessageBox.Ok)
