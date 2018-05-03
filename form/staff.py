@@ -1101,13 +1101,8 @@ class OneStaff(QMainWindow):
             sheet['%s%s' % (col[i], 66)] = t
             i += 1
 
-        # col = ("Y61", "AB61", "AE61", "AH61", "AK61", "AN61", "AQ61", "AT61", "AW61", "AZ61", "BC61", "BF61", "BI61", "BL61", "BO61", "BR61", "BU61", "BX61", "CA61",
-        #        "CD61", "CG61", "CJ61", "CM61", "CP61", "CS61", "CV61", "CY61", "DB61", "DE61", "DH61", "DK61", "DN61", "DQ61", "DT61", "DW61", "A63", "D63", "G63",
-        #        "j63", "M63", "P63", "S63", "V63", "Y63", "AB63", "AE63", "AH63", "AK63", "AN63", "AQ63", "AT63", "AW63", "AZ63", "BC63", "BF63", "BI63", "BL63",
-        #        "BO63", "BR63", "BU63", "BX63", "CA63", "CD63", "CG63", "CJ63", "CM63", "CP63", "CS63", "CV63", "CY63", "DB63", "DE63", "DH63", "DK63", "DN63",
-        #        "DQ63", "DT63", "DW63")
-        col = ("Y61", "AB61", "AE61", "AH61", "AK61", "AN61", "AQ61", "AT61", "AW61", "AZ61", "BC61", "BF61", "BI61", "BL61", "BO61", "BR61", "BU61", "BX61", "CA61",
-               "CD61", "CG61", "CJ61", "CM61", "CP61", "CS61", "CV61", "CY61", "DB61", "DE61", "DH61", "DK61", "DN61", "DQ61", "DT61", "DW61")
+        col = ("AO68", "AS68", "AW68", "BA68", "BE68", "BI68", "BM68", "BQ68",
+               "BU68", "BY68", "CC68", "CG68", "CK68", "CO68", "CS68", "CW68", "DA68", "DE68", "DI68", "DM68", "DQ68", "DU68", "DY68", "EC68")
         text = tuple(self.le_info_birthplace.text().upper())
         n = 0
         if len(col) < len(text):
@@ -1123,9 +1118,8 @@ class OneStaff(QMainWindow):
             n += 1
             i += 1
 
-        col = ("A63", "D63", "G63", "j63", "M63", "P63", "S63", "V63", "Y63", "AB63", "AE63", "AH63", "AK63", "AN63", "AQ63", "AT63", "AW63", "AZ63", "BC63", "BF63",
-               "BI63", "BL63", "BO63", "BR63", "BU63", "BX63", "CA63", "CD63", "CG63", "CJ63", "CM63", "CP63", "CS63", "CV63", "CY63", "DB63", "DE63", "DH63",
-               "DK63", "DN63", "DQ63", "DT63", "DW63")
+        col = ("A70", "E70", "I70", "M70", "Q70", "U70", "Y70", "AC70", "AG70", "AK70", "AO70", "AS70", "AW70", "BA70", "BE70", "BI70", "BM70", "BQ70",
+               "BU70", "BY70", "CC70", "CG70", "CK70", "CO70", "CS70", "CW70", "DA70", "DE70", "DI70", "DM70", "DQ70", "DU70", "DY70", "EC70")
         if m < len(text):
             if len(text) - m > len(col):
                 QMessageBox.critical(self, "Ошибка", "Место рождения длиннее строки ввода", QMessageBox.Ok)
@@ -1139,22 +1133,22 @@ class OneStaff(QMainWindow):
             n += 1
             i += 1
 
-        col = ("V", "Y", "AH", "AK", "AQ", "AT", "AW", "AZ")
+        col = ("U", "Y", "AG", "AK", "AS", "AW", "BA", "BE")
         text = tuple(self.de_info_birth.date().toString("ddMMyyyy"))
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 65)] = t
+            sheet['%s%s' % (col[i], 72)] = t
             i += 1
 
-        if self.rb_sex_m.isChecked():  # Узнаем пол работника
-            sheet['%s%s' % ("BL", 65)] = "Х"
-        elif self.rb_sex_f.isChecked():
-            sheet['%s%s' % ("BU", 65)] = "Х"
+        # if self.rb_sex_m.isChecked():  # Узнаем пол работника
+        #     sheet['%s%s' % ("BL", 65)] = "Х"
+        # elif self.rb_sex_f.isChecked():
+        #     sheet['%s%s' % ("BU", 65)] = "Х"
 
         # Заполняем пасспорт
         sheet = book['s2']
-        col = ("M", "P", "S", "V", "Y", "AB", "AE", "AH")
+        col = ("I", "M", "Q", "U", "Y", "AC", "AG")
         text = tuple(self.le_passport_series.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Серия паспорта длиннее строки ввода", QMessageBox.Ok)
@@ -1162,10 +1156,10 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 5)] = t
+            sheet['%s%s' % (col[i], 4)] = t
             i += 1
 
-        col = ("AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX")
+        col = ("AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX")
         text = tuple(self.le_passport_number.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Номер паспорта длиннее строки ввода", QMessageBox.Ok)
@@ -1173,10 +1167,10 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 5)] = t
+            sheet['%s%s' % (col[i], 4)] = t
             i += 1
 
-        col = ("CP", "CS", "DB", "DE", "DN", "DQ", "DT", "DW")
+        col = ("CN", "CR", "DY", "DC", "DJ", "DN", "DR", "DV")
         text = tuple(self.de_passport_issued.date().toString("ddMMyyyy"))
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Дата выдачи паспорта длиннее строки ввода", QMessageBox.Ok)
@@ -1184,11 +1178,11 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 5)] = t
+            sheet['%s%s' % (col[i], 4)] = t
             i += 1
 
-        col = ("P", "S", "V", "Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX", "CA", "CD", "CG", "CJ",
-               "CM", "CP", "CS", "CV", "CY", "DB", "DE", "DH", "DK", "DN", "DQ", "DT", "DW")
+        col = ("P", "T", "X", "AB", "AF", "AJ", "AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX", "CB", "CF", "CJ",
+               "CN", "CR", "CV", "CZ", "DD", "DH", "DL", "DP", "DT")
         text = tuple(self.le_passport_issued.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Кем выдан паспорт, длиннее строки ввода", QMessageBox.Ok)
@@ -1196,11 +1190,11 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 7)] = t
+            sheet['%s%s' % (col[i], 6)] = t
             i += 1
 
         # Миграционка
-        col = ("AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX")
+        col = ("AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX", "CB", "CF", "CJ")
         text = tuple(self.le_migration_number.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Номер миграционки длиннее строки ввода", QMessageBox.Ok)
@@ -1208,11 +1202,11 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 9)] = t
+            sheet['%s%s' % (col[i], 8)] = t
             i += 1
 
         # Регистрация
-        col = ("CP", "CS", "DB", "DE", "DN", "DQ", "DT", "DW")
+        col = ("O", "S", "AA", "AE", "AM", "AQ", "AU", "AY")
         text = tuple(self.de_migration.date().toString("ddMMyyyy"))
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Дата выдачи миграционки длиннее строки ввода", QMessageBox.Ok)
@@ -1220,12 +1214,11 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 9)] = t
+            sheet['%s%s' % (col[i], 11)] = t
             i += 1
 
-        col = (
-        "AW12", "AZ12", "BC12", "BF12", "BI12", "BL12", "BO12", "BR12", "BU12", "BX12", "CA12", "CD12", "CG12", "CJ12", "CM12", "CP12", "CS12", "CV12", "CY12",
-        "DB12", "DE12", "DH12", "DK12", "DN12", "DQ12", "DT12", "DW12")
+        col = ("BI14", "BM14", "BQ14",
+               "BU14", "BY14", "CC14", "CG14", "CK14", "CO14", "CS14", "CW14", "DA14", "DE14", "DI14", "DM14", "DQ14", "DU14", "DY14", "EC14")
         text = tuple(self.le_registration_address.text().upper())
         n = 0
         if len(col) < len(text):
@@ -1241,26 +1234,8 @@ class OneStaff(QMainWindow):
             n += 1
             i += 1
 
-        col = ("A14", "D14", "G14", "j14", "M14", "P14", "S14", "V14", "Y14", "AB14", "AE14", "AH14", "AK14", "AN14", "AQ14", "AT14", "AW14", "AZ14", "BC14",
-               "BF14", "BI14", "BL14", "BO14", "BR14", "BU14", "BX14", "CA14", "CD14", "CG14", "CJ14", "CM14", "CP14", "CS14", "CV14", "CY14", "DB14", "DE14",
-               "DH14", "DK14", "DN14", "DQ14", "DT14", "DW14")
-        if m < len(text):
-            if len(text) - m > len(col):
-                m += len(col)
-                while text[m] != " ":
-                    m -= 1
-            else:
-                m = len(text)
-        i = 0
-        while n < m:
-            self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s' % col[i]] = text[n]
-            n += 1
-            i += 1
-
-        col = ("A16", "D16", "G16", "j16", "M16", "P16", "S16", "V16", "Y16", "AB16", "AE16", "AH16", "AK16", "AN16", "AQ16", "AT16", "AW16", "AZ16", "BC16", "BF16",
-               "BI16", "BL16", "BO16", "BR16", "BU16", "BX16", "CA16", "CD16", "CG16", "CJ16", "CM16", "CP16", "CS16", "CV16", "CY16", "DB16", "DE16", "DH16",
-               "DK16", "DN16", "DQ16", "DT16", "DW16")
+        col = ("A16", "E16", "I16", "M16", "Q16", "U16", "Y16", "AC16", "AG16", "AK16", "AO16", "AS16", "AW16", "BA16", "BE16", "BI16", "BM16", "BQ16",
+               "BU16", "BY16", "CC16", "CG16", "CK16", "CO16", "CS16", "CW16", "DA16", "DE16", "DI16", "DM16", "DQ16", "DU16", "DY16", "EC16")
         if m < len(text):
             if len(text) - m > len(col):
                 QMessageBox.critical(self, "Ошибка", "Место регистрации длиннее строки ввода", QMessageBox.Ok)
@@ -1274,7 +1249,7 @@ class OneStaff(QMainWindow):
             n += 1
             i += 1
 
-        col = ("AW", "AZ", "BI", "BL", "BU", "BX", "CA", "CD")
+        col = ("AS", "AW", "BE", "BI", "BQ", "BU", "BY", "CC")
         text = tuple(self.de_registration.date().toString("ddMMyyyy"))
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Дата регистрации длиннее строки ввода", QMessageBox.Ok)
@@ -1282,14 +1257,14 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 18)] = t
+            sheet['%s%s' % (col[i], 19)] = t
             i += 1
 
         # Патент
         country = my_sql.sql_select("SELECT Patent, Act FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0]
         if country[0] == 1:
-            col = ("AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX",
-                   "CA", "CD", "CG", "CJ", "CM", "CP", "CS", "CV", "CY", "DB", "DE", "DH", "DK", "DN", "DQ", "DT", "DW")
+            col = ("AB", "AF", "AJ", "AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX", "CB", "CF", "CJ",
+                   "CN", "CR", "CV")
             text = tuple("ПАТЕНТ " + self.le_patent_additional_number.text().upper())
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Доп номер патента длиннее строки ввода", QMessageBox.Ok)
@@ -1300,7 +1275,7 @@ class OneStaff(QMainWindow):
                 sheet['%s%s' % (col[i], 22)] = t
                 i += 1
 
-            col = ("P", "S", "V", "Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW")
+            col = ("P", "T", "X", "AB", "AF", "AJ", "AN", "AR")
             text = tuple(self.le_patent_serial.text().upper())
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Серия патента длиннее строки ввода", QMessageBox.Ok)
@@ -1311,7 +1286,7 @@ class OneStaff(QMainWindow):
                 sheet['%s%s' % (col[i], 24)] = t
                 i += 1
 
-            col = ("BF", "BI", "BL", "BO", "BR", "BU", "BX", "CA", "CD", "CG", "CJ", "CM")
+            col = ("BJ", "BN", "BR", "BV", "BZ", "CD", "CH", "CL", "CP", "CT")
             text = tuple(self.le_patent_number.text().upper())
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Номер патента длиннее строки ввода", QMessageBox.Ok)
@@ -1322,7 +1297,7 @@ class OneStaff(QMainWindow):
                 sheet['%s%s' % (col[i], 24)] = t
                 i += 1
 
-            col = ("P", "S", "AB", "AE", "AN", "AQ", "AT", "AW")
+            col = ("P", "T", "AB", "AF", "AN", "AR", "AV", "AZ")
             text = tuple(self.de_patent_issued.date().toString("ddMMyyyy"))
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Дата выдачи патента длиннее строки ввода", QMessageBox.Ok)
@@ -1333,8 +1308,7 @@ class OneStaff(QMainWindow):
                 sheet['%s%s' % (col[i], 26)] = t
                 i += 1
 
-            col = ("P", "S", "V", "Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX",
-                   "CA", "CD", "CG", "CJ", "CM", "CP", "CS", "CV", "CY", "DB", "DE", "DH", "DK", "DN", "DQ", "DT", "DW")
+            col = ("P", "T", "X", "AB", "AF", "AJ", "AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX", "CB", "CF", "CJ", "CN", "CR")
             text = tuple(self.le_patent_issued.text().upper())
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Кем выдан патент длиннее строки ввода", QMessageBox.Ok)
@@ -1345,7 +1319,7 @@ class OneStaff(QMainWindow):
                 sheet['%s%s' % (col[i], 28)] = t
                 i += 1
 
-            col = ("S", "V", "AE", "AH", "AQ", "AT", "AW", "AZ")
+            col = ("P", "T", "AB", "AF", "AN", "AR", "AV", "AZ")
             text = tuple(self.de_patent_issued.date().toString("ddMMyyyy"))
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Срок С патента длиннее строки ввода", QMessageBox.Ok)
@@ -1356,7 +1330,7 @@ class OneStaff(QMainWindow):
                 sheet['%s%s' % (col[i], 30)] = t
                 i += 1
 
-            col = ("BL", "BO", "BX", "CA", "CJ", "CM", "CP", "CS")
+            col = ("BH", "BL", "BT", "BX", "CF", "CJ", "CN", "CR")
             text = tuple(self.de_patent_ending.date().toString("ddMMyyyy"))
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Срок ДО патента длиннее строки ввода", QMessageBox.Ok)
@@ -1368,21 +1342,13 @@ class OneStaff(QMainWindow):
                 i += 1
         else:
             text = tuple(country[1].upper())
-            col = (("A33", "D33", "G33", "j33", "M33", "P33", "S33", "V33", "Y33", "AB33", "AE33", "AH33", "AK33", "AN33", "AQ33", "AT33", "AW33", "AZ33", "BC33",
-                    "BF33", "BI33", "BL33", "BO33", "BR33", "BU33", "BX33", "CA33", "CD33", "CG33", "CJ33", "CM33", "CP33", "CS33", "CV33", "CY33", "DB33", "DE33",
-                    "DH33", "DK33", "DN33", "DQ33", "DT33", "DW33"),
-                   ("A35", "D35", "G35", "j35", "M35", "P35", "S35", "V35", "Y35", "AB35", "AE35", "AH35", "AK35", "AN35", "AQ35", "AT35", "AW35", "AZ35", "BC35",
-                    "BF35", "BI35", "BL35", "BO35", "BR35", "BU35", "BX35", "CA35", "CD35", "CG35", "CJ35", "CM35", "CP35", "CS35", "CV35", "CY35", "DB35", "DE35",
-                    "DH35", "DK35", "DN35", "DQ35", "DT35", "DW35"),
-                   ("A37", "D37", "G37", "j37", "M37", "P37", "S37", "V37", "Y37", "AB37", "AE37", "AH37", "AK37", "AN37", "AQ37", "AT37", "AW37", "AZ37", "BC37",
-                    "BF37", "BI37", "BL37", "BO37", "BR37", "BU37", "BX37", "CA37", "CD37", "CG37", "CJ37", "CM37", "CP37", "CS37", "CV37", "CY37", "DB37", "DE37",
-                    "DH37", "DK37", "DN37", "DQ37", "DT37", "DW37"),
-                   ("A39", "D39", "G39", "j39", "M39", "P39", "S39", "V39", "Y39", "AB39", "AE39", "AH39", "AK39", "AN39", "AQ39", "AT39", "AW39", "AZ39", "BC39",
-                    "BF39", "BI39", "BL39", "BO39", "BR39", "BU39", "BX39", "CA39", "CD39", "CG39", "CJ39", "CM39", "CP39", "CS39", "CV39", "CY39", "DB39", "DE39",
-                    "DH39", "DK39", "DN39", "DQ39", "DT39", "DW39"),
-                   ("A41", "D41", "G41", "j41", "M41", "P41", "S41", "V41", "Y41", "AB41", "AE41", "AH41", "AK41", "AN41", "AQ41", "AT41", "AW41", "AZ41", "BC41",
-                    "BF41", "BI41", "BL41", "BO41", "BR41", "BU41", "BX41", "CA41", "CD41", "CG41", "CJ41", "CM41", "CP41", "CS41", "CV41", "CY41", "DB41", "DE41",
-                    "DH41", "DK41", "DN41", "DQ41", "DT41", "DW41"))
+            col = (("A33", "E33", "I33", "M33", "Q33", "U33", "Y33", "AC33", "AG33", "AK33", "AO33", "AS33", "AW33", "BA33", "BE33", "BI33", "BM33", "BQ33",
+                    "BU33", "BY33", "CC33", "CG33", "CK33", "CO33", "CS33", "CW33", "DA33", "DE33", "DI33", "DM33", "DQ33", "DU33", "DY33", "EC33"),
+                   ("A35", "E35", "I35", "M35", "Q35", "U35", "Y35", "AC35", "AG35", "AK35", "AO35", "AS35", "AW35", "BA35", "BE35", "BI35", "BM35", "BQ35",
+                    "BU35", "BY35", "CC35", "CG35", "CK35", "CO35", "CS35", "CW35", "DA35", "DE35", "DI35", "DM35", "DQ35", "DU35", "DY35", "EC35"),
+                   ("A37", "E37", "I37", "M37", "Q37", "U37", "Y37", "AC37", "AG37", "AK37", "AO37", "AS37", "AW37", "BA37", "BE37", "BI37", "BM37", "BQ37",
+                    "BU37", "BY37", "CC37", "CG37", "CK37", "CO37", "CS37", "CW37", "DA37", "DE37", "DI37", "DM37", "DQ37", "DU37", "DY37", "EC37"),
+                   )
             m, n = 0, 0
             for t in text:
                 if t == "\n":
@@ -1395,8 +1361,8 @@ class OneStaff(QMainWindow):
 
         # Должность
         position_number = my_sql.sql_select("SELECT Number FROM staff_position WHERE Name = %s", (self.cb_info_position.currentText(),))[0][0]
-        col = ("A", "D", "G", "j", "M", "P", "S", "V", "Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX",
-               "CA", "CD", "CG", "CJ", "CM", "CP", "CS", "CV", "CY", "DB", "DE", "DH", "DK", "DN", "DQ", "DT", "DW")
+        col = ("A", "E", "I", "M", "Q", "U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ",
+               "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE", "DI", "DM", "DQ", "DU", "DY", "EC")
         text = tuple(self.cb_info_position.currentText().upper() + " " + position_number)
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Должность длиннее строки ввода", QMessageBox.Ok)
@@ -1408,7 +1374,7 @@ class OneStaff(QMainWindow):
             i += 1
 
         # Дата работы / увольнения
-        col = ("CP", "CS", "DB", "DE", "DN", "DQ", "DT", "DW")
+        col = ("CO", "CS", "DA", "DE", "DM", "DQ", "DU", "DY")
         if option == "in":
             text = tuple(info.de_in.date().toString("ddMMyyyy"))
         elif option == "out":
@@ -1424,9 +1390,9 @@ class OneStaff(QMainWindow):
 
         # вставляем сегоднюшнюю дату
         date_now = QDate.currentDate()
-        sheet['C60'] = date_now.toString("dd")
-        sheet['H60'] = date_now.toString("MM")
-        sheet['Z60'] = date_now.toString("yy")
+        sheet['C58'] = date_now.toString("dd")
+        sheet['H58'] = date_now.toString("MM")
+        sheet['Z58'] = date_now.toString("yy")
 
         dir_name = self.id_info
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
