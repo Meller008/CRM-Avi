@@ -1356,8 +1356,12 @@ class OneStaff(QMainWindow):
                     n = 0
                 else:
                     self.statusBar().showMessage("Создаю %s" % n)
-                    sheet['%s' % (col[m][n])] = t
-                    n += 1
+                    try:
+                        sheet['%s' % (col[m][n])] = t
+                        n += 1
+                    except IndexError:
+                        QMessageBox.critical(self, "Ошибка", "Текст патента длинее строк ввода!", QMessageBox.Ok)
+                        return False
 
         # Должность
         position_number = my_sql.sql_select("SELECT Number FROM staff_position WHERE Name = %s", (self.cb_info_position.currentText(),))[0][0]
