@@ -151,8 +151,8 @@
      <string>Крой</string>
     </property>
     <addaction name="ma_cut_list"/>
-    <addaction name="ma_cut_mission_list"/>
     <addaction name="ma_pack"/>
+    <addaction name="ma_cut_mission_list"/>
    </widget>
    <widget class="QMenu" name="menu_9">
     <property name="title">
@@ -162,6 +162,7 @@
     <addaction name="ma_order_edi"/>
     <addaction name="ma_scan_pack"/>
     <addaction name="ma_article_list"/>
+    <addaction name="ma_access_add_operation"/>
    </widget>
    <widget class="QMenu" name="menu_11">
     <property name="title">
@@ -576,6 +577,14 @@
    </property>
    <property name="text">
     <string>Быстрая проверка</string>
+   </property>
+  </action>
+  <action name="ma_access_add_operation">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Список доп. операций</string>
    </property>
   </action>
  </widget>
@@ -1493,6 +1502,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_access_add_operation</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_add_operation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1552,5 +1577,6 @@
   <slot>view_test_warehouse_material()</slot>
   <slot>view_test_warehouse_accessories()</slot>
   <slot>view_test_fast_warehouse()</slot>
+  <slot>view_add_operation()</slot>
  </slots>
 </ui>

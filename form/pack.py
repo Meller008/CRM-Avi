@@ -320,11 +320,17 @@ class PackBrows(QDialog):
         self.one_operation_window.le_value.setText(str(self.pack.value_all()))  # Выставить кол-во в новой операции
         self.one_operation_window.setModal(True)
         self.one_operation_window.show()
+
         if self.one_operation_window.exec() <= 0:
             return False
         operation = self.one_operation_window.operation
         self.pack.set_operation(operation)
         self.set_operation_name()
+
+    def ui_add_add_operation(self):
+        self.new_operation = operation.OperationAddList(self, dc_select=True)
+        self.new_operation.setWindowModality(Qt.ApplicationModal)
+        self.new_operation.show()
 
     def ui_change_operation(self):
         try:
@@ -892,6 +898,29 @@ class PackBrows(QDialog):
         self.le_order.setText(str(order[0]))
         self.le_order.setWhatsThis(str(order[1]))
         self.pack.set_order(order[1])
+
+    def of_tree_select_add_operation(self, operation):
+
+        query = "SELECT operations.Price FROM operations WHERE Id = %s"
+        sql_info = my_sql.sql_select(query, (operation[1],))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения цены операции", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        operation = {"id": None,
+                     "position": None,
+                     "operation_id": operation[1],
+                     "name": operation[0],
+                     "worker_id": None,
+                     "worker_name": None,
+                     "date_make": None,
+                     "date_input": None,
+                     "value": self.pack.value(),
+                     "price": float(sql_info[0][0]),
+                     "pay": 0}
+
+        self.pack.set_operation(operation)
+        self.set_operation_name()
 
 
 class PackOperation(QDialog):

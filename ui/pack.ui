@@ -166,6 +166,16 @@
           </widget>
          </item>
          <item>
+          <widget class="QToolButton" name="pb_add_add_operation">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Доп. операция</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="horizontalSpacer_5">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -1908,6 +1918,22 @@ border-color: rgb(170, 0, 0);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_add_add_operation</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_add_add_operation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>392</x>
+     <y>222</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>872</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_edit_date_make()</slot>
@@ -1941,5 +1967,6 @@ border-color: rgb(170, 0, 0);
   <slot>ui_edit_print_label()</slot>
   <slot>ui_add_value()</slot>
   <slot>ui_copy_pack()</slot>
+  <slot>ui_add_add_operation()</slot>
  </slots>
 </ui>

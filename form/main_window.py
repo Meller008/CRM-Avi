@@ -188,6 +188,14 @@ class MainWindow(QMainWindow):
         self.sub_operation_list.resize(self.operation_list.size())
         self.sub_operation_list.show()
 
+    def view_add_operation(self):
+        self.add_operation_list = operation.OperationAddList()
+        self.sub_add_operation_list = QMdiSubWindow()
+        self.sub_add_operation_list.setWidget(self.add_operation_list)
+        self.mdi.addSubWindow(self.sub_add_operation_list)
+        self.sub_add_operation_list.resize(self.add_operation_list.size())
+        self.sub_add_operation_list.show()
+
     def view_product(self):
         self.article_list = article.ArticleList()
         self.sub_article_list = QMdiSubWindow()

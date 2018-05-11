@@ -1,5 +1,5 @@
 from os import getcwd
-from form.templates import tree
+from form.templates import tree, table
 from form.templates import list
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox
@@ -309,3 +309,70 @@ class MachineName(list.ListItems):
                             "WinColor": "(85, 255, 255)",
                             "lb_name": "Название",
                             "lb_note": "Заметка"}
+
+
+class OperationAddList(table.TableList):
+    def set_settings(self):
+        self.resize(820, 300)
+        self.setWindowTitle("Список дополнительных операций")  # Имя окна
+        self.toolBar.setStyleSheet("background-color: rgb(85, 255, 255);")  # Цвет бара
+
+        self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
+        self.pb_change.deleteLater()
+        self.pb_filter.deleteLater()
+
+        # Названия колонк (Имя, Длинна)
+        self.table_header_name = (("Название", 300), ("Цена", 70), ("Машинка", 120), ("Заметка", 300))
+
+        self.query_table_all = """SELECT add_operation_list.Id, operations.Name, operations.Price, sewing_machine.Name, operations.Note2
+                                    FROM add_operation_list
+                                      LEFT JOIN operations ON add_operation_list.Id = operations.Id
+                                      LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id"""
+
+        #  нулевой элемент должен быть ID
+        self.query_table_select = """SELECT add_operation_list.Id, operations.Name, operations.Price, sewing_machine.Name, operations.Note2
+                                        FROM add_operation_list
+                                          LEFT JOIN operations ON add_operation_list.Id = operations.Id
+                                          LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id"""
+
+        self.query_table_dell = "DELETE FROM add_operation_list WHERE Id = %s"
+
+    def ui_add_table_item(self):  # Добавить предмет
+        self.new_operation = OperationList(self, dc_select=True)
+        self.new_operation.setWindowModality(Qt.ApplicationModal)
+        self.new_operation.show()
+
+    def ui_dell_table_item(self):
+        result = QMessageBox.question(self, "Удаление", "Точно удалить элемент?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            try:
+                id_item = self.table_widget.selectedItems()
+            except:
+                QMessageBox.critical(self, "Ошибка Удаления", "Выделите элемент который хотите удалить", QMessageBox.Ok)
+                return False
+            for id in id_item:
+                sql_info = my_sql.sql_change(self.query_table_dell, (id.data(5), ))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    QMessageBox.critical(self, "Ошибка sql удаления элемента таблицы", sql_info.msg, QMessageBox.Ok)
+                    return False
+        self.set_table_info()
+
+    def ui_double_click_table_item(self, item):  # Двойной клик по элементу
+        if not self.dc_select:
+            self.ui_change_table_item(item.data(5))
+        else:
+            # что хотим получить ставим всместо 0
+            item = (self.table_widget.item(item.row(), 0).text(), item.data(5))
+            self.main.of_tree_select_add_operation(item)
+            self.close()
+            self.destroy()
+
+    def of_tree_select_operation(self, item):
+        query = "INSERT INTO add_operation_list (Id) VALUES (%s)"
+        sql_info = my_sql.sql_change(query, (item[0],))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql добавления операции", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        self.ui_update()
