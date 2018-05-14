@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>810</width>
+    <width>874</width>
     <height>422</height>
    </rect>
   </property>
@@ -477,11 +477,6 @@
         </column>
         <column>
          <property name="text">
-          <string>Клиент</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
           <string>Кол.</string>
          </property>
         </column>
@@ -508,6 +503,11 @@
         <column>
          <property name="text">
           <string>Название клиента</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Заметка</string>
          </property>
         </column>
        </widget>

@@ -214,13 +214,13 @@ class CutBrows(QDialog):
         self.tw_pack.horizontalHeader().resizeSection(1, 65)
         self.tw_pack.horizontalHeader().resizeSection(2, 35)
         self.tw_pack.horizontalHeader().resizeSection(3, 90)
-        self.tw_pack.horizontalHeader().resizeSection(4, 85)
+        self.tw_pack.horizontalHeader().resizeSection(4, 35)
         self.tw_pack.horizontalHeader().resizeSection(5, 35)
-        self.tw_pack.horizontalHeader().resizeSection(6, 35)
-        self.tw_pack.horizontalHeader().resizeSection(7, 55)
+        self.tw_pack.horizontalHeader().resizeSection(6, 55)
+        self.tw_pack.horizontalHeader().resizeSection(7, 65)
         self.tw_pack.horizontalHeader().resizeSection(8, 65)
-        self.tw_pack.horizontalHeader().resizeSection(9, 65)
-        self.tw_pack.horizontalHeader().resizeSection(10, 200)
+        self.tw_pack.horizontalHeader().resizeSection(9, 180)
+        self.tw_pack.horizontalHeader().resizeSection(10, 180)
 
     def ui_edit_date_cut(self):
         if not self.insert_values_sql:
@@ -526,39 +526,39 @@ class CutBrows(QDialog):
                     new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 3, new_table_item)
 
-                    new_table_item = QTableWidgetItem(str(pack.client_name()))
+                    new_table_item = QTableWidgetItem(str(pack.value()))
                     new_table_item.setData(-2, pack_id)
                     new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 4, new_table_item)
 
-                    new_table_item = QTableWidgetItem(str(pack.value()))
+                    new_table_item = QTableWidgetItem(str(pack.value_damage()))
                     new_table_item.setData(-2, pack_id)
                     new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 5, new_table_item)
 
-                    new_table_item = QTableWidgetItem(str(pack.value_damage()))
-                    new_table_item.setData(-2, pack_id)
-                    new_table_item.setBackground(color)
-                    self.tw_pack.setItem(row, 6, new_table_item)
-
                     new_table_item = QTableWidgetItem(str(pack.weight()))
                     new_table_item.setData(-2, pack_id)
                     new_table_item.setBackground(color)
-                    self.tw_pack.setItem(row, 7, new_table_item)
+                    self.tw_pack.setItem(row, 6, new_table_item)
 
                     date_make = pack.date_make().strftime("%d.%m.%Y") if pack.date_make() is not None else ""
                     new_table_item = QTableWidgetItem(date_make)
                     new_table_item.setData(-2, pack_id)
                     new_table_item.setBackground(color)
-                    self.tw_pack.setItem(row, 8, new_table_item)
+                    self.tw_pack.setItem(row, 7, new_table_item)
 
                     date_complete = pack.date_complete().strftime("%d.%m.%Y") if pack.date_complete() is not None else ""
                     new_table_item = QTableWidgetItem(date_complete)
                     new_table_item.setData(-2, pack_id)
                     new_table_item.setBackground(color)
-                    self.tw_pack.setItem(row, 9, new_table_item)
+                    self.tw_pack.setItem(row, 8, new_table_item)
 
                     new_table_item = QTableWidgetItem(pack.article_client_name())
+                    new_table_item.setData(-2, pack_id)
+                    new_table_item.setBackground(color)
+                    self.tw_pack.setItem(row, 9, new_table_item)
+
+                    new_table_item = QTableWidgetItem(pack.note())
                     new_table_item.setData(-2, pack_id)
                     new_table_item.setBackground(color)
                     self.tw_pack.setItem(row, 10, new_table_item)
