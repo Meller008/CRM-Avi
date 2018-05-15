@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
-    <height>380</height>
+    <width>485</width>
+    <height>634</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Проверка веса пачек</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout_3">
     <property name="leftMargin">
      <number>1</number>
     </property>
@@ -31,54 +31,26 @@
      <number>2</number>
     </property>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout_6">
+     <layout class="QGridLayout" name="gridLayout_2">
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="7">
-       <widget class="QPushButton" name="pushButton_10">
+      <item row="0" column="10">
+       <widget class="QPushButton" name="pushButton_5">
         <property name="text">
-         <string>Печать</string>
+         <string>Экспорт</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Дата С</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDateEdit" name="de_date_from">
-        <property name="calendarPopup">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>По</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="5">
-       <widget class="QPushButton" name="pushButton_9">
-        <property name="text">
-         <string>Расчитать</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
+      <item row="0" column="4">
        <widget class="QDateEdit" name="de_date_to">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="4">
-       <spacer name="horizontalSpacer_3">
+      <item row="0" column="7">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -90,20 +62,58 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="6">
-       <widget class="QPushButton" name="pb_calc_sum">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
+      <item row="0" column="8">
+       <widget class="QPushButton" name="pushButton">
         <property name="text">
-         <string>В деньгах</string>
+         <string>Расчитать</string>
         </property>
        </widget>
       </item>
+      <item row="0" column="9">
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="text">
+         <string>Печать</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>По</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QDateEdit" name="de_date_from">
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Дата с</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </item>
-    <item row="1" column="0">
-     <widget class="QTableWidget" name="tableWidget">
+    <item row="2" column="0">
+     <widget class="QTableWidget" name="tw_pack">
       <property name="font">
        <font>
         <family>Tahoma</family>
@@ -119,6 +129,9 @@
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
       <attribute name="verticalHeaderVisible">
        <bool>false</bool>
       </attribute>
@@ -130,35 +143,65 @@
       </attribute>
       <column>
        <property name="text">
-        <string>Артикул</string>
+        <string>ID</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Всего</string>
+        <string>Крой</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Брака</string>
+        <string>Пачка</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>% брака</string>
+        <string>Кол-во</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Себест.</string>
+        <string>Вес штуки</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Сумма</string>
+        <string>Вес доп ткани</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Вес обрези</string>
        </property>
       </column>
      </widget>
+    </item>
+    <item row="1" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="le_matrial">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Ткань</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="toolButton">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -169,6 +212,9 @@
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(89, 125, 163);</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -181,57 +227,57 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton_9</sender>
+   <sender>pushButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>ui_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>327</x>
-     <y>4</y>
+     <x>314</x>
+     <y>19</y>
     </hint>
     <hint type="destinationlabel">
-     <x>324</x>
-     <y>-95</y>
+     <x>484</x>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>pb_calc_sum</sender>
+   <sender>toolButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>ui_calc_sum()</slot>
+   <slot>ui_view_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>466</x>
+     <y>42</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>484</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_pack</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_dc_row()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>403</x>
-     <y>10</y>
+     <y>303</y>
     </hint>
     <hint type="destinationlabel">
-     <x>389</x>
-     <y>-56</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_10</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_print()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>471</x>
-     <y>10</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>468</x>
-     <y>-125</y>
+     <x>581</x>
+     <y>303</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
-  <slot>ui_calc_sum()</slot>
-  <slot>ui_print()</slot>
+  <slot>ui_view_material()</slot>
+  <slot>ui_dc_row()</slot>
  </slots>
 </ui>

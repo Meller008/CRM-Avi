@@ -11,7 +11,7 @@ from form import report_supply, report_cost_article, test_window, report_sibesto
     report_accept_pack, pack, report_profit, report_performance_company, report_shipped_to_customer
 from form import staff_traffic, report_material_consumption, report_warehouse_balance_date,\
     report_all, report_nalog, report_article_day, test_warehouse
-from form import report_order, report_reject, transaction_warehouse
+from form import report_order, report_reject, transaction_warehouse, material_in_pack
 from function import my_sql
 from classes.my_class import User
 import sys
@@ -507,6 +507,14 @@ class MainWindow(QMainWindow):
         self.mdi.addSubWindow(self.sub_report_article_day)
         self.sub_report_article_day.resize(self.report_article_day.size())
         self.sub_report_article_day.show()
+
+    def view_material_in_pack(self):
+        self.material_in_pack = material_in_pack.MaterialInPack()
+        self.sub_material_in_pack = QMdiSubWindow()
+        self.sub_material_in_pack.setWidget(self.material_in_pack)
+        self.mdi.addSubWindow(self.sub_material_in_pack)
+        self.sub_material_in_pack.resize(self.material_in_pack.size())
+        self.sub_material_in_pack.show()
 
     def view_test_window(self):
         self.test_window = test_window.TestWindow()
