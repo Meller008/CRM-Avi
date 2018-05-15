@@ -168,12 +168,12 @@
       </column>
       <column>
        <property name="text">
-        <string>Вес доп ткани</string>
+        <string>Вес обрези</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Вес обрези</string>
+        <string>Вес доп. ткани</string>
        </property>
       </column>
      </widget>
