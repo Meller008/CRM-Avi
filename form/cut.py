@@ -455,11 +455,27 @@ class CutBrows(QDialog):
 
     def ui_acc(self):
         if self.cut.error_material():
-            result = QMessageBox.question(self, "Сохранить?", "Что то не так с весом обрези.\nМогу сохранить без веса обрези!", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            result = QMessageBox.question(self, "Сохранить?", "Что то не так с весом обрези.\nМогу сохранить без веса обрези! ", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
                 pass
             else:
                 return False
+
+        # Временная проверка на совпадение чисел.
+        if Decimal(self.le_weight_cut.text().replace(",", ".")) != self.cut.weight() or \
+            Decimal(self.le_weight_rest_cut.text().replace(",", ".")) != self.cut.weight_rest() or \
+            Decimal(self.le_all_weight_cut.text().replace(",", ".")) != self.cut.weight_all():
+
+            text = "Крой %s \nВес пачек %s - %s \nВес обрези %s - %s \nВес ИТОГО %s - %s" % \
+            (self.cut.id(), self.le_weight_cut.text(),  self.cut.weight(),
+             self.le_weight_rest_cut.text(), self.cut.weight_rest(), self.le_all_weight_cut.text(), self.cut.weight_all())
+
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setWindowTitle("Не совпадение")
+            msg.setText("ВНИМАНИЕ! Все хорошо! Сфотографируйте сообщение для александра(или запишите)! НЕ ЗАБУДЬТЕ показать детали! Кнопка внизу справа!!!")
+            msg.setDetailedText(text)
+            msg.exec()
 
         save_note = self.cut.save_sql()
         if not save_note[0]:

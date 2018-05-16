@@ -769,6 +769,9 @@ class Cut:
         else:
             self.__percent_rest = 0
 
+        self.__save_sql_info = True
+
+
     def check_balance_material(self):
         if self.__material_id is not None:
             query = """SELECT SUM(material_balance.BalanceWeight) FROM material_balance
