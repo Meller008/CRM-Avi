@@ -454,6 +454,7 @@ class CutBrows(QDialog):
             self.set_pack()
 
     def ui_acc(self):
+        print("Нажата кнопка сохранить")
         if self.cut.error_material():
             result = QMessageBox.question(self, "Сохранить?", "Что то не так с весом обрези.\nМогу сохранить без веса обрези! ", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
@@ -461,6 +462,7 @@ class CutBrows(QDialog):
             else:
                 return False
 
+        print("Проверка на совпадение чисел")
         # Временная проверка на совпадение чисел.
         if Decimal(self.le_weight_cut.text().replace(",", ".")) != self.cut.weight() or \
             Decimal(self.le_weight_rest_cut.text().replace(",", ".")) != self.cut.weight_rest() or \
@@ -477,7 +479,10 @@ class CutBrows(QDialog):
             msg.setDetailedText(text)
             msg.exec()
 
+        print("Нужно ли сохранять крой - %s" % str(self.cut.need_save()))
+        print("Начинаем сохранять крой")
         save_note = self.cut.save_sql()
+        print("Ответ от класса кроя - %s" % save_note[1])
         if not save_note[0]:
             QMessageBox.critical(self, "Ошибка сохранения кроя", save_note[1], QMessageBox.Ok)
             return False

@@ -179,6 +179,8 @@ class Cut:
                 sql_info = sql_info = my_sql.sql_change(query, (self.__material_id, self.__id))
                 if "mysql.connector.errors" in str(type(sql_info)):
                     return [False, "Не смог изменить вид ткани в крое"]
+        else:
+            return [True, "Крой не требуется сохранять"]
 
         return [True, "Крой сохранен"]
 
@@ -770,7 +772,6 @@ class Cut:
             self.__percent_rest = 0
 
         self.__save_sql_info = True
-
 
     def check_balance_material(self):
         if self.__material_id is not None:
