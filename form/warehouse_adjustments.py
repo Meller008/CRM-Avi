@@ -44,6 +44,54 @@ class MaterialAdjustmentsList(table.TableList):
         self.new_order.setWindowModality(Qt.ApplicationModal)
         self.new_order.show()
 
+    def ui_dell_table_item(self):
+        result = QMessageBox.question(self, "Удаление", "Точно удалить элемент?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            try:
+                id_item = self.table_widget.selectedItem()
+            except:
+                QMessageBox.critical(self, "Ошибка Удаления", "Выделите элемент который хотите удалить", QMessageBox.Ok)
+                return False
+            row_id = id_item[0].data(5)
+
+            query = "SELECT Balance, Balance_Id FROM material_adjustments WHERE Id = %s"
+            sql_info = my_sql.sql_select(query, (row_id,))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получения баланса", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            value_change = sql_info[0][0]
+            balance_id = sql_info[0][1]
+
+            sql_connect_transaction = my_sql.sql_start_transaction()
+
+            query = "DELETE FROM material_adjustments WHERE Id = %s"
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (row_id,))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                QMessageBox.critical(self, "Ошибка sql удаление баланса", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            query = "UPDATE material_balance SET BalanceWeight = BalanceWeight - %s WHERE Id = %s"
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (value_change, balance_id))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                QMessageBox.critical(self, "Ошибка sql изменение баланса", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            txt_note = "Корректировка №%s удаление корректировки" % row_id
+            query = """INSERT INTO transaction_records_material (Supply_Balance_Id, Balance, Date, Note, Cut_Material_Id, Code)
+                                                          VALUES (%s, %s, SYSDATE(), %s, NULL, 161)"""
+            sql_info = my_sql.sql_change_transaction(sql_connect_transaction, query, (balance_id, value_change, txt_note))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                my_sql.sql_rollback_transaction(sql_connect_transaction)
+                QMessageBox.critical(self, "Ошибка sql добавления записи об изменении баланса", sql_info.msg, QMessageBox.Ok)
+                return False
+
+            my_sql.sql_commit_transaction(sql_connect_transaction)
+
+        self.set_table_info()
+
 
 class MaterialAdjustments(QDialog):
     def __init__(self, main, _id=None):
@@ -127,6 +175,8 @@ class MaterialAdjustments(QDialog):
             return False
 
         my_sql.sql_commit_transaction(sql_connect_transaction)
+
+        self.main.ui_update()
 
         self.close()
         self.destroy()
