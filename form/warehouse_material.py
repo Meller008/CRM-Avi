@@ -162,6 +162,16 @@ class WarehouseSupplyPosition(table.TableList):
         self.supply_info.setWindowModality(Qt.ApplicationModal)
         self.supply_info.show()
 
+    def ui_double_click_table_item(self, item):  # Двойной клик по элементу
+        if not self.dc_select:
+            self.ui_change_table_item(item.data(5))
+        else:
+            # что хотим получить ставим всместо 0
+            item = (self.table_widget.item(item.row(), 0).text(), item.data(5))
+            self.main.of_table_select_warehouse_supply_position(item)
+            self.close()
+            self.destroy()
+
 
 class WarehouseTransaction(table.TableList):
 

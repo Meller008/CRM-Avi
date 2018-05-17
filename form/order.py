@@ -16,7 +16,6 @@ from form.templates import table, list
 from form import clients, article, print_label
 import num2t4ru
 from classes.my_class import User
-
 import collections
 
 

@@ -190,11 +190,18 @@
      <addaction name="ma_test_accessories"/>
      <addaction name="ma_material_in_pack"/>
     </widget>
+    <widget class="QMenu" name="menu_16">
+     <property name="title">
+      <string>Корректировки</string>
+     </property>
+     <addaction name="ma_adjustments_material"/>
+    </widget>
     <addaction name="ma_warehouse_material"/>
     <addaction name="ma_warehouse_accessories"/>
     <addaction name="ma_warehouse"/>
     <addaction name="ma_warehouse_rest"/>
     <addaction name="ma_test_warehouse_menu"/>
+    <addaction name="menu_16"/>
    </widget>
    <widget class="QMenu" name="menu_13">
     <property name="enabled">
@@ -594,6 +601,11 @@
    </property>
    <property name="toolTip">
     <string>ma_material_in_pack</string>
+   </property>
+  </action>
+  <action name="ma_adjustments_material">
+   <property name="text">
+    <string>Уменьшение ткани</string>
    </property>
   </action>
  </widget>
@@ -1543,6 +1555,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_adjustments_material</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_warehouse_adjustments_material()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1604,5 +1632,6 @@
   <slot>view_test_fast_warehouse()</slot>
   <slot>view_add_operation()</slot>
   <slot>view_material_in_pack()</slot>
+  <slot>view_warehouse_adjustments_material()</slot>
  </slots>
 </ui>

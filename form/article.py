@@ -1126,7 +1126,7 @@ class Article(QMainWindow):
                     QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
                     return False
 
-        path = info_sql[0][0] + "/" + self.le_article.text() + " " + self.cb_size.currentText() + " " + self.cb_parametrs.currentText() + "/" + item.text()
+        path = info_sql[0][0] + "/" + self.le_article.text().replace("/", "-") + " " + self.cb_size.currentText() + " " + self.cb_parametrs.currentText() + "/" + item.text()
         self.print_label = print_label.LabelSettings(path, data)
         self.print_label.setWindowModality(True)
         self.print_label.show()

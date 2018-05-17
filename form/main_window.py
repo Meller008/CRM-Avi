@@ -11,7 +11,7 @@ from form import report_supply, report_cost_article, test_window, report_sibesto
     report_accept_pack, pack, report_profit, report_performance_company, report_shipped_to_customer
 from form import staff_traffic, report_material_consumption, report_warehouse_balance_date,\
     report_all, report_nalog, report_article_day, test_warehouse
-from form import report_order, report_reject, transaction_warehouse, material_in_pack
+from form import report_order, report_reject, transaction_warehouse, material_in_pack, warehouse_adjustments
 from function import my_sql
 from classes.my_class import User
 import sys
@@ -315,6 +315,14 @@ class MainWindow(QMainWindow):
         self.mdi.addSubWindow(self.sub_material_accessories)
         self.sub_material_accessories.resize(self.accessories_warehouse.size())
         self.sub_material_accessories.show()
+
+    def view_warehouse_adjustments_material(self):
+        self.adjustments_material = warehouse_adjustments.MaterialAdjustmentsList()
+        self.sub_adjustments_material = QMdiSubWindow()
+        self.sub_adjustments_material.setWidget(self.adjustments_material)
+        self.mdi.addSubWindow(self.sub_adjustments_material)
+        self.sub_adjustments_material.resize(self.adjustments_material.size())
+        self.sub_adjustments_material.show()
 
     def view_transaction_warehouse(self):
         self.transaction_warehouse = transaction_warehouse.TransactionWarehouse()

@@ -464,20 +464,24 @@ class CutBrows(QDialog):
 
         print("Проверка на совпадение чисел")
         # Временная проверка на совпадение чисел.
-        if Decimal(self.le_weight_cut.text().replace(",", ".")) != self.cut.weight() or \
-            Decimal(self.le_weight_rest_cut.text().replace(",", ".")) != self.cut.weight_rest() or \
-            Decimal(self.le_all_weight_cut.text().replace(",", ".")) != self.cut.weight_all():
+        try:
+            if Decimal(self.le_weight_cut.text().replace(",", ".")) != self.cut.weight() or \
+                Decimal(self.le_weight_rest_cut.text().replace(",", ".")) != self.cut.weight_rest() or \
+                Decimal(self.le_all_weight_cut.text().replace(",", ".")) != self.cut.weight_all():
 
-            text = "Крой %s \nВес пачек %s - %s \nВес обрези %s - %s \nВес ИТОГО %s - %s" % \
-            (self.cut.id(), self.le_weight_cut.text(),  self.cut.weight(),
-             self.le_weight_rest_cut.text(), self.cut.weight_rest(), self.le_all_weight_cut.text(), self.cut.weight_all())
+                text = "Крой %s \nВес пачек %s - %s \nВес обрези %s - %s \nВес ИТОГО %s - %s" % \
+                (self.cut.id(), self.le_weight_cut.text(),  self.cut.weight(),
+                 self.le_weight_rest_cut.text(), self.cut.weight_rest(), self.le_all_weight_cut.text(), self.cut.weight_all())
 
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Information)
-            msg.setWindowTitle("Не совпадение")
-            msg.setText("ВНИМАНИЕ! Все хорошо! Сфотографируйте сообщение для александра(или запишите)! НЕ ЗАБУДЬТЕ показать детали! Кнопка внизу справа!!!")
-            msg.setDetailedText(text)
-            msg.exec()
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setWindowTitle("Не совпадение")
+                msg.setText("ВНИМАНИЕ! Все хорошо! Сфотографируйте сообщение для александра(или запишите)! НЕ ЗАБУДЬТЕ показать детали! Кнопка внизу справа!!!")
+                msg.setDetailedText(text)
+                msg.exec()
+
+        except:
+            pass
 
         print("Нужно ли сохранять крой - %s" % str(self.cut.need_save()))
         print("Начинаем сохранять крой")
@@ -631,11 +635,11 @@ class CutBrows(QDialog):
             return self.cut.id()
 
     def of_save_pack_complete(self):
+        self.cut.take_pack_sql()
         self.cut.check_material_weight()
         self.cut.check_pack_value()
         self.le_weight_cut.setText(str(self.cut.weight()))
         self.le_pack_value.setText(str(self.cut.pack_value()))
-        self.cut.take_pack_sql()
         self.set_pack()
         self.cut.take_material_price()
         self.set_width_all()
