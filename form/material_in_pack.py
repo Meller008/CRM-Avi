@@ -39,7 +39,7 @@ class MaterialInPack(QMainWindow):
         self.tw_pack.setRowCount(0)
 
         # Получить пачки с нужной тканью
-        query = """SELECT pack.Article_Parametr_Id, pack.Id, cut.Id, pack.Number, pack.Value_Damage + pack.Value_Pieces,
+        query = """SELECT pack.Article_Parametr_Id, pack.Id, cut.Id, pack.Number, pack.Value_Pieces,
                           pack.Weight, pack.Weight / 100 * cut.Rest_Percent
                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                       WHERE cut.Date_Cut BETWEEN %s AND %s AND cut.Material_Id = %s"""
@@ -49,7 +49,7 @@ class MaterialInPack(QMainWindow):
             return False
 
         # Получить пачки с доп тканью
-        query = """SELECT pack.Article_Parametr_Id, pack.Id, cut.Id, pack.Number, pack.Value_Damage + pack.Value_Pieces,
+        query = """SELECT pack.Article_Parametr_Id, pack.Id, cut.Id, pack.Number, pack.Value_Pieces,
                       pack_add_material.Weight_Rest + pack_add_material.Weight
                     FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                       LEFT JOIN pack_add_material ON pack.Id = pack_add_material.Pack_Id

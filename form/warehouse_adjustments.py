@@ -1,12 +1,10 @@
 from os import getcwd
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog, QPushButton
-from PyQt5.QtCore import Qt, QDate, QDateTime, QObject
-from PyQt5.QtGui import QIcon, QBrush, QColor
-from decimal import Decimal
-from function import my_sql, to_excel, table_to_html, moneyfmt, calc_price, str_to
-from classes import print_qt
-from form.templates import table, list
+from PyQt5.QtWidgets import QDialog, QMessageBox
+from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtGui import QIcon
+from function import my_sql, str_to
+from form.templates import table
 from form import warehouse_material, supply_material
 
 
