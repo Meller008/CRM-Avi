@@ -456,10 +456,10 @@ class CutBrows(QDialog):
 
     def ui_acc(self):
 
-        logging.basicConfig(format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.DEBUG, filename=getcwd() + '/cutLog.log')
+        logging.basicConfig(format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.WARNING, filename=getcwd() + '/cutLog.log')
 
-        logging.debug("===--- Крой %s ---===" % self.cut.id())
-        logging.debug("Нажата кнопка сохранить")
+        logging.WARNING("===--- Крой %s ---===" % self.cut.id())
+        logging.WARNING("Нажата кнопка сохранить")
 
         print("===--- Крой %s ---===" % self.cut.id())
         print("Нажата кнопка сохранить")
@@ -470,24 +470,24 @@ class CutBrows(QDialog):
             else:
                 return False
 
-        logging.debug("Проверка на совпадение чисел")
-        logging.debug("Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight()))
-        logging.debug("Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest()))
-        logging.debug("Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all()))
+        logging.WARNING("Проверка на совпадение чисел")
+        logging.WARNING("Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight()))
+        logging.WARNING("Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest()))
+        logging.WARNING("Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all()))
 
         print("Проверка на совпадение чисел")
         print("Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight()))
         print("Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest()))
         print("Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all()))
 
-        logging.debug("Нужно ли сохранять крой - %s" % str(self.cut.need_save()))
-        logging.debug("Начинаем сохранять крой")
+        logging.WARNING("Нужно ли сохранять крой - %s" % str(self.cut.need_save()))
+        logging.WARNING("Начинаем сохранять крой")
 
         print("Нужно ли сохранять крой - %s" % str(self.cut.need_save()))
         print("Начинаем сохранять крой")
         save_note = self.cut.save_sql()
 
-        logging.debug("Ответ от класса кроя - %s" % save_note[1])
+        logging.WARNING("Ответ от класса кроя - %s" % save_note[1])
         print("Ответ от класса кроя - %s" % save_note[1])
         if not save_note[0]:
             QMessageBox.critical(self, "Ошибка сохранения кроя", save_note[1], QMessageBox.Ok)
