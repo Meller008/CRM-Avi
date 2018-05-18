@@ -14,6 +14,7 @@ from classes.my_class import User
 from form.templates import table
 import codecs
 from decimal import Decimal
+import logging
 
 
 class CutList(table.TableList):
@@ -454,6 +455,13 @@ class CutBrows(QDialog):
             self.set_pack()
 
     def ui_acc(self):
+
+        logging.basicConfig(format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.DEBUG, filename=getcwd() + '/cutLog.log')
+
+        logging.debug("===--- Крой %s ---===" % self.cut.id())
+        logging.debug("Нажата кнопка сохранить")
+
+        print("===--- Крой %s ---===" % self.cut.id())
         print("Нажата кнопка сохранить")
         if self.cut.error_material():
             result = QMessageBox.question(self, "Сохранить?", "Что то не так с весом обрези.\nМогу сохранить без веса обрези! ", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -462,30 +470,24 @@ class CutBrows(QDialog):
             else:
                 return False
 
+        logging.debug("Проверка на совпадение чисел")
+        logging.debug("Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight()))
+        logging.debug("Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest()))
+        logging.debug("Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all()))
+
         print("Проверка на совпадение чисел")
-        # Временная проверка на совпадение чисел.
-        try:
-            if Decimal(self.le_weight_cut.text().replace(",", ".")) != self.cut.weight() or \
-                Decimal(self.le_weight_rest_cut.text().replace(",", ".")) != self.cut.weight_rest() or \
-                Decimal(self.le_all_weight_cut.text().replace(",", ".")) != self.cut.weight_all():
+        print("Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight()))
+        print("Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest()))
+        print("Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all()))
 
-                text = "Крой %s \nВес пачек %s - %s \nВес обрези %s - %s \nВес ИТОГО %s - %s" % \
-                (self.cut.id(), self.le_weight_cut.text(),  self.cut.weight(),
-                 self.le_weight_rest_cut.text(), self.cut.weight_rest(), self.le_all_weight_cut.text(), self.cut.weight_all())
-
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Information)
-                msg.setWindowTitle("Не совпадение")
-                msg.setText("ВНИМАНИЕ! Все хорошо! Сфотографируйте сообщение для александра(или запишите)! НЕ ЗАБУДЬТЕ показать детали! Кнопка внизу справа!!!")
-                msg.setDetailedText(text)
-                msg.exec()
-
-        except:
-            pass
+        logging.debug("Нужно ли сохранять крой - %s" % str(self.cut.need_save()))
+        logging.debug("Начинаем сохранять крой")
 
         print("Нужно ли сохранять крой - %s" % str(self.cut.need_save()))
         print("Начинаем сохранять крой")
         save_note = self.cut.save_sql()
+
+        logging.debug("Ответ от класса кроя - %s" % save_note[1])
         print("Ответ от класса кроя - %s" % save_note[1])
         if not save_note[0]:
             QMessageBox.critical(self, "Ошибка сохранения кроя", save_note[1], QMessageBox.Ok)
