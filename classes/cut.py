@@ -595,7 +595,10 @@ class Cut:
 
     # Получекние значений
     def id(self):
-        return int(self.__id)
+        if self.__id:
+            return int(self.__id)
+        else:
+            return self.__id
 
     def number(self):
         return self.__number
