@@ -482,12 +482,12 @@ class CutBrows(QDialog):
             else:
                 return False
 
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id(), User().id(), "Проверка на совпадение чисел"))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id(), User().id(), "Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight())))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id(), User().id(), "Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest())))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id(), User().id(), "Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all())))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id(), User().id(), "Нужно ли сохранять крой - %s" % str(self.cut.need_save())))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id(), User().id(), "Начало сохранения кроя"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Проверка на совпадение чисел"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight())))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest())))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all())))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Нужно ли сохранять крой - %s" % str(self.cut.need_save())))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Начало сохранения кроя"))
 
         save_note = self.cut.save_sql()
         self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id(), User().id(), "Ответ от класса кроя - %s" % save_note[1]))
