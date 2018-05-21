@@ -197,7 +197,7 @@ class CutBrows(QDialog):
             self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(new_number_cut, User().id(), "Создает крой"))
         else:
 
-            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Открыл крой"))
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Открыл крой"))
 
             self.insert_values_sql = True
 
@@ -292,7 +292,7 @@ class CutBrows(QDialog):
             QMessageBox.critical(self, "Ошибка ткани", "Сначало выберите ткань.", QMessageBox.Ok)
             return False
 
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Добавление новой пачки"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Добавление новой пачки"))
 
         self.pack = cut.Pack()
         self.pack.set_number_pack(self.cut.take_new_number_pack())
@@ -312,7 +312,7 @@ class CutBrows(QDialog):
 
         self.select_pack = id
 
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Открытие пачки %s" % self.select_pack))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Открытие пачки %s" % self.select_pack))
         self.pack_win = PackBrows(self, self.cut.pack(id), save_pack_weight=True)
         self.pack_win.setModal(True)
         self.pack_win.show()
@@ -327,7 +327,7 @@ class CutBrows(QDialog):
         result = QMessageBox.question(self, "Удалить?", "Точно удалить пачку?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
 
-            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Удаление пачки %s" % id))
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Удаление пачки %s" % id))
             save_note = self.cut.pack(id).del_pack()
             if not save_note[0]:
                 QMessageBox.critical(self, "Ошибка удаления пачки.", save_note[1], QMessageBox.Ok)
@@ -350,7 +350,7 @@ class CutBrows(QDialog):
         if self.cut.change_cut_weight():
             self.select_pack = table_item.data(-2)
 
-            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Открытие пачки %s" % self.select_pack))
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Открытие пачки %s" % self.select_pack))
             self.pack_win = PackBrows(self, self.cut.pack(table_item.data(-2)), save_pack_weight=True)
             self.pack_win.setModal(True)
             self.pack_win.show()
@@ -472,7 +472,7 @@ class CutBrows(QDialog):
 
     def ui_acc(self):
 
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Нажата кнопка принять"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Нажата кнопка принять"))
 
 
         if self.cut.error_material():
@@ -482,15 +482,15 @@ class CutBrows(QDialog):
             else:
                 return False
 
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Проверка на совпадение чисел"))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight())))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest())))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all())))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Нужно ли сохранять крой - %s" % str(self.cut.need_save())))
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Начало сохранения кроя"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Проверка на совпадение чисел"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Вес пачек %s - %s" % (self.le_weight_cut.text(),  self.cut.weight())))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Вес обрези %s - %s" % (self.le_weight_rest_cut.text(), self.cut.weight_rest())))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Вес ИТОГО %s - %s" % (self.le_all_weight_cut.text(), self.cut.weight_all())))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Нужно ли сохранять крой - %s" % str(self.cut.need_save())))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Начало сохранения кроя"))
 
         save_note = self.cut.save_sql()
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Ответ от класса кроя - %s" % save_note[1]))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id(), User().id(), "Ответ от класса кроя - %s" % save_note[1]))
 
         if not save_note[0]:
             QMessageBox.critical(self, "Ошибка сохранения кроя", save_note[1], QMessageBox.Ok)
@@ -502,7 +502,7 @@ class CutBrows(QDialog):
         self.destroy()
 
     def ui_can(self):
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Нажата кнопка отмена"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Нажата кнопка отмена"))
 
         if self.cut.need_save() and self.access_save_sql:
             result = QMessageBox.question(self, "Выйти?", "Есть несохраненая информация.\nТочно выйти без сохранения?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -642,7 +642,7 @@ class CutBrows(QDialog):
             return self.cut.id()
 
     def of_save_pack_complete(self):
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id() or 0, "Сохранена новая пачка"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Сохранена новая пачка"))
         self.cut.take_pack_sql()
         self.cut.check_material_weight()
         self.cut.check_pack_value()

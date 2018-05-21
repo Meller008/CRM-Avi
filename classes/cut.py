@@ -595,7 +595,7 @@ class Cut:
 
     # Получекние значений
     def id(self):
-        return self.__id
+        return int(self.__id)
 
     def number(self):
         return self.__number
