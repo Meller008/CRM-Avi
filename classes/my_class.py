@@ -32,12 +32,12 @@ class User(metaclass=Singleton):
             list = []
         return list
 
-    def set_id(self, id):
+    def set_id(self, _id):
         self.__access = {}
         query = """SELECT staff_worker_info.Id, staff_worker_info.First_Name, staff_worker_info.Last_Name, staff_position.Id, staff_position.Name
                       FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id
                       WHERE staff_worker_info.Id = %s"""
-        sql_info = my_sql.sql_select(query, (id, ))
+        sql_info = my_sql.sql_select(query, (_id, ))
         if "mysql.connector.errors" in str(type(sql_info)):
             raise RuntimeError("Не смог получить операции артикула")
 
@@ -48,13 +48,13 @@ class User(metaclass=Singleton):
         self.__position_name = sql_info[0][4]
 
         query = """SELECT Class, Atr1, Atr2, Atr_Value FROM access WHERE Worker_Id = %s ORDER BY Class"""
-        sql_info = my_sql.sql_select(query, (id,))
+        sql_info = my_sql.sql_select(query, (_id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             raise RuntimeError("Не смог получить список доступов по работнику")
 
         if not sql_info:
             query = """SELECT Class, Atr1, Atr2, Atr_Value FROM access WHERE Staff_Position_Id = %s ORDER BY Class"""
-            sql_info = my_sql.sql_select(query, (id,))
+            sql_info = my_sql.sql_select(query, (self.__position_id,))
             if "mysql.connector.errors" in str(type(sql_info)):
                 raise RuntimeError("Не смог получить список доступов по категории")
 
