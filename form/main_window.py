@@ -15,6 +15,8 @@ from form import report_order, report_reject, transaction_warehouse, material_in
 from function import my_sql
 from classes.my_class import User
 import sys
+import logging
+import logging.config
 
 
 class MainWindow(QMainWindow):
@@ -29,6 +31,8 @@ class MainWindow(QMainWindow):
         if "-FS" in win_arg:
             self.arg_FS()
 
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("MainLog")
 
         self.show()
         self.setDisabled(True)
@@ -533,6 +537,7 @@ class MainWindow(QMainWindow):
         self.sub_test_window.show()
 
     def login_access(self):
+        self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Зашел в программу"))
         self.statusBar().showMessage("Вы вошли как -= %s =-" % User().position_name())
         self.setEnabled(True)
         self.setFocus()
@@ -555,6 +560,7 @@ class MainWindow(QMainWindow):
         self.statusBar().addPermanentWidget(beika)
 
     def closeEvent(self, e):
+        self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
         e.accept()
         sys.exit()
 

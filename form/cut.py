@@ -14,7 +14,6 @@ from classes.my_class import User
 from form.templates import table
 import codecs
 from decimal import Decimal
-
 import logging
 import logging.config
 
