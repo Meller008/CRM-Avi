@@ -17,6 +17,8 @@ from form import clients, article, print_label
 import num2t4ru
 from classes.my_class import User
 import collections
+import logging
+import logging.config
 
 
 class OrderList(table.TableList):
@@ -31,6 +33,9 @@ class OrderList(table.TableList):
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата поствки", 70), ("№ док.", 50), ("Позиций", 50),
                                   ("Стоимость", 105), ("Стоимость без ндс", 105), ("Примечание", 150), ("Отгр.", 40))
+
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("ArtLog")
 
         self.filter = None
         self.query_table_all = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
@@ -81,6 +86,22 @@ class OrderList(table.TableList):
             self.main.of_tree_select_order(item)
             self.close()
             self.destroy()
+
+    def ui_dell_table_item(self):
+        result = QMessageBox.question(self, "Удаление", "Точно удалить элемент?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            try:
+                id_item = self.table_widget.selectedItems()
+            except:
+                QMessageBox.critical(self, "Ошибка Удаления", "Выделите элемент который хотите удалить", QMessageBox.Ok)
+                return False
+            for id in id_item:
+                sql_info = my_sql.sql_change(self.query_table_dell, (id.data(5), ))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    QMessageBox.critical(self, "Ошибка sql удаления элемента таблицы", sql_info.msg, QMessageBox.Ok)
+                    return False
+                self.logger.info(u"[Заказ {:04d} Пользователь {:04d}] {}".format(id.data(5) or 0, User().id(), "Удалил заказ"))
+        self.set_table_info()
 
     def set_table_info(self):
         self.table_items = my_sql.sql_select(self.query_table_select)
@@ -138,6 +159,10 @@ class Order(QMainWindow):
         super(Order, self).__init__()
         loadUi(getcwd() + '/ui/order.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("OrderLog")
+
         self.id = id
         self.main = main_class
         self.access_save_sql = True
@@ -192,8 +217,10 @@ class Order(QMainWindow):
         self.tw_position_label.horizontalHeader().resizeSection(7, 70)
 
         if self.id:
+            self.logger.info(u"[Заказ {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Открыл заказ"))
             self.start_set_sql_info()
         else:
+            self.logger.info(u"[Заказ {:04d} Пользователь {:04d}] {}".format(0, User().id(), "Создает заказ"))
             self.pb_add_position.setEnabled(False)
             self.pb_change_position.setEnabled(False)
             self.pb_dell_position.setEnabled(False)
@@ -378,6 +405,8 @@ class Order(QMainWindow):
             self.cb_shipping.setChecked(self.sql_shipped)
             self.cb_shipping.setEnabled(self.sql_shipped)
 
+        self.logger.info(u"[Заказ {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Добавил позицию"))
+
         row = self.tw_position.rowCount()
         self.tw_position.insertRow(row)
         table_item = QTableWidgetItem(self.position.le_article.text())
@@ -492,6 +521,8 @@ class Order(QMainWindow):
             self.cb_shipping.setChecked(self.sql_shipped)
             self.cb_shipping.setEnabled(self.sql_shipped)
 
+        self.logger.info(u"[Заказ {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Изменил позицию"))
+
         row = select_row
         if self.tw_position.item(row, 0).data(-1) == "new":
             status = "new"
@@ -600,6 +631,7 @@ class Order(QMainWindow):
 
         result = QMessageBox.question(self, "Удалить?", "Точно удалить позицию?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
+            self.logger.info(u"[Заказ {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Удалил позицию"))
             if not self.sql_shipped:
                 self.cb_shipping.setChecked(self.sql_shipped)
                 self.cb_shipping.setEnabled(self.sql_shipped)
@@ -786,9 +818,11 @@ class Order(QMainWindow):
                 self.main.ui_update()
 
     def ui_can(self):
+        self.logger.info(u"[Заказ {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Нажал кнопку отмена"))
         if (self.save_change_order or self.save_change_order_position) and self.access_save_sql:
             result = QMessageBox.question(self, "Сохранить?", "Сохранить изменение перед выходом?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
+                self.logger.info(u"[Заказ {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Сохранил перед выходом"))
                 self.save_sql()
         self.close()
         self.destroy()

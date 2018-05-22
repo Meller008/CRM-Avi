@@ -9,8 +9,6 @@ from function import my_sql, table_to_html
 from classes.my_class import User
 from classes import print_qt
 from decimal import Decimal
-
-
 import logging
 import logging.config
 
@@ -28,6 +26,9 @@ class ArticleList(tree.TreeList):
 
         # Названия колонк (Имя, Длинна)
         self.table_header_name = (("Артикул", 70), ("Название", 230), ("Размеры", 220), ("Варианты", 200))
+
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("ArtLog")
 
         self.query_tree_select = "SELECT Id, Parent_Id, Name FROM product_tree ORDER BY Parent_Id, Position"
         self.query_tree_add = "INSERT INTO product_tree (Parent_Id, Name, Position) VALUES (%s, %s, %s)"
@@ -128,6 +129,24 @@ class ArticleList(tree.TreeList):
             self.new_operation = Article(self.main, item_id, dc_select=True)
             self.new_operation.setWindowModality(QtCore.Qt.ApplicationModal)
             self.new_operation.show()
+
+    def ui_dell_tree_item(self):
+        result = QMessageBox.question(self, "Удаление", "Точно удалить ветку?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            try:
+                parent_id = self.tree_widget.selectedItems()[0].data(0, 5)
+                if self.tree_widget.selectedItems()[0].childCount() == 0:
+                    sql_tree = my_sql.sql_change(self.query_tree_del, (parent_id, ))
+                    if "mysql.connector.errors" in str(type(sql_tree)):
+                        QMessageBox.critical(self, "Ошибка sql удаления итема в дереве", sql_tree.msg, QMessageBox.Ok)
+                        return False
+                    self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(parent_id or 0, User().id(), "Удалил артикул"))
+                    self.set_tree_info()
+                else:
+                    QMessageBox.critical(self, "Ошибка", "У этого элеиента есть дети удалите сначало их", QMessageBox.Ok)
+            except:
+                QMessageBox.critical(self, "Ошибка ", "Выделите элемент который хотите удалить", QMessageBox.Ok)
+                return False
 
     def ui_filter_table(self):
         if self.filter is None:

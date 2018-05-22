@@ -32,6 +32,9 @@ class CutList(table.TableList):
         self.table_header_name = (("№", 35), ("Дата кроя", 70), ("Вес пачек", 80), ("Вес обрези", 80), ("Вес итого", 80), ("Пачек", 55),
                                   ("Раскладчик", 100), ("ткань", 120), ("Заметка", 200))
 
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("CutLog")
+
         # Быстрый фильтр
         self.le_fast_filter = QLineEdit()
         self.le_fast_filter.setPlaceholderText("Номер кроя")
@@ -80,6 +83,22 @@ class CutList(table.TableList):
         self.cut_window = CutBrows(self, item_id)
         self.cut_window.setModal(True)
         self.cut_window.show()
+
+    def ui_dell_table_item(self):
+        result = QMessageBox.question(self, "Удаление", "Точно удалить элемент?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            try:
+                id_item = self.table_widget.selectedItems()
+            except:
+                QMessageBox.critical(self, "Ошибка Удаления", "Выделите элемент который хотите удалить", QMessageBox.Ok)
+                return False
+            for id in id_item:
+                sql_info = my_sql.sql_change(self.query_table_dell, (id.data(5), ))
+                if "mysql.connector.errors" in str(type(sql_info)):
+                    QMessageBox.critical(self, "Ошибка sql удаления элемента таблицы", sql_info.msg, QMessageBox.Ok)
+                    return False
+                self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(id.data(5) or 0, User().id(), "Удалил крой"))
+        self.set_table_info()
 
     def ui_filter(self):
         if self.filter is None:
