@@ -11,6 +11,10 @@ from classes import print_qt
 from decimal import Decimal
 
 
+import logging
+import logging.config
+
+
 class ArticleList(tree.TreeList):
 
     def set_settings(self):
@@ -153,6 +157,10 @@ class Article(QMainWindow):
         super(Article, self).__init__()
         loadUi(getcwd() + '/ui/article.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("ArtLog")
+
         self.access_save_sql = True
         self.main = main
         self.id = id
@@ -220,10 +228,12 @@ class Article(QMainWindow):
         self.tw_operations.horizontalHeader().resizeSection(2, 110)
 
         if not self.id and self.tree_id:  # Если новый артикул
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(0, User().id(), "Создает артикул"))
             self.set_enabled(False)  # закрываем поля
             self.gb_parametrs.setEnabled(False)
 
         if self.id:
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Открывает артикул"))
             if not self.dc_select:
                 self.set_start_sql_info()
             else:
@@ -465,6 +475,7 @@ class Article(QMainWindow):
         if not new_size[1]:
             return False
         else:
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Добавляет размер %s" % new_size[0]))
             new_size = new_size[0]
             query = "INSERT INTO product_article_size (Article_Id, Size) VALUES (%s, %s)"
             sql_info = my_sql.sql_change(query, (self.id, new_size))
@@ -508,6 +519,7 @@ class Article(QMainWindow):
 
         result = QMessageBox.question(self, "Удаление", "Точно удалить размер???", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Удаляет размер %s" % self.cb_size.currentText()))
             size_id = self.cb_size.currentData()
             query = "DELETE FROM product_article_size WHERE Id = %s"
             sql_info = my_sql.sql_change(query, (size_id,))
@@ -527,6 +539,7 @@ class Article(QMainWindow):
         if not new_param[1] or new_param[0] == 0:
             return False
         else:
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Добавляет параметр %s" % new_param[0]))
             new_param = new_param[0]
             query = "INSERT INTO product_article_parametrs (Product_Article_Size_Id, Name, `Show`) VALUES (%s, %s, %s)"
             sql_info = my_sql.sql_change(query, (size_id, new_param, 1))
@@ -575,6 +588,7 @@ class Article(QMainWindow):
 
         result = QMessageBox.question(self, "Удаление", "Точно удалить настройку???", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Удаляет параметр %s" % self.cb_parametrs.currentText()))
 
             query = "SELECT Value_In_Warehouse FROM product_article_warehouse WHERE Id_Article_Parametr = %s"
             sql_info = my_sql.sql_select(query, (param_id,))
@@ -1052,6 +1066,7 @@ class Article(QMainWindow):
         self.calc()
 
     def ui_acc(self):
+        self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Нажата кнопка принять"))
         if not self.dc_select:
             if self.save_sql():
                 self.close()
@@ -1083,9 +1098,11 @@ class Article(QMainWindow):
             self.destroy()
 
     def ui_cancel(self):
+        self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Нажата кнопка отмена"))
         if self.save_change and self.access_save_sql:
             result = QMessageBox.question(self, "Сохранить?", "Сохранить изменение перед выходом?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
+                self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(self.id or 0, User().id(), "Сохранение перед выходом"))
                 self.save_sql()
         self.close()
         self.destroy()
