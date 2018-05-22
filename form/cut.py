@@ -642,7 +642,7 @@ class CutBrows(QDialog):
             return self.cut.id()
 
     def of_save_pack_complete(self):
-        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Сохранена новая пачка"))
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.cut.id() or 0, User().id(), "Сохранена пачка"))
         self.cut.take_pack_sql()
         self.cut.check_material_weight()
         self.cut.check_pack_value()

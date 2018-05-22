@@ -13,6 +13,9 @@ from function import barcode, files, my_sql
 from classes.my_class import User
 from form.templates import table
 
+import logging
+import logging.config
+
 
 class PackList(table.TableList):
     def set_settings(self):
@@ -113,6 +116,9 @@ class PackBrows(QDialog):
         else:
             self.pack = pack
 
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("CutLog")
+
         self.insert_values_sql = False
         self.access_save_sql = True
         self.reminder_make = False  # Переменная которая сообщает нужно ли выкинуть предупреждение о непринятой пачке
@@ -208,6 +214,7 @@ class PackBrows(QDialog):
             self.insert_values_sql = False
 
             self.tw_accessories_operation.setCurrentIndex(0)
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(), "Открыта пачка %s" % self.pack.id()))
 
         else:
             # Пачка новая
@@ -239,6 +246,7 @@ class PackBrows(QDialog):
 
     def ui_edit_date_complete(self):
         if not self.insert_values_sql:
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(), "Пачка %s изменение даты проверки" % self.pack.id()))
             if self.cb_date_complete.isChecked():
                 self.pack.set_date_complete(self.de_date_complete.date())
             else:
@@ -246,6 +254,7 @@ class PackBrows(QDialog):
 
     def ui_edit_date_make(self):
         if not self.insert_values_sql:
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(), "Пачка %s изменение даты приемки" % self.pack.id()))
             if self.cb_date_make.isChecked():
                 self.pack.set_date_make(self.de_date_make.date())
             else:
@@ -257,6 +266,8 @@ class PackBrows(QDialog):
 
     def ui_edit_value_product(self):
         if not self.insert_values_sql:
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(),
+                                                                            "Пачка %s изменение кол-ва в пачке %s" % (self.pack.id(), self.le_value_product.text())))
             self.pack.set_value_pieces(self.le_value_product.text())
             self.set_value_pack()
             self.set_accessories_name()
@@ -264,6 +275,8 @@ class PackBrows(QDialog):
 
     def ui_edit_weight(self):
         if not self.insert_values_sql:
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(),
+                                                                            "Пачка %s изменение веса пачки %s" % (self.pack.id(), self.le_weight.text())))
             self.pack.set_width(self.le_weight.text())
             material_check = self.pack.check_balance_material()
             if material_check[0]:
@@ -279,6 +292,8 @@ class PackBrows(QDialog):
 
     def ui_edit_value_damage(self):
         if not self.insert_values_sql:
+            self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(),
+                                                                            "Пачка %s изменение кол-ва брака %s" % (self.pack.id(), self.le_value_damage.text())))
             self.pack.set_value_damage(self.le_value_damage.text())
             self.set_value_pack()
             self.set_accessories_name()
@@ -571,6 +586,8 @@ class PackBrows(QDialog):
         if self.check_make():
             return False
 
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(), "Пачка %s нажата кнопка принять" % self.pack.id()))
+
         cut_id = None
         if self.pack.id() is None:
             cut_id = self.main.of_cut_id()
@@ -589,6 +606,7 @@ class PackBrows(QDialog):
         if self.check_make():
             return False
 
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(), "Пачка %s нажата кнопка отмена" % self.pack.id()))
         if self.pack.need_save_sql() and self.access_save_sql:
             result = QMessageBox.question(self, "Выйти?", "Есть несохраненая информация.\nТочно выйти без сохранения?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
