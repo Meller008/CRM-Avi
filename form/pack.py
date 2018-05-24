@@ -12,7 +12,6 @@ from form import clients, article, print_label, supply_material
 from function import barcode, files, my_sql
 from classes.my_class import User
 from form.templates import table
-
 import logging
 import logging.config
 

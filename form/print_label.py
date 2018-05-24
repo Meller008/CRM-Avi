@@ -5,6 +5,9 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QDate, QDateTime, Qt
 from function import my_sql
 import socket
+import logging
+import logging.config
+from classes.my_class import User
 
 
 IP_SERV_LABEL = "192.168.1.3"
@@ -94,6 +97,9 @@ class LabelSettings(QDialog):
         loadUi(getcwd() + '/ui/print_birk_settings.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("LabelLog")
+
         self.label_data = {"label_path": path.replace("/", '\\'),
                            "label_value": "None",
                            "label_print": "None",
@@ -123,6 +129,10 @@ class LabelSettings(QDialog):
 
         self.label_data["label_value"] = self.le_value.value()
         self.label_data["label_print"] = self.cb_printer.currentText()
+
+        log_article = "%s %s %s" % (self.label_data["article"], self.label_data["article_size"], self.label_data["article_parametr"])
+        self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Печатает артикул %s, кол-во %s, бирка %s, ID пачки %s" %
+                                                            (log_article, self.label_data["label_value"], self.label_data["label_path"], self.label_data["pack_id"])))
 
         conn = socket.socket()
         try:

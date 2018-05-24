@@ -7,6 +7,9 @@ from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QLineEdit, Q
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql
+import logging
+import logging.config
+from classes.my_class import User
 
 
 # Просто перепишем окно отображения артикулов под склад.
@@ -120,6 +123,9 @@ class WarehouseChange(QDialog):
         loadUi(getcwd() + '/ui/warehouse_product_change.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("WarehouseALog")
+
         self.main = main
         self.id = id
         self.name = name
@@ -144,7 +150,25 @@ class WarehouseChange(QDialog):
         self.tab_number = tab
 
     def ui_acc(self):
+        # Получим данные для лога
+        query = """SELECT Value_In_Warehouse FROM product_article_warehouse WHERE Id_Article_Parametr = %s"""
+        sql_info = my_sql.sql_select(query, (int(self.le_balance.text()), self.id))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получение данных для лога склада", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        history_warehouse = sql_info[0][0]
+
+        query = """SELECT SUM(Balance) FROM transaction_records_warehouse WHERE Article_Parametr_Id = %s"""
+        sql_info = my_sql.sql_select(query, (int(self.le_balance.text()), self.id))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получение данных для лога транзакций", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        history_warehouse_transaction = sql_info[0][0]
+
         if self.tab_number == 0:
+            log_text = "Добавленно изменение"
             sql_connect_transaction = my_sql.sql_start_transaction()
             query = """UPDATE product_article_warehouse
                           SET Value_In_Warehouse = Value_In_Warehouse + %s
@@ -166,7 +190,29 @@ class WarehouseChange(QDialog):
 
             my_sql.sql_commit_transaction(sql_connect_transaction)
 
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "%s" % log_text))
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Остаток ДО на складе %s По транзакциям %s" %
+                                                                                  (history_warehouse, history_warehouse_transaction)))
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Изменено %s" % self.le_balance.text()))
+
         elif self.tab_number == 1:
+            # Получим данные для лога второго артикула
+            log_text = "Добавленно перешитие"
+
+            query = """SELECT Value_In_Warehouse FROM product_article_warehouse WHERE Id_Article_Parametr = %s"""
+            sql_info = my_sql.sql_select(query, (int(self.le_balance.text()), self.le_art_name_plus.whatsThis()))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получение данных для лога склада", sql_info.msg, QMessageBox.Ok)
+                return False
+            history_warehouse_2 = sql_info[0][0]
+
+            query = """SELECT SUM(Balance) FROM transaction_records_warehouse WHERE Article_Parametr_Id = %s"""
+            sql_info = my_sql.sql_select(query, (int(self.le_balance.text()), self.le_art_name_plus.whatsThis()))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получение данных для лога транзакций", sql_info.msg, QMessageBox.Ok)
+                return False
+            history_warehouse_transaction_2 = sql_info[0][0]
+
             # Изменяем перешиваемое
             sql_connect_transaction = my_sql.sql_start_transaction()
             query = """UPDATE product_article_warehouse
@@ -208,6 +254,19 @@ class WarehouseChange(QDialog):
                 return False
 
             my_sql.sql_commit_transaction(sql_connect_transaction)
+
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "%s" % log_text))
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Что перешили"))
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Остаток ДО на складе %s По транзакциям %s" %
+                                                                                  (history_warehouse, history_warehouse_transaction)))
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Изменено %s" % self.le_balance_2.text()))
+
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "На что перешили"))
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Остаток ДО на складе %s По транзакциям %s" %
+                                                                                  (history_warehouse_2, history_warehouse_transaction_2)))
+            self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Изменено %s" % self.le_balance_2.text()))
+
+
 
         self.main.ui_update_table()
         self.close()
