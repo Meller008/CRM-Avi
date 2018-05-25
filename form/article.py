@@ -252,7 +252,7 @@ class Article(QMainWindow):
             self.gb_parametrs.setEnabled(False)
 
         if self.id:
-            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".int(unt(self.id), User().id(), "Открывает артикул"))
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(int(self.id), User().id(), "Открывает артикул"))
             if not self.dc_select:
                 self.set_start_sql_info()
             else:
@@ -538,7 +538,7 @@ class Article(QMainWindow):
 
         result = QMessageBox.question(self, "Удаление", "Точно удалить размер???", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
-            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".int(unt(self.id) or 0, User().id(), "Удаляет размер %s" % self.cb_size.currentText()))
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(int(self.id) or 0, User().id(), "Удаляет размер %s" % self.cb_size.currentText()))
             size_id = self.cb_size.currentData()
             query = "DELETE FROM product_article_size WHERE Id = %s"
             sql_info = my_sql.sql_change(query, (size_id,))
@@ -558,7 +558,7 @@ class Article(QMainWindow):
         if not new_param[1] or new_param[0] == 0:
             return False
         else:
-            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".int(unt(self.id) or 0, User().id(), "Добавляет параметр %s" % new_param[0]))
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(int(self.id) or 0, User().id(), "Добавляет параметр %s" % new_param[0]))
             new_param = new_param[0]
             query = "INSERT INTO product_article_parametrs (Product_Article_Size_Id, Name, `Show`) VALUES (%s, %s, %s)"
             sql_info = my_sql.sql_change(query, (size_id, new_param, 1))
@@ -607,7 +607,7 @@ class Article(QMainWindow):
 
         result = QMessageBox.question(self, "Удаление", "Точно удалить настройку???", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
-            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".int(unt(self.id) or 0, User().id(), "Удаляет параметр %s" % self.cb_parametrs.currentText()))
+            self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(int(self.id) or 0, User().id(), "Удаляет параметр %s" % self.cb_parametrs.currentText()))
 
             query = "SELECT Value_In_Warehouse FROM product_article_warehouse WHERE Id_Article_Parametr = %s"
             sql_info = my_sql.sql_select(query, (param_id,))
@@ -1085,7 +1085,7 @@ class Article(QMainWindow):
         self.calc()
 
     def ui_acc(self):
-        self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".int(unt(self.id) or 0, User().id(), "Нажата кнопка принять"))
+        self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(int(self.id) or 0, User().id(), "Нажата кнопка принять"))
         if not self.dc_select:
             if self.save_sql():
                 self.close()
@@ -1117,11 +1117,11 @@ class Article(QMainWindow):
             self.destroy()
 
     def ui_cancel(self):
-        self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".int(unt(self.id) or 0, User().id(), "Нажата кнопка отмена"))
+        self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(int(self.id) or 0, User().id(), "Нажата кнопка отмена"))
         if self.save_change and self.access_save_sql:
             result = QMessageBox.question(self, "Сохранить?", "Сохранить изменение перед выходом?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if result == 16384:
-                self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".int(unt(self.id) or 0, User().id(), "Сохранение перед выходом"))
+                self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(int(self.id) or 0, User().id(), "Сохранение перед выходом"))
                 self.save_sql()
         self.close()
         self.destroy()
