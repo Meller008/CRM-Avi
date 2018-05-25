@@ -187,7 +187,7 @@ class PackBrows(QDialog):
                 self.de_date_make.setDate(QDate.currentDate())
 
             self.le_article.setWhatsThis(str(self.pack.article()))
-            self.le_article.setText(str(self.pack.article_name()))
+            self.le_article.setText(str(self.pack.parametr_name()))
 
             self.le_size.setText(str(self.pack.size()))
 
@@ -247,7 +247,15 @@ class PackBrows(QDialog):
         if not self.insert_values_sql:
             self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(), "Пачка %s изменение даты проверки" % self.pack.id()))
             if self.cb_date_complete.isChecked():
-                self.pack.set_date_complete(self.de_date_complete.date())
+
+                if self.cb_date_make.isChecked():
+                    self.pack.set_date_complete(self.de_date_complete.date())
+                else:
+                    result = QMessageBox.question(self, "Отметить", "Пачка еще не принята. Вы уверены что хотите ее отметить как проверенную?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    if result == 16384:
+                        self.pack.set_date_complete(self.de_date_complete.date())
+                    else:
+                        self.cb_date_complete.setChecked(False)
             else:
                 self.pack.set_date_complete(None)
 
@@ -1305,7 +1313,7 @@ class PackFilter(QDialog):
             if self.cb_complete.isChecked():
                 where = self.add_filter(where, "(pack.Date_Coplete IS NULL)")
             else:
-                sql_date = "(pack.Date_Coplete >= '%s' AND pack.Date_Copletee <= '%s')" % \
+                sql_date = "(pack.Date_Coplete >= '%s' AND pack.Date_Coplete <= '%s')" % \
                            (self.de_date_complete_from.date().toString(Qt.ISODate), self.de_date_complete_to.date().toString(Qt.ISODate))
                 where = self.add_filter(where, sql_date)
 
