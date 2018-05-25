@@ -200,14 +200,14 @@ class WarehouseChange(QDialog):
             log_text = "Добавленно перешитие"
 
             query = """SELECT Value_In_Warehouse FROM product_article_warehouse WHERE Id_Article_Parametr = %s"""
-            sql_info = my_sql.sql_select(query, (int(self.le_balance.text()), self.le_art_name_plus.whatsThis()))
+            sql_info = my_sql.sql_select(query, (self.le_art_name_plus.whatsThis(), ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получение данных для лога склада", sql_info.msg, QMessageBox.Ok)
                 return False
             history_warehouse_2 = sql_info[0][0]
 
             query = """SELECT SUM(Balance) FROM transaction_records_warehouse WHERE Article_Parametr_Id = %s"""
-            sql_info = my_sql.sql_select(query, (int(self.le_balance.text()), self.le_art_name_plus.whatsThis()))
+            sql_info = my_sql.sql_select(query, (self.le_art_name_plus.whatsThis(), ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получение данных для лога транзакций", sql_info.msg, QMessageBox.Ok)
                 return False
