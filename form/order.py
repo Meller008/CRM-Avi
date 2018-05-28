@@ -1824,9 +1824,12 @@ class Order(QMainWindow):
         query = "SELECT Adres FROM clients_actual_address WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.cb_clients_adress.currentData(),))
         if "mysql.connector.errors" in str(type(sql_info)):
-            QMessageBox.critical(self, "Ошибка sql получения пункти разгрузки", sql_info.msg, QMessageBox.Ok)
+            QMessageBox.critical(self, "Ошибка sql получения пункта разгрузки", sql_info.msg, QMessageBox.Ok)
             return False
-        sheet["R16"] = sql_info[0][0]
+        if sql_info:
+            sheet["R16"] = sql_info[0][0]
+        else:
+            QMessageBox.information(self, "Пункт разгрузки", "У клиента нет адреса разгрузки. Поле останется пустым.", QMessageBox.Ok)
 
         sheet["B7"] = auto
         sheet["C11"] = driver
