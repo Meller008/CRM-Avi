@@ -2,7 +2,8 @@ from os import getcwd, path, mkdir, listdir
 from form.templates import tree, table
 from form import operation, supply_material, supply_accessories, print_label
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem, QLineEdit, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QTableWidgetItem, QShortcut, QListWidgetItem, QLineEdit,\
+    QWidget, QSizePolicy, QTreeWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5 import QtCore
 from function import my_sql, table_to_html
@@ -1800,3 +1801,289 @@ class ArticleListAll(table.TableList):
                                       ORDER BY product_article.Article, product_article_size.Size, product_article_parametrs.Name"""
 
         self.query_table_dell = ""
+
+
+class ArticleTest(QMainWindow):
+    def __init__(self):
+        super(ArticleTest, self).__init__()
+        loadUi(getcwd() + '/ui/article_test.ui', self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.set_tree_info()
+        self.set_article_list()
+        self.set_start_settings()
+
+    def set_start_settings(self):
+        # Ширина материалов
+        self.tw_materials.horizontalHeader().resizeSection(0, 225)
+        self.tw_materials.horizontalHeader().resizeSection(1, 80)
+        self.tw_materials.horizontalHeader().resizeSection(2, 80)
+        self.tw_materials.horizontalHeader().resizeSection(3, 80)
+        # Ширина операций
+        self.tw_operations.horizontalHeader().resizeSection(0, 250)
+        self.tw_operations.horizontalHeader().resizeSection(1, 80)
+        self.tw_operations.horizontalHeader().resizeSection(2, 110)
+
+    def set_tree_info(self):  # заполняем девево
+        self.tree = my_sql.sql_select("SELECT Id, Parent_Id, Name FROM product_tree ORDER BY Parent_Id, Position")
+        if "mysql.connector.errors" in str(type(self.tree)):
+            QMessageBox.critical(self, "Ошибка sql вывода дерева", self.tree.msg, QMessageBox.Ok)
+            return False
+
+        self.tree_widget.clear()
+        for item_tree in self.tree:
+            if item_tree[1] == 0:
+                add_item = QTreeWidgetItem((item_tree[2], ))
+                add_item.setData(0, 5, item_tree[0])
+                self.tree_widget.addTopLevelItem(add_item)
+            else:
+                for n in range(self.tree_widget.topLevelItemCount()):
+                    item = self.tree_widget.topLevelItem(n)
+                    self.search(item, item_tree)
+
+        add_item = QTreeWidgetItem(("Показать всё", ))
+        add_item.setData(0, 5, -1)
+        self.tree_widget.addTopLevelItem(add_item)
+
+    def search(self, item, search_tuple):  # Ищет кортеж в детях главных итемах дерева
+        if item.data(0, 5) == search_tuple[1]:
+            add_item = QTreeWidgetItem((search_tuple[2], ))
+            add_item.setData(0, 5, search_tuple[0])
+            item.addChild(add_item)
+            return True
+        else:
+            for number_child in range(item.childCount()):
+                self.search(item.child(number_child), search_tuple)
+            return False
+
+    def set_article_list(self, tree_id=None):
+        if tree_id:
+            self.table_items = my_sql.sql_select("SELECT Id, Article FROM product_article WHERE Tree_Id = %s ORDER BY Article", (tree_id, ))
+            if "mysql.connector.errors" in str(type(self.table_items)):
+                    QMessageBox.critical(self, "Ошибка sql получение артикулов с ID", self.table_items.msg, QMessageBox.Ok)
+                    return False
+        else:
+            self.table_items = my_sql.sql_select("SELECT Id, Article FROM product_article ORDER BY Article")
+            if "mysql.connector.errors" in str(type(self.table_items)):
+                    QMessageBox.critical(self, "Ошибка sql получение Артикулов без ID", self.table_items.msg, QMessageBox.Ok)
+                    return False
+
+        self.lw_article.clear()
+
+        if not self.table_items:
+            return False
+
+        for item_list in self.table_items:
+            item = QListWidgetItem(str(item_list[1]))
+            item.setData(5, item_list[0])
+            self.lw_article.addItem(item)
+
+    def set_size_list(self, article_id):
+        size_sql = my_sql.sql_select("SELECT Id, Size FROM product_article_size WHERE Article_Id = %s", (article_id, ))
+        if "mysql.connector.errors" in str(type(self.table_items)):
+                QMessageBox.critical(self, "Ошибка sql получения размеров", self.table_items.msg, QMessageBox.Ok)
+                return False
+
+        self.lw_size.clear()
+
+        if not size_sql:
+            return False
+
+        for item_list in size_sql:
+            item = QListWidgetItem(str(item_list[1]))
+            item.setData(5, item_list[0])
+            self.lw_size.addItem(item)
+
+    def set_parametr_list(self, size_id):
+        size_sql = my_sql.sql_select("SELECT Id, Name FROM product_article_parametrs WHERE Product_Article_Size_Id = %s", (size_id, ))
+        if "mysql.connector.errors" in str(type(self.table_items)):
+                QMessageBox.critical(self, "Ошибка sql получения параметров", self.table_items.msg, QMessageBox.Ok)
+                return False
+
+        self.lw_parametr.clear()
+
+        if not size_sql:
+            return False
+
+        for item_list in size_sql:
+            item = QListWidgetItem(str(item_list[1]))
+            item.setData(5, item_list[0])
+            self.lw_parametr.addItem(item)
+
+    def set_parametr_info(self, param_id):
+
+        self.tw_operations.clearContents()
+        self.tw_operations.setRowCount(0)
+        self.tw_materials.clearContents()
+        self.tw_materials.setRowCount(0)
+
+        query = """SELECT product_article.Name, product_article_parametrs.Client_Name, product_article_parametrs.Barcode,
+                product_article_parametrs.Client_code, product_article_parametrs.In_On_Place, product_article_parametrs.Price,
+                product_article_parametrs.Product_Note, product_article_parametrs.Cut_Note, product_article_parametrs.NDS
+                FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                WHERE product_article_parametrs.Id = %s"""
+        sql_info = my_sql.sql_select(query, (param_id,))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения параметра", sql_info.msg, QMessageBox.Ok)
+            return False   
+        
+        if sql_info:
+            self.le_name.setText(sql_info[0][0])
+            self.le_client_name.setText(sql_info[0][1])
+            self.le_barcode.setText(sql_info[0][2])
+            self.le_client_code.setText(sql_info[0][3])
+            self.le_in_on_place.setText(str(sql_info[0][4] or ""))
+            self.le_price.setText(str(sql_info[0][5] or ""))
+            self.pe_product_note.appendPlainText(sql_info[0][6])
+            self.pe_cut_note.appendPlainText(sql_info[0][7])
+            if sql_info[0][8] == 18:
+                self.rb_nds_1.setChecked(True)
+            else:
+                self.rb_nds_2.setChecked(True)
+
+        query = """SELECT product_article_operation.Product_Article_Parametrs_Id, product_article_operation.Id, product_article_operation.Operation_Id,
+                    operations.Name, operations.Price, sewing_machine.Name
+                    FROM product_article_operation
+                    LEFT JOIN operations ON product_article_operation.Operation_Id = operations.Id
+                    LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id
+                    WHERE product_article_operation.Product_Article_Parametrs_Id = %s ORDER BY product_article_operation.Position"""
+        sql_info = my_sql.sql_select(query, (param_id,))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения операций", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        status_sql = "set"
+        for operation in sql_info:
+            self.tw_operations.insertRow(self.tw_operations.rowCount())
+            for i in range(3, len(operation)):
+                new_item = QTableWidgetItem(str(operation[i]))
+                new_item.setData(5, operation[2])
+                new_item.setData(-1, status_sql)
+                new_item.setData(-2, operation[1])
+                self.tw_operations.setItem(self.tw_operations.rowCount() - 1, i - 3, new_item)
+
+        query = """SELECT product_article_material.Product_Article_Parametrs_Id, product_article_material.Id, product_article_material.Material_Id,
+                    material_name.Name, product_article_material.Value
+                    FROM product_article_parametrs
+                    LEFT JOIN product_article_material ON product_article_parametrs.Id = product_article_material.Product_Article_Parametrs_Id
+                    LEFT JOIN material_name ON product_article_material.Material_Id = material_name.Id
+                    WHERE product_article_parametrs.Id = %s AND product_article_material.Material_Id IS NOT NULL"""
+        sql_info = my_sql.sql_select(query, (param_id,))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения материала", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for material in sql_info:
+            self.tw_materials.insertRow(self.tw_materials.rowCount())
+            for i in range(3, len(material)):
+                material_text = material[i] if (material[i] is not None) else "0"
+                new_item = QTableWidgetItem(str(material_text))
+                new_item.setData(5, material[2])
+                new_item.setData(-1, status_sql)
+                new_item.setData(-2, material[1])
+                new_item.setBackground(QBrush(QColor(153, 221, 255, 255)))
+                self.tw_materials.setItem(self.tw_materials.rowCount() - 1, i - 3, new_item)
+
+        query = """SELECT product_article_material.Product_Article_Parametrs_Id, product_article_material.Id,product_article_material.Accessories_Id,
+            accessories_name.Name, product_article_material.Value
+            FROM product_article_parametrs
+            LEFT JOIN product_article_material ON product_article_parametrs.Id = product_article_material.Product_Article_Parametrs_Id
+            LEFT JOIN accessories_name ON product_article_material.Accessories_Id = accessories_name.Id
+            WHERE product_article_parametrs.Id = %s AND product_article_material.Accessories_Id IS NOT NULL"""
+        sql_info = my_sql.sql_select(query, (param_id,))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения аксесуаров", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        for accessories in sql_info:
+            self.tw_materials.insertRow(self.tw_materials.rowCount())
+            for i in range(3, len(accessories)):
+                accessories_text = accessories[i] if (accessories[i] is not None) else 0
+                new_item = QTableWidgetItem(str(accessories_text))
+                new_item.setData(5, accessories[2])
+                new_item.setData(-1, status_sql)
+                new_item.setData(-2, accessories[1])
+                new_item.setBackground(QBrush(QColor(252, 163, 255, 255)))
+                self.tw_materials.setItem(self.tw_materials.rowCount() - 1, i - 3, new_item)
+
+    def ui_calc_material(self):
+        select_param_id = self.lw_parametr.currentItem().data(5)
+        query = """SELECT product_article_material.Id, (SELECT material_supplyposition.Price
+                                        FROM material_supplyposition LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                          LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                                        WHERE material_supplyposition.Material_NameId = product_article_material.Material_Id AND material_balance.BalanceWeight > 0
+                                        ORDER BY material_supply.Data LIMIT 1)
+                        FROM product_article_material
+                        WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Material_Id IS NOT NULL"""
+        sql_info_material = my_sql.sql_select(query, (select_param_id,))
+        if "mysql.connector.errors" in str(type(sql_info_material)):
+            QMessageBox.critical(self, "Ошибка sql получения цен на ткань", sql_info_material.msg, QMessageBox.Ok)
+            return False
+
+        query = """SELECT product_article_material.Id, (SELECT accessories_supplyposition.Price
+                              FROM accessories_supplyposition LEFT JOIN accessories_supply ON accessories_supplyposition.accessories_SupplyId = accessories_supply.Id
+                                LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.accessories_SupplyPositionId
+                              WHERE accessories_supplyposition.accessories_NameId = product_article_material.Accessories_Id AND accessories_balance.BalanceValue > 0
+                              ORDER BY accessories_supply.Data LIMIT 1)
+                        FROM product_article_material
+                        WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Accessories_Id IS NOT NULL"""
+        sql_info_accessories = my_sql.sql_select(query, (select_param_id,))
+        if "mysql.connector.errors" in str(type(sql_info_accessories)):
+            QMessageBox.critical(self, "Ошибка sql получения цен на фурнитуру", sql_info_accessories.msg, QMessageBox.Ok)
+            return False
+
+        sql_info = sql_info_material + sql_info_accessories
+
+        for row in range(self.tw_materials.rowCount()):
+            id = int(self.tw_materials.item(row, 0).data(-2))
+            material_id = self.tw_materials.item(row, 0).data(5)
+            status_sql = self.tw_materials.item(row, 0).data(-1)
+            price = [i[1] for i in sql_info if i[0] == id][0]
+            value = Decimal(self.tw_materials.item(row, 1).text())
+            sum = value * price
+
+            new_item = QTableWidgetItem(str(price))
+            new_item.setData(5, material_id)
+            new_item.setData(-1, status_sql)
+            new_item.setData(-2, id)
+            self.tw_materials.setItem(row, 2, new_item)
+
+            new_item = QTableWidgetItem(str(sum))
+            new_item.setData(5, material_id)
+            new_item.setData(-1, status_sql)
+            new_item.setData(-2, id)
+            self.tw_materials.setItem(row, 3, new_item)
+
+        price_all_operations = 0.0
+        price_all_material = 0.0
+        for row in range(self.tw_operations.rowCount()):
+            if not self.tw_operations.isRowHidden(row):
+                price_all_operations += float(self.tw_operations.item(row, 1).text())
+
+        for row in range(self.tw_materials.rowCount()):
+            if not self.tw_materials.isRowHidden(row):
+                try:
+                    price_all_material += float(self.tw_materials.item(row, 3).text())
+                except:
+                    self.le_cost_price.setText("Нет расчета")
+                    return False
+
+        all_price = price_all_material + price_all_operations
+        self.le_cost_price.setText(str(round(all_price, 4)))
+
+    def ui_select_tree(self, select_tree):
+        tree_id = select_tree.data(0, 5)
+        self.set_article_list(tree_id)
+
+    def ui_select_article(self):
+        article_id = self.lw_article.currentItem().data(5)
+        self.set_size_list(article_id)
+
+    def ui_select_size(self):
+        size_id = self.lw_size.currentItem().data(5)
+        self.set_parametr_list(size_id)
+
+    def ui_select_parametr(self):
+        parametr_id = self.lw_parametr.currentItem().data(5)
+        self.set_parametr_info(parametr_id)

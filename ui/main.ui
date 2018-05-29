@@ -145,6 +145,7 @@
     <addaction name="ma_order_list"/>
     <addaction name="ma_clients"/>
     <addaction name="ma_product_operations"/>
+    <addaction name="ma_article_test"/>
    </widget>
    <widget class="QMenu" name="menu_8">
     <property name="title">
@@ -606,6 +607,11 @@
   <action name="ma_adjustments_material">
    <property name="text">
     <string>Уменьшение ткани</string>
+   </property>
+  </action>
+  <action name="ma_article_test">
+   <property name="text">
+    <string>Артикул тест</string>
    </property>
   </action>
  </widget>
@@ -1571,6 +1577,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_article_test</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_article_test()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1633,5 +1655,6 @@
   <slot>view_add_operation()</slot>
   <slot>view_material_in_pack()</slot>
   <slot>view_warehouse_adjustments_material()</slot>
+  <slot>view_article_test()</slot>
  </slots>
 </ui>

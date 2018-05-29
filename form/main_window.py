@@ -240,6 +240,14 @@ class MainWindow(QMainWindow):
         self.sub_article_list_all.resize(self.article_list_all.size())
         self.sub_article_list_all.show()
 
+    def view_article_test(self):
+        self.article_test = article.ArticleTest()
+        self.sub_article_test = QMdiSubWindow()
+        self.sub_article_test.setWidget(self.article_test)
+        self.mdi.addSubWindow(self.sub_article_test)
+        self.sub_article_test.resize(self.article_test.size())
+        self.sub_article_test.show()
+
     def view_pack_list(self):
         self.pack_list = pack.PackList()
         self.sub_pack_list = QMdiSubWindow()
