@@ -1809,20 +1809,41 @@ class ArticleTest(QMainWindow):
         loadUi(getcwd() + '/ui/article_test.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        self.set_start_settings()
         self.set_tree_info()
         self.set_article_list()
-        self.set_start_settings()
 
     def set_start_settings(self):
+        # Ширина артикула
+        self.tw_article.horizontalHeader().resizeSection(0, 65)
+        self.tw_article.horizontalHeader().resizeSection(1, 190)
+        self.tw_article.horizontalHeader().resizeSection(2, 170)
+        self.tw_article.horizontalHeader().resizeSection(3, 240)
         # Ширина материалов
-        self.tw_materials.horizontalHeader().resizeSection(0, 225)
+        self.tw_materials.horizontalHeader().resizeSection(0, 240)
         self.tw_materials.horizontalHeader().resizeSection(1, 80)
         self.tw_materials.horizontalHeader().resizeSection(2, 80)
         self.tw_materials.horizontalHeader().resizeSection(3, 80)
         # Ширина операций
-        self.tw_operations.horizontalHeader().resizeSection(0, 250)
+        self.tw_operations.horizontalHeader().resizeSection(0, 280)
         self.tw_operations.horizontalHeader().resizeSection(1, 80)
         self.tw_operations.horizontalHeader().resizeSection(2, 110)
+
+        self.get_article_sql()
+
+    def get_article_sql(self):
+        query = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
+                      GROUP_CONCAT(DISTINCT product_article_size.Size ORDER BY product_article_size.Size),
+                      GROUP_CONCAT(DISTINCT product_article_parametrs.Name ORDER BY product_article_parametrs.Name)
+                      FROM product_article
+                        LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
+                        LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
+                      GROUP BY product_article.Article
+                      ORDER BY product_article.Article"""
+        self.table_items = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(self.table_items)):
+                QMessageBox.critical(self, "Ошибка sql получение артикулов", self.table_items.msg, QMessageBox.Ok)
+                return False
 
     def set_tree_info(self):  # заполняем девево
         self.tree = my_sql.sql_select("SELECT Id, Parent_Id, Name FROM product_tree ORDER BY Parent_Id, Position")
@@ -1856,27 +1877,30 @@ class ArticleTest(QMainWindow):
                 self.search(item.child(number_child), search_tuple)
             return False
 
-    def set_article_list(self, tree_id=None):
-        if tree_id:
-            self.table_items = my_sql.sql_select("SELECT Id, Article FROM product_article WHERE Tree_Id = %s ORDER BY Article", (tree_id, ))
-            if "mysql.connector.errors" in str(type(self.table_items)):
-                    QMessageBox.critical(self, "Ошибка sql получение артикулов с ID", self.table_items.msg, QMessageBox.Ok)
-                    return False
+    def set_article_list(self, tree_id=-1):
+        self.tw_article.setSortingEnabled(False)
+
+        if tree_id == -1:
+            self.tw_article.clearContents()
+            self.tw_article.setRowCount(0)
+            for table_tuple in self.table_items:
+                self.tw_article.insertRow(self.tw_article.rowCount())
+                for column in range(2, len(table_tuple)):
+                    item = QTableWidgetItem(str(table_tuple[column]))
+                    item.setData(5, table_tuple[0])
+                    self.tw_article.setItem(self.tw_article.rowCount() - 1, column - 2, item)
         else:
-            self.table_items = my_sql.sql_select("SELECT Id, Article FROM product_article ORDER BY Article")
-            if "mysql.connector.errors" in str(type(self.table_items)):
-                    QMessageBox.critical(self, "Ошибка sql получение Артикулов без ID", self.table_items.msg, QMessageBox.Ok)
-                    return False
+            self.tw_article.clearContents()
+            self.tw_article.setRowCount(0)
+            for table_tuple in self.table_items:
+                if table_tuple[1] == tree_id:
+                    self.tw_article.insertRow(self.tw_article.rowCount())
+                    for column in range(2, len(table_tuple)):
+                        item = QTableWidgetItem(str(table_tuple[column]))
+                        item.setData(5, table_tuple[0])
+                        self.tw_article.setItem(self.tw_article.rowCount() - 1, column - 2, item)
 
-        self.lw_article.clear()
-
-        if not self.table_items:
-            return False
-
-        for item_list in self.table_items:
-            item = QListWidgetItem(str(item_list[1]))
-            item.setData(5, item_list[0])
-            self.lw_article.addItem(item)
+        self.tw_article.setSortingEnabled(True)
 
     def set_size_list(self, article_id):
         size_sql = my_sql.sql_select("SELECT Id, Size FROM product_article_size WHERE Article_Id = %s", (article_id, ))
@@ -2077,7 +2101,7 @@ class ArticleTest(QMainWindow):
         self.set_article_list(tree_id)
 
     def ui_select_article(self):
-        article_id = self.lw_article.currentItem().data(5)
+        article_id = self.tw_article.currentItem().data(5)
         self.set_size_list(article_id)
 
     def ui_select_size(self):

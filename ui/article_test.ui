@@ -6,48 +6,416 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>967</width>
-    <height>581</height>
+    <width>1197</width>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Артикула</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2" columnstretch="3,4">
+   <layout class="QGridLayout" name="gridLayout_2" columnstretch="0">
     <property name="leftMargin">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="topMargin">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="rightMargin">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="bottomMargin">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="spacing">
      <number>2</number>
     </property>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout" columnstretch="4,2,2,2">
+     <layout class="QGridLayout" name="gridLayout" columnstretch="4,0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
       <property name="spacing">
        <number>2</number>
       </property>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="placeholderText">
-         <string>Поиск артикула</string>
+      <item row="2" column="1" colspan="2">
+       <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,1,2">
+        <property name="spacing">
+         <number>2</number>
         </property>
-       </widget>
+        <item row="1" column="2">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_40">
+            <property name="text">
+             <string>Операции</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tw_operations">
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="dragEnabled">
+             <bool>false</bool>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderHighlightSections">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>20</number>
+            </attribute>
+            <attribute name="verticalHeaderHighlightSections">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="verticalHeaderMinimumSectionSize">
+             <number>18</number>
+            </attribute>
+            <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderStretchLastSection">
+             <bool>false</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Название</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Цена</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Машинка</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_41">
+            <property name="text">
+             <string>Материал</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tw_materials">
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>20</number>
+            </attribute>
+            <attribute name="verticalHeaderMinimumSectionSize">
+             <number>18</number>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Название</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Количество</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Цена</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Сумма</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1">
+         <layout class="QFormLayout" name="formLayout_5">
+          <property name="horizontalSpacing">
+           <number>2</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>2</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_42">
+            <property name="text">
+             <string>Название</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="le_name">
+            <property name="maxLength">
+             <number>60</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_43">
+            <property name="text">
+             <string>Описание товара</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPlainTextEdit" name="pe_product_note">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_44">
+            <property name="text">
+             <string>Описание кроя</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPlainTextEdit" name="pe_cut_note">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_45">
+            <property name="text">
+             <string>Название у клиента</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="le_client_name">
+            <property name="maxLength">
+             <number>65</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_46">
+            <property name="text">
+             <string>Штрих-код</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="le_barcode">
+            <property name="maxLength">
+             <number>15</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_47">
+            <property name="text">
+             <string>Код клиента</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="le_client_code">
+            <property name="maxLength">
+             <number>15</number>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_48">
+            <property name="text">
+             <string>В одном месте</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="le_in_on_place">
+            <property name="maxLength">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_49">
+            <property name="text">
+             <string>Цена</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="le_price">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_50">
+            <property name="text">
+             <string>НДС</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QRadioButton" name="rb_nds_1">
+              <property name="text">
+               <string>18%</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rb_nds_2">
+              <property name="text">
+               <string>10%</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_51">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Цена без НДС&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_52">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QDoubleSpinBox" name="sb_no_nds">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="buttonSymbols">
+             <enum>QAbstractSpinBox::NoButtons</enum>
+            </property>
+            <property name="decimals">
+             <number>4</number>
+            </property>
+            <property name="maximum">
+             <double>500.990000000000009</double>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="1">
+           <widget class="QLineEdit" name="le_cost_price">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="0" column="0" rowspan="2">
+      <item row="1" column="0" rowspan="2">
        <widget class="QTreeWidget" name="tree_widget">
         <property name="minimumSize">
          <size>
           <width>200</width>
           <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="font">
@@ -75,35 +443,85 @@
         </column>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QListWidget" name="lw_article">
+      <item row="0" column="0">
+       <widget class="QLineEdit" name="lineEdit">
         <property name="minimumSize">
          <size>
-          <width>120</width>
+          <width>200</width>
           <height>0</height>
          </size>
         </property>
-        <property name="font">
-         <font>
-          <family>Tahoma</family>
-          <pointsize>8</pointsize>
-         </font>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
         </property>
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
+        <property name="placeholderText">
+         <string>Поиск артикула</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" rowspan="2">
-       <layout class="QVBoxLayout" name="verticalLayout">
+      <item row="0" column="2" rowspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,2,2">
         <property name="spacing">
          <number>2</number>
         </property>
         <item>
-         <widget class="QLineEdit" name="lineEdit_2">
-          <property name="placeholderText">
-           <string>Поиск размера</string>
+         <widget class="QTableWidget" name="tw_article">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>200</height>
+           </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderDefaultSectionSize">
+           <number>20</number>
+          </attribute>
+          <attribute name="verticalHeaderMinimumSectionSize">
+           <number>18</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Артикул</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Название</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Размеры</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Параметры</string>
+           </property>
+          </column>
          </widget>
         </item>
         <item>
@@ -126,20 +544,6 @@
          </widget>
         </item>
         <item>
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit_3">
-          <property name="placeholderText">
-           <string>Поиск параметра</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QListWidget" name="lw_parametr">
           <property name="font">
            <font>
@@ -150,381 +554,6 @@
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="2" rowspan="2">
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="0" column="1">
-     <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,2" columnstretch="16,14">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <property name="spacing">
-       <number>2</number>
-      </property>
-      <item row="0" column="0">
-       <layout class="QFormLayout" name="formLayout_3">
-        <property name="horizontalSpacing">
-         <number>2</number>
-        </property>
-        <property name="verticalSpacing">
-         <number>2</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>Название</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="le_name">
-          <property name="maxLength">
-           <number>60</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_15">
-          <property name="text">
-           <string>Описание товара</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPlainTextEdit" name="pe_product_note">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="font">
-           <font>
-            <family>Tahoma</family>
-           </font>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_16">
-          <property name="text">
-           <string>Описание кроя</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QPlainTextEdit" name="pe_cut_note">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="font">
-           <font>
-            <family>Tahoma</family>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="1">
-       <layout class="QFormLayout" name="formLayout_4">
-        <property name="horizontalSpacing">
-         <number>2</number>
-        </property>
-        <property name="verticalSpacing">
-         <number>2</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_17">
-          <property name="text">
-           <string>Название у клиента</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_18">
-          <property name="text">
-           <string>Штрих-код</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_19">
-          <property name="text">
-           <string>Код клиента</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_20">
-          <property name="text">
-           <string>В одном месте</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_21">
-          <property name="text">
-           <string>Цена</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="label_22">
-          <property name="text">
-           <string>НДС</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="le_client_name">
-          <property name="maxLength">
-           <number>65</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="le_barcode">
-          <property name="maxLength">
-           <number>15</number>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="le_client_code">
-          <property name="maxLength">
-           <number>15</number>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="le_in_on_place">
-          <property name="maxLength">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="le_price">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <item>
-           <widget class="QRadioButton" name="rb_nds_1">
-            <property name="text">
-             <string>18%</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rb_nds_2">
-            <property name="text">
-             <string>10%</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_23">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Цена без НДС&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1">
-         <widget class="QDoubleSpinBox" name="sb_no_nds">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="decimals">
-           <number>4</number>
-          </property>
-          <property name="maximum">
-           <double>500.990000000000009</double>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0">
-         <widget class="QLabel" name="label_24">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="1">
-         <widget class="QLineEdit" name="le_cost_price">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="spacing">
-         <number>2</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="label_25">
-          <property name="text">
-           <string>Операции</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTableWidget" name="tw_operations">
-          <property name="font">
-           <font>
-            <family>Tahoma</family>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
-          <property name="acceptDrops">
-           <bool>false</bool>
-          </property>
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <property name="dragEnabled">
-           <bool>false</bool>
-          </property>
-          <property name="alternatingRowColors">
-           <bool>true</bool>
-          </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
-          </property>
-          <attribute name="horizontalHeaderCascadingSectionResizes">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="horizontalHeaderHighlightSections">
-           <bool>true</bool>
-          </attribute>
-          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="horizontalHeaderStretchLastSection">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="verticalHeaderVisible">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="verticalHeaderDefaultSectionSize">
-           <number>20</number>
-          </attribute>
-          <attribute name="verticalHeaderHighlightSections">
-           <bool>true</bool>
-          </attribute>
-          <attribute name="verticalHeaderMinimumSectionSize">
-           <number>18</number>
-          </attribute>
-          <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="verticalHeaderStretchLastSection">
-           <bool>false</bool>
-          </attribute>
-          <column>
-           <property name="text">
-            <string>Название</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Цена</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Машинка</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_26">
-          <property name="text">
-           <string>Материал</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTableWidget" name="tw_materials">
-          <property name="font">
-           <font>
-            <family>Tahoma</family>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <property name="alternatingRowColors">
-           <bool>true</bool>
-          </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
-          </property>
-          <attribute name="verticalHeaderVisible">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="verticalHeaderDefaultSectionSize">
-           <number>20</number>
-          </attribute>
-          <attribute name="verticalHeaderMinimumSectionSize">
-           <number>18</number>
-          </attribute>
-          <column>
-           <property name="text">
-            <string>Название</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Количество</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Цена</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Сумма</string>
-           </property>
-          </column>
          </widget>
         </item>
        </layout>
@@ -588,18 +617,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>lw_article</sender>
+   <sender>tw_article</sender>
    <signal>itemSelectionChanged()</signal>
    <receiver>MainWindow</receiver>
    <slot>ui_select_article()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>275</x>
-     <y>78</y>
+     <x>366</x>
+     <y>144</y>
     </hint>
     <hint type="destinationlabel">
-     <x>278</x>
-     <y>0</y>
+     <x>367</x>
+     <y>-38</y>
     </hint>
    </hints>
   </connection>
@@ -610,12 +639,12 @@
    <slot>ui_select_size()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>419</x>
-     <y>185</y>
+     <x>928</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
-     <x>454</x>
-     <y>0</y>
+     <x>922</x>
+     <y>-75</y>
     </hint>
    </hints>
   </connection>
@@ -626,28 +655,12 @@
    <slot>ui_select_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>377</x>
-     <y>463</y>
+     <x>1047</x>
+     <y>111</y>
     </hint>
     <hint type="destinationlabel">
-     <x>383</x>
-     <y>722</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_calc_matrial</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_calc_material()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>483</x>
-     <y>290</y>
+     <x>1043</x>
+     <y>-74</y>
     </hint>
    </hints>
   </connection>
@@ -657,6 +670,5 @@
   <slot>ui_select_article()</slot>
   <slot>ui_select_size()</slot>
   <slot>ui_select_parametr()</slot>
-  <slot>ui_calc_material()</slot>
  </slots>
 </ui>
