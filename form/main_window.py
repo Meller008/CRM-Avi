@@ -570,6 +570,8 @@ class MainWindow(QMainWindow):
     def closeEvent(self, e):
         self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
         e.accept()
+        self.close()
+        self.destroy()
         sys.exit()
 
     def arg_FS(self):
