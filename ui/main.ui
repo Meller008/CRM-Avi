@@ -610,6 +610,9 @@
    </property>
   </action>
   <action name="ma_article_test">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Артикул тест</string>
    </property>

@@ -319,7 +319,7 @@
        </widget>
       </item>
       <item row="2" column="1" colspan="3">
-       <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,1,2">
+       <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,3,5,1">
         <property name="spacing">
          <number>2</number>
         </property>
@@ -555,6 +555,13 @@
           </item>
          </layout>
         </item>
+        <item row="1" column="0">
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="1">
          <layout class="QFormLayout" name="formLayout_5">
           <property name="horizontalSpacing">
@@ -768,14 +775,42 @@
           </item>
          </layout>
         </item>
-        <item row="1" column="0">
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+        <item row="1" column="3">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>2</number>
           </property>
-         </widget>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Бирки</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="pb_label_view">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Показать</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QListWidget" name="lw_label">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="0" column="1" colspan="2">
+        <item row="0" column="1" colspan="3">
          <widget class="Line" name="line">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -801,6 +836,9 @@
     <string notr="true"/>
    </property>
    <widget class="QMenu" name="menu">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
@@ -812,6 +850,9 @@
     <addaction name="pb_dell_category"/>
    </widget>
    <widget class="QMenu" name="menu_2">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Артикул</string>
     </property>
@@ -822,7 +863,7 @@
     <addaction name="pb_calc_matrial"/>
     <addaction name="pb_copy_article"/>
     <addaction name="pb_past_article"/>
-    <addaction name="action_4"/>
+    <addaction name="pb_change_article_category"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -870,7 +911,7 @@
     <string>Удалить</string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="pb_change_article_category">
    <property name="text">
     <string>Сменить категорию</string>
    </property>
@@ -970,7 +1011,7 @@
    <slot>ui_add_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1089</x>
+     <x>978</x>
      <y>456</y>
     </hint>
     <hint type="destinationlabel">
@@ -986,7 +1027,7 @@
    <slot>ui_add_accessories()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1136</x>
+     <x>1025</x>
      <y>454</y>
     </hint>
     <hint type="destinationlabel">
@@ -1002,7 +1043,7 @@
    <slot>ui_dell_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1181</x>
+     <x>1070</x>
      <y>450</y>
     </hint>
     <hint type="destinationlabel">
@@ -1034,7 +1075,7 @@
    <slot>ui_add_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1169</x>
+     <x>1058</x>
      <y>236</y>
     </hint>
     <hint type="destinationlabel">
@@ -1050,7 +1091,7 @@
    <slot>ui_dell_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1187</x>
+     <x>1076</x>
      <y>240</y>
     </hint>
     <hint type="destinationlabel">
@@ -1066,7 +1107,7 @@
    <slot>ui_double_click_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1090</x>
+     <x>1082</x>
      <y>331</y>
     </hint>
     <hint type="destinationlabel">
@@ -1082,7 +1123,7 @@
    <slot>ui_up_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1119</x>
+     <x>1008</x>
      <y>241</y>
     </hint>
     <hint type="destinationlabel">
@@ -1098,7 +1139,7 @@
    <slot>ui_down_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1141</x>
+     <x>1030</x>
      <y>235</y>
     </hint>
     <hint type="destinationlabel">
@@ -1507,6 +1548,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>le_filter_article</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_search_article()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>29</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-64</x>
+     <y>22</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_change_article_category</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_change_article_category()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>598</x>
+     <y>329</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_label_view</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_view_label()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1159</x>
+     <y>239</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1238</x>
+     <y>240</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lw_label</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_print_label()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1165</x>
+     <y>460</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1261</x>
+     <y>460</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_select_tree()</slot>
@@ -1540,5 +1645,9 @@
   <slot>ui_save_article_sql()</slot>
   <slot>ui_copy_article()</slot>
   <slot>ui_past_article()</slot>
+  <slot>ui_search_article()</slot>
+  <slot>ui_change_article_category()</slot>
+  <slot>ui_view_label()</slot>
+  <slot>ui_print_label()</slot>
  </slots>
 </ui>

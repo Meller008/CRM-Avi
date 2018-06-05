@@ -1872,6 +1872,31 @@ class ArticleTest(QMainWindow):
         self.set_tree_info()
         self.set_article_list()
 
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    try:
+                        val = int(item["value"])
+                    except:
+                        val = item["value"]
+                a(val)
+            else:
+                a()
+
+    def access_save(self, bol):
+        self.flag_access_save_sql = bol
+
     def set_start_settings(self):
         # Ширина артикула
         self.tw_article.horizontalHeader().resizeSection(0, 65)
@@ -1899,20 +1924,36 @@ class ArticleTest(QMainWindow):
         self.flag_need_save_material = False
         # переменная для копирования артикула
         self.copy_article_id = None
+        # Флаг дающи разрешение на сохранение информации пользователю
+        self.flag_access_save_sql = False
 
         self.get_article_sql()
 
-    def get_article_sql(self):
+    def get_article_sql(self, where=None):
         # Получаем список артикулов, что бы не запрашивать каждый раз
-        query = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
-                      GROUP_CONCAT(DISTINCT product_article_size.Size ORDER BY product_article_size.Size),
-                      GROUP_CONCAT(DISTINCT product_article_parametrs.Name ORDER BY product_article_parametrs.Name)
-                      FROM product_article
-                        LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
-                        LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
-                      GROUP BY product_article.Article
-                      ORDER BY product_article.Article"""
-        self.table_items = my_sql.sql_select(query)
+        if not where:
+            query = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
+                          GROUP_CONCAT(DISTINCT product_article_size.Size ORDER BY product_article_size.Size),
+                          GROUP_CONCAT(DISTINCT product_article_parametrs.Name ORDER BY product_article_parametrs.Name)
+                          FROM product_article
+                            LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
+                            LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
+                          GROUP BY product_article.Article
+                          ORDER BY product_article.Article"""
+            self.table_items = my_sql.sql_select(query)
+        else:
+            where_like = "%" + str(where) + "%"
+            query = """SELECT product_article.Id, product_article.Tree_Id, product_article.Article, product_article.Name,
+                          GROUP_CONCAT(DISTINCT product_article_size.Size ORDER BY product_article_size.Size),
+                          GROUP_CONCAT(DISTINCT product_article_parametrs.Name ORDER BY product_article_parametrs.Name)
+                          FROM product_article
+                            LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
+                            LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
+                          WHERE product_article.Article LIKE '%s'
+                          GROUP BY product_article.Article
+                          ORDER BY product_article.Article""" % where_like
+            self.table_items = my_sql.sql_select(query)
+
         if "mysql.connector.errors" in str(type(self.table_items)):
                 QMessageBox.critical(self, "Ошибка sql получение артикулов", self.table_items.msg, QMessageBox.Ok)
                 return False
@@ -2172,6 +2213,8 @@ class ArticleTest(QMainWindow):
         self.toolButton_13.setEnabled(True)
         self.toolButton_12.setEnabled(True)
         self.toolButton_14.setEnabled(True)
+        self.pb_label_view.setEnabled(True)
+
         
         self.flag_select_human = True
 
@@ -2218,12 +2261,16 @@ class ArticleTest(QMainWindow):
         self.toolButton_13.setEnabled(False)
         self.toolButton_12.setEnabled(False)
         self.toolButton_14.setEnabled(False)
+        self.pb_label_view.setEnabled(False)
 
         self.flag_select_human = True
 
     # Блок выбора элементов списка
     def ui_select_tree(self, select_tree):
         # Вызывается при клике на дерево
+        if self.ui_check_need_save():
+            return False
+
         tree_id = select_tree.data(0, 5)
         self.set_article_list(tree_id)
 
@@ -2234,6 +2281,9 @@ class ArticleTest(QMainWindow):
     def ui_select_article(self):
         # Вызывается при клике на артикул
         if self.flag_select_human:
+            if self.ui_check_need_save():
+                return False
+
             article_id = self.tw_article.currentItem().data(5)
             self.set_size_list(article_id)
 
@@ -2243,6 +2293,9 @@ class ArticleTest(QMainWindow):
     def ui_select_size(self):
         # Вызывается при клике на размер
         if self.flag_select_human:
+            if self.ui_check_need_save():
+                return False
+
             size_id = self.lw_size.currentItem().data(5)
             self.set_parametr_list(size_id)
 
@@ -2251,15 +2304,8 @@ class ArticleTest(QMainWindow):
     def ui_select_parametr(self):
         # Вызывается при клике на параметр
         if self.flag_select_human:
-            if self.flag_need_save_article or self.flag_need_save_operation or self.flag_need_save_material:
-                result = QMessageBox.question(self, "Не сохранять?", "Точно выйти без сохранения?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-                if result == 16384:
-                    self.pb_article_acc.setEnabled(False)
-                    self.flag_need_save_article = False
-                    self.flag_need_save_operation = False
-                    self.flag_need_save_material = False
-                else:
-                    return False
+            if self.ui_check_need_save():
+                return False
 
             parametr_id = self.lw_parametr.currentItem().data(5)
             self.set_parametr_info(parametr_id)
@@ -2556,6 +2602,50 @@ class ArticleTest(QMainWindow):
 
             self.update_article_list()
 
+    def ui_search_article(self):
+        # Вызывается при поиске артикула
+        if self.le_filter_article.text():
+            self.get_article_sql(self.le_filter_article.text())
+            self.set_article_list()
+
+        else:
+            self.get_article_sql()
+            self.set_article_list()
+
+    def ui_change_article_category(self):
+        try:
+            transfer_id = []
+            for item in self.tw_article.selectedItems():
+                if item.data(5) not in transfer_id:
+                 transfer_id.append(item.data(5))
+        except:
+            QMessageBox.critical(self, "Ошибка переноса", "Выберете артикула для переноса", QMessageBox.Ok)
+            return False
+        if not transfer_id:
+            QMessageBox.critical(self, "Ошибка переноса", "Выберете артикула для переноса", QMessageBox.Ok)
+            return False
+
+        self.set_transfer_win = {"WinTitle": "Изменение категории",
+                                 "WinColor": "(167, 183, 255)"}
+
+        info = tree.TreeTransfer("SELECT Id, Parent_Id, Name FROM product_tree ORDER BY Parent_Id, Position")
+        info.set_settings(self.set_transfer_win)
+        if info.exec() == 0:
+            return False
+
+        if not info.select_tree_id:
+            QMessageBox.critical(self, "Ошибка переноса", "Выберете в каую категорию перенести", QMessageBox.Ok)
+        new_tree_id = info.select_tree_id
+
+        for item_id in transfer_id:
+            sql_info = my_sql.sql_change("UPDATE product_article SET Tree_Id = %s WHERE Id = %s", (new_tree_id, item_id))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql получение табюлицы", sql_info.msg, QMessageBox.Ok)
+                return False
+
+        self.get_article_sql()
+        self.set_article_list(self.tree_widget.currentItem().data(0, 5))
+
     def ui_copy_article(self):
         try:
             self.copy_article_id = self.lw_parametr.currentItem().data(5)
@@ -2770,23 +2860,40 @@ class ArticleTest(QMainWindow):
 
     def ui_save_change_info(self):
         # Срабатывает при изменении данных артикула
-        if self.flag_select_human:
+        if self.flag_select_human and self.flag_access_save_sql:
             self.flag_need_save_article = True
             self.pb_article_acc.setEnabled(True)
             
     def ui_save_change_operation(self):
         # Срабатывает при изменении данных операций
-        if self.flag_select_human:
+        if self.flag_select_human and self.flag_access_save_sql:
             self.flag_need_save_operation = True
             self.pb_article_acc.setEnabled(True)
             
     def ui_save_change_material(self):
         # Срабатывает при изменении данных материала
-        if self.flag_select_human:
+        if self.flag_select_human and self.flag_access_save_sql:
             self.flag_need_save_material = True
             self.pb_article_acc.setEnabled(True)
+
+    def ui_check_need_save(self):
+        if self.flag_need_save_article or self.flag_need_save_operation or self.flag_need_save_material:
+                result = QMessageBox.question(self, "Не сохранять?", "Точно выйти без сохранения?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                if result == 16384:
+                    self.pb_article_acc.setEnabled(False)
+                    self.flag_need_save_article = False
+                    self.flag_need_save_operation = False
+                    self.flag_need_save_material = False
+                    return False
+                else:
+                    return True
+        else:
+            return False
             
     def ui_save_article_sql(self):
+
+        if not self.flag_access_save_sql:
+            return False
 
         try:
             int(self.le_in_on_place.text())
@@ -3204,6 +3311,79 @@ class ArticleTest(QMainWindow):
         self.tw_materials.setItem(self.tw_materials.rowCount() - 1, 1, item)
 
         self.ui_save_change_material()
+
+    # Бирки
+    def ui_print_label(self, item):
+        data = {"article": self.tw_article.selectedItems()[0].text(),
+                "article_size": self.lw_size.currentItem().text(),
+                "article_parametr": self.lw_parametr.currentItem().text()}
+
+        query = 'SELECT `Values` FROM program_settings_path WHERE Name = "Путь корень бирки"'
+        info_sql = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(info_sql)):
+                QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                return False
+
+        path = info_sql[0][0] + "/" +\
+               self.tw_article.selectedItems()[0].text().replace("/", "-") + " " +\
+               self.lw_size.currentItem().text() + " " +\
+               self.lw_parametr.currentItem().text() + "/" +\
+               item.text()
+
+        self.print_label = print_label.LabelSettings(path, data)
+        self.print_label.setWindowModality(True)
+        self.print_label.show()
+
+    def ui_view_label(self):
+        if self.lw_size.currentItem().text() and self.lw_parametr.currentItem().text() :
+            dir_name = self.tw_article.selectedItems()[0].text().replace("/", "-") + " " +\
+                       self.lw_size.currentItem().text() + " " +\
+                       self.lw_parametr.currentItem().text()
+            self.inspection_files(dir_name, "Путь корень бирки")
+
+    def inspection_path(self, dir_name, sql_dir_name):  # Находим путь работника
+        if not hasattr(self, 'path_work'):
+            query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % sql_dir_name
+            info_sql = my_sql.sql_select(query)
+            if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                        return False
+            self.path_wor = info_sql[0][0]
+            if not path.isdir("%s/%s" % (self.path_wor, dir_name)):
+                try:
+                    mkdir("%s/%s" % (self.path_wor, dir_name))
+                    return "%s/%s" % (self.path_wor, dir_name)
+                except:
+                    QMessageBox.critical(self, "Ошибка файлы", "Нет доступа к корневому диалогу, файлы недоступны", QMessageBox.Ok)
+                    return False
+            else:
+                return "%s/%s" % (self.path_wor, dir_name)
+
+    def inspection_files(self, dir_name, sql_dir_name):   # Проверяем файлы и даем иконки
+        dir_name = dir_name.replace("/", "-")
+        self.path = self.inspection_path(dir_name, sql_dir_name)
+        if self.path:
+            self.lw_label.clear()
+            files = listdir("%s/%s" % (self.path_wor, dir_name))
+            for file in files:
+                if "~" not in file:
+                    r = path.splitext(file)  # Получаем название и расширение
+                    if "xlsx" in r[1][1:] or "xlsm" in r[1] or "xls" in r[1] or "xlt" in r[1]:
+                        ico = "xlsx"
+                    elif "xml" in r[1][1:] or "docx" in r[1] or "doc" in r[1] or "docm" in r[1]:
+                        ico = "xml"
+                    elif "png" in r[1].lower() or "jpg" in r[1] or "jpeg" in r[1] or "jpe" in r[1] or "gif" in r[1] or "bmp" in r[1]:
+                        ico = "image"
+                    elif "pdf" in r[1]:
+                        ico = "pdf"
+                    elif "btw" in r[1]:
+                        ico = "btw"
+                    else:
+                        ico = "other"
+
+                    list_item = QListWidgetItem(r[0] + r[1])
+                    list_item.setIcon(QIcon(getcwd() + "/images/%s.ico" % ico))
+                    self.lw_label.addItem(list_item)
 
 
 class ArticleName(QDialog):
