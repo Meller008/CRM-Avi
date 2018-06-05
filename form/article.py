@@ -1872,6 +1872,8 @@ class ArticleTest(QMainWindow):
         self.set_tree_info()
         self.set_article_list()
 
+        self.log("Открыл окно артикулов")
+
         self.access()
 
     def access(self):
@@ -1897,7 +1899,19 @@ class ArticleTest(QMainWindow):
     def access_save(self, bol):
         self.flag_access_save_sql = bol
 
+    def log(self, text):
+        # Метод создает логи
+        try:
+            parametr_id = int(self.lw_parametr.currentItem().data(5))
+        except:
+            parametr_id = 0
+
+        self.logger.info(u"[Артикул {:04d} Пользователь {:04d}] {}".format(parametr_id, User().id(), text))
+
     def set_start_settings(self):
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("ArtLog")
+
         # Ширина артикула
         self.tw_article.horizontalHeader().resizeSection(0, 65)
         self.tw_article.horizontalHeader().resizeSection(1, 190)
@@ -2336,6 +2350,8 @@ class ArticleTest(QMainWindow):
             QMessageBox.critical(self, "Ошибка sql добавления корневой категории", sql_tree.msg, QMessageBox.Ok)
             return False
 
+        self.log("Добавил категорию")
+
         self.set_tree_info()
 
     def ui_change_category(self):
@@ -2364,6 +2380,8 @@ class ArticleTest(QMainWindow):
             QMessageBox.critical(self, "Ошибка sql изменения категории", sql_tree.msg, QMessageBox.Ok)
             return False
 
+        self.log("Изменил категорию")
+
         self.set_tree_info()
 
     def ui_dell_category(self):
@@ -2376,6 +2394,8 @@ class ArticleTest(QMainWindow):
                     if "mysql.connector.errors" in str(type(sql_tree)):
                         QMessageBox.critical(self, "Ошибка sql удаления категории", sql_tree.msg, QMessageBox.Ok)
                         return False
+
+                    self.log("Удалил категорию")
                     self.set_tree_info()
                 else:
                     QMessageBox.information(self, "Ошибка", "Сначала удалите подкатегории", QMessageBox.Ok)
@@ -2398,6 +2418,8 @@ class ArticleTest(QMainWindow):
                 QMessageBox.critical(self, "Ошибка sql добавление размера", sql_info.msg, QMessageBox.Ok)
                 return False
 
+            self.log("Добавил размер")
+
             self.set_size_list(article_id)
             self.update_article_list()
 
@@ -2412,6 +2434,8 @@ class ArticleTest(QMainWindow):
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql изменение размера", sql_info.msg, QMessageBox.Ok)
                 return False
+
+            self.log("Изменил размер %s" % size_id)
 
             self.set_size_list(self.tw_article.currentItem().data(5))
             self.update_article_list()
@@ -2430,6 +2454,8 @@ class ArticleTest(QMainWindow):
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql удаление размера", sql_info.msg, QMessageBox.Ok)
                 return False
+
+            self.log("Удалил размер %s" % size_id)
 
             self.set_size_list(self.tw_article.currentItem().data(5))
             self.update_article_list()
@@ -2455,6 +2481,8 @@ class ArticleTest(QMainWindow):
                 QMessageBox.critical(self, "Ошибка sql добавление пустой позиции на склад", sql_info_2.msg, QMessageBox.Ok)
                 return False
 
+            self.log("Добавил вариант")
+
             self.set_parametr_list(size_id)
             self.update_article_list()
 
@@ -2477,6 +2505,8 @@ class ArticleTest(QMainWindow):
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql изменения параметра", sql_info.msg, QMessageBox.Ok)
             return False
+
+        self.log("Изменил вариант %s" % param_id)
 
         self.set_parametr_list(size_id)
         self.update_article_list()
@@ -2521,6 +2551,8 @@ class ArticleTest(QMainWindow):
 
             my_sql.sql_commit_transaction(sql_connect_transaction)
 
+            self.log("Удалил вариант %s" % param_id)
+
             self.set_parametr_list(size_id)
             self.update_article_list()
 
@@ -2552,6 +2584,8 @@ class ArticleTest(QMainWindow):
             QMessageBox.critical(self, "Ошибка sql добавление артикула", sql_info.msg, QMessageBox.Ok)
             return False
 
+        self.log("Добавил артикул")
+
         self.update_article_list()
 
     def ui_change_article(self):
@@ -2581,6 +2615,8 @@ class ArticleTest(QMainWindow):
             QMessageBox.critical(self, "Ошибка sql изменение артикула", sql_info.msg, QMessageBox.Ok)
             return False
 
+        self.log("Изменил артикул")
+
         self.update_article_list()
 
     def ui_dell_article(self):
@@ -2599,6 +2635,8 @@ class ArticleTest(QMainWindow):
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql удаления артикула", sql_info.msg, QMessageBox.Ok)
                 return False
+
+            self.log("Удалил артикул")
 
             self.update_article_list()
 
@@ -2926,6 +2964,8 @@ class ArticleTest(QMainWindow):
                 QMessageBox.critical(self, "Ошибка sql изменения параметров", sql_info.msg, QMessageBox.Ok)
                 return False
 
+            self.log("Сохранил изменение арикула")
+
         if self.flag_need_save_operation:
             position_operation = 1
             for row in range(self.tw_operations.rowCount()):
@@ -2960,6 +3000,8 @@ class ArticleTest(QMainWindow):
                 else:
                     QMessageBox.critical(self, "Ошибка", "Строка операций не подошла в if при сохранении, это не нормально позовите администратора", QMessageBox.Ok)
                     return False
+
+                self.log("Сохранил изменение операций")
 
         if self.flag_need_save_material:
             for row in range(self.tw_materials.rowCount()):
@@ -3006,6 +3048,8 @@ class ArticleTest(QMainWindow):
                 else:
                     QMessageBox.critical(self, "Ошибка", "Строка материала не подошла в if при сохранении, это не нормально позовите администратора", QMessageBox.Ok)
                     return False
+
+                self.log("Сохранил изменение материалов")
 
         self.pb_article_acc.setEnabled(False)
         self.flag_need_save_article = False
