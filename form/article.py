@@ -402,6 +402,7 @@ class Article(QMainWindow):
             self.tw_operations.setRowCount(0)
             self.tw_materials.clearContents()
             self.tw_materials.setRowCount(0)
+
         self.le_client_name.clear()
         self.le_barcode.clear()
         self.le_client_code.clear()
@@ -2255,6 +2256,7 @@ class ArticleTest(QMainWindow):
         self.tw_operations.setRowCount(0)
         self.tw_materials.clearContents()
         self.tw_materials.setRowCount(0)
+        self.lw_label.clear()
 
         self.le_name.clear()
         self.le_client_name.clear()
