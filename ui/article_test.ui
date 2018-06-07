@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1197</width>
-    <height>660</height>
+    <height>668</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
        <number>2</number>
       </property>
       <item row="0" column="2" rowspan="2">
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,0,0">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,0">
         <property name="spacing">
          <number>2</number>
         </property>
@@ -107,152 +107,60 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="spacing">
-           <number>0</number>
+         <layout class="QFormLayout" name="formLayout">
+          <property name="horizontalSpacing">
+           <number>2</number>
           </property>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Размер</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="pb_size_add">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>+</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="pb_size_del">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>-</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="pb_size_chenge">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Н</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QListWidget" name="lw_size">
-            <property name="minimumSize">
-             <size>
-              <width>120</width>
-              <height>0</height>
-             </size>
+          <property name="verticalSpacing">
+           <number>2</number>
+          </property>
+          <item row="1" column="1">
+           <widget class="QPlainTextEdit" name="pe_product_note">
+            <property name="enabled">
+             <bool>true</bool>
             </property>
             <property name="maximumSize">
              <size>
-              <width>120</width>
-              <height>16777215</height>
+              <width>180</width>
+              <height>130</height>
              </size>
             </property>
             <property name="font">
              <font>
               <family>Tahoma</family>
-              <pointsize>8</pointsize>
              </font>
-            </property>
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
             </property>
            </widget>
           </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Варианты</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="pb_param_add">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>+</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="pb_param_del">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>-</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="pb_param_change">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Н</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QListWidget" name="lw_parametr">
-            <property name="minimumSize">
-             <size>
-              <width>120</width>
-              <height>0</height>
-             </size>
+          <item row="3" column="1">
+           <widget class="QPlainTextEdit" name="pe_cut_note">
+            <property name="enabled">
+             <bool>true</bool>
             </property>
             <property name="maximumSize">
              <size>
-              <width>120</width>
-              <height>16777215</height>
+              <width>180</width>
+              <height>130</height>
              </size>
             </property>
             <property name="font">
              <font>
               <family>Tahoma</family>
-              <pointsize>8</pointsize>
              </font>
             </property>
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Информация о товаре&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Информация для кроя&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -562,6 +470,41 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="3">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Бирки</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="pb_label_view">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Показать</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QListWidget" name="lw_label">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
         <item row="1" column="1">
          <layout class="QFormLayout" name="formLayout_5">
           <property name="horizontalSpacing">
@@ -570,58 +513,20 @@
           <property name="verticalSpacing">
            <number>2</number>
           </property>
-          <item row="0" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_42">
             <property name="text">
              <string>Название</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="2" column="1">
            <widget class="QLineEdit" name="le_name">
             <property name="maxLength">
              <number>60</number>
             </property>
             <property name="readOnly">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_43">
-            <property name="text">
-             <string>Описание товара</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPlainTextEdit" name="pe_product_note">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Tahoma</family>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_44">
-            <property name="text">
-             <string>Описание кроя</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QPlainTextEdit" name="pe_cut_note">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Tahoma</family>
-             </font>
             </property>
            </widget>
           </item>
@@ -730,13 +635,6 @@
             </property>
            </widget>
           </item>
-          <item row="11" column="0">
-           <widget class="QLabel" name="label_52">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
           <item row="10" column="1">
            <widget class="QDoubleSpinBox" name="sb_no_nds">
             <property name="readOnly">
@@ -750,6 +648,13 @@
             </property>
             <property name="maximum">
              <double>500.990000000000009</double>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_52">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -773,44 +678,175 @@
             </property>
            </widget>
           </item>
-         </layout>
-        </item>
-        <item row="1" column="3">
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <property name="spacing">
-           <number>2</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item row="0" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item>
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Бирки</string>
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <property name="spacing">
+               <number>0</number>
               </property>
-             </widget>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="spacing">
+                 <number>2</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Размер</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="pb_size_add">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>+</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="pb_size_del">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="pb_size_chenge">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Н</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QListWidget" name="lw_size">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>1655555</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Tahoma</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QToolButton" name="pb_label_view">
-              <property name="enabled">
-               <bool>false</bool>
+             <layout class="QVBoxLayout" name="verticalLayout_3">
+              <property name="spacing">
+               <number>0</number>
               </property>
-              <property name="text">
-               <string>Показать</string>
-              </property>
-             </widget>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <property name="spacing">
+                 <number>2</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>Варианты</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="pb_param_add">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>+</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="pb_param_del">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>-</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="pb_param_change">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Н</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QListWidget" name="lw_parametr">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Tahoma</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
-          <item>
-           <widget class="QListWidget" name="lw_label">
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
+          <item row="1" column="0" colspan="2">
+           <widget class="Line" name="line_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item row="0" column="1" colspan="3">
+        <item row="0" column="2" colspan="2">
          <widget class="Line" name="line">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -963,8 +999,8 @@
    <slot>ui_select_size()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>998</x>
-     <y>92</y>
+     <x>370</x>
+     <y>393</y>
     </hint>
     <hint type="destinationlabel">
      <x>993</x>
@@ -979,28 +1015,12 @@
    <slot>ui_select_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1166</x>
-     <y>109</y>
+     <x>532</x>
+     <y>410</y>
     </hint>
     <hint type="destinationlabel">
      <x>1096</x>
      <y>0</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>le_price</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_calc_no_nds_price()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>331</x>
-     <y>555</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>313</x>
-     <y>659</y>
     </hint>
    </hints>
   </connection>
@@ -1011,8 +1031,8 @@
    <slot>ui_add_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>978</x>
-     <y>456</y>
+     <x>998</x>
+     <y>490</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1027,8 +1047,8 @@
    <slot>ui_add_accessories()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1025</x>
-     <y>454</y>
+     <x>1062</x>
+     <y>490</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1043,8 +1063,8 @@
    <slot>ui_dell_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1070</x>
-     <y>450</y>
+     <x>1081</x>
+     <y>490</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1075,8 +1095,8 @@
    <slot>ui_add_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1058</x>
-     <y>236</y>
+     <x>1062</x>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1091,8 +1111,8 @@
    <slot>ui_dell_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1076</x>
-     <y>240</y>
+     <x>1081</x>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1123,8 +1143,8 @@
    <slot>ui_up_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1008</x>
-     <y>241</y>
+     <x>1014</x>
+     <y>295</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1139,8 +1159,8 @@
    <slot>ui_down_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1030</x>
-     <y>235</y>
+     <x>1039</x>
+     <y>295</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1155,8 +1175,8 @@
    <slot>ui_add_size()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1013</x>
-     <y>25</y>
+     <x>328</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
      <x>1014</x>
@@ -1171,8 +1191,8 @@
    <slot>ui_change_size()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1053</x>
-     <y>37</y>
+     <x>369</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
      <x>1050</x>
@@ -1187,8 +1207,8 @@
    <slot>ui_dell_size()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1033</x>
-     <y>35</y>
+     <x>347</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
      <x>1012</x>
@@ -1251,8 +1271,8 @@
    <slot>ui_add_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1136</x>
-     <y>32</y>
+     <x>490</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
      <x>1133</x>
@@ -1267,8 +1287,8 @@
    <slot>ui_change_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1178</x>
-     <y>38</y>
+     <x>531</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
      <x>1181</x>
@@ -1283,8 +1303,8 @@
    <slot>ui_dell_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1156</x>
-     <y>35</y>
+     <x>509</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
      <x>1145</x>
@@ -1337,166 +1357,6 @@
     <hint type="destinationlabel">
      <x>598</x>
      <y>319</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pe_product_note</sender>
-   <signal>textChanged()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>521</x>
-     <y>282</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>497</x>
-     <y>-98</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pe_cut_note</sender>
-   <signal>textChanged()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>495</x>
-     <y>388</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>510</x>
-     <y>-49</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>le_client_name</sender>
-   <signal>textEdited(QString)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>477</x>
-     <y>465</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>455</x>
-     <y>-118</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>le_barcode</sender>
-   <signal>textEdited(QString)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>460</x>
-     <y>486</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>454</x>
-     <y>-23</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>le_client_code</sender>
-   <signal>textEdited(QString)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>440</x>
-     <y>509</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>434</x>
-     <y>-15</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>le_in_on_place</sender>
-   <signal>textEdited(QString)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>420</x>
-     <y>527</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>417</x>
-     <y>-40</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>le_price</sender>
-   <signal>textEdited(QString)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>387</x>
-     <y>559</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>427</x>
-     <y>-35</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>rb_nds_1</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>349</x>
-     <y>579</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>343</x>
-     <y>-50</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>rb_nds_2</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_change_info()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>518</x>
-     <y>577</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>548</x>
-     <y>-25</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_article_acc</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>ui_save_article_sql()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>423</x>
-     <y>648</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>430</x>
-     <y>753</y>
     </hint>
    </hints>
   </connection>
@@ -1559,7 +1419,7 @@
      <y>29</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-64</x>
+     <x>0</x>
      <y>22</y>
     </hint>
    </hints>
@@ -1587,11 +1447,11 @@
    <slot>ui_view_label()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1159</x>
-     <y>239</y>
+     <x>1192</x>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1238</x>
+     <x>1196</x>
      <y>240</y>
     </hint>
    </hints>
@@ -1607,8 +1467,184 @@
      <y>460</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1261</x>
+     <x>1196</x>
      <y>460</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_barcode</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>454</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_client_code</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>509</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>434</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_in_on_place</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>550</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_price</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>387</x>
+     <y>559</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>427</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_nds_1</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>349</x>
+     <y>579</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>343</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_nds_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>518</x>
+     <y>577</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>548</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_price</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_no_nds_price()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>331</x>
+     <y>555</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>313</x>
+     <y>659</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_article_acc</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_article_sql()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>423</x>
+     <y>648</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>430</x>
+     <y>667</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_client_name</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>477</x>
+     <y>465</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>455</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pe_product_note</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1098</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>991</x>
+     <y>-88</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pe_cut_note</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1033</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>924</x>
+     <y>-149</y>
     </hint>
    </hints>
   </connection>
