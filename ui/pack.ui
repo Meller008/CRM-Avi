@@ -631,7 +631,7 @@ border-color: rgb(170, 0, 0);
         </layout>
        </item>
        <item row="0" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0,1,0,10,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0,1,0,0,0,10,0,0">
          <property name="spacing">
           <number>6</number>
          </property>
@@ -663,6 +663,32 @@ border-color: rgb(170, 0, 0);
          </item>
          <item>
           <widget class="QLineEdit" name="le_number_cut">
+           <property name="minimumSize">
+            <size>
+             <width>70</width>
+             <height>33</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 75 12pt &quot;Tahoma&quot;;</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_27">
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="le_id_pack">
            <property name="minimumSize">
             <size>
              <width>70</width>

@@ -27,7 +27,10 @@ class WorkCalendar(QDialog):
         self.tableWidget.clearContents()
         self.tableWidget.setRowCount(0)
         to_date = QDate.currentDate()
-        notif_date = (to_date.addDays(15).toString(Qt.ISODate), to_date.addDays(-15).toString(Qt.ISODate))
+        date_1 = to_date.addDays(30)
+        date_2 = to_date.addDays(-15)
+        notif_date = (to_date.addDays(30).toString(Qt.ISODate), to_date.addDays(-15).toString(Qt.ISODate))
+
         query = "SELECT staff_worker_info.Id, CONCAT(staff_worker_info.Last_Name, ' ', staff_worker_info.First_Name),'Патент', staff_worker_patent.Date_Ending " \
                 "FROM staff_worker_patent LEFT JOIN staff_worker_info ON staff_worker_patent.Worker_Info_Id = staff_worker_info.Id" \
                 " WHERE Date_Ending <= %s AND Date_Ending >= %s AND staff_worker_info.Leave = 0"
@@ -68,13 +71,13 @@ class WorkCalendar(QDialog):
         self.paint_date(notif_1, (0, 255, 255))
         self.set_table(notif_1, (0, 255, 255))
 
-        query = "SELECT staff_worker_info.Id, CONCAT(staff_worker_info.Last_Name, ' ', staff_worker_info.First_Name), 'ДР', staff_worker_info.Date_Birth " \
-                "FROM staff_worker_info WHERE Date_Birth <= %s AND Date_Birth >= %s"
-        notif_1 = my_sql.sql_select(query, notif_date)
+        query = """SELECT staff_worker_info.Id, CONCAT(staff_worker_info.Last_Name, ' ', staff_worker_info.First_Name), 'ДР', staff_worker_info.Date_Birth
+                      FROM staff_worker_info WHERE MONTH(Date_Birth) BETWEEN %s AND %s"""
+        notif_1 = my_sql.sql_select(query, (to_date.month(), date_1.month()))
         if "mysql.connector.errors" in str(type(notif_1)):
             QMessageBox.critical(self, "Ошибка sql", notif_1.msg, QMessageBox.Ok)
             return False
-        self.paint_date(notif_1, (255, 167, 167))
+        # self.paint_date(notif_1, (255, 167, 167))
         self.set_table(notif_1, (255, 167, 167))
 
     def paint_date(self, date, color):

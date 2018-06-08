@@ -153,6 +153,14 @@ class PayListFilter(QDialog):
         if self.le_work.whatsThis() != '':
             where = self.add_filter(where, "(pack_operation.Worker_Id = %s)" % self.le_work.whatsThis())
 
+        # Блок  условий выбора кроя
+        if self.sb_cut.value():
+            where = self.add_filter(where, "(Cut.Id = %s)" % self.sb_cut.value())
+
+        # Блок  условий выбора пачки
+        if self.sb_pack.value():
+            where = self.add_filter(where, "(Pack.Id = %s)" % self.sb_pack.value())
+
         if where:
             self.sql_query_all = self.sql_query_all.replace("LIMIT", " WHERE " + where + " LIMIT ")
 

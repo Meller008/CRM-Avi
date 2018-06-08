@@ -186,6 +186,8 @@ class PackBrows(QDialog):
             else:
                 self.de_date_make.setDate(QDate.currentDate())
 
+            self.le_id_pack.setText(str(self.pack.id()))
+
             self.le_article.setWhatsThis(str(self.pack.article()))
             self.le_article.setText(str(self.pack.parametr_name()))
 
