@@ -2347,12 +2347,13 @@ class Pack:
                 raise RuntimeError("Что то пошло не так со вставкой фурнитуры (id в for)")
 
         elif id is None:
-            edit_accessories = {"id": self.__new_operation_count,
+            edit_accessories = {"id": self.__new_accessories_count,
                                 "accessories_id": None,
                                 "accessories_name": None,
                                 "price": None,
                                 "value": None,
-                                "sql_value": None}
+                                "sql_value": None,
+                                "value_thing": None}
             self.__save_accessories_sql.append(self.__new_accessories_count)
             self.__new_accessories_count -= 1
             self.__accessories.append(edit_accessories)
@@ -2378,6 +2379,8 @@ class Pack:
         edit_accessories["price"] = price
         edit_accessories["value"] = info["value"]
         edit_accessories["sql_value"] = info["sql_value"]
+        edit_accessories["value_thing"] = info["value_thing"]
+        edit_accessories["sql_value_sum"] = info["value_thing"] * info["value"]
 
     def set_order(self, id):
         self.__order = int(id)

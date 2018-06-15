@@ -437,6 +437,7 @@ class PackBrows(QDialog):
 
     def ui_add_accessories(self):
         self.one_accessories_window = PackAccessories()
+        self.one_accessories_window.le_value.setText(str(self.pack.value()))
         self.one_accessories_window.setModal(True)
         self.one_accessories_window.show()
         if self.one_accessories_window.exec() <= 0:
