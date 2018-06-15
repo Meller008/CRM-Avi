@@ -20,6 +20,8 @@ class MainWindowOperation(QMainWindow, main_class):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
         self.show()
 
+        self.showFullScreen()
+
         self.timer = QTimer()
         self.timer.timeout.connect(self.close_timer)
         self.timer.start(900000)
