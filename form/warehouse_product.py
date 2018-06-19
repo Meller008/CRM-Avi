@@ -278,7 +278,6 @@ class WarehouseChange(QDialog):
             self.logger.info(u"[Артикул ID {:04d} Пользователь {:04d}] {}".format(self.id, User().id(), "Изменено %s" % self.le_balance_2.text()))
 
 
-
         self.main.ui_update_table()
         self.close()
         self.destroy()
@@ -576,6 +575,7 @@ class Warehouse2(QMainWindow):
         self.tw_order.horizontalHeader().resizeSection(2, 85)
         self.tw_order.horizontalHeader().resizeSection(3, 85)
 
+        self.de_date_to.setDate(QDate.currentDate())
 
         # Флаги определения выделения строки человеком
         self.flag_select_human = True
@@ -858,3 +858,72 @@ class Warehouse2(QMainWindow):
             new_table_item = QTableWidgetItem(str(order[4]))
             new_table_item.setData(-2, order[0])
             self.tw_order.setItem(row, 3, new_table_item)
+
+    def ui_calc_date(self):
+        article_id = self.tw_article.currentItem().data(5)
+
+        query = """SELECT war.Value_In_Warehouse - (SELECT SUM(transaction_records_warehouse.Balance) FROM transaction_records_warehouse
+                                                    WHERE transaction_records_warehouse.Article_Parametr_Id = war.Id_Article_Parametr
+                                                      AND transaction_records_warehouse.Date > %s)
+                      FROM product_article_warehouse AS war WHERE war.Id_Article_Parametr = %s"""
+        sql_info = my_sql.sql_select(query, (self.de_date_to.date().toPyDate(), article_id))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получение склада на дату", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        warehouse = sql_info[0][0]
+        self.le_warehouse_date.setText(str(warehouse))
+
+        # Узнаем всю расчетную себестоимость
+        query = """SELECT pr.Price, (
+                              SELECT SUM(operations.Price)
+                                FROM product_article_operation LEFT JOIN operations ON product_article_operation.Operation_Id = operations.Id
+                                WHERE product_article_operation.Product_Article_Parametrs_Id = pr.Id
+                          ),(
+                              SELECT SUM(s)
+                              FROM (SELECT material_supplyposition.Price * product_article_material.Value AS s
+                                      FROM product_article_material
+                                        LEFT JOIN material_supplyposition ON product_article_material.Material_Id = material_supplyposition.Material_NameId
+                                        LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                        LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
+                                      WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Material_Id IS NOT NULL
+                                        AND material_balance.BalanceWeight > 0
+                                      GROUP BY product_article_material.Material_Id) t
+                          ),(
+                              SELECT SUM(s)
+                              FROM (SELECT accessories_supplyposition.Price * product_article_material.Value AS s
+                                      FROM product_article_material
+                                        LEFT JOIN accessories_supplyposition ON product_article_material.Accessories_Id = accessories_supplyposition.Accessories_NameId
+                                        LEFT JOIN accessories_supply ON accessories_supplyposition.Accessories_SupplyId = accessories_supply.Id
+                                        LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
+                                      WHERE product_article_material.Product_Article_Parametrs_Id = %s AND product_article_material.Accessories_Id IS NOT NULL
+                                            AND accessories_balance.BalanceValue > 0
+                                      GROUP BY product_article_material.Accessories_Id) t
+                          )
+                      FROM product_article_parametrs AS pr WHERE pr.Id = %s"""
+        sql_info = my_sql.sql_select(query, (article_id, article_id, article_id))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения расчетной себестоимости + цены продажи", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        if warehouse:
+            self.le_price_one.setText(str(sql_info[0][0]))
+            self.le_sebest_one.setText(str(sql_info[0][1] + sql_info[0][2] + sql_info[0][3]))
+            self.le_price_many.setText(str(sql_info[0][0] * warehouse))
+            self.le_sebest_many.setText(str((sql_info[0][1] + sql_info[0][2] + sql_info[0][3]) * warehouse))
+
+    def ui_change_value(self):
+        try:
+            item_id = self.tw_article.selectedItems()[0].data(5)
+            row_item = self.tw_article.selectedItems()[0].row()
+            item_name = self.tw_article.item(row_item, 0).text() + " (" + self.tw_article.item(row_item, 1).text() + ") [" + self.tw_article.item(row_item, 2).text() + "]"
+        except:
+            QMessageBox.critical(self, "Ошибка ", "Выделите элемент который хотите изменить", QMessageBox.Ok)
+            return False
+
+        self.warehouse_change = WarehouseChange(self, item_id, item_name)
+        self.warehouse_change.setModal(True)
+        self.warehouse_change.show()
+
+    def ui_update_table(self):
+        self.update_article_list()
