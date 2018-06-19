@@ -514,11 +514,17 @@
    <addaction name="pb_change_warehouse"/>
   </widget>
   <action name="pb_calc">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Расчитать</string>
    </property>
   </action>
   <action name="pb_change_warehouse">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Изменить</string>
    </property>

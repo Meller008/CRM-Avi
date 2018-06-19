@@ -199,11 +199,11 @@
     </widget>
     <addaction name="ma_warehouse_material"/>
     <addaction name="ma_warehouse_accessories"/>
-    <addaction name="ma_warehouse"/>
     <addaction name="ma_warehouse2"/>
     <addaction name="ma_warehouse_rest"/>
     <addaction name="ma_test_warehouse_menu"/>
     <addaction name="menu_16"/>
+    <addaction name="ma_warehouse"/>
    </widget>
    <widget class="QMenu" name="menu_13">
     <property name="enabled">
@@ -381,7 +381,7 @@
   </action>
   <action name="ma_warehouse">
    <property name="text">
-    <string>Продукция</string>
+    <string>Продукция old</string>
    </property>
   </action>
   <action name="ma_beika">
@@ -620,7 +620,7 @@
   </action>
   <action name="ma_warehouse2">
    <property name="text">
-    <string>Продукция2</string>
+    <string>Продукция</string>
    </property>
   </action>
  </widget>
