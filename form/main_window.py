@@ -304,6 +304,14 @@ class MainWindow(QMainWindow):
         self.sub_product_warehouse.resize(self.product_warehouse.size())
         self.sub_product_warehouse.show()
 
+    def view_product_warehouse_2(self):
+        self.product_warehouse2 = warehouse_product.Warehouse2()
+        self.sub_product_warehouse2 = QMdiSubWindow()
+        self.sub_product_warehouse2.setWidget(self.product_warehouse2)
+        self.mdi.addSubWindow(self.sub_product_warehouse2)
+        self.sub_product_warehouse2.resize(self.product_warehouse2.size())
+        self.sub_product_warehouse2.show()
+
     def view_warehouse_rest(self):
         self.rest_warehouse = warehouse_rest.WarehouseRest()
         self.sub_rest_warehouse = QMdiSubWindow()

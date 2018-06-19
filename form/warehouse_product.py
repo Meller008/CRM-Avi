@@ -3,13 +3,24 @@ from form import article
 from form.pack import PackBrows
 from form.order import Order
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QLineEdit, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QLineEdit, QWidget, QSizePolicy, QMainWindow, QTreeWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtCore import QDate
 from PyQt5 import QtCore
 from function import my_sql
 import logging
 import logging.config
 from classes.my_class import User
+
+
+def d_flag_human(_function):
+        # Декоратор который ставит флаг что не человек выделил строку
+        def function_decorate(*args):
+            args[0].flag_select_human = False
+            _function(*args)
+            args[0].flag_select_human = True
+
+        return function_decorate
 
 
 # Просто перепишем окно отображения артикулов под склад.
@@ -486,6 +497,350 @@ class WarehouseInfo(QDialog):
         self.tw_order.setRowCount(0)
 
         for row, order in enumerate(self.order):
+            self.tw_order.insertRow(row)
+
+            new_table_item = QTableWidgetItem(str(order[1]))
+            new_table_item.setData(-2, order[0])
+            self.tw_order.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(order[2]))
+            new_table_item.setData(-2, order[0])
+            self.tw_order.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(order[3].strftime("%d.%m.%Y"))
+            new_table_item.setData(-2, order[0])
+            self.tw_order.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(order[4]))
+            new_table_item.setData(-2, order[0])
+            self.tw_order.setItem(row, 3, new_table_item)
+
+
+class Warehouse2(QMainWindow):
+    def __init__(self):
+        super(Warehouse2, self).__init__()
+        loadUi(getcwd() + '/ui/warehouse_product_info_2.ui', self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.set_start_settings()
+        self.set_tree_info()
+        self.set_article_list()
+
+        self.access()
+
+    def access(self):
+        for item in User().access_list(self.__class__.__name__):
+            a = getattr(self, item["atr1"])
+            if item["atr2"]:
+                a = getattr(a, item["atr2"])
+
+            if item["value"]:
+                if item["value"] == "True":
+                    val = True
+                elif item["value"] == "False":
+                    val = False
+                else:
+                    try:
+                        val = int(item["value"])
+                    except:
+                        val = item["value"]
+                a(val)
+            else:
+                a()
+
+    def access_save(self, bol):
+        self.flag_access_save_sql = bol
+
+    def set_start_settings(self):
+        # Ширина артикула
+        self.tw_article.horizontalHeader().resizeSection(0, 57)
+        self.tw_article.horizontalHeader().resizeSection(1, 50)
+        self.tw_article.horizontalHeader().resizeSection(2, 80)
+        self.tw_article.horizontalHeader().resizeSection(3, 180)
+        self.tw_article.horizontalHeader().resizeSection(4, 50)
+        self.tw_article.horizontalHeader().resizeSection(5, 70)
+        self.tw_article.horizontalHeader().resizeSection(6, 65)
+
+        self.tw_workshop.horizontalHeader().resizeSection(0, 45)
+        self.tw_workshop.horizontalHeader().resizeSection(1, 45)
+        self.tw_workshop.horizontalHeader().resizeSection(2, 55)
+        self.tw_workshop.horizontalHeader().resizeSection(3, 80)
+
+        self.tw_warehouse.horizontalHeader().resizeSection(0, 50)
+        self.tw_warehouse.horizontalHeader().resizeSection(1, 70)
+        self.tw_warehouse.horizontalHeader().resizeSection(2, 50)
+        self.tw_warehouse.horizontalHeader().resizeSection(3, 150)
+
+        self.tw_order.horizontalHeader().resizeSection(0, 50)
+        self.tw_order.horizontalHeader().resizeSection(1, 100)
+        self.tw_order.horizontalHeader().resizeSection(2, 85)
+        self.tw_order.horizontalHeader().resizeSection(3, 85)
+
+
+        # Флаги определения выделения строки человеком
+        self.flag_select_human = True
+
+        self.get_article_sql()
+
+    def get_article_sql(self, where=None):
+        # Получаем список артикулов, что бы не запрашивать каждый раз
+        if not where:
+            query = """SELECT product_article_parametrs.Id, product_article.Tree_Id,
+                                        product_article.Article, product_article_size.Size, product_article_parametrs.Name, product_article.Name,
+                                                      IFNULL((SELECT SUM(pack.Value_Pieces)
+                                                        FROM pack
+                                                        WHERE Date_Make IS NULL AND pack.Article_Parametr_Id = product_article_parametrs.Id
+                                                        GROUP BY pack.Article_Parametr_Id), 0) AS c,
+                                        product_article_warehouse.Value_In_Warehouse AS w,
+                                                       (SELECT SUM(order_position.Value) - (c + w)
+                                                        FROM order_position LEFT JOIN `order` ON order_position.Order_Id = `order`.Id
+                                                        WHERE `order`.Shipped = 0 AND order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+                                                        GROUP BY order_position.Product_Article_Parametr_Id)
+                                      FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                                        LEFT JOIN product_article_warehouse ON product_article_parametrs.Id = product_article_warehouse.Id_Article_Parametr"""
+            self.table_items = my_sql.sql_select(query)
+        else:
+            where_like = "%" + str(where) + "%"
+            query = """SELECT product_article_parametrs.Id, product_article.Tree_Id,
+                                        product_article.Article, product_article_size.Size, product_article_parametrs.Name, product_article.Name,
+                                                      IFNULL((SELECT SUM(pack.Value_Pieces)
+                                                        FROM pack
+                                                        WHERE Date_Make IS NULL AND pack.Article_Parametr_Id = product_article_parametrs.Id
+                                                        GROUP BY pack.Article_Parametr_Id), 0) AS c,
+                                        product_article_warehouse.Value_In_Warehouse AS w,
+                                                       (SELECT SUM(order_position.Value) - (c + w)
+                                                        FROM order_position LEFT JOIN `order` ON order_position.Order_Id = `order`.Id
+                                                        WHERE `order`.Shipped = 0 AND order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+                                                        GROUP BY order_position.Product_Article_Parametr_Id)
+                                      FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                                        LEFT JOIN product_article_warehouse ON product_article_parametrs.Id = product_article_warehouse.Id_Article_Parametr
+                          WHERE product_article.Article LIKE '%s' """ % where_like
+            self.table_items = my_sql.sql_select(query)
+
+        if "mysql.connector.errors" in str(type(self.table_items)):
+                QMessageBox.critical(self, "Ошибка sql получение артикулов", self.table_items.msg, QMessageBox.Ok)
+                return False
+
+    def search(self, item, search_tuple):  # Ищет кортеж в детях главных итемах дерева
+        if item.data(0, 5) == search_tuple[1]:
+            add_item = QTreeWidgetItem((search_tuple[2], ))
+            add_item.setData(0, 5, search_tuple[0])
+            item.addChild(add_item)
+            return add_item
+        else:
+            for number_child in range(item.childCount()):
+                self.search(item.child(number_child), search_tuple)
+            return False
+
+    def update_article_list(self):
+        tree_item = self.tree_widget.currentItem()
+        if tree_item:
+            tree_id = tree_item.data(0, 5)
+        else:
+            tree_id = -1
+
+        self.get_article_sql()
+        self.set_article_list(tree_id)
+
+    # Блок вставки значений списков
+    @d_flag_human
+    def set_tree_info(self, current_id=None):  # заполняем девево
+        # Посмотрим выделенный ID
+        if not current_id and self.tree_widget.currentItem():
+            current_id = self.tree_widget.currentItem().data(0, 5)
+
+        self.tree = my_sql.sql_select("SELECT Id, Parent_Id, Name FROM product_tree ORDER BY Parent_Id, Position")
+        if "mysql.connector.errors" in str(type(self.tree)):
+            QMessageBox.critical(self, "Ошибка sql вывода дерева", self.tree.msg, QMessageBox.Ok)
+            return False
+
+        self.tree_widget.clear()
+        open_tree_item = None
+        for item_tree in self.tree:
+            if item_tree[1] == 0:
+                add_item = QTreeWidgetItem((item_tree[2], ))
+                add_item.setData(0, 5, item_tree[0])
+                self.tree_widget.addTopLevelItem(add_item)
+
+                if current_id and current_id == item_tree[0]:
+                    open_tree_item = add_item
+            else:
+                for n in range(self.tree_widget.topLevelItemCount()):
+                    item = self.tree_widget.topLevelItem(n)
+                    new_item = self.search(item, item_tree)
+
+                    if current_id and new_item and current_id == new_item.data(0, 5):
+                        open_tree_item = new_item
+
+            if open_tree_item:
+                self.tree_widget.setCurrentItem(open_tree_item)
+                parent = open_tree_item.parent()
+                while parent:
+                    self.tree_widget.expandItem(parent)
+                    parent = parent.parent()
+
+        add_item = QTreeWidgetItem(("Показать всё", ))
+        add_item.setData(0, 5, -1)
+        self.tree_widget.addTopLevelItem(add_item)
+
+    @d_flag_human
+    def set_article_list(self, tree_id=-1, current_id=None):
+        # Составляем таблицу артикулов, всю или отфильрованную
+        self.tw_article.setSortingEnabled(False)
+
+        # Посмотрим выделенный ID
+        if not current_id and self.tw_article.currentItem():
+            current_id = self.tw_article.currentItem().data(5)
+
+        self.tw_article.clearContents()
+        self.tw_article.setRowCount(0)
+
+        for table_tuple in self.table_items:
+            if tree_id == -1 or table_tuple[1] == tree_id:
+                self.tw_article.insertRow(self.tw_article.rowCount())
+
+                for column in range(2, len(table_tuple)):
+                    item = QTableWidgetItem(str(table_tuple[column]))
+                    item.setData(5, table_tuple[0])
+                    self.tw_article.setItem(self.tw_article.rowCount() - 1, column - 2, item)
+
+                if table_tuple[0] == current_id: # Выделим выбранную ранее строку
+                    self.tw_article.setCurrentCell(self.tw_article.rowCount() - 1, 0)
+
+        self.tw_article.setSortingEnabled(True)
+
+    # Блок отчистки списков
+    def clear_parametr_info(self):
+        self.tw_workshop.clearContents()
+        self.tw_workshop.setRowCount(0)
+        self.tw_warehouse.clearContents()
+        self.tw_warehouse.setRowCount(0)
+        self.tw_order.clearContents()
+        self.tw_order.setRowCount(0)
+
+        self.le_warehouse_date.clear()
+        self.le_price_one.clear()
+        self.le_sebest_one.clear()
+        self.le_price_many.clear()
+        self.le_sebest_many.clear()
+
+    # Блок выбора элементов списка
+    def ui_select_tree(self, select_tree):
+        # Вызывается при клике на дерево
+
+        tree_id = select_tree.data(0, 5)
+        self.set_article_list(tree_id)
+
+        self.clear_parametr_info()
+
+    def ui_select_article(self):
+        # Вызывается при клике на артикул
+        if self.flag_select_human:
+            article_id = self.tw_article.currentItem().data(5)
+
+            self.clear_parametr_info()
+
+            self.set_parametr_warehouse(article_id)
+
+    def ui_search_article(self):
+        # Вызывается при поиске артикула
+        if self.le_filter_article.text():
+            self.get_article_sql(self.le_filter_article.text())
+            self.set_article_list()
+
+        else:
+            self.get_article_sql()
+            self.set_article_list()
+
+    # Вставка значений склада
+    def set_parametr_warehouse(self, _id):
+        self.set_workshop_table(_id)
+        self.set_warehouse_table(_id)
+        self.set_order_table(_id)
+
+    def set_workshop_table(self, _id):
+
+        query = """SELECT pack.Id, pack.Cut_Id, pack.Number, pack.Value_Pieces, cut.Date_Cut
+                      FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
+                      WHERE Date_Make IS NULL AND pack.Article_Parametr_Id = %s
+                      ORDER BY cut.Date_Cut"""
+        sql_info_workshop = my_sql.sql_select(query, (_id, ))
+        if "mysql.connector.errors" in str(type(sql_info_workshop)):
+            QMessageBox.critical(self, "Ошибка sql получение цеха", sql_info_workshop.msg, QMessageBox.Ok)
+            return False
+
+        for row, pack in enumerate(sql_info_workshop):
+            self.tw_workshop.insertRow(row)
+
+            new_table_item = QTableWidgetItem(str(pack[1]))
+            new_table_item.setData(-2, pack[0])
+            self.tw_workshop.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(pack[2]))
+            new_table_item.setData(-2, pack[0])
+            self.tw_workshop.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(pack[3]))
+            new_table_item.setData(-2, pack[0])
+            self.tw_workshop.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(pack[4].strftime("%d.%m.%Y"))
+            new_table_item.setData(-2, pack[0])
+            self.tw_workshop.setItem(row, 3, new_table_item)
+
+    def set_warehouse_table(self, _id):
+
+        query = """SELECT Id, Date, Balance, Note
+                      FROM transaction_records_warehouse
+                      WHERE Article_Parametr_Id = %s AND Date >= %s
+                      ORDER BY Date DESC, Id DESC """
+        sql_info_warehouse = my_sql.sql_select(query, (_id, QDate.currentDate().addMonths(-3).toString(1)))
+        if "mysql.connector.errors" in str(type(sql_info_warehouse)):
+            QMessageBox.critical(self, "Ошибка sql получение склада", sql_info_warehouse.msg, QMessageBox.Ok)
+            return False
+
+        for row, transaction in enumerate(sql_info_warehouse):
+            self.tw_warehouse.insertRow(row)
+
+            if transaction[2] > 0:
+                color = QBrush(QColor(150, 255, 161, 255))
+            else:
+                color = QBrush(QColor(252, 141, 141, 255))
+
+            new_table_item = QTableWidgetItem(str(transaction[0]))
+            new_table_item.setData(-2, transaction[0])
+            new_table_item.setBackground(color)
+            self.tw_warehouse.setItem(row, 0, new_table_item)
+
+            new_table_item = QTableWidgetItem(transaction[1].strftime("%d.%m.%Y"))
+            new_table_item.setData(-2, transaction[0])
+            new_table_item.setBackground(color)
+            self.tw_warehouse.setItem(row, 1, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(transaction[2]))
+            new_table_item.setData(-2, transaction[0])
+            new_table_item.setBackground(color)
+            self.tw_warehouse.setItem(row, 2, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(transaction[3]))
+            new_table_item.setData(-2, transaction[0])
+            new_table_item.setBackground(color)
+            self.tw_warehouse.setItem(row, 3, new_table_item)
+
+    def set_order_table(self, _id):
+
+        query = """SELECT `order`.Id, `order`.Number_Doc, clients.Name, `order`.Date_Order, order_position.Value
+                      FROM order_position LEFT JOIN `order` ON order_position.Order_Id = `order`.Id
+                        LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                      WHERE `order`.Shipped = 0 AND order_position.Product_Article_Parametr_Id = %s"""
+        sql_info_order = my_sql.sql_select(query, (_id,))
+        if "mysql.connector.errors" in str(type(sql_info_order)):
+            QMessageBox.critical(self, "Ошибка sql получение заказов", sql_info_order.msg, QMessageBox.Ok)
+            return False
+
+        for row, order in enumerate(sql_info_order):
             self.tw_order.insertRow(row)
 
             new_table_item = QTableWidgetItem(str(order[1]))

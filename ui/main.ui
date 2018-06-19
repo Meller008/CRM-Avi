@@ -200,6 +200,7 @@
     <addaction name="ma_warehouse_material"/>
     <addaction name="ma_warehouse_accessories"/>
     <addaction name="ma_warehouse"/>
+    <addaction name="ma_warehouse2"/>
     <addaction name="ma_warehouse_rest"/>
     <addaction name="ma_test_warehouse_menu"/>
     <addaction name="menu_16"/>
@@ -615,6 +616,11 @@
    </property>
    <property name="text">
     <string>Артикул тест</string>
+   </property>
+  </action>
+  <action name="ma_warehouse2">
+   <property name="text">
+    <string>Продукция2</string>
    </property>
   </action>
  </widget>
@@ -1596,6 +1602,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_warehouse2</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_product_warehouse_2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1659,5 +1681,6 @@
   <slot>view_material_in_pack()</slot>
   <slot>view_warehouse_adjustments_material()</slot>
   <slot>view_article_test()</slot>
+  <slot>view_product_warehouse_2()</slot>
  </slots>
 </ui>
