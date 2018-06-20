@@ -927,3 +927,15 @@ class Warehouse2(QMainWindow):
 
     def ui_update_table(self):
         self.update_article_list()
+
+    # Отерытие кроя
+    def ui_pack_double_click(self, item):
+        self.pack = PackBrows(pack_id=item.data(-2))
+        self.pack.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.pack.show()
+
+    # Отерытие заказа
+    def ui_order_double_click(self, item):
+        self.order = Order(id=item.data(-2))
+        self.order.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.order.show()

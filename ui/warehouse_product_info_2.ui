@@ -34,7 +34,7 @@
      <number>2</number>
     </property>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout" columnstretch="4,0">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,4,5" columnstretch="4,0">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -612,6 +612,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tw_order</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_order_double_click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>989</x>
+     <y>437</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>996</x>
+     <y>736</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tw_workshop</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_pack_double_click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>350</x>
+     <y>568</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>337</x>
+     <y>761</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_select_tree()</slot>
@@ -619,5 +651,7 @@
   <slot>ui_search_article()</slot>
   <slot>ui_calc_date()</slot>
   <slot>ui_change_value()</slot>
+  <slot>ui_pack_double_click()</slot>
+  <slot>ui_order_double_click()</slot>
  </slots>
 </ui>
