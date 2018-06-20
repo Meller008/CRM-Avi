@@ -582,9 +582,9 @@ class Warehouse2(QMainWindow):
 
         self.get_article_sql()
 
-    def get_article_sql(self, where=None):
+    def get_article_sql(self, where_art=None, where_size=None, where_param=None):
         # Получаем список артикулов, что бы не запрашивать каждый раз
-        if not where:
+        if not where_art and not where_size and not where_param:
             query = """SELECT product_article_parametrs.Id, product_article.Tree_Id,
                                         product_article.Article, product_article_size.Size, product_article_parametrs.Name, product_article.Name,
                                                       IFNULL((SELECT SUM(pack.Value_Pieces)
@@ -599,9 +599,18 @@ class Warehouse2(QMainWindow):
                                       FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
                                         LEFT JOIN product_article_warehouse ON product_article_parametrs.Id = product_article_warehouse.Id_Article_Parametr"""
-            self.table_items = my_sql.sql_select(query)
         else:
-            where_like = "%" + str(where) + "%"
+            where = ""
+
+            if where_art:
+                where = self.add_filter(where, "(product_article.Article LIKE '%s')" % ("%" + where_art + "%", ))
+
+            if where_size:
+                where = self.add_filter(where, "(product_article_size.Size LIKE '%s')" % ("%" + where_size + "%", ))
+
+            if where_param:
+                where = self.add_filter(where, "(product_article_parametrs.Name LIKE '%s')" % ("%" + where_param + "%", ))
+
             query = """SELECT product_article_parametrs.Id, product_article.Tree_Id,
                                         product_article.Article, product_article_size.Size, product_article_parametrs.Name, product_article.Name,
                                                       IFNULL((SELECT SUM(pack.Value_Pieces)
@@ -616,9 +625,8 @@ class Warehouse2(QMainWindow):
                                       FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
                                         LEFT JOIN product_article_warehouse ON product_article_parametrs.Id = product_article_warehouse.Id_Article_Parametr
-                          WHERE product_article.Article LIKE '%s' """ % where_like
-            self.table_items = my_sql.sql_select(query)
-
+                          WHERE %s """ % where
+        self.table_items = my_sql.sql_select(query)
         if "mysql.connector.errors" in str(type(self.table_items)):
                 QMessageBox.critical(self, "Ошибка sql получение артикулов", self.table_items.msg, QMessageBox.Ok)
                 return False
@@ -746,13 +754,18 @@ class Warehouse2(QMainWindow):
 
     def ui_search_article(self):
         # Вызывается при поиске артикула
+        art_filter_text, size_filter_text, param_filter_text = None, None, None
         if self.le_filter_article.text():
-            self.get_article_sql(self.le_filter_article.text())
-            self.set_article_list()
+            art_filter_text = self.le_filter_article.text()
+        if self.le_filter_article_2.text():
+            art_filter_text = self.le_filter_article_2.text()
+        if self.le_filter_article_size.text():
+            size_filter_text = self.le_filter_article_size.text()
+        if self.le_filter_article_parametr.text():
+            param_filter_text = self.le_filter_article_parametr.text()
 
-        else:
-            self.get_article_sql()
-            self.set_article_list()
+        self.get_article_sql(art_filter_text, size_filter_text, param_filter_text)
+        self.set_article_list()
 
     # Вставка значений склада
     def set_parametr_warehouse(self, _id):
@@ -939,3 +952,15 @@ class Warehouse2(QMainWindow):
         self.order = Order(id=item.data(-2))
         self.order.setWindowModality(QtCore.Qt.ApplicationModal)
         self.order.show()
+
+    # Функция фильтра
+    def add_filter(self, where, add, and_add=True):
+        if where:
+            if and_add:
+                where += " AND " + add
+            else:
+                where += " OR " + add
+        else:
+            where = add
+
+        return where

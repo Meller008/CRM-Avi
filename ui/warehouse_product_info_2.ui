@@ -136,86 +136,26 @@
           <property name="spacing">
            <number>2</number>
           </property>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Остаток</string>
+          <item row="0" column="0" colspan="3">
+           <widget class="QLineEdit" name="le_filter_article_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
             </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="le_price_one">
-            <property name="readOnly">
-             <bool>true</bool>
+            <property name="maximumSize">
+             <size>
+              <width>166666</width>
+              <height>16777215</height>
+             </size>
             </property>
-           </widget>
-          </item>
-          <item row="2" column="1" colspan="2">
-           <widget class="QLineEdit" name="le_warehouse_date">
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="2">
-           <widget class="QLineEdit" name="le_sebest_many">
-            <property name="readOnly">
-             <bool>true</bool>
+            <property name="placeholderText">
+             <string>Поиск артикула</string>
             </property>
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Цена продажи</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QLineEdit" name="le_sebest_one">
-            <property name="inputMethodHints">
-             <set>Qt::ImhNone</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Штука</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Себестоимость</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLineEdit" name="le_price_many">
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Сумма</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -228,7 +168,28 @@
             </property>
            </spacer>
           </item>
-          <item row="1" column="1" colspan="2">
+          <item row="8" column="1">
+           <widget class="QLineEdit" name="le_price_many">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="le_price_one">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1" colspan="2">
+           <widget class="QLineEdit" name="le_warehouse_date">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
              <number>2</number>
@@ -255,10 +216,106 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="0">
+          <item row="8" column="2">
+           <widget class="QLineEdit" name="le_sebest_many">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Штука</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Себестоимость</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Сумма</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="2">
+           <widget class="QLineEdit" name="le_sebest_one">
+            <property name="inputMethodHints">
+             <set>Qt::ImhNone</set>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>На дату</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Цена продажи</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Остаток</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="3">
+           <widget class="QLineEdit" name="le_filter_article_size">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>166666</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Поиск размера</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QLineEdit" name="le_filter_article_parametr">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>166666</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Поиск варианта</string>
             </property>
            </widget>
           </item>
@@ -641,6 +698,54 @@
     <hint type="destinationlabel">
      <x>337</x>
      <y>761</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_filter_article_2</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_search_article()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>987</x>
+     <y>44</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>983</x>
+     <y>-99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_filter_article_size</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_search_article()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>911</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>913</x>
+     <y>-75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>le_filter_article_parametr</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_search_article()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1043</x>
+     <y>79</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1045</x>
+     <y>-69</y>
     </hint>
    </hints>
   </connection>
