@@ -136,60 +136,24 @@
           <property name="spacing">
            <number>2</number>
           </property>
-          <item row="0" column="0" colspan="3">
-           <widget class="QLineEdit" name="le_filter_article_2">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>166666</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="placeholderText">
-             <string>Поиск артикула</string>
+          <item row="12" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Сумма</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item row="10" column="1">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Цена продажи</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="8" column="1">
-           <widget class="QLineEdit" name="le_price_many">
-            <property name="readOnly">
-             <bool>true</bool>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="7" column="1">
-           <widget class="QLineEdit" name="le_price_one">
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1" colspan="2">
-           <widget class="QLineEdit" name="le_warehouse_date">
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1" colspan="2">
+          <item row="8" column="1" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
              <number>2</number>
@@ -216,38 +180,7 @@
             </item>
            </layout>
           </item>
-          <item row="8" column="2">
-           <widget class="QLineEdit" name="le_sebest_many">
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Штука</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Себестоимость</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Сумма</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="2">
+          <item row="11" column="2">
            <widget class="QLineEdit" name="le_sebest_one">
             <property name="inputMethodHints">
              <set>Qt::ImhNone</set>
@@ -257,24 +190,96 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>На дату</string>
+          <item row="7" column="1">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QLineEdit" name="le_filter_article_parametr">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>166666</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Поиск варианта</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="1">
-           <widget class="QLabel" name="label_8">
+          <item row="10" column="2">
+           <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Цена продажи</string>
+             <string>Себестоимость</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item row="0" column="0" colspan="3">
+           <widget class="QLineEdit" name="le_filter_article_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>166666</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Поиск артикула</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="1">
+           <widget class="QLineEdit" name="le_price_many">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="1">
+           <widget class="QLineEdit" name="le_price_one">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Штука</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>На дату</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Остаток</string>
@@ -300,24 +305,114 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="3">
-           <widget class="QLineEdit" name="le_filter_article_parametr">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>166666</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="placeholderText">
-             <string>Поиск варианта</string>
+          <item row="12" column="2">
+           <widget class="QLineEdit" name="le_sebest_many">
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
+          </item>
+          <item row="9" column="1" colspan="2">
+           <widget class="QLineEdit" name="le_warehouse_date">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="3">
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="3">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Дата изменений С</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDateEdit" name="de_date_transaction_from">
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>По</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDateEdit" name="de_date_transaction_to">
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="6" column="0" colspan="3">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="cb_order">
+              <property name="text">
+               <string>Заказы</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cb_pack">
+              <property name="text">
+               <string>Пачки</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cb_other">
+              <property name="text">
+               <string>Остальное</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -749,6 +844,86 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>cb_other</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_update_transaction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1142</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1304</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_pack</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_update_transaction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1020</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1295</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_order</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_update_transaction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>905</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1258</x>
+     <y>213</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_date_transaction_to</sender>
+   <signal>dateChanged(QDate)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_update_transaction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1158</x>
+     <y>138</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1267</x>
+     <y>100</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>de_date_transaction_from</sender>
+   <signal>dateChanged(QDate)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_update_transaction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>999</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1305</x>
+     <y>111</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_select_tree()</slot>
@@ -758,5 +933,6 @@
   <slot>ui_change_value()</slot>
   <slot>ui_pack_double_click()</slot>
   <slot>ui_order_double_click()</slot>
+  <slot>ui_update_transaction()</slot>
  </slots>
 </ui>

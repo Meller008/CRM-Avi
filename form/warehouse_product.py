@@ -576,6 +576,8 @@ class Warehouse2(QMainWindow):
         self.tw_order.horizontalHeader().resizeSection(3, 85)
 
         self.de_date_to.setDate(QDate.currentDate())
+        self.de_date_transaction_to.setDate(QDate.currentDate())
+        self.de_date_transaction_from.setDate(QDate.currentDate().addMonths(-3))
 
         # Флаги определения выделения строки человеком
         self.flag_select_human = True
@@ -805,11 +807,29 @@ class Warehouse2(QMainWindow):
 
     def set_warehouse_table(self, _id):
 
-        query = """SELECT Id, Date, Balance, Note
-                      FROM transaction_records_warehouse
-                      WHERE Article_Parametr_Id = %s AND Date >= %s
-                      ORDER BY Date DESC, Id DESC """
-        sql_info_warehouse = my_sql.sql_select(query, (_id, QDate.currentDate().addMonths(-3).toString(1)))
+        if self.cb_order.isChecked() == self.cb_pack.isChecked() == self.cb_other.isChecked():
+            query = """SELECT Id, Date, Balance, Note
+                          FROM transaction_records_warehouse
+                          WHERE Article_Parametr_Id = %s AND Date BETWEEN %s AND %s
+                          ORDER BY Date DESC, Id DESC """
+
+        else:
+            where_cod = []
+            if self.cb_order.isChecked():
+                where_cod.extend((310, 311))
+            if self.cb_pack.isChecked():
+                where_cod.extend((320, 321, 322))
+            if self.cb_other.isChecked():
+                where_cod.extend((350, 351, 352))
+
+            where_query = "transaction_records_warehouse.Code IN (%s)" % str(where_cod).replace('[', '').replace(']', '')
+
+            query = """SELECT Id, Date, Balance, Note
+                          FROM transaction_records_warehouse
+                          WHERE Article_Parametr_Id = %s AND """ + where_query + """ AND Date BETWEEN %s AND %s
+                          ORDER BY Date DESC, Id DESC """
+
+        sql_info_warehouse = my_sql.sql_select(query, (_id, self.de_date_transaction_from.date().toString(1), self.de_date_transaction_to.date().toString(1)))
         if "mysql.connector.errors" in str(type(sql_info_warehouse)):
             QMessageBox.critical(self, "Ошибка sql получение склада", sql_info_warehouse.msg, QMessageBox.Ok)
             return False
@@ -940,6 +960,17 @@ class Warehouse2(QMainWindow):
 
     def ui_update_table(self):
         self.update_article_list()
+
+    def ui_update_transaction(self):
+        try:
+            article_id = self.tw_article.currentItem().data(5)
+        except:
+            return False
+
+        if article_id:
+            self.tw_warehouse.clearContents()
+            self.tw_warehouse.setRowCount(0)
+            self.set_warehouse_table(article_id)
 
     # Отерытие кроя
     def ui_pack_double_click(self, item):
