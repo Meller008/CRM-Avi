@@ -203,6 +203,43 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="2">
+         <layout class="QGridLayout" name="gridLayout_19">
+          <item row="1" column="1">
+           <widget class="QPushButton" name="pushButton_11">
+            <property name="text">
+             <string>Сервис</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <spacer name="horizontalSpacer_12">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <spacer name="verticalSpacer_13">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="p_main">
@@ -2096,8 +2133,8 @@
    <slot>ui_add_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>67</x>
-     <y>354</y>
+     <x>46</x>
+     <y>193</y>
     </hint>
     <hint type="destinationlabel">
      <x>-97</x>
@@ -2112,8 +2149,8 @@
    <slot>ui_cut_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>43</x>
-     <y>693</y>
+     <x>53</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>-21</x>
@@ -2128,8 +2165,8 @@
    <slot>ui_cut_next()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1070</x>
-     <y>696</y>
+     <x>205</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>1150</x>
@@ -2144,8 +2181,8 @@
    <slot>ui_pack_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>691</y>
+     <x>64</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>-43</x>
@@ -2160,8 +2197,8 @@
    <slot>ui_pack_next()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1042</x>
-     <y>690</y>
+     <x>205</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>1178</x>
@@ -2176,8 +2213,8 @@
    <slot>ui_operation_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>703</y>
+     <x>74</x>
+     <y>76</y>
     </hint>
     <hint type="destinationlabel">
      <x>64</x>
@@ -2192,8 +2229,8 @@
    <slot>ui_operation_next()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1012</x>
-     <y>695</y>
+     <x>220</x>
+     <y>76</y>
     </hint>
     <hint type="destinationlabel">
      <x>1014</x>
@@ -2208,8 +2245,8 @@
    <slot>ui_operation_input_complete()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>547</x>
-     <y>701</y>
+     <x>240</x>
+     <y>76</y>
     </hint>
     <hint type="destinationlabel">
      <x>536</x>
@@ -2224,8 +2261,8 @@
    <slot>ui_log_out()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>695</y>
+     <x>90</x>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>458</x>
@@ -2240,8 +2277,8 @@
    <slot>ui_salary_menu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1079</x>
-     <y>313</y>
+     <x>89</x>
+     <y>105</y>
     </hint>
     <hint type="destinationlabel">
      <x>1144</x>
@@ -2256,8 +2293,8 @@
    <slot>ui_salary_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>343</y>
+     <x>32</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
      <x>-45</x>
@@ -2272,8 +2309,8 @@
    <slot>ui_salary_p_m()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>543</x>
-     <y>335</y>
+     <x>61</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
      <x>542</x>
@@ -2288,8 +2325,8 @@
    <slot>ui_salary_history()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1068</x>
-     <y>334</y>
+     <x>89</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
      <x>1182</x>
@@ -2304,8 +2341,8 @@
    <slot>ui_salary_menu_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1028</x>
-     <y>709</y>
+     <x>90</x>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel">
      <x>1251</x>
@@ -2320,8 +2357,8 @@
    <slot>ui_back_to_salary_menu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>575</x>
-     <y>683</y>
+     <x>90</x>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel">
      <x>567</x>
@@ -2336,8 +2373,8 @@
    <slot>ui_back_to_salary_menu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>612</x>
-     <y>683</y>
+     <x>90</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel">
      <x>627</x>
@@ -2352,8 +2389,8 @@
    <slot>ui_back_to_salary_menu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>554</x>
-     <y>679</y>
+     <x>90</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel">
      <x>555</x>
@@ -2368,8 +2405,8 @@
    <slot>ui_beika()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1068</x>
-     <y>400</y>
+     <x>89</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>1199</x>
@@ -2384,8 +2421,8 @@
    <slot>ui_beika_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>72</x>
-     <y>692</y>
+     <x>82</x>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>-125</x>
@@ -2400,8 +2437,8 @@
    <slot>ui_beika_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1048</x>
-     <y>690</y>
+     <x>205</x>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>1036</x>
@@ -2416,8 +2453,8 @@
    <slot>ui_beika_change_value()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1041</x>
-     <y>554</y>
+     <x>90</x>
+     <y>72</y>
     </hint>
     <hint type="destinationlabel">
      <x>1258</x>
@@ -2432,12 +2469,28 @@
    <slot>ui_operation_double_click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>559</x>
-     <y>390</y>
+     <x>90</x>
+     <y>21</y>
     </hint>
     <hint type="destinationlabel">
      <x>605</x>
      <y>-100</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_11</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_services()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1087</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1287</x>
+     <y>518</y>
     </hint>
    </hints>
   </connection>
@@ -2464,5 +2517,6 @@
   <slot>ui_beika_acc()</slot>
   <slot>ui_beika_change_value()</slot>
   <slot>ui_operation_double_click()</slot>
+  <slot>ui_services()</slot>
  </slots>
 </ui>

@@ -1,6 +1,6 @@
 import sys
 from os import getcwd
-from PyQt5.QtWidgets import QApplication, QLabel, QTableWidgetItem, QDialog, QMainWindow, QListWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QApplication, QLabel, QTableWidgetItem, QDialog, QMainWindow, QListWidgetItem, QInputDialog
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate, QTimer
@@ -137,7 +137,6 @@ class MainWindowOperation(QMainWindow, main_class):
             self.lb_login_error.setText('<html><head/><body><p align="center"><span style=" color:#ff0000;">Не верный логин ил пароль</span></p></body></html>')
 
     def ui_log_out(self):
-        self.timer.start(900000)
         self.start_var()
         self.start_settings()
         self.lb_f_name.setText("")
@@ -727,7 +726,14 @@ class MainWindowOperation(QMainWindow, main_class):
 
     def close_timer(self):
         self.timer.stop()
-        self.close()
+        self.ui_log_out()
+
+    def ui_services(self):
+        res = QInputDialog.getText(self, "Код", "Введите сервис код")
+        if res[1]:
+            if res[0] == "088011":
+                self.close()
+                self.destroy()
 
 
 class OperationAcc(QDialog, operation_acc):
