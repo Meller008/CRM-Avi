@@ -2507,7 +2507,7 @@ class Position(QDialog):
         self.ui_calculation()
 
     def ui_view_article(self):
-        self.article_list = article.ArticleList(self, True)
+        self.article_list = article.ArticleList(self, select_variant=True)
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 
@@ -2521,15 +2521,35 @@ class Position(QDialog):
         self.close()
         self.destroy()
 
-    def of_tree_select_article(self, article):
-        self.article_list.close()
-        self.article_list.destroy()
+    def of_select_variant(self, variant):
+        query = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
+                        product_article_parametrs.Client_Name, product_article_parametrs.Price, product_article_parametrs.NDS, product_article_parametrs.In_On_Place,
+                        product_article_parametrs.Client_code
+                      FROM product_article_parametrs
+                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                      WHERE product_article_parametrs.Id = %s"""
+        sql_info = my_sql.sql_select(query, (variant[0],))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения артикула", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        article = {"article": sql_info[0][1],
+                   "size": sql_info[0][2],
+                   "parametr": sql_info[0][3],
+                   "parametr_id": sql_info[0][0],
+                   "client_Name": sql_info[0][4],
+                   "price": sql_info[0][5],
+                   "nds": sql_info[0][6],
+                   "in on place": sql_info[0][7],
+                   "client_cod": sql_info[0][8]}
+
         self.le_article.setText(article["article"])
         self.le_size.setText(article["size"])
         self.le_parametr.setText(article["parametr"])
         self.le_parametr.setWhatsThis(str(article["parametr_id"]))
-        self.le_price.setText(article["price"])
-        self.le_in_on_place.setText(article["in on place"])
+        self.le_price.setText(str(article["price"]))
+        self.le_in_on_place.setText(str(article["in on place"]))
         self.le_client_cod.setText(article["client_cod"])
         if article["nds"] == 18:
             self.nds_1.setChecked(True)
@@ -3091,14 +3111,32 @@ class ImportEDI(QDialog):
     def change_material_name(self):
         butt = QObject.sender(self)
         self.row_change_material = butt.property("row")
-        self.article_list = article.ArticleList(self, True)
+        self.article_list = article.ArticleList(self, select_variant=True)
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 
-    def of_tree_select_article(self, article):
-        self.article_list.close()
-        self.article_list.destroy()
-        item = QTableWidgetItem(article["article"] + " " + article["size"] + " " + article["parametr"])
+    def of_select_variant(self, variant):
+        query = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
+                                product_article_parametrs.Client_Name, product_article_parametrs.Price, product_article_parametrs.NDS, product_article_parametrs.In_On_Place
+                              FROM product_article_parametrs
+                                LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                                LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                              WHERE product_article_parametrs.Id = %s"""
+        sql_info = my_sql.sql_select(query, (variant[0],))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения артикула", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        article = {"article": sql_info[0][1],
+                   "size": sql_info[0][2],
+                   "parametr": sql_info[0][3],
+                   "parametr_id": sql_info[0][0],
+                   "client_Name": sql_info[0][4],
+                   "price": sql_info[0][5],
+                   "nds": sql_info[0][6],
+                   "in on place": sql_info[0][7]}
+
+        item = QTableWidgetItem(variant[1])
         item.setData(5, article)
         self.tw_edi_3.setItem(self.row_change_material, 8, item)
 

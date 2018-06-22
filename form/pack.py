@@ -325,7 +325,7 @@ class PackBrows(QDialog):
         self.le_client.setWhatsThis("")
 
     def ui_view_list_article(self):
-        self.article_list = article.ArticleList(self, True, self.pack.article_id())
+        self.article_list = article.ArticleList(self, select_variant=True, open_variant=self.pack.parametr_id())
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 
@@ -898,15 +898,22 @@ class PackBrows(QDialog):
             return True
         return False
 
-    def of_tree_select_article(self, article):
-        self.article_list.close()
-        self.article_list.destroy()
-        self.le_article.setWhatsThis(str(article["parametr_id"]))
-        str_article = str(article["article"]) + " (" + str(article["size"]) + ") [" + str(article["parametr"]) + "]"
-        self.le_article.setText(str_article)
-        self.le_size.setText(article["size"])
+    def of_select_variant(self, variant):
+        query = """SELECT product_article_size.Size
+                      FROM product_article_parametrs 
+                      LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                    WHERE product_article_parametrs.Id = %s"""
+        sql_result = my_sql.sql_select(query, (variant[0], ))
+        if "mysql.connector.errors" in str(type(sql_result)):
+                QMessageBox.critical(self, "Ошибка sql получение размера", sql_result.msg, QMessageBox.Ok)
 
-        self.pack.set_article(article["parametr_id"])
+        self.le_article.setWhatsThis(str(variant[0]))
+        self.le_article.setText(variant[1])
+
+        if sql_result:
+            self.le_size.setText(sql_result[0][0])
+
+        self.pack.set_article(variant[0])
 
         if self.pack.id() is None:
             self.pack.clear_save_operation()
@@ -1229,7 +1236,7 @@ class PackFilter(QDialog):
         self.de_date_complete_to.setDate(QDate.currentDate())
 
     def ui_view_article(self):
-        self.article_list = article.ArticleList(self, True)
+        self.article_list = article.ArticleList(self, select_variant=True)
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 
@@ -1342,17 +1349,22 @@ class PackFilter(QDialog):
 
         return where
 
-    def of_tree_select_article(self, article):
-        self.article_list.close()
-        self.article_list.destroy()
+    def of_select_variant(self, variant):
+        query = """SELECT product_article_size.Article_Id, product_article_size.Size
+                      FROM product_article_parametrs 
+                      LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                    WHERE product_article_parametrs.Id = %s"""
+        sql_result = my_sql.sql_select(query, (variant[0], ))
+        if "mysql.connector.errors" in str(type(sql_result)):
+            QMessageBox.critical(self, "Ошибка sql получение артиикула", sql_result.msg, QMessageBox.Ok)
+            return False
 
-        str_article = str(article["article"]) + " (" + str(article["size"]) + ") [" + str(article["parametr"]) + "]"
-        self.le_art.setWhatsThis(str(article["parametr_id"]))
-        self.le_art.setText(str_article)
+        self.le_art.setWhatsThis(str(variant[0]))
+        self.le_art.setText(variant[1])
 
-        self.rb_art.setWhatsThis(str(article["article_id"]))
-        self.rb_size.setWhatsThis(str(article["size_id"]))
-        self.rb_parametr.setWhatsThis(str(article["parametr_id"]))
+        self.rb_art.setWhatsThis(str(sql_result[0][0]))
+        self.rb_size.setWhatsThis(str(sql_result[0][1]))
+        self.rb_parametr.setWhatsThis(str(variant[0]))
 
     def of_list_clients(self, client):
         self.le_client.setText(client[1])

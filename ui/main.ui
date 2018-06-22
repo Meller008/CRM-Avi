@@ -141,11 +141,11 @@
     <property name="title">
      <string>Номенклатура</string>
     </property>
-    <addaction name="ma_product_article"/>
+    <addaction name="ma_article_test"/>
     <addaction name="ma_order_list"/>
     <addaction name="ma_clients"/>
     <addaction name="ma_product_operations"/>
-    <addaction name="ma_article_test"/>
+    <addaction name="ma_product_article"/>
    </widget>
    <widget class="QMenu" name="menu_8">
     <property name="title">
@@ -321,7 +321,7 @@
   </action>
   <action name="ma_product_article">
    <property name="text">
-    <string>Артикула</string>
+    <string>АртикулаOld</string>
    </property>
   </action>
   <action name="ma_product_operations">
@@ -615,7 +615,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Артикул тест</string>
+    <string>Артикула</string>
    </property>
   </action>
   <action name="ma_warehouse2">

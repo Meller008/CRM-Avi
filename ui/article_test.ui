@@ -1648,6 +1648,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tw_article</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_dc_article()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>701</x>
+     <y>145</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>702</x>
+     <y>-64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lw_size</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_dc_size()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>270</x>
+     <y>367</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>-92</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lw_parametr</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_dc_variant()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>423</x>
+     <y>347</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>403</x>
+     <y>-109</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_select_tree()</slot>
@@ -1685,5 +1733,8 @@
   <slot>ui_change_article_category()</slot>
   <slot>ui_view_label()</slot>
   <slot>ui_print_label()</slot>
+  <slot>ui_dc_article()</slot>
+  <slot>ui_dc_size()</slot>
+  <slot>ui_dc_variant()</slot>
  </slots>
 </ui>

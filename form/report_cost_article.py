@@ -26,7 +26,7 @@ class ReportCostArticle(QMainWindow):
         self.tableWidget.horizontalHeader().resizeSection(6, 85)
 
     def ui_view_article(self):
-        self.article_list = article.ArticleList(self, True)
+        self.article_list = article.ArticleList(self, select_article=True)
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 
@@ -111,8 +111,6 @@ class ReportCostArticle(QMainWindow):
 
             row += 1
 
-    def of_tree_select_article(self, article):
-        self.article_list.close()
-        self.article_list.destroy()
-        self.le_article.setText(article["article"])
-        self.le_article.setWhatsThis(str(article["article_id"]))
+    def of_select_article(self, article):
+        self.le_article.setText(article[1])
+        self.le_article.setWhatsThis(str(article[0]))

@@ -697,7 +697,7 @@ class CutFilter(QDialog):
         self.worker_list.show()
 
     def ui_view_article(self):
-        self.article_list = article.ArticleList(self, True)
+        self.article_list = article.ArticleList(self, select_variant=True)
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 
@@ -771,13 +771,9 @@ class CutFilter(QDialog):
         self.le_work.setWhatsThis(str(item[0]))
         self.le_work.setText(item[1])
 
-    def of_tree_select_article(self, article):
-        self.article_list.close()
-        self.article_list.destroy()
-
-        str_article = str(article["article"]) + " (" + str(article["size"]) + ") [" + str(article["parametr"]) + "]"
-        self.le_art.setWhatsThis(str(article["parametr_id"]))
-        self.le_art.setText(str_article)
+    def of_select_variant(self, variant):
+        self.le_art.setWhatsThis(str(variant[0]))
+        self.le_art.setText(variant[1])
 
 
 class CutPassport(QDialog):

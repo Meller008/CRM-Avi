@@ -246,7 +246,15 @@ class ReportSibestoimost(QMainWindow):
     def ui_view_art(self):
         self.but_name = QObject.sender(self).objectName()
 
-        self.article_list = article.ArticleList(self, True)
+        if self.but_name == "pb_art":
+            self.article_list = article.ArticleList(self, select_article=True)
+        elif self.but_name == "pb_size":
+            self.article_list = article.ArticleList(self, select_size=True)
+        elif self.but_name == "pb_parametr":
+            self.article_list = article.ArticleList(self, select_variant=True)
+        else:
+            return False
+
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 
@@ -309,24 +317,24 @@ class ReportSibestoimost(QMainWindow):
 
         return where
 
-    def of_tree_select_article(self, article):
-        if self.but_name == "pb_parametr":
-            self.le_art.setWhatsThis(str(article["article_id"]))
-            self.le_art.setText(str(article["article"]))
-            self.le_size.setWhatsThis(str(article["size_id"]))
-            self.le_size.setText(str(article["size"]))
-            self.le_param.setWhatsThis(str(article["parametr_id"]))
-            self.le_param.setText(str(article["parametr"]))
+    def of_select_article(self, article):
+        self.le_art.setWhatsThis(str(article[0]))
+        self.le_art.setText(str(article[1]))
 
-        elif self.but_name == "pb_size":
-            self.le_art.setWhatsThis(str(article["article_id"]))
-            self.le_art.setText(str(article["article"]))
-            self.le_size.setWhatsThis(str(article["size_id"]))
-            self.le_size.setText(str(article["size"]))
+        self.le_size.clear()
+        self.le_param.clear()
 
-        else:
-            self.le_art.setWhatsThis(str(article["article_id"]))
-            self.le_art.setText(str(article["article"]))
+    def of_select_size(self, size):
+        self.le_size.setWhatsThis(str(size[0]))
+        self.le_size.setText(str(size[1]))
 
-        self.article_list.close()
-        self.article_list.destroy()
+        self.le_art.clear()
+        self.le_param.clear()
+
+    def of_select_variant(self, variant):
+        self.le_param.setWhatsThis(str(variant[0]))
+        self.le_param.setText(str(variant[1]))
+
+        self.le_art.clear()
+        self.le_size.clear()
+

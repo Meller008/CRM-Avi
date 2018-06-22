@@ -576,7 +576,11 @@ class MainWindow(QMainWindow):
         self.statusBar().addPermanentWidget(beika)
 
     def closeEvent(self, e):
-        self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+        try:
+            self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+        except:
+            print("Нет логина")
+
         e.accept()
         self.close()
         self.destroy()

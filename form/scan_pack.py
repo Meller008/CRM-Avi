@@ -98,12 +98,15 @@ class ListArticle(QDialog):
 
     def ui_double_click(self, item):
         art_id = item.data(5)
-        self.are_win = article.Article(self, art_id, dc_select=True)
+        self.are_win = article.ArticleList(self, open_variant=art_id)
         self.are_win.setWindowModality(QtCore.Qt.ApplicationModal)
         self.are_win.show()
 
+        self.close()
+        self.destroy()
+
     def search_barcode(self, barcode):
-        query = """SELECT product_article.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name, product_article_parametrs.Client_Name
+        query = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name, product_article_parametrs.Client_Name
                       FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
                       WHERE Barcode = %s"""
@@ -130,7 +133,3 @@ class ListArticle(QDialog):
                 item = QTableWidgetItem(text)
                 item.setData(5, table_typle[0])
                 self.tw_list_article.setItem(self.tw_list_article.rowCount() - 1, column, item)
-
-    def of_tree_select_article(self, art):
-        self.close()
-        self.destroy()
