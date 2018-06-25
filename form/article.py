@@ -1531,6 +1531,7 @@ class ArticleList(QMainWindow):
         item.setData(5, id)
         item.setData(-1, sql_status)
         item.setData(-2, sql_id)
+        item.setData(-3, variant)
         item.setBackground(brush)
         self.tw_materials.setItem(row, 0, item)
 
@@ -1538,6 +1539,7 @@ class ArticleList(QMainWindow):
         item.setData(5, id)
         item.setData(-1, sql_status)
         item.setData(-2, sql_id)
+        item.setData(-3, variant)
         item.setBackground(brush)
         self.tw_materials.setItem(row, 1, item)
 
