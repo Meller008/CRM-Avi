@@ -325,7 +325,7 @@ class PackBrows(QDialog):
         self.le_client.setWhatsThis("")
 
     def ui_view_list_article(self):
-        self.article_list = article.ArticleList(self, select_variant=True, open_variant=self.pack.parametr_id())
+        self.article_list = article.ArticleList(self, select_variant=True, open_variant=self.pack.article())
         self.article_list.setWindowModality(Qt.ApplicationModal)
         self.article_list.show()
 

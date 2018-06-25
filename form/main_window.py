@@ -201,7 +201,7 @@ class MainWindow(QMainWindow):
         self.sub_add_operation_list.show()
 
     def view_product(self):
-        self.article_list = article.ArticleList()
+        self.article_list = article.ArticleListOld()
         self.sub_article_list = QMdiSubWindow()
         self.sub_article_list.setWidget(self.article_list)
         self.mdi.addSubWindow(self.sub_article_list)
@@ -241,7 +241,7 @@ class MainWindow(QMainWindow):
         self.sub_article_list_all.show()
 
     def view_article_test(self):
-        self.article_test = article.ArticleTest()
+        self.article_test = article.ArticleList()
         self.sub_article_test = QMdiSubWindow()
         self.sub_article_test.setWidget(self.article_test)
         self.mdi.addSubWindow(self.sub_article_test)
