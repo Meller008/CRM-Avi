@@ -153,7 +153,7 @@ class WarehouseChange(QDialog):
         self.de_date_2.setDate(QtCore.QDate.currentDate())
 
     def ui_view_warehouse(self):
-        self.warehouse = Warehouse(self, True)
+        self.warehouse = Warehouse2(self, True)
         self.warehouse.setWindowModality(QtCore.Qt.ApplicationModal)
         self.warehouse.show()
 
@@ -289,6 +289,10 @@ class WarehouseChange(QDialog):
     def of_tree_select_warehouse(self, item):
         self.le_art_name_plus.setText(item[0])
         self.le_art_name_plus.setWhatsThis(str(item[1]))
+
+    def of_select_warehouse(self, variant):
+        self.le_art_name_plus.setText(variant[1])
+        self.le_art_name_plus.setWhatsThis(str(variant[0]))
 
 
 class WarehouseInfo(QDialog):
@@ -516,10 +520,13 @@ class WarehouseInfo(QDialog):
 
 
 class Warehouse2(QMainWindow):
-    def __init__(self):
+    def __init__(self, main=None, select_variant=False):
         super(Warehouse2, self).__init__()
         loadUi(getcwd() + '/ui/warehouse_product_info_2.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.main = main
+        self.flag_select_variant = select_variant
 
         self.set_start_settings()
         self.set_tree_info()
@@ -753,6 +760,18 @@ class Warehouse2(QMainWindow):
             self.clear_parametr_info()
 
             self.set_parametr_warehouse(article_id)
+
+    def ui_dc_select_article(self, item):
+        if self.flag_select_variant and self.main:
+            variant_id = item.data(5)
+            article_name = self.tw_article.item(self.tw_article.currentRow(), 0).text()
+            article_name += " (" + self.tw_article.item(self.tw_article.currentRow(), 1).text() + ")"
+            article_name += " [" + self.tw_article.item(self.tw_article.currentRow(), 2).text() + "]"
+
+            self.main.of_select_warehouse((int(variant_id), article_name))
+            self.close()
+            self.destroy()
+            return True
 
     def ui_search_article(self):
         # Вызывается при поиске артикула

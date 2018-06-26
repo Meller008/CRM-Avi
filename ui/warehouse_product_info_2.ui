@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Артикула</string>
+   <string>Склад продукции</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -924,6 +924,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tw_article</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_dc_select_article()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>648</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>649</x>
+     <y>-75</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_select_tree()</slot>
@@ -934,5 +950,6 @@
   <slot>ui_pack_double_click()</slot>
   <slot>ui_order_double_click()</slot>
   <slot>ui_update_transaction()</slot>
+  <slot>ui_dc_select_article()</slot>
  </slots>
 </ui>
