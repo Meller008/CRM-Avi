@@ -77,6 +77,9 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="le_card"/>
+   </item>
    <item row="4" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
@@ -126,23 +129,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="2" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLineEdit" name="le_card"/>
-     </item>
-     <item>
-      <widget class="QToolButton" name="toolButton">
-       <property name="text">
-        <string>scan</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
@@ -196,27 +182,10 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>toolButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>ui_scan_card()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>321</x>
-     <y>49</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>447</x>
-     <y>52</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
   <slot>ui_view_worker()</slot>
   <slot>ui_acc()</slot>
   <slot>ui_can()</slot>
-  <slot>ui_scan_card()</slot>
  </slots>
 </ui>

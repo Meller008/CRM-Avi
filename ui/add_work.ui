@@ -886,10 +886,20 @@
         <property name="spacing">
          <number>2</number>
         </property>
-        <item row="3" column="0">
-         <widget class="QPushButton" name="pushButton_17">
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="le_login_password">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_31">
           <property name="text">
-           <string>Проверить логин</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Пароль&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -906,6 +916,19 @@
           </property>
          </spacer>
         </item>
+        <item row="1" column="0">
+         <widget class="QLineEdit" name="le_login_login">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="dragEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_30">
           <property name="text">
@@ -920,43 +943,10 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLineEdit" name="le_login_login">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="dragEnabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_31">
+        <item row="3" column="0">
+         <widget class="QPushButton" name="pushButton_17">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Пароль&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="le_login_password">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QCheckBox" name="cb_beika">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Разрешить вносить бейку</string>
+           <string>Проверить логин</string>
           </property>
          </widget>
         </item>
@@ -1384,8 +1374,8 @@
    <slot>change_patent_date()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>267</x>
-     <y>359</y>
+     <x>64</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>143</x>
@@ -1672,8 +1662,8 @@
    <slot>alter_migration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>115</x>
-     <y>288</y>
+     <x>51</x>
+     <y>275</y>
     </hint>
     <hint type="destinationlabel">
      <x>27</x>
@@ -1688,8 +1678,8 @@
    <slot>alter_migration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>115</x>
-     <y>310</y>
+     <x>51</x>
+     <y>283</y>
     </hint>
     <hint type="destinationlabel">
      <x>332</x>
@@ -1704,8 +1694,8 @@
    <slot>alter_migration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>288</y>
+     <x>100</x>
+     <y>275</y>
     </hint>
     <hint type="destinationlabel">
      <x>77</x>
@@ -1720,8 +1710,8 @@
    <slot>alter_migration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>115</x>
-     <y>332</y>
+     <x>51</x>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
@@ -1736,8 +1726,8 @@
    <slot>alter_migration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>332</y>
+     <x>100</x>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>527</x>
@@ -1752,8 +1742,8 @@
    <slot>alter_migration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>38</x>
-     <y>314</y>
+     <x>35</x>
+     <y>280</y>
     </hint>
     <hint type="destinationlabel">
      <x>256</x>
@@ -1768,8 +1758,8 @@
    <slot>alter_patent()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>267</x>
-     <y>314</y>
+     <x>64</x>
+     <y>280</y>
     </hint>
     <hint type="destinationlabel">
      <x>350</x>
@@ -1784,8 +1774,8 @@
    <slot>alter_patent()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>38</x>
-     <y>314</y>
+     <x>35</x>
+     <y>280</y>
     </hint>
     <hint type="destinationlabel">
      <x>31</x>
@@ -1800,8 +1790,8 @@
    <slot>alter_patent()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>497</x>
-     <y>314</y>
+     <x>93</x>
+     <y>280</y>
     </hint>
     <hint type="destinationlabel">
      <x>509</x>
@@ -1816,8 +1806,8 @@
    <slot>alter_patent()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>38</x>
-     <y>359</y>
+     <x>35</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>66</x>
@@ -1832,8 +1822,8 @@
    <slot>alter_patent()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>267</x>
-     <y>359</y>
+     <x>64</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>426</x>
@@ -1848,8 +1838,8 @@
    <slot>alter_patent()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>497</x>
-     <y>359</y>
+     <x>93</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>586</x>
@@ -1864,8 +1854,8 @@
    <slot>alter_registration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>96</x>
-     <y>314</y>
+     <x>93</x>
+     <y>281</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
@@ -1880,8 +1870,8 @@
    <slot>alter_registration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>340</y>
+     <x>41</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>281</x>
@@ -1896,8 +1886,8 @@
    <slot>alter_registration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>232</x>
-     <y>340</y>
+     <x>64</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>281</x>
@@ -1912,8 +1902,8 @@
    <slot>alter_registration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>623</x>
-     <y>340</y>
+     <x>93</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>620</x>
@@ -2024,8 +2014,8 @@
    <slot>alter_insurance()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>38</x>
-     <y>314</y>
+     <x>35</x>
+     <y>281</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2040,8 +2030,8 @@
    <slot>alter_insurance()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>339</x>
-     <y>314</y>
+     <x>64</x>
+     <y>281</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2056,8 +2046,8 @@
    <slot>alter_insurance()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>641</x>
-     <y>314</y>
+     <x>94</x>
+     <y>281</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2120,8 +2110,8 @@
    <slot>alter_notification()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>497</x>
-     <y>295</y>
+     <x>93</x>
+     <y>275</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2136,8 +2126,8 @@
    <slot>alter_notification()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>96</x>
-     <y>474</y>
+     <x>93</x>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2152,8 +2142,8 @@
    <slot>alter_notification()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>38</x>
-     <y>293</y>
+     <x>35</x>
+     <y>275</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2168,12 +2158,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>38</x>
-     <y>293</y>
+     <x>35</x>
+     <y>275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>80</x>
-     <y>474</y>
+     <x>77</x>
+     <y>287</y>
     </hint>
    </hints>
   </connection>
@@ -2184,8 +2174,8 @@
    <slot>alter_migration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>310</y>
+     <x>100</x>
+     <y>283</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2200,8 +2190,8 @@
    <slot>alter_login()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>52</x>
-     <y>303</y>
+     <x>49</x>
+     <y>279</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2216,8 +2206,8 @@
    <slot>alter_login()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>404</x>
-     <y>303</y>
+     <x>100</x>
+     <y>279</y>
     </hint>
     <hint type="destinationlabel">
      <x>665</x>
@@ -2360,8 +2350,8 @@
    <slot>check_login()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>353</y>
+     <x>51</x>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>-85</x>
@@ -2376,8 +2366,8 @@
    <slot>free_login()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>29</x>
-     <y>328</y>
+     <x>26</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>-56</x>
@@ -2497,22 +2487,6 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>cb_beika</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>alert_beika()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>35</x>
-     <y>469</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-143</x>
-     <y>457</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
   <slot>acc()</slot>
@@ -2544,6 +2518,5 @@
   <slot>build_word_order_on_reception()</slot>
   <slot>build_word_order_on_dismissal()</slot>
   <slot>build_word_sertificat()</slot>
-  <slot>alert_beika()</slot>
  </slots>
 </ui>
