@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt, QDate, QDateTime, QTime
 from function import my_sql, table_to_html
 from form import staff
 from form.templates import table
+from function import scan_card
 from datetime import timedelta
 from function import to_excel
 from classes import print_qt
@@ -347,6 +348,16 @@ class ChangeCard(QDialog):
         self.worker_list = staff.Staff(self, True)
         self.worker_list.setWindowModality(Qt.ApplicationModal)
         self.worker_list.show()
+
+    def ui_scan_card(self):
+        number = scan_card.scan()
+
+        if not number:
+            QMessageBox.critical(self, "Ошибка сканирования", "Не удалось сканировать номер", QMessageBox.Ok)
+            return False
+
+        self.le_card.setText(number)
+
 
     def ui_acc(self):
         if self.id:

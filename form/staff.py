@@ -279,6 +279,7 @@ class OneStaff(QMainWindow):
         self.alert = []  # Массив для запоминания изменений
 
         self.id_info = None
+        self.sql_beika = False
 
         self.access()
 
@@ -568,6 +569,10 @@ class OneStaff(QMainWindow):
         if "login" not in self.alert:
             self.alert.append("login")
 
+    def alert_beika(self):  # Инфрмация об изменении разрешения на ввод бейки
+        if "beika" not in self.alert:
+            self.alert.append("beika")
+
     def insert_info(self, id_worker):
         # Обнуляем список заполненых полей
         self.update_sql = []
@@ -731,6 +736,20 @@ class OneStaff(QMainWindow):
                 self.le_login_password.setText(sql_reply[0][1])
 
         self.alert = []
+
+        # Смотрим можно ли вносить бекйку этому работнику
+        self.cb_beika.setEnabled(True)
+        query = "SELECT Atr_Value FROM access WHERE Worker_Id = %s AND Class = 'MainWindowOperation' AND Atr1 = 'pb_beika'"
+        sql_reply = my_sql.sql_select(query, (id_worker,))
+        if "mysql.connector.errors" in str(type(sql_reply)):
+            QMessageBox.critical(self, "Ошибка sql получения разрешения на бейку", sql_reply.msg, QMessageBox.Ok)
+            return False
+
+        if sql_reply and sql_reply[0][0]:
+            self.cb_beika.setChecked(True)
+
+            self.sql_beika = True
+
         return True
 
     def check_login(self):
@@ -920,6 +939,22 @@ class OneStaff(QMainWindow):
                             return False
                 except:
                     pass
+
+                if "beika" in self.alert:  # Если разрешение на бейку надо изменить
+                    if self.cb_beika.isChecked():
+                        if not self.sql_beika:
+                            query = "INSERT INTO access (Worker_Id, Class, Atr1, Atr2, Atr_Value) VALUES (%s, %s, %s, %s, %s)"
+                            parametrs = (self.id_info, "MainWindowOperation", "pb_beika", "setEnabled", 'True')
+                    else:
+                        if self.sql_beika:
+                            query = "DELETE FROM access WHERE Worker_Id = %s AND Class = 'MainWindowOperation' AND Atr1 = 'pb_beika'"
+                            parametrs = (self.id_info, )
+
+                    info_sql = my_sql.sql_change(query, parametrs)
+                    if "mysql.connector.errors" in str(type(info_sql)):
+                        QMessageBox.critical(self, "Ошибка sql изменения разрешения бейки", info_sql.msg, QMessageBox.Ok)
+                        return False
+
                 self.alert = []  # Обнуляем массив для запоминания изменений
                 self.close()
                 self.m.set_info()
