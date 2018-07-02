@@ -1381,7 +1381,7 @@ class ReportAll(QMainWindow):
                                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                                       WHERE pack.Id = pm.Id AND transaction_records_material.Note NOT LIKE '%доп. тк%'
                                       ),(
-                                          SELECT ((pack_add_material.Weight + pack_add_material.Weight_Rest) / pack.Value_Pieces) * pack_add_material.Price
+                                          SELECT SUM(((pack_add_material.Weight + pack_add_material.Weight_Rest) / pack.Value_Pieces) * pack_add_material.Price)
                                             FROM pack_add_material LEFT JOIN pack ON pack_add_material.Pack_Id = pack.Id
                                             WHERE pack.Id = pm.Id
                                       ),(
@@ -1401,6 +1401,7 @@ class ReportAll(QMainWindow):
                     sql_info = my_sql.sql_select(query, (pack_id, pack_id))
                     if "mysql.connector.errors" in str(type(sql_info)):
                         QMessageBox.critical(self, "Ошибка sql получения средней себестоимости", sql_info.msg, QMessageBox.Ok)
+                        print(pack_id)
                         return False
 
                     sebest_pack_list.append(sum([0 if i is None else i for i in sql_info[0]]))
