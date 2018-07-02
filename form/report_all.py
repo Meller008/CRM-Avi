@@ -1706,7 +1706,10 @@ class ReportAll(QMainWindow):
             return False
 
         for article in sql_info:
-            article_list[article[0]]["cut_value"] = article[1]
+            if article[0]:
+                article_list[article[0]]["cut_value"] = article[1]
+            else:
+                continue
 
         # Считаем себестоимость
         all_warehouse, all_warehouse_seb, all_warehouse_price = 0, 0, 0
