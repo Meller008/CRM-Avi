@@ -559,7 +559,7 @@ class Warehouse2(QMainWindow):
 
     def set_start_settings(self):
         # Ширина артикула
-        self.tw_article.horizontalHeader().resizeSection(0, 57)
+        self.tw_article.horizontalHeader().resizeSection(0, 70)
         self.tw_article.horizontalHeader().resizeSection(1, 50)
         self.tw_article.horizontalHeader().resizeSection(2, 80)
         self.tw_article.horizontalHeader().resizeSection(3, 180)
@@ -658,8 +658,8 @@ class Warehouse2(QMainWindow):
         else:
             tree_id = -1
 
-        self.get_article_sql()
-        self.set_article_list(tree_id)
+        if not self.ui_search_article():
+            self.set_article_list(tree_id)
 
     # Блок вставки значений списков
     @d_flag_human
@@ -775,18 +775,25 @@ class Warehouse2(QMainWindow):
 
     def ui_search_article(self):
         # Вызывается при поиске артикула
+        flag_return = False
         art_filter_text, size_filter_text, param_filter_text = None, None, None
         if self.le_filter_article.text():
             art_filter_text = self.le_filter_article.text()
+            flag_return = True
         if self.le_filter_article_2.text():
             art_filter_text = self.le_filter_article_2.text()
+            flag_return = True
         if self.le_filter_article_size.text():
             size_filter_text = self.le_filter_article_size.text()
+            flag_return = True
         if self.le_filter_article_parametr.text():
             param_filter_text = self.le_filter_article_parametr.text()
+            flag_return = True
 
         self.get_article_sql(art_filter_text, size_filter_text, param_filter_text)
         self.set_article_list()
+
+        return flag_return
 
     # Вставка значений склада
     def set_parametr_warehouse(self, _id):
