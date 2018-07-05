@@ -1,4 +1,4 @@
-from os import getcwd, path, mkdir, listdir
+from os import getcwd, path, mkdir, listdir, rename
 from form.templates import tree, table
 from form import operation, supply_material, supply_accessories, print_label
 from PyQt5.uic import loadUi
@@ -683,6 +683,10 @@ class ArticleList(QMainWindow):
             return False
         else:
             size_id = self.lw_size.currentItem().data(5)
+
+            if not self.create_new_size_name_dir(size_id, str(new_size[0])):
+                return False
+
             query = "UPDATE product_article_size SET Size = %s WHERE Id = %s"
             sql_info = my_sql.sql_change(query, (new_size[0], size_id))
             if "mysql.connector.errors" in str(type(sql_info)):
@@ -752,6 +756,9 @@ class ArticleList(QMainWindow):
 
         new_name = QInputDialog.getText(self, "Изменение варианта", "Введите новое название варианта товара", text=param_name)
         if not new_name[1]:
+            return False
+
+        if not self.create_new_var_name_dir(param_id, new_name[0]):
             return False
 
         query = "UPDATE product_article_parametrs SET Name = %s WHERE Id = %s"
@@ -861,6 +868,10 @@ class ArticleList(QMainWindow):
 
         if not self.add_article.le_article.text() or not self.add_article.le_name.text():
             QMessageBox.information(self, "Ошибка", "Вы не заполнили все поля", QMessageBox.Ok)
+            return False
+
+        if not self.create_new_art_name_dir(article_id, self.add_article.le_article.text()):
+            QMessageBox.critical(self, "Ошибка файлов", "Не получилось переимекновать папки!", QMessageBox.Ok)
             return False
 
         query = "UPDATE  product_article SET Article = %s, Name = %s WHERE Id = %s"
@@ -1684,6 +1695,87 @@ class ArticleList(QMainWindow):
                     list_item = QListWidgetItem(r[0] + r[1])
                     list_item.setIcon(QIcon(getcwd() + "/images/%s.ico" % ico))
                     self.lw_label.addItem(list_item)
+
+    def create_new_art_name_dir(self, old_art_id, new_art_name):
+        # Функция генерирует новые имена для артикула
+        query = """SELECT product_article.Article, product_article_size.Size, product_article_parametrs.Name
+                      FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
+                        LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
+                      WHERE product_article.Id = %s"""
+        sql_info = my_sql.sql_select(query, (old_art_id, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения списка артикулов для переименования", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        list_rename_dir = []
+        for article in sql_info:
+            old_dir = article[0].replace("/", "-") + " " + article[1] + " " + article[2]
+            new_dir = new_art_name.replace("/", "-") + " " + article[1] + " " + article[2]
+
+            list_rename_dir.append((old_dir, new_dir))
+
+        self.rename_folders(list_rename_dir)
+        return True
+
+    def create_new_size_name_dir(self, old_size_id, new_size_name):
+        # Функция генерирует новые имена для размера
+        query = """SELECT product_article.Article, product_article_size.Size, product_article_parametrs.Name
+                      FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
+                        LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
+                      WHERE product_article_size.Id = %s"""
+        sql_info = my_sql.sql_select(query, (old_size_id, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения списка артикулов для переименования", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        list_rename_dir = []
+        for article in sql_info:
+            old_dir = article[0].replace("/", "-") + " " + article[1] + " " + article[2]
+            new_dir = article[0].replace("/", "-") + " " + new_size_name + " " + article[2]
+
+            list_rename_dir.append((old_dir, new_dir))
+
+        self.rename_folders(list_rename_dir)
+        return True
+
+    def create_new_var_name_dir(self, old_var_id, new_var_name):
+        # Функция генерирует новые имена для варианта
+        query = """SELECT product_article.Article, product_article_size.Size, product_article_parametrs.Name
+                      FROM product_article LEFT JOIN product_article_size ON product_article.Id = product_article_size.Article_Id
+                        LEFT JOIN product_article_parametrs ON product_article_size.Id = product_article_parametrs.Product_Article_Size_Id
+                      WHERE product_article_parametrs.Id = %s"""
+        sql_info = my_sql.sql_select(query, (old_var_id, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получения списка артикулов для переименования", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        list_rename_dir = []
+        for article in sql_info:
+            old_dir = article[0].replace("/", "-") + " " + article[1] + " " + article[2]
+            new_dir = article[0].replace("/", "-") + " " + article[1] + " " + new_var_name
+
+            list_rename_dir.append((old_dir, new_dir))
+
+        self.rename_folders(list_rename_dir)
+        return True
+
+    def rename_folders(self, rename_list):
+        # Функция переименовывает папки [[старое имя, новое имя], ...]
+        query = 'SELECT `Values` FROM program_settings_path WHERE Name = "%s"' % "Путь корень бирки"
+        info_sql = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(info_sql)):
+                    QMessageBox.critical(self, "Ошибка sql", info_sql.msg, QMessageBox.Ok)
+                    return False
+
+        main_dir = info_sql[0][0]
+
+        for dirs in rename_list:
+            old_dir = "%s/%s" % (main_dir, dirs[0])
+            if path.isdir(old_dir):
+                new_dir = "%s/%s" % (main_dir, dirs[1])
+                rename(old_dir, new_dir)
+
+        return True
 
 
 class ArticleListOld(tree.TreeList):
