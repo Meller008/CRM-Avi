@@ -524,14 +524,14 @@ class SalaryList(QDialog):
 
             sql_transaction = my_sql.sql_start_transaction()
 
-            query = "UPDATE pack_operation SET Pay = 0 WHERE Date_Pay = %s AND Pay = 1"
+            query = "UPDATE pack_operation SET Pay = 0, Date_Pay = NULL WHERE Date_Pay = %s AND Pay = 1"
             sql_info = my_sql.sql_change_transaction(sql_transaction, query, (self.select_history_py_date, ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка SQL", "Не смог вернуть операции", QMessageBox.Ok)
                 my_sql.sql_rollback_transaction(sql_transaction)
                 return False
 
-            query = "UPDATE pay_worker SET Pay = 0 WHERE Date_Pay = %s AND Pay = 1"
+            query = "UPDATE pay_worker SET Pay = 0, Date_Pay = NULL WHERE Date_Pay = %s AND Pay = 1"
             sql_info = my_sql.sql_change_transaction(sql_transaction, query, (self.select_history_py_date, ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка SQL", "Не смог вернуть доплаты вычеты", QMessageBox.Ok)
