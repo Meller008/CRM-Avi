@@ -349,6 +349,13 @@
            </property>
           </widget>
          </item>
+         <item row="1" column="3">
+          <widget class="QPushButton" name="pb_dell_salary">
+           <property name="text">
+            <string>Отменить ЗП</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item row="1" column="0">
@@ -962,6 +969,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_dell_salary</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_del_salary()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>695</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>677</x>
+     <y>-110</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
@@ -976,5 +999,6 @@
   <slot>ui_calc_preliminary()</slot>
   <slot>ui_export_preliminary_salary()</slot>
   <slot>ui_print_preliminary_salary()</slot>
+  <slot>ui_del_salary()</slot>
  </slots>
 </ui>

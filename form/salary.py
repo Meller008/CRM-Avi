@@ -17,6 +17,7 @@ class SalaryList(QDialog):
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
         self.set_size_table()
+        self.select_history_py_date = None
 
         self.de_date_make.setDate(QDate.currentDate())
 
@@ -288,6 +289,7 @@ class SalaryList(QDialog):
         self.all_plus_history = 0
         self.all_minus_history = 0
         self.salary_history = []
+        self.select_history_py_date = self.history.date
         query = """SELECT work.Id, CONCAT(work.Last_Name, ' ', work.First_Name) AS work_name, pack_operation.Id, pack_operation.Price * pack_operation.Value,
                         operations.Name ,pack_operation.Date_make, pack_operation.Date_Input, pack.Cut_Id, pack.Number
                       FROM pack_operation LEFT JOIN pack ON pack_operation.Pack_Id = pack.Id
@@ -511,6 +513,32 @@ class SalaryList(QDialog):
         path = QFileDialog.getSaveFileName(self, "Сохранение")
         if path[0]:
             to_excel.table_to_excel(self.tw_main_salary_history, path[0])
+
+    def ui_del_salary(self):
+        if not self.select_history_py_date:
+            QMessageBox.information(self, "Дата", "Выберите дату", QMessageBox.Ok)
+            return False
+
+        result = QMessageBox.question(self, "Отменить?", "Вы уверены что хотите ОТМЕНИТЬ расчитаную ЗП %s?" % self.history.date, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+
+            sql_transaction = my_sql.sql_start_transaction()
+
+            query = "UPDATE pack_operation SET Pay = 0 WHERE Date_Pay = %s AND Pay = 1"
+            sql_info = my_sql.sql_change_transaction(sql_transaction, query, (self.select_history_py_date, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка SQL", "Не смог вернуть операции", QMessageBox.Ok)
+                my_sql.sql_rollback_transaction(sql_transaction)
+                return False
+
+            query = "UPDATE pay_worker SET Pay = 0 WHERE Date_Pay = %s AND Pay = 1"
+            sql_info = my_sql.sql_change_transaction(sql_transaction, query, (self.select_history_py_date, ))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка SQL", "Не смог вернуть доплаты вычеты", QMessageBox.Ok)
+                my_sql.sql_rollback_transaction(sql_transaction)
+                return False
+
+            my_sql.sql_commit_transaction(sql_transaction)
 
     # сводное окно
     def ui_calc_many(self):
