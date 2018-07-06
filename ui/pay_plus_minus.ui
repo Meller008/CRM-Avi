@@ -603,9 +603,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="le_p_m_note_minus"/>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_13">
          <property name="text">
@@ -717,9 +714,6 @@
          </item>
         </layout>
        </item>
-       <item row="10" column="1">
-        <widget class="QLineEdit" name="le_p_m_note_plus"/>
-       </item>
        <item row="6" column="0">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
@@ -732,6 +726,40 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_13">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="le_p_m_note_minus"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButton_10">
+           <property name="text">
+            <string>copy</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="10" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_14">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="le_p_m_note_plus"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButton_11">
+           <property name="text">
+            <string>copy</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -969,8 +997,8 @@
    <slot>ui_add_worker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>10</y>
+     <x>462</x>
+     <y>28</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -985,8 +1013,8 @@
    <slot>ui_add_worker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>10</y>
+     <x>462</x>
+     <y>28</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1001,8 +1029,8 @@
    <slot>ui_add_reason_plus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>16</y>
+     <x>462</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1017,8 +1045,8 @@
    <slot>ui_add_reason_minus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>16</y>
+     <x>462</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1033,8 +1061,8 @@
    <slot>ui_edit_date_road()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>227</x>
-     <y>23</y>
+     <x>443</x>
+     <y>252</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1049,8 +1077,8 @@
    <slot>ui_add_worker_m_p_minus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>2</y>
+     <x>462</x>
+     <y>5</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1065,8 +1093,8 @@
    <slot>ui_add_worker_m_p_plus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>25</y>
+     <x>462</x>
+     <y>224</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1081,8 +1109,8 @@
    <slot>ui_add_reason_m_p_minus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>6</y>
+     <x>462</x>
+     <y>33</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1097,8 +1125,8 @@
    <slot>ui_add_reason_m_p_plus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>28</y>
+     <x>462</x>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1113,8 +1141,8 @@
    <slot>ui_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>340</x>
-     <y>251</y>
+     <x>381</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>338</x>
@@ -1129,8 +1157,8 @@
    <slot>ui_can()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>251</y>
+     <x>462</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1145,8 +1173,8 @@
    <slot>ui_add_reason_road()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>14</y>
+     <x>462</x>
+     <y>224</y>
     </hint>
     <hint type="destinationlabel">
      <x>424</x>
@@ -1161,8 +1189,8 @@
    <slot>ui_add_worker_bye()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>412</x>
-     <y>18</y>
+     <x>226</x>
+     <y>4</y>
     </hint>
     <hint type="destinationlabel">
      <x>518</x>
@@ -1177,8 +1205,8 @@
    <slot>ui_add_reason_bye()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>410</x>
-     <y>33</y>
+     <x>226</x>
+     <y>8</y>
     </hint>
     <hint type="destinationlabel">
      <x>358</x>
@@ -1193,8 +1221,8 @@
    <slot>ui_add_material_name()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>398</x>
-     <y>55</y>
+     <x>226</x>
+     <y>12</y>
     </hint>
     <hint type="destinationlabel">
      <x>347</x>
@@ -1209,8 +1237,8 @@
    <slot>ui_change_weight()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>361</x>
-     <y>88</y>
+     <x>227</x>
+     <y>17</y>
     </hint>
     <hint type="destinationlabel">
      <x>493</x>
@@ -1225,12 +1253,44 @@
    <slot>ui_material_sum_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>397</x>
-     <y>106</y>
+     <x>226</x>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
      <x>546</x>
      <y>126</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_10</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_copy_to_note_1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>447</x>
+     <y>61</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>597</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_11</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_copy_to_note_2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>448</x>
+     <y>262</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>550</x>
+     <y>246</y>
     </hint>
    </hints>
   </connection>
@@ -1253,5 +1313,7 @@
   <slot>ui_add_material_name()</slot>
   <slot>ui_change_weight()</slot>
   <slot>ui_material_sum_calc()</slot>
+  <slot>ui_copy_to_note_1()</slot>
+  <slot>ui_copy_to_note_2()</slot>
  </slots>
 </ui>

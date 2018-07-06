@@ -287,6 +287,12 @@ class PayBrows(QDialog):
         self.reason_list.setWindowModality(Qt.ApplicationModal)
         self.reason_list.show()
 
+    def ui_copy_to_note_1(self):
+        self.le_p_m_note_minus.setText(self.le_p_m_note_plus.text())
+
+    def ui_copy_to_note_2(self):
+        self.le_p_m_note_plus.setText(self.le_p_m_note_minus.text())
+
     # Для продажи ткани
     def ui_add_worker_bye(self):
         self.button = "Продажа ткани"
