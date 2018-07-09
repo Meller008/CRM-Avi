@@ -1062,6 +1062,10 @@ class Order(QMainWindow):
             sum_of_nds = 0
             unit_position = 0
             for cod, cod_value in product.items():
+
+                if not cod_value["value"]:
+                    continue
+
                 if self.lb_client.whatsThis().find("no_nds") >= 0:
                     cod_value["price_no_nds"], cod_value["sum_no_nds"], cod_value["nds_sum"], cod_value["sum"], cod_value["mest"] =\
                         calc_price.calc_no_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
