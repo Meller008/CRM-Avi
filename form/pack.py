@@ -670,6 +670,7 @@ class PackBrows(QDialog):
         html = html.replace("#note#", str(self.pack.note()))
         html = html.replace("#o_table#", operation_table)
 
+        self.logger.info(u"[Крой {:04d} Пользователь {:04d}] {}".format(self.pack.number_cut() or 0, User().id(), "Пачка %s напечатан паспорт" % self.pack.id()))
         self.print_class = print_qt.PrintHtml(self, html)
 
         files.del_temp_file(cod + ".svg")
