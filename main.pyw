@@ -5,8 +5,7 @@ from datetime import datetime
 try:
     import form.main_window
 except:
-    import os
-    os.system("install_pack.py")
+    import install_pack
     import form.main_window
 
 
