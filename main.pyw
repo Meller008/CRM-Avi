@@ -1,4 +1,3 @@
-import os
 from PyQt5.QtWidgets import QApplication
 import sys, traceback, time
 from datetime import datetime
@@ -6,9 +5,8 @@ from datetime import datetime
 try:
     import form.main_window
 except:
-    print(1)
+    import os
     os.system("install_pack.py")
-    print(0)
     import form.main_window
 
 

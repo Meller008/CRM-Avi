@@ -1,7 +1,13 @@
 from PyQt5.QtWidgets import QApplication
 import sys, traceback, time
-import form.main_window
 from datetime import datetime
+
+try:
+    import form.main_window
+except:
+    import os
+    os.system("install_pack.py")
+    import form.main_window
 
 def ex(t, v, tb):
     print(traceback.print_exception(t, v, tb))
