@@ -28,7 +28,7 @@ def yellow(text):
 
 def upgrade_pip():
     print("Обновлю PIP")
-    subprocess.call("C:\Python34\python -m pip install --upgrade pip", shell=True)
+    subprocess.call("C:\Python34\python -m pip install --upgrade pip", shell=False)
     print(green("PIP Обновлен"))
 
     try:
