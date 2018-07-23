@@ -74,11 +74,11 @@ def copy_lib(copy_folder):
                 pass
     print(green("Скопировал %s" % copy_folder))
 
-
+print(3)
 upgrade_pip()
 print(yellow("Сейчас я проверю список установленных пакетов "))
 need_install_modules = search_module_list(modules)
-
+print(4)
 
 if need_install_modules:
     print("Сейчас я установлю недостающие модули")
@@ -90,5 +90,5 @@ print(yellow("Сейчас я скопирую пакеты"))
 for copy_mod in copy_modules:
     copy_lib(copy_mod)
 
-
+print(5)
 print(green("Готово"))
