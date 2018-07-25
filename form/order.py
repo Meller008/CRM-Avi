@@ -1854,7 +1854,7 @@ class Order(QMainWindow):
             for cell in row:
                 cell.border = border_all
 
-            sheet.page_breaks.append(Break(59))
+            sheet.page_breaks.append(Break(58))
 
         # Заполняем шапку второго листа
         sheet["AC65"] = self.le_number_doc.text()
