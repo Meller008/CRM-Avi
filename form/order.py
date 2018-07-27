@@ -3080,27 +3080,27 @@ class ImportEDI(QDialog):
                     table_item = QTableWidgetItem(str(price_no_nds))
                     table_item.setData(-1, "new")
                     table_item.setData(5, nds)
-                    self.main.tw_position.setItem(row, 4, table_item)
+                    self.main.tw_position.setItem(row_main, 4, table_item)
 
                     table_item = QTableWidgetItem(str(round(price_no_nds * int(float(self.tw_edi_3.item(row, 3).text())), 4)))
                     table_item.setData(-1, "new")
                     table_item.setData(5, nds)
-                    self.main.tw_position.setItem(row, 6, table_item)
+                    self.main.tw_position.setItem(row_main, 6, table_item)
                 else:
                     table_item = QTableWidgetItem(str(article["price"]))
                     table_item.setData(-1, "new")
                     table_item.setData(5, nds)
-                    self.main.tw_position.setItem(row, 4, table_item)
+                    self.main.tw_position.setItem(row_main, 4, table_item)
 
                     table_item = QTableWidgetItem(str(round(float(article["price"]) * int(float(self.tw_edi_3.item(row, 3).text())), 4)))
                     table_item.setData(-1, "new")
                     table_item.setData(5, nds)
-                    self.main.tw_position.setItem(row, 6, table_item)
+                    self.main.tw_position.setItem(row_main, 6, table_item)
 
                 table_item = QTableWidgetItem(self.tw_edi_3.item(row, 3).text())
                 table_item.setData(-1, "new")
                 table_item.setData(5, self.tw_edi_3.item(row, 5).text())
-                self.main.tw_position.setItem(row, 5, table_item)
+                self.main.tw_position.setItem(row_main, 5, table_item)
 
         self.main.save_change_order_position = True
         self.main.calc_sum()
