@@ -332,7 +332,7 @@ class PayBrows(QDialog):
                 self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(247, 84, 84);")
                 self.le_weight.setToolTip("Этой ткани не хватит для изменения расходов")
 
-            elif weight is None or float(sql_info[0][0]) > weight:
+            elif weight is None or float(sql_info[0][0]) >= weight:
                 self.le_weight.setStyleSheet("border: 4px solid;\nborder-color: rgb(122, 247, 84);")
                 self.le_weight.setToolTip("Новой ткани хватает")
                 self.need_weight = True
