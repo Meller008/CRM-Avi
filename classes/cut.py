@@ -1464,7 +1464,7 @@ class Pack:
                         else:
                             # Если в этом балансе меньше чем нам надо
                             take_accessory_value = sql_balance_accessories[0][1]
-                            accessory_value -= sql_balance_accessories[0][1]
+                            accessory_value -= float(sql_balance_accessories[0][1])
 
                         # Забираем возможное кол-во
                         query = "UPDATE accessories_balance SET BalanceValue = BalanceValue - %s WHERE Id = %s"
