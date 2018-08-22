@@ -1444,7 +1444,7 @@ class Pack:
                     save_accessory["id"] = sql_info
 
                     # возьмем требуемое кол-во и будем забирать со склада
-                    accessory_value = save_accessory["value"] * save_accessory["value_thing"]
+                    accessory_value = Decimal(save_accessory["value"] * save_accessory["value_thing"])
                     while accessory_value > 0:
                         # Проверяем первое кол-во на складе
                         query = """SELECT accessories_balance.Id, accessories_balance.BalanceValue, MIN(accessories_supply.Data)
@@ -1464,7 +1464,7 @@ class Pack:
                         else:
                             # Если в этом балансе меньше чем нам надо
                             take_accessory_value = sql_balance_accessories[0][1]
-                            accessory_value -= float(sql_balance_accessories[0][1])
+                            accessory_value -= sql_balance_accessories[0][1]
 
                         # Забираем возможное кол-во
                         query = "UPDATE accessories_balance SET BalanceValue = BalanceValue - %s WHERE Id = %s"
