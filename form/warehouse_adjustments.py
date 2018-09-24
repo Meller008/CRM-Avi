@@ -127,7 +127,7 @@ class MaterialAdjustments(QDialog):
         balance_id = self.le_balance_id.whatsThis()
 
         if not value_change or value_change > 0:
-            QMessageBox.information(self, "Ошибка", "Что то не так с балансом, или он больше 0", QMessageBox.Ok)
+            QMessageBox.information(self, "Ошибка", "Что то не так с изменяемым кол-вом, или он больше 0", QMessageBox.Ok)
             return False
 
         if not balance_id:
