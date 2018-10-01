@@ -532,6 +532,8 @@ class Warehouse2(QMainWindow):
         self.set_tree_info()
         self.set_article_list()
 
+        self.flag_access_open_order = False
+
         self.access()
 
     def access(self):
@@ -556,6 +558,9 @@ class Warehouse2(QMainWindow):
 
     def access_save(self, bol):
         self.flag_access_save_sql = bol
+
+    def access_open_order(self, bol):
+        self.flag_access_open_order = bol
 
     def set_start_settings(self):
         # Ширина артикула
@@ -1006,9 +1011,10 @@ class Warehouse2(QMainWindow):
 
     # Отерытие заказа
     def ui_order_double_click(self, item):
-        self.order = Order(id=item.data(-2))
-        self.order.setWindowModality(QtCore.Qt.ApplicationModal)
-        self.order.show()
+        if self.flag_access_open_order:
+            self.order = Order(id=item.data(-2))
+            self.order.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.order.show()
 
     # Функция фильтра
     def add_filter(self, where, add, and_add=True):
