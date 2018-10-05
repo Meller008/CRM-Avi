@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>373</width>
+    <height>204</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>1</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
+    <number>1</number>
+   </property>
+   <property name="spacing">
+    <number>2</number>
+   </property>
+   <item row="1" column="0">
+    <widget class="QTableWidget" name="tw_operations">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>20</number>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>18</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Операция</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Цена прошлая</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Цена новая</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pb_acc">
+       <property name="text">
+        <string>Принять</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Отмена</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Цену умножить на </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="le_multiply_price">
+       <property name="text">
+        <string>1.3</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pb_calc">
+       <property name="text">
+        <string>Пересчет</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pb_calc</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_calc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>341</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>578</x>
+     <y>23</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_acc</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_acc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>242</x>
+     <y>189</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>243</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_can()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>332</x>
+     <y>180</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>336</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>ui_calc()</slot>
+  <slot>ui_acc()</slot>
+  <slot>ui_can()</slot>
+ </slots>
+</ui>
