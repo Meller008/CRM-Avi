@@ -361,6 +361,11 @@
               <string>Машинка</string>
              </property>
             </column>
+            <column>
+             <property name="text">
+              <string>Изм. цены</string>
+             </property>
+            </column>
            </widget>
           </item>
           <item>

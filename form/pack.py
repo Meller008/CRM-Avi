@@ -9,7 +9,7 @@ import codecs
 from decimal import *
 from classes import cut, print_qt
 from form import clients, article, print_label, supply_material
-from function import barcode, files, my_sql
+from function import barcode, files, my_sql, str_to
 from classes.my_class import User
 from form.templates import table
 import logging
@@ -415,6 +415,11 @@ class PackBrows(QDialog):
             return False
 
         self.set_operation_name()
+
+    def ui_change_price_operations(self):
+        self.change_operation_window = PackChangePrice(self, self.pack.operations(), self.pack.parametr_id())
+        self.change_operation_window.setModal(True)
+        self.change_operation_window.show()
 
     def ui_double_click_accessories(self, table_item):
         if not self.toolButton_5.isEnabled():
@@ -958,6 +963,10 @@ class PackBrows(QDialog):
         self.pack.set_operation(operation)
         self.set_operation_name()
 
+    def of_set_new_price_operation(self, operation):  # функция вызывается при массовом изменени цены операции, изменяет цену операции.
+        self.pack.set_operation(operation, operation["id"])
+        self.set_operation_name()
+
 
 class PackOperation(QDialog):
     def __init__(self, operation=None):
@@ -1081,6 +1090,78 @@ class PackOperation(QDialog):
     def of_list_worker(self, worker):
         self.le_worker.setWhatsThis(str(worker[0]))
         self.le_worker.setText(worker[1])
+
+
+class PackChangePrice(QDialog):
+    def __init__(self, main, operations, article_id):
+        super(PackChangePrice, self).__init__()
+        loadUi(getcwd() + '/ui/pack_change_price_operations.ui', self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+        self.set_size_table()
+        self.get_access_change_price(article_id)
+        self.set_table_operations(operations)
+        self.operations = operations
+        self.main = main
+
+    def set_size_table(self):
+        self.tw_operations.horizontalHeader().resizeSection(0, 200)
+        self.tw_operations.horizontalHeader().resizeSection(1, 75)
+        self.tw_operations.horizontalHeader().resizeSection(2, 75)
+
+    def get_access_change_price(self, article_id):
+        query = """SELECT product_article_operation.Operation_Id FROM product_article_operation WHERE Product_Article_Parametrs_Id = %s AND Change_Price = 1"""
+        sql_info = my_sql.sql_select(query, (article_id, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            return False
+
+        self.accept_operations_id = [i[0] for i in sql_info]
+
+    def set_table_operations(self, operations):
+        row = 0
+        for dict in operations:
+            if dict["operation_id"] in self.accept_operations_id:
+                self.tw_operations.insertRow(row)
+
+                new_table_item = QTableWidgetItem(str(dict["name"]))
+                new_table_item.setData(-2, dict)
+                self.tw_operations.setItem(row, 0, new_table_item)
+
+                new_table_item = QTableWidgetItem(str(dict["price"]))
+                self.tw_operations.setItem(row, 1, new_table_item)
+
+                row += 1
+
+    def ui_calc(self):
+        multiply = str_to.str_to_float(self.le_multiply_price.text())
+        for row in range(self.tw_operations.rowCount()):
+            old_price = str_to.str_to_float(self.tw_operations.item(row, 1).text())
+            new_price = round(old_price * multiply, 2)
+
+            new_table_item = QTableWidgetItem(str(new_price))
+            self.tw_operations.setItem(row, 2, new_table_item)
+
+    def ui_acc(self):
+        for row in range(self.tw_operations.rowCount()):
+            try:
+                if not self.tw_operations.item(row, 2).text():
+                    QMessageBox.information(self, "Ошибка цены", "В строчке %s неправильное значение" % row, QMessageBox.Ok)
+                    return False
+            except AttributeError:
+                QMessageBox.information(self, "Ошибка цены", "В строчке %s нет цены" % row, QMessageBox.Ok)
+                return False
+
+        for row in range(self.tw_operations.rowCount()):
+            operation_dict = self.tw_operations.item(row, 0).data(-2)
+            operation_dict["price"] = str_to.str_to_float(self.tw_operations.item(row, 2).text())
+
+            self.main.of_set_new_price_operation(operation_dict)
+        else:
+            self.close()
+            self.destroy()
+
+    def ui_can(self):
+        self.close()
+        self.destroy()
 
 
 class PackAccessories(QDialog):

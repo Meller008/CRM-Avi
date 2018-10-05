@@ -88,6 +88,10 @@ class ArticleList(QMainWindow):
         self.flag_select_size = select_size
         self.flag_select_variant = select_variant
 
+        # Переменные для запоминания выбранной предыдущей позиции
+        self.old_select_row_size = None
+        self.old_select_row_parametr = None
+
         self.log("Открыл окно артикулов")
 
         self.access()
@@ -140,8 +144,9 @@ class ArticleList(QMainWindow):
         self.tw_materials.horizontalHeader().resizeSection(3, 80)
         # Ширина операций
         self.tw_operations.horizontalHeader().resizeSection(0, 280)
-        self.tw_operations.horizontalHeader().resizeSection(1, 80)
-        self.tw_operations.horizontalHeader().resizeSection(2, 110)
+        self.tw_operations.horizontalHeader().resizeSection(1, 60)
+        self.tw_operations.horizontalHeader().resizeSection(2, 100)
+        self.tw_operations.horizontalHeader().resizeSection(3, 70)
 
         self.pb_up.setIcon(QIcon(getcwd() + "/images/up.ico"))
         self.pb_down.setIcon(QIcon(getcwd() + "/images/down.ico"))
@@ -367,7 +372,7 @@ class ArticleList(QMainWindow):
                 self.rb_nds_2.setChecked(True)
 
         query = """SELECT product_article_operation.Product_Article_Parametrs_Id, product_article_operation.Id, product_article_operation.Operation_Id,
-                    operations.Name, operations.Price, sewing_machine.Name
+                    operations.Name, operations.Price, sewing_machine.Name, product_article_operation.Change_Price
                     FROM product_article_operation
                     LEFT JOIN operations ON product_article_operation.Operation_Id = operations.Id
                     LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id
@@ -525,6 +530,9 @@ class ArticleList(QMainWindow):
         # Вызывается при клике на размер
         if self.flag_select_human:
             if self.ui_check_need_save():
+                self.flag_select_human = False
+                self.lw_size.setCurrentRow(self.old_select_row_size)
+                self.flag_select_human = True
                 return False
 
             size_id = self.lw_size.currentItem().data(5)
@@ -532,14 +540,21 @@ class ArticleList(QMainWindow):
 
             self.clear_parametr_info()
 
+            self.old_select_row_size = self.lw_size.currentRow()
+
     def ui_select_parametr(self):
         # Вызывается при клике на параметр
         if self.flag_select_human:
             if self.ui_check_need_save():
+                self.flag_select_human = False
+                self.lw_parametr.setCurrentRow(self.old_select_row_parametr)
+                self.flag_select_human = True
                 return False
 
             parametr_id = self.lw_parametr.currentItem().data(5)
             self.set_parametr_info(parametr_id)
+
+            self.old_select_row_parametr = self.lw_parametr.currentRow()
 
     # Блок выбора записи
     def ui_dc_article(self, row):
@@ -1235,6 +1250,7 @@ class ArticleList(QMainWindow):
             position_operation = 1
             for row in range(self.tw_operations.rowCount()):
                 table_item = self.tw_operations.item(row, 0)
+                access_price = int(self.tw_operations.item(row, 3).text())
                 if self.tw_operations.isRowHidden(row):
                     if table_item.data(-1) == "del" and table_item.data(-2):
                         query = "DELETE FROM product_article_operation WHERE Id = %s"
@@ -1244,16 +1260,16 @@ class ArticleList(QMainWindow):
                             return False
 
                 elif table_item.data(-1) == "new":
-                    query = "INSERT INTO product_article_operation (Product_Article_Parametrs_Id, Operation_Id, Position) VALUES (%s, %s, %s)"
-                    sql_info = my_sql.sql_change(query, (parametr_id, table_item.data(5), position_operation))
+                    query = "INSERT INTO product_article_operation (Product_Article_Parametrs_Id, Operation_Id, Position, Change_Price) VALUES (%s, %s, %s, %s)"
+                    sql_info = my_sql.sql_change(query, (parametr_id, table_item.data(5), position_operation, access_price))
                     position_operation += 1
                     if "mysql.connector.errors" in str(type(sql_info)):
                         QMessageBox.critical(self, "Ошибка sql добавление операции", sql_info.msg, QMessageBox.Ok)
                         return False
 
                 elif table_item.data(-1) == "upd" and table_item.data(-2):
-                    query = "UPDATE product_article_operation SET Operation_Id = %s, Position = %s WHERE Id = %s"
-                    sql_info = my_sql.sql_change(query, (table_item.data(5), position_operation, table_item.data(-2)))
+                    query = "UPDATE product_article_operation SET Operation_Id = %s, Position = %s, Change_Price = %s WHERE Id = %s"
+                    sql_info = my_sql.sql_change(query, (table_item.data(5), position_operation, access_price, table_item.data(-2)))
                     position_operation += 1
                     if "mysql.connector.errors" in str(type(sql_info)):
                         QMessageBox.critical(self, "Ошибка sql добавление операции", sql_info.msg, QMessageBox.Ok)
@@ -1336,33 +1352,40 @@ class ArticleList(QMainWindow):
         self.change_operation = ChangeOperation()
         self.change_operation.le_operation.setText(item.text())
         self.change_operation.le_operation.setWhatsThis(str(item.data(5)))
+        self.change_operation.cb_accept_change_price.setChecked(bool(int(self.tw_operations.item(row, 3).text())))
         self.change_operation.setModal(True)
         self.change_operation.show()
 
         id = self.change_operation.exec()
         if id <= 0:
             return False
-        if not self.change_operation.new_operation:
-            return False
+        if self.change_operation.new_operation:
 
-        elif id == item.data(5):
-            item.setText(self.change_operation.new_operation[1])
-        else:
-            sql_id = item.data(-2)
-            if item.data(-1) == "new":
-                sql_status = "new"
+            if id == item.data(5):
+                item.setText(self.change_operation.new_operation[1])
             else:
-                sql_status = "upd"
+                sql_id = item.data(-2)
+                if item.data(-1) == "new":
+                    sql_status = "new"
+                else:
+                    sql_status = "upd"
 
-            item = self.change_operation.new_operation
-            for col in range(1, len(item)):
-                new_item = QTableWidgetItem(item[col])
-                new_item.setData(5, item[0])
-                new_item.setData(-1, sql_status)
-                new_item.setData(-2, sql_id)
-                self.tw_operations.setItem(row, col - 1, new_item)
+                item = self.change_operation.new_operation
+                for col in range(1, len(item)):
+                    new_item = QTableWidgetItem(item[col])
+                    new_item.setData(5, item[0])
+                    new_item.setData(-1, sql_status)
+                    new_item.setData(-2, sql_id)
+                    self.tw_operations.setItem(row, col - 1, new_item)
 
-        self.ui_save_change_operation()
+            self.ui_save_change_operation()
+
+        # Проверим галку разрешения изменения цены опрации
+        if int(self.tw_operations.item(row, 3).text()) != int(self.change_operation.cb_accept_change_price.isChecked()):
+            self.tw_operations.item(row, 3).setText(str(int(self.change_operation.cb_accept_change_price.isChecked())))
+            self.tw_operations.item(row, 0).setData(-1, "upd")
+
+            self.ui_save_change_operation()
 
     def ui_dell_operation(self):
         # Удалить операцию в списке
@@ -1474,10 +1497,13 @@ class ArticleList(QMainWindow):
 
     def of_tree_select_operation(self, item):
         # Вставляет новую операцию в список
+        add_item = list(item)  # добавим 0 разрешение для изменения цены операции
+        add_item.append("0")
+
         self.tw_operations.insertRow(self.tw_operations.rowCount())
-        for col in range(1, len(item)):
-            new_item = QTableWidgetItem(item[col])
-            new_item.setData(5, item[0])
+        for col in range(1, len(add_item)):
+            new_item = QTableWidgetItem(add_item[col])
+            new_item.setData(5, add_item[0])
             new_item.setData(-1, "new")
             self.tw_operations.setItem(self.tw_operations.rowCount() - 1, col - 1, new_item)
 

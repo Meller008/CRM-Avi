@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+
 def str_to_float(str_in):
     if not str_in:
         return None
@@ -9,6 +10,7 @@ def str_to_float(str_in):
         return fl
     except ValueError:
         return False
+
 
 def str_to_decimal(str_in):
     if not str_in:
