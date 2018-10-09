@@ -2,7 +2,7 @@ import sys
 from os import getcwd
 from PyQt5.QtWidgets import QApplication, QLabel, QTableWidgetItem, QDialog, QMainWindow, QListWidgetItem, QInputDialog
 from PyQt5.uic import loadUiType
-from PyQt5.QtGui import QIcon, QBrush, QColor
+from PyQt5.QtGui import QIcon, QBrush, QColor, QTextCharFormat
 from PyQt5.QtCore import Qt, QDate, QTimer
 from function import my_sql
 from classes.my_class import User
@@ -21,6 +21,8 @@ class MainWindowOperation(QMainWindow, main_class):
         self.show()
 
         self.showFullScreen()
+
+        self.select_data = None
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.close_timer)
@@ -95,6 +97,9 @@ class MainWindowOperation(QMainWindow, main_class):
         self.tw_salary_history.horizontalHeader().resizeSection(6, 80)
         self.tw_salary_history.horizontalHeader().resizeSection(7, 100)
         self.tw_salary_history.horizontalHeader().resizeSection(8, 150)
+
+        self.tw_staff_traffic.horizontalHeader().resizeSection(0, 300)
+        self.tw_staff_traffic.horizontalHeader().resizeSection(1, 350)
 
     def ui_login(self):
         self.timer.start(900000)
@@ -704,6 +709,90 @@ class MainWindowOperation(QMainWindow, main_class):
         self.timer.start(900000)
         self.lw_material.clear()
         self.le_value.clear()
+
+        self.sw_main.setCurrentIndex(1)
+
+    def ui_go_traffic(self):
+        self.timer.start(900000)
+        self.sw_main.setCurrentIndex(10)
+        self.set_work_traffic()
+
+    def ui_select_date_work_traffic(self):
+        self.set_work_traffic()
+
+    def set_work_traffic(self):
+        id = self.user["id"]
+
+        if self.select_data is None or self.last_id != id \
+                or self.cw_traffic.selectedDate().month() != self.select_data.month() or self.cw_traffic.selectedDate().year() != self.select_data.year():
+            data = self.cw_traffic.selectedDate()
+            query = """SELECT staff_worker_traffic.Id, staff_worker_traffic.Position, staff_worker_traffic.Data, staff_worker_traffic.Table_Data, staff_worker_traffic.Note
+                          FROM staff_worker_traffic LEFT JOIN staff_worker_info ON staff_worker_traffic.Worker_Id = staff_worker_info.Id
+                          WHERE staff_worker_traffic.Worker_Id = %s AND staff_worker_traffic.Data >= %s AND staff_worker_traffic.Data <= %s
+                          ORDER BY staff_worker_traffic.Data"""
+            sql_param = (id, data.toString("yyyy-MM-01-00-00-00"), data.toString("yyyy-MM-%s-23-59-59" % data.daysInMonth()))
+            self.sql_traffic = my_sql.sql_select(query, sql_param)
+            if "mysql.connector.errors" in str(type(self.sql_traffic)):
+                return False
+
+            # Очистим цветные метки
+            if self.select_data:
+                color = (255, 255, 255)
+                color = QColor(color[0], color[1], color[2], 255)
+                brush = QBrush()
+                brush.setColor(color)
+                fomat = QTextCharFormat()
+                fomat.setBackground(brush)
+                for day in range(1, self.select_data.daysInMonth() + 1):
+                    d = QDate(self.select_data.year(), self.select_data.month(), day)
+                    self.cw_traffic.setDateTextFormat(d, fomat)
+
+            # Выставим цветные метки
+            color_green = QColor(79, 255, 185, 200)
+            color_yellow = QColor(230, 245, 95, 200)
+            color_red = QColor(245, 110, 95, 200)
+
+            for data in self.sql_traffic:
+                if self.cw_traffic.dateTextFormat(data[2]).background().color() == color_yellow:
+                    brush = QBrush()
+                    brush.setColor(color_green)
+                    fomat = QTextCharFormat()
+                    fomat.setBackground(brush)
+                elif self.cw_traffic.dateTextFormat(data[2]).background().color() == color_green:
+                    brush = QBrush()
+                    brush.setColor(color_red)
+                    fomat = QTextCharFormat()
+                    fomat.setBackground(brush)
+                else:
+                    brush = QBrush()
+                    brush.setColor(color_yellow)
+                    fomat = QTextCharFormat()
+                    fomat.setBackground(brush)
+
+                self.cw_traffic.setDateTextFormat(data[2], fomat)
+
+        if self.cw_traffic.selectedDate() != self.select_data or self.last_id != id:
+
+            self.last_id = id
+            self.select_data = self.cw_traffic.selectedDate()
+            self.tw_staff_traffic.clearContents()
+            self.tw_staff_traffic.setRowCount(0)
+            for data in self.sql_traffic:
+                if data[2].strftime("%d.%m.%Y") == self.select_data.toString("dd.MM.yyyy"):
+                    self.tw_staff_traffic.insertRow(self.tw_staff_traffic.rowCount())
+
+                    new_table_item = QTableWidgetItem(data[2].strftime("%d.%m.%Y %H:%M"))
+                    new_table_item.setData(-2, data[0])
+                    self.tw_staff_traffic.setItem(self.tw_staff_traffic.rowCount()-1, 0, new_table_item)
+
+                    new_table_item = QTableWidgetItem(data[4])
+                    new_table_item.setData(-2, data[0])
+                    self.tw_staff_traffic.setItem(self.tw_staff_traffic.rowCount()-1, 1, new_table_item)
+
+    def ui_work_traffic_back(self):
+        self.timer.start(900000)
+        self.tw_staff_traffic.clearContents()
+        self.tw_staff_traffic.setRowCount(0)
 
         self.sw_main.setCurrentIndex(1)
 

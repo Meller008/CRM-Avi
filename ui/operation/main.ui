@@ -243,31 +243,12 @@
        </layout>
       </widget>
       <widget class="QWidget" name="p_main">
-       <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,0,0,0">
+       <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,0,0,0,0">
         <property name="topMargin">
          <number>20</number>
         </property>
         <item row="2" column="0">
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="1">
-           <widget class="QPushButton" name="pushButton_2">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>80</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Tahoma</family>
-              <pointsize>16</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Посмотреть операции</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="1">
            <widget class="QPushButton" name="pb_beika">
             <property name="enabled">
@@ -290,7 +271,50 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0" rowspan="2">
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>80</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Посмотреть операции</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pb_traffic">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>80</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Tahoma</family>
+              <pointsize>16</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Проверить посещаемость</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="3">
            <widget class="QPushButton" name="pushButton">
             <property name="minimumSize">
              <size>
@@ -311,7 +335,7 @@
           </item>
          </layout>
         </item>
-        <item row="4" column="0">
+        <item row="5" column="0">
          <widget class="QPushButton" name="pushButton_3">
           <property name="minimumSize">
            <size>
@@ -329,6 +353,19 @@
            <string>Выйти</string>
           </property>
          </widget>
+        </item>
+        <item row="4" column="0">
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -362,19 +399,6 @@
         </item>
         <item row="1" column="0">
          <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="3" column="0">
-         <spacer name="verticalSpacer_4">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -2052,6 +2076,120 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="page_6">
+       <layout class="QGridLayout" name="gridLayout_20">
+        <item row="3" column="0" colspan="2">
+         <widget class="QPushButton" name="pushButton_20">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Назад</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCalendarWidget" name="cw_traffic">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="gridVisible">
+           <bool>true</bool>
+          </property>
+          <property name="verticalHeaderFormat">
+           <enum>QCalendarWidget::NoVerticalHeader</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <spacer name="verticalSpacer_15">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QTableWidget" name="tw_staff_traffic">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+            <column>
+             <property name="text">
+              <string>Дата отметки</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Заметка</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_14">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_26">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Выберите дату. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_27">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Отметки о посещении.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -2133,8 +2271,8 @@
    <slot>ui_add_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>46</x>
-     <y>193</y>
+     <x>56</x>
+     <y>441</y>
     </hint>
     <hint type="destinationlabel">
      <x>-97</x>
@@ -2213,8 +2351,8 @@
    <slot>ui_operation_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>74</x>
-     <y>76</y>
+     <x>84</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>64</x>
@@ -2229,8 +2367,8 @@
    <slot>ui_operation_next()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>76</y>
+     <x>1109</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>1014</x>
@@ -2245,8 +2383,8 @@
    <slot>ui_operation_input_complete()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>240</x>
-     <y>76</y>
+     <x>634</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>536</x>
@@ -2261,8 +2399,8 @@
    <slot>ui_log_out()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>78</y>
+     <x>99</x>
+     <y>717</y>
     </hint>
     <hint type="destinationlabel">
      <x>458</x>
@@ -2277,8 +2415,8 @@
    <slot>ui_salary_menu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>105</y>
+     <x>652</x>
+     <y>311</y>
     </hint>
     <hint type="destinationlabel">
      <x>1144</x>
@@ -2389,8 +2527,8 @@
    <slot>ui_back_to_salary_menu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>70</y>
+     <x>99</x>
+     <y>717</y>
     </hint>
     <hint type="destinationlabel">
      <x>555</x>
@@ -2405,8 +2543,8 @@
    <slot>ui_beika()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>109</y>
+     <x>652</x>
+     <y>397</y>
     </hint>
     <hint type="destinationlabel">
      <x>1199</x>
@@ -2421,8 +2559,8 @@
    <slot>ui_beika_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>82</x>
-     <y>78</y>
+     <x>92</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>-125</x>
@@ -2437,8 +2575,8 @@
    <slot>ui_beika_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>205</x>
-     <y>78</y>
+     <x>1109</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>1036</x>
@@ -2453,8 +2591,8 @@
    <slot>ui_beika_change_value()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>72</y>
+     <x>653</x>
+     <y>570</y>
     </hint>
     <hint type="destinationlabel">
      <x>1258</x>
@@ -2469,8 +2607,8 @@
    <slot>ui_operation_double_click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>21</y>
+     <x>99</x>
+     <y>142</y>
     </hint>
     <hint type="destinationlabel">
      <x>605</x>
@@ -2491,6 +2629,54 @@
     <hint type="destinationlabel">
      <x>1287</x>
      <y>518</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_traffic</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_go_traffic()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1007</x>
+     <y>443</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1196</x>
+     <y>439</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cw_traffic</sender>
+   <signal>selectionChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_select_date_work_traffic()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>189</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1176</x>
+     <y>168</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_20</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_work_traffic_back()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>695</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>69</x>
+     <y>849</y>
     </hint>
    </hints>
   </connection>
@@ -2518,5 +2704,8 @@
   <slot>ui_beika_change_value()</slot>
   <slot>ui_operation_double_click()</slot>
   <slot>ui_services()</slot>
+  <slot>ui_go_traffic()</slot>
+  <slot>ui_select_date_work_traffic()</slot>
+  <slot>ui_work_traffic_back()</slot>
  </slots>
 </ui>
