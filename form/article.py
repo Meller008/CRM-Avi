@@ -1027,7 +1027,7 @@ class ArticleList(QMainWindow):
             self.ui_save_change_operation()
 
             query = """SELECT product_article_operation.Product_Article_Parametrs_Id, product_article_operation.Id, product_article_operation.Operation_Id,
-                    operations.Name, operations.Price, sewing_machine.Name
+                    operations.Name, operations.Price, sewing_machine.Name, product_article_operation.Change_Price
                     FROM product_article_operation
                     LEFT JOIN operations ON product_article_operation.Operation_Id = operations.Id
                     LEFT JOIN sewing_machine ON operations.Sewing_Machine_Id = sewing_machine.Id
