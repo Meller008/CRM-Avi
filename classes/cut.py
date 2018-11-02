@@ -2281,8 +2281,12 @@ class Pack:
 
     def set_width(self, value):
         if value != "":
-            if self.__weight != float(value.replace(",", ".")):
-                self.__weight = float(value.replace(",", "."))
+            try:
+                width = float(value.replace(",", "."))
+            except:
+                return False
+            if self.__weight != width:
+                self.__weight = width
 
                 if not self.__save_sql_info:
                         self.__save_sql_info = True

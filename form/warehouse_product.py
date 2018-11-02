@@ -215,7 +215,11 @@ class WarehouseChange(QDialog):
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получение данных для лога склада", sql_info.msg, QMessageBox.Ok)
                 return False
-            history_warehouse_2 = sql_info[0][0]
+            try:
+                history_warehouse_2 = sql_info[0][0]
+            except:
+                QMessageBox.critical(self, "Ошибка данных для лога склада", "Пустой ответ", QMessageBox.Ok)
+                return False
 
             query = """SELECT SUM(Balance) FROM transaction_records_warehouse WHERE Article_Parametr_Id = %s"""
             sql_info = my_sql.sql_select(query, (self.le_art_name_plus.whatsThis(), ))

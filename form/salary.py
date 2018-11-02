@@ -18,6 +18,7 @@ class SalaryList(QDialog):
 
         self.set_size_table()
         self.select_history_py_date = None
+        self.salary = None
 
         self.de_date_make.setDate(QDate.currentDate())
 
@@ -236,6 +237,7 @@ class SalaryList(QDialog):
 
     def ui_save_salary(self):
         if not self.salary:
+            QMessageBox.information(self, "Ошибка", "Нет зарплаты для сохранения", QMessageBox.Ok)
             return False
 
         sql_date = self.date_pay.strftime("%Y-%m-%d")

@@ -553,8 +553,8 @@ class PackBrows(QDialog):
         material_and_rest_one = price_one_weight + (price_one_weight / 100 * rest_percent)
         material_and_rest_many = price_many_weight + (price_many_weight / 100 * rest_percent)
 
-        add_material_one = round(add_material_price / value, 4)
-        add_material_many = round(add_material_price, 4)
+        add_material_one = Decimal(round(add_material_price / value, 4))
+        add_material_many = Decimal(round(add_material_price, 4))
 
         all_material_one = material_and_rest_one + add_material_one
         all_meterial_many = material_and_rest_many + add_material_many

@@ -402,6 +402,12 @@ class PayBrows(QDialog):
                 self.destroy()
 
             elif self.menu_text == "Обмен":
+                try:
+                    float(self.le_p_m_balance.text().replace(",", "."))
+                except:
+                    QMessageBox.information(self, "Ошибка баланса", "Проверьте значения!", QMessageBox.Ok)
+                    return False
+
                 sql_values = []
                 sql_values.append((self.le_p_m_worker_minus.whatsThis(), User().id(), self.le_p_m_reason_minus.whatsThis(), -float(self.le_p_m_balance.text().replace(",", ".")),
                                    self.de_p_m_date.date().toString(Qt.ISODate), self.le_p_m_note_minus.text(), 0, None))
