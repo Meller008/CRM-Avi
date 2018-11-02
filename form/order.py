@@ -1584,8 +1584,8 @@ class Order(QMainWindow):
         sheet["A12"] = "ИНН/КПП покупателя: " + sql_info[0][1] + "/" + str(kpp)
 
         if self.cb_clients_vendor.currentData():
-            query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Client_Id = %s"
-            sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
+            query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Id = %s"
+            sql_info = my_sql.sql_select(query, (self.cb_clients_vendor.currentData(), ))
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                 return False
