@@ -1006,7 +1006,12 @@ class AccessoriesNameAndWarehouse(table.TableList):
         self.table_header_name = (("Название", 235), ("На складе", 80), ("Посл. цена", 80), ("Дата цены", 80))
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT accessories_name.Id, accessories_name.Name, SUM(accessories_balance.BalanceValue), accessories_supplyposition.Price, MAX(accessories_supply.Data)
+        self.query_table_select = """SELECT accessories_name.Id, accessories_name.Name, SUM(accessories_balance.BalanceValue), 
+                                        (SELECT Price FROM accessories_supplyposition
+                                          LEFT JOIN accessories_supply ON accessories_supplyposition.accessories_SupplyId = accessories_supply.Id
+                                          WHERE accessories_supplyposition.accessories_NameId = accessories_name.Id
+                                          ORDER BY accessories_supply.Data DESC LIMIT 1),
+                                             MAX(accessories_supply.Data)
                                       FROM accessories_name LEFT JOIN accessories_supplyposition ON accessories_name.Id = accessories_supplyposition.accessories_NameId
                                         LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.accessories_SupplyPositionId
                                         LEFT JOIN accessories_supply ON accessories_supplyposition.accessories_SupplyId = accessories_supply.Id

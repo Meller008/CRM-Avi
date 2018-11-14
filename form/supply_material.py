@@ -952,7 +952,12 @@ class MaterialNameAndWarehouse(table.TableList):
         self.table_header_name = (("Название", 235), ("На складе", 80), ("Посл. цена", 80), ("Дата цены", 80))
 
         #  нулевой элемент должен быть ID
-        self.query_table_select = """SELECT material_name.Id, material_name.Name, SUM(material_balance.BalanceWeight), material_supplyposition.Price, MAX(material_supply.Data)
+        self.query_table_select = """SELECT material_name.Id, material_name.Name, SUM(material_balance.BalanceWeight),
+                                          (SELECT Price FROM material_supplyposition
+                                          LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
+                                          WHERE material_supplyposition.Material_NameId = material_name.Id
+                                          ORDER BY material_supply.Data DESC LIMIT 1),
+                                        MAX(material_supply.Data)
                                       FROM material_name LEFT JOIN material_supplyposition ON material_name.Id = material_supplyposition.Material_NameId
                                         LEFT JOIN material_balance ON material_supplyposition.Id = material_balance.Material_SupplyPositionId
                                         LEFT JOIN material_supply ON material_supplyposition.Material_SupplyId = material_supply.Id
