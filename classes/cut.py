@@ -2426,7 +2426,7 @@ class Pack:
                 if e[1]["id"] == id:
                     self.__operation.pop(e[0])
                     try:
-                        self.__save_operation_sql.pop(e[1]["id"])
+                        self.__save_operation_sql.remove(e[1]["id"])
                     except:
                         pass
                     return True
@@ -2437,7 +2437,7 @@ class Pack:
                 if e[1]["id"] == id and e[1]["pay"] == 0:
                     self.__operation.pop(e[0])
                     try:
-                        self.__save_operation_sql.pop(e[1]["id"])
+                        self.__save_operation_sql.remove(e[1]["id"])
                     except:
                         pass
                     self.__dell_operation_sql.append(e[1]["id"])
@@ -2570,7 +2570,7 @@ class Pack:
             if sql_info[0][0] is None:
                 self.__error_value_accessories_id.append(id)
                 return [False, "На складе нет такой фурнитуры"]
-            elif sql_info[0][0] > (Decimal(str(sum_accessories)) - accessory["sql_value_sum"]):
+            elif sql_info[0][0] > (Decimal(str(sum_accessories)) - Decimal(accessory["sql_value_sum"])):
                 try:
                     self.__error_value_accessories_id.remove(id)
                 except:
