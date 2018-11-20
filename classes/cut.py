@@ -2451,9 +2451,10 @@ class Pack:
                 if e[1]["id"] == id:
                     self.__accessories.pop(e[0])
                     try:
-                        self.__save_accessories_sql.pop(e[1]["id"])
+                        self.__save_accessories_sql.remove(e[1]["id"])
                     except:
                         pass
+                    print(self.__save_accessories_sql)
                     return True
             else:
                 return False
@@ -2462,7 +2463,7 @@ class Pack:
                 if e[1]["id"] == id:
                     self.__accessories.pop(e[0])
                     try:
-                        self.__save_accessories_sql.pop(e[1]["id"])
+                        self.__save_accessories_sql.remove(e[1]["id"])
                     except:
                         pass
                     self.__dell_accessories_sql.append(e[1]["id"])
