@@ -240,6 +240,7 @@
      <addaction name="ma_report_all"/>
      <addaction name="menu_15"/>
     </widget>
+    <addaction name="ma_shipment_order"/>
     <addaction name="ma_report_reject"/>
     <addaction name="ma_rest_for_work"/>
     <addaction name="ma_report_article_day"/>
@@ -621,6 +622,14 @@
   <action name="ma_warehouse2">
    <property name="text">
     <string>Продукция</string>
+   </property>
+  </action>
+  <action name="ma_shipment_order">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Заказ на отгрузку</string>
    </property>
   </action>
  </widget>
@@ -1618,6 +1627,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_shipment_order</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_shipment_order()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1682,5 +1707,6 @@
   <slot>view_warehouse_adjustments_material()</slot>
   <slot>view_article_test()</slot>
   <slot>view_product_warehouse_2()</slot>
+  <slot>view_shipment_order()</slot>
  </slots>
 </ui>
