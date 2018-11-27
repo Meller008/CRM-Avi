@@ -2021,7 +2021,7 @@ class Pack:
         dell_accessories_sql_id = my_sql.sql_change_transaction(sql_connect_transaction, query, (self.__id, ))
         if "mysql.connector.errors" in str(type(dell_accessories_sql_id)):
             my_sql.sql_rollback_transaction(sql_connect_transaction)
-            return [False, "Не смог удалить саму пачку"]
+            return [False, "Не смог удалить саму пачку, проверьте доп ткань!"]
 
         my_sql.sql_commit_transaction(sql_connect_transaction)
         return [True, "Пачка удалена!"]
