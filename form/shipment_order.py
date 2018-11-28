@@ -1,14 +1,13 @@
 from os import getcwd
+from collections import OrderedDict
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QDialog, QFileDialog
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from form import order
-from classes import print_qt
 from function import my_sql
 import openpyxl
-from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
-from openpyxl.worksheet.pagebreak import Break
+from openpyxl.styles import Border, Side, Font, Alignment
 
 
 class ShipmentOrder(QDialog):
@@ -93,10 +92,10 @@ class ShipmentOrder(QDialog):
         for ka, va in position.items():
             start_row_article = row_ex
 
-            for kp, vp in va.items():
+            for kp in sorted(va.keys()):
                 sheet["%s%s" % (size_col, row_ex)] = kp
                 sheet["%s%s" % (size_col, row_ex)].alignment = Alignment(horizontal="right", vertical="center")
-                sheet["%s%s" % (val_col, row_ex)] = vp
+                sheet["%s%s" % (val_col, row_ex)] = va[kp]
                 sheet["%s%s" % (val_col, row_ex)].alignment = Alignment(horizontal="right", vertical="center")
 
                 row_ex += 1
@@ -125,7 +124,7 @@ class ShipmentOrder(QDialog):
 
     def calc_orders(self):
 
-        all_position = {}
+        all_position = OrderedDict()
         for row in range(self.tw_order.rowCount()):
             order_position = self.calc_order_position(self.tw_order.item(row, 0).data(-1))
             if order_position:
@@ -158,7 +157,7 @@ class ShipmentOrder(QDialog):
             QMessageBox.critical(self, "Ошибка sql получения позиций заказа", sql_info.msg, QMessageBox.Ok)
             return False
 
-        all_position = {}
+        all_position = OrderedDict()
         for position_sql in sql_info:
             article = all_position.setdefault(position_sql[0], {})
             value = article.setdefault(position_sql[1], 0)
