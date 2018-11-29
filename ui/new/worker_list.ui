@@ -86,6 +86,12 @@ background-color: rgb(163, 117, 255);}</string>
           <height>30</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Добавить работника</string>
+        </property>
+        <property name="statusTip">
+         <string/>
+        </property>
         <property name="styleSheet">
          <string notr="true">QPushButton{
 	border-style: none;
@@ -114,6 +120,9 @@ QPushButton:hover{
           <height>30</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Изменить работника</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">QPushButton#evilButton {
     background-color: red;
@@ -137,6 +146,87 @@ QPushButton#evilButton:pressed {
       </item>
       <item>
        <widget class="QPushButton" name="pb_del">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Удалить работника</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pb_add_2">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pb_change_2">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pb_del_2">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pb_add_3">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pb_change_3">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pb_del_3">
         <property name="minimumSize">
          <size>
           <width>30</width>
@@ -192,5 +282,76 @@ QPushButton#evilButton:pressed {
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pb_add</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>b1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>14</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>29</x>
+     <y>-193</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_change</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>b2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>17</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>61</x>
+     <y>-152</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_del</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>b3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>90</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>97</x>
+     <y>-129</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_add_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>b4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>126</x>
+     <y>8</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>149</x>
+     <y>-134</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>b1()</slot>
+  <slot>b2()</slot>
+  <slot>b3()</slot>
+  <slot>b4()</slot>
+ </slots>
 </ui>
