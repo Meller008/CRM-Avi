@@ -11,32 +11,31 @@ class WorkerListWindow(QDialog):
         loadUi(getcwd() + '/ui/new/worker_list.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
-        # self.pb_add.setIcon(QIcon(getcwd() + "/images/new.png"))
-        # self.pb_add.setIconSize(QSize(25, 25))
-        #
-        # self.pb_change.setIcon(QIcon(getcwd() + "/images/change.png"))
-        # self.pb_change.setIconSize(QSize(25, 25))
-        #
-        # self.pb_del.setIcon(QIcon(getcwd() + "/images/del.png"))
-        # self.pb_del.setIconSize(QSize(25, 25))
-        #
-        #
-        # self.pb_add_2.setIcon(QIcon(getcwd() + "/images/new2.png"))
-        # self.pb_add_2.setIconSize(QSize(25, 25))
-        #
-        # self.pb_change_2.setIcon(QIcon(getcwd() + "/images/change2.png"))
-        # self.pb_change_2.setIconSize(QSize(25, 25))
-        #
-        # self.pb_del_2.setIcon(QIcon(getcwd() + "/images/del2.png"))
-        # self.pb_del_2.setIconSize(QSize(25, 25))
-        #
-        #
-        # self.pb_add_3.setIcon(QIcon(getcwd() + "/images/new3.png"))
-        # self.pb_add_3.setIconSize(QSize(25, 25))
-        #
-        # self.pb_change_3.setIcon(QIcon(getcwd() + "/images/change3.png"))
-        # self.pb_change_3.setIconSize(QSize(25, 25))
-        #
-        # self.pb_del_3.setIcon(QIcon(getcwd() + "/images/del3.png"))
-        # self.pb_del_3.setIconSize(QSize(25, 25))
-    
+        self.pb_add_list.setIcon(QIcon(getcwd() + "/images/add_list.png"))
+        self.pb_add_list.setIconSize(QSize(30, 30))
+
+        self.pb_edit_list.setIcon(QIcon(getcwd() + "/images/edit_list.png"))
+        self.pb_edit_list.setIconSize(QSize(30, 30))
+
+        self.pb_del_list.setIcon(QIcon(getcwd() + "/images/del_list.png"))
+        self.pb_del_list.setIconSize(QSize(30, 30))
+
+        self.pb_add_doc.setIcon(QIcon(getcwd() + "/images/new_doc.png"))
+        self.pb_add_doc.setIconSize(QSize(30, 30))
+
+        self.pb_change_doc.setIcon(QIcon(getcwd() + "/images/edit_doc.png"))
+        self.pb_change_doc.setIconSize(QSize(30, 30))
+
+        self.pb_del_doc.setIcon(QIcon(getcwd() + "/images/del_doc.png"))
+        self.pb_del_doc.setIconSize(QSize(30, 30))
+
+        self.pb_copy_doc.setIcon(QIcon(getcwd() + "/images/copy_doc.png"))
+        self.pb_copy_doc.setIconSize(QSize(30, 30))
+
+        self.pb_filter.setIcon(QIcon(getcwd() + "/images/filter.png"))
+        self.pb_filter.setIconSize(QSize(30, 30))
+
+        self.pb_menu.setIcon(QIcon(getcwd() + "/images/menu.png"))
+        self.pb_menu.setIconSize(QSize(30, 30))
+
+
