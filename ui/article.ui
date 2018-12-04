@@ -640,7 +640,24 @@
        <item row="8" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
+          <widget class="QRadioButton" name="rb_nds_3">
+           <property name="font">
+            <font>
+             <pointsize>7</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>20%</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QRadioButton" name="rb_nds_1">
+           <property name="font">
+            <font>
+             <pointsize>7</pointsize>
+            </font>
+           </property>
            <property name="text">
             <string>18%</string>
            </property>
@@ -651,6 +668,11 @@
          </item>
          <item>
           <widget class="QRadioButton" name="rb_nds_2">
+           <property name="font">
+            <font>
+             <pointsize>7</pointsize>
+            </font>
+           </property>
            <property name="text">
             <string>10%</string>
            </property>
