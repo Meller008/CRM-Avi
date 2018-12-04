@@ -368,6 +368,8 @@ class ArticleList(QMainWindow):
             self.pe_cut_note.appendPlainText(sql_info[0][7])
             if sql_info[0][8] == 18:
                 self.rb_nds_1.setChecked(True)
+            elif sql_info[0][8] == 20:
+                self.rb_nds_3.setChecked(True)
             else:
                 self.rb_nds_2.setChecked(True)
 
@@ -1012,6 +1014,8 @@ class ArticleList(QMainWindow):
             self.le_price.setText(self.past_window.le_price.text())
             if self.past_window.nds == 18:
                 self.rb_nds_1.setChecked(True)
+            elif self.past_window.nds == 20:
+                self.rb_nds_3.setChecked(True)
             else:
                 self.rb_nds_2.setChecked(True)
 
@@ -1172,6 +1176,8 @@ class ArticleList(QMainWindow):
             price = 0
         if self.rb_nds_1.isChecked():
             nds = 18
+        elif self.rb_nds_3.isChecked():
+            nds = 20
         else:
             nds = 10
         self.sb_no_nds.setValue(round(price - (price * nds) / (100 + nds), 4))
@@ -1235,6 +1241,8 @@ class ArticleList(QMainWindow):
                       Client_code = %s, In_On_Place = %s, Price = %s, Product_Note = %s, Cut_Note = %s, NDS = %s WHERE Id = %s"""
             if self.rb_nds_1.isChecked():
                 nds = 18
+            elif self.rb_nds_3.isChecked():
+                nds = 20
             else:
                 nds = 10
             sql_param = (self.le_client_name.text(), self.le_barcode.text(), self.le_client_code.text(), self.le_in_on_place.text().replace(",", "."),
@@ -2211,6 +2219,8 @@ class Article(QMainWindow):
                 self.pe_cut_note.appendPlainText(param_info[9])
                 if param_info[11] == 18:
                     self.rb_nds_1.setChecked(True)
+                elif param_info[11] == 20:
+                    self.rb_nds_3.setChecked(True)
                 else:
                     self.rb_nds_2.setChecked(True)
                 break
@@ -2795,6 +2805,8 @@ class Article(QMainWindow):
 
         if self.rb_nds_1.isChecked():
             nds = 18
+        elif self.rb_nds_3.isChecked():
+            nds = 20
         else:
             nds = 10
 
@@ -2822,6 +2834,8 @@ class Article(QMainWindow):
             price = 0
         if self.rb_nds_1.isChecked():
             nds = 18
+        elif self.rb_nds_3.isChecked():
+            nds = 20
         else:
             nds = 10
         self.sb_no_nds.setValue(round(price - (price * nds) / (100 + nds), 4))
@@ -2891,6 +2905,8 @@ class Article(QMainWindow):
 
             if self.rb_nds_1.isChecked():
                 nds = 18
+            elif self.rb_nds_3.isChecked():
+                nds = 20
             else:
                 nds = 10
             article_info = {"article_id": self.le_article.whatsThis(),
@@ -3025,6 +3041,8 @@ class Article(QMainWindow):
                       Client_code = %s, In_On_Place = %s, Price = %s, Product_Note = %s, Cut_Note = %s, NDS = %s WHERE Id = %s"""
             if self.rb_nds_1.isChecked():
                 nds = 18
+            elif self.rb_nds_3.isChecked():
+                nds = 20
             else:
                 nds = 10
             sql_param = (self.le_client_name.text(), self.le_barcode.text(), self.le_client_code.text(), self.le_in_on_place.text().replace(",", "."),

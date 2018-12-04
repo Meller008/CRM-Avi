@@ -631,6 +631,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QRadioButton" name="rb_nds_3">
+              <property name="text">
+               <string>20%</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item row="10" column="0">
