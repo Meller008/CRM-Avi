@@ -1571,8 +1571,8 @@
    <slot>ui_save_change_info()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>518</x>
-     <y>577</y>
+     <x>458</x>
+     <y>592</y>
     </hint>
     <hint type="destinationlabel">
      <x>548</x>
@@ -1705,6 +1705,22 @@
     <hint type="destinationlabel">
      <x>403</x>
      <y>-109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_nds_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>499</x>
+     <y>584</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>598</x>
+     <y>333</y>
     </hint>
    </hints>
   </connection>
