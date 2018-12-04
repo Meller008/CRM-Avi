@@ -262,6 +262,11 @@ class Staff(QMainWindow):
 
         self.set_info()
 
+    def ui_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tw_workers, path[0])
+
     def of_set_filter(self, sql):
         self.query_table_select = sql
 
