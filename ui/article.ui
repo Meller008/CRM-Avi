@@ -844,8 +844,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_add_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>289</y>
+     <x>57</x>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -877,7 +877,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>186</x>
-     <y>289</y>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -892,8 +892,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_dell_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>331</x>
-     <y>288</y>
+     <x>104</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -908,8 +908,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_add_accessories()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>201</x>
-     <y>288</y>
+     <x>104</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -925,7 +925,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>506</x>
-     <y>291</y>
+     <y>289</y>
     </hint>
     <hint type="destinationlabel">
      <x>495</x>
@@ -941,7 +941,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>529</x>
-     <y>291</y>
+     <y>289</y>
     </hint>
     <hint type="destinationlabel">
      <x>495</x>
@@ -973,7 +973,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>129</x>
-     <y>289</y>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -988,8 +988,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_double_click_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>52</x>
-     <y>298</y>
+     <x>57</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1004,8 +1004,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_change_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
-     <y>288</y>
+     <x>104</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1085,7 +1085,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>161</x>
-     <y>93</y>
+     <y>92</y>
     </hint>
     <hint type="destinationlabel">
      <x>141</x>
@@ -1133,7 +1133,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>268</x>
-     <y>170</y>
+     <y>168</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1149,7 +1149,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>268</x>
-     <y>243</y>
+     <y>241</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1244,8 +1244,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_save_change_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>34</x>
-     <y>289</y>
+     <x>40</x>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1261,7 +1261,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>129</x>
-     <y>289</y>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1277,7 +1277,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>186</x>
-     <y>289</y>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1293,7 +1293,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>529</x>
-     <y>291</y>
+     <y>289</y>
     </hint>
     <hint type="destinationlabel">
      <x>495</x>
@@ -1309,7 +1309,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>506</x>
-     <y>291</y>
+     <y>289</y>
     </hint>
     <hint type="destinationlabel">
      <x>495</x>
@@ -1356,8 +1356,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_save_change_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>201</x>
-     <y>288</y>
+     <x>104</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1372,8 +1372,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_save_change_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
-     <y>288</y>
+     <x>104</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>495</x>
@@ -1388,8 +1388,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_save_change_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>331</x>
-     <y>288</y>
+     <x>104</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>495</x>
@@ -1405,7 +1405,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>104</x>
-     <y>298</y>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>495</x>
@@ -1437,7 +1437,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>223</x>
-     <y>92</y>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
      <x>248</x>
@@ -1485,7 +1485,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>531</x>
-     <y>206</y>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>529</x>
@@ -1500,8 +1500,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_save_change_parametr()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>453</x>
-     <y>206</y>
+     <x>482</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>537</x>
@@ -1549,7 +1549,7 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <hints>
     <hint type="sourcelabel">
      <x>104</x>
-     <y>298</y>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>719</x>
@@ -1564,8 +1564,8 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_calc_nds()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>465</x>
-     <y>206</y>
+     <x>482</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>663</x>
@@ -1612,12 +1612,44 @@ font: 8pt &quot;Tahoma&quot;;</string>
    <slot>ui_calc_material()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>474</x>
-     <y>280</y>
+     <x>104</x>
+     <y>296</y>
     </hint>
     <hint type="destinationlabel">
      <x>645</x>
      <y>255</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_nds_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_calc_nds()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>412</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_nds_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_parametr()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>412</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>238</y>
     </hint>
    </hints>
   </connection>
