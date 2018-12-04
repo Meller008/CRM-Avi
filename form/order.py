@@ -439,6 +439,8 @@ class Order(QMainWindow):
 
         if self.position.nds_1.isChecked():
             nds = 18
+        elif self.position.nds_3.isChecked():
+            nds = 20
         else:
             nds = 10
         if self.lb_client.whatsThis().find("no_nds") >= 0:
@@ -500,6 +502,8 @@ class Order(QMainWindow):
         nds = self.tw_position.item(select_row, 4).data(5)
         if nds == 18:
             self.position.nds_1.setChecked(True)
+        elif nds == 20:
+            self.position.nds_3.setChecked(True)
         else:
             self.position.nds_2.setChecked(True)
 
@@ -569,6 +573,8 @@ class Order(QMainWindow):
 
         if self.position.nds_1.isChecked():
             nds = 18
+        elif self.position.nds_3.isChecked():
+            nds = 20
         else:
             nds = 10
         if self.lb_client.whatsThis().find("no_nds") >= 0:
@@ -2463,6 +2469,8 @@ class Position(QDialog):
             nds = 18
         elif self.nds_2.isChecked():
             nds = 10
+        elif self.nds_3.isChecked():
+            nds = 20
         else:
             nds = 0
 
@@ -2557,6 +2565,8 @@ class Position(QDialog):
         self.le_client_cod.setText(article["client_cod"])
         if article["nds"] == 18:
             self.nds_1.setChecked(True)
+        if article["nds"] == 20:
+            self.nds_3.setChecked(True)
         else:
             self.nds_2.setChecked(True)
 
