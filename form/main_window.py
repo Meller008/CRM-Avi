@@ -14,7 +14,6 @@ from form import staff_traffic, report_material_consumption, report_warehouse_ba
 from form import report_order, report_reject, transaction_warehouse, material_in_pack, warehouse_adjustments,\
     shipment_order
 
-from form.new import worker
 from function import my_sql
 from classes.my_class import User
 import sys
@@ -556,8 +555,7 @@ class MainWindow(QMainWindow):
         self.sub_shipment_order.show()
 
     def view_test_window(self):
-        # self.test_window = test_window.TestWindow()
-        self.test_window = worker.WorkerListWindow()
+        self.test_window = test_window.TestWindow()
         self.sub_test_window = QMdiSubWindow()
         self.sub_test_window.setWidget(self.test_window)
         self.mdi.addSubWindow(self.sub_test_window)

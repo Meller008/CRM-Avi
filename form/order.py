@@ -2565,7 +2565,7 @@ class Position(QDialog):
         self.le_client_cod.setText(article["client_cod"])
         if article["nds"] == 18:
             self.nds_1.setChecked(True)
-        if article["nds"] == 20:
+        elif article["nds"] == 20:
             self.nds_3.setChecked(True)
         else:
             self.nds_2.setChecked(True)
