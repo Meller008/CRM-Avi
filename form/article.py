@@ -287,7 +287,7 @@ class ArticleList(QMainWindow):
         if not current_id and self.lw_size.currentItem():
             current_id = self.lw_size.currentItem().data(5)
 
-        size_sql = my_sql.sql_select("SELECT Id, Size FROM product_article_size WHERE Article_Id = %s", (article_id, ))
+        size_sql = my_sql.sql_select("SELECT Id, Size FROM product_article_size WHERE Article_Id = %s ORDER BY Size", (article_id, ))
         if "mysql.connector.errors" in str(type(self.table_items)):
                 QMessageBox.critical(self, "Ошибка sql получения размеров", self.table_items.msg, QMessageBox.Ok)
                 return False
@@ -317,7 +317,7 @@ class ArticleList(QMainWindow):
         if not current_id and self.lw_parametr.currentItem():
             current_id = self.lw_parametr.currentItem().data(5)
 
-        size_sql = my_sql.sql_select("SELECT Id, Name FROM product_article_parametrs WHERE Product_Article_Size_Id = %s", (size_id, ))
+        size_sql = my_sql.sql_select("SELECT Id, Name FROM product_article_parametrs WHERE Product_Article_Size_Id = %s ORDER BY Name", (size_id, ))
         if "mysql.connector.errors" in str(type(self.table_items)):
                 QMessageBox.critical(self, "Ошибка sql получения параметров", self.table_items.msg, QMessageBox.Ok)
                 return False
@@ -3494,11 +3494,11 @@ class ChangeMaterial(QDialog):
 
     def of_list_material_name(self, item):
         self.le_material.setText(item[1])
-        self.le_material.setWhatsThis(str(1))
+        self.le_material.setWhatsThis(str(item[0]))
 
     def of_list_accessories_name(self, item):
         self.le_material.setText(item[1])
-        self.le_material.setWhatsThis(str(1))
+        self.le_material.setWhatsThis(str(item[0]))
 
 
 class CopyParametr(QDialog):
