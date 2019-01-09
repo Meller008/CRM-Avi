@@ -2134,7 +2134,7 @@ class OneStaff(QMainWindow):
         if "mysql.connector.errors" in str(type(doc_number_sql)):
             QMessageBox.critical(self, "Ошибка sql", doc_number_sql.msg, QMessageBox.Ok)
 
-        if "No Number" not in doc_number_sql:
+        if ("No Number", ) not in doc_number_sql:
             doc_number = int(doc_number_sql[0][0]) + 1
             doc_date = self.de_info_recruitment.date().toPyDate()
         else:
