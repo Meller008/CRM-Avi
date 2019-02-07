@@ -2017,17 +2017,17 @@ class Order(QMainWindow):
             sheet["A%s" % row_ex] = position["cod"]
             sheet["F%s" % row_ex] = position["cod"]
             sheet["J%s" % row_ex] = position["value"]
-            sheet["L%s" % row_ex] = moneyfmt.moneyfmt(position["price_no_nds"])
+            sheet["L%s" % row_ex] = moneyfmt.moneyfmt(position["price"])
             sheet["L%s" % row_ex].alignment = ald_center_full
             sheet["N%s" % row_ex] = position["name"]
             sheet["T%s" % row_ex] = "шт."
             sheet["U%s" % row_ex] = "Короб"
             sheet["W%s" % row_ex] = position["mest"]
             sheet["Y%s" % row_ex] = "---"
-            sheet["AA%s" % row_ex] = moneyfmt.moneyfmt(position["sum_no_nds"])
+            sheet["AA%s" % row_ex] = moneyfmt.moneyfmt(position["sum"])
             sheet["AA%s" % row_ex].alignment = ald_center_full
 
-            all_no_nds += position["sum_no_nds"]
+            all_no_nds += position["sum"]
             all_mest += position["mest"]
 
             sheet.row_dimensions[row_ex].height = 23
