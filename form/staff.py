@@ -610,7 +610,8 @@ class OneStaff(QMainWindow):
             self.rb_leave.setChecked(True)
             self.de_info_leave.setEnabled(True)
 
-        self.de_info_leave.setDate(sql_reply[0][8])
+        if sql_reply[0][8]:
+            self.de_info_leave.setDate(sql_reply[0][8])
         self.cb_info_country.setCurrentText(sql_reply[0][9])
         self.le_info_phone.setText(sql_reply[0][10])
         self.le_info_address.setText(sql_reply[0][11])
