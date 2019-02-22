@@ -31,15 +31,16 @@ class OrderList(table.TableList):
         self.toolBar.setStyleSheet("background-color: rgb(126, 176, 127);")  # Цвет бара
 
         # Названия колонк (Имя, Длинна)
-        self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата поствки", 70), ("№ док.", 50), ("Позиций", 50),
-                                  ("Стоимость", 105), ("Стоимость без ндс", 105), ("Примечание", 150), ("Отгр.", 40))
+        self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата поствки", 70), ("№ док.", 50),
+                                  ("Стоимость", 85), ("Стоимость без ндс", 85), ('НДС', 70), ("Примечание", 150), ("Отгр.", 40))
 
         logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
         self.logger = logging.getLogger("ArtLog")
 
         self.filter = None
         self.query_table_all = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
-                                      `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id), ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
+                                      `order`.Date_Shipment, `order`.Number_Doc, ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
+                                      ROUND(`order`.Sum_In_Nds - `order`.Sum_Off_Nds, 2),
                                       `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
                                     FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
                                       LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
@@ -48,7 +49,8 @@ class OrderList(table.TableList):
 
         #  нулевой элемент должен быть ID
         self.query_table_select = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
-                                          `order`.Date_Shipment, `order`.Number_Doc, COUNT(order_position.Id), ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
+                                          `order`.Date_Shipment, `order`.Number_Doc, ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
+                                          ROUND(`order`.Sum_In_Nds - `order`.Sum_Off_Nds, 2),
                                           `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
                                       FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
                                           LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
