@@ -1519,7 +1519,7 @@ class Order(QMainWindow):
         sheet2 = book['Низ']
 
         # Вставляем имя менеджера
-        sheet2['G14'] = manager_name
+        sheet2['G15'] = manager_name
 
         for row in sheet2.iter_rows(min_row=1, max_col=22, max_row=17):
             for cell in row:
