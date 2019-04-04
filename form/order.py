@@ -1358,17 +1358,22 @@ class Order(QMainWindow):
                 # Делаем ссылку дя удобства
                 position = product[row]
 
-                query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
+                query = "SELECT Barcode, Client_code, Name FROM product_article_parametrs WHERE Id = %s"
                 sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                     return False
-                if article:
+
+                if article == 1:
+                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["cod"] = sql_info[0][1]
+                elif article == 2:
                     position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
                                        " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
                     position["cod"] = sql_info[0][1]
                 else:
-                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0]) + " - " + sql_info[0][2]
                     position["cod"] = sql_info[0][1]
 
                 position["nds"] = int(self.tw_position.item(row, 4).data(5))
@@ -1681,18 +1686,24 @@ class Order(QMainWindow):
                 # Делаем ссылку дя удобства
                 position = product[row]
 
-                query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
+                query = "SELECT Barcode, Client_code, Name FROM product_article_parametrs WHERE Id = %s"
                 sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                     return False
-                if article:
+
+                if article == 1:
+                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["cod"] = sql_info[0][1]
+                elif article == 2:
                     position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
                                        " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
                     position["cod"] = sql_info[0][1]
                 else:
-                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0]) + " - " + sql_info[0][2]
                     position["cod"] = sql_info[0][1]
+
 
                 position["nds"] = int(self.tw_position.item(row, 4).data(5))
                 position["price"] = float(self.tw_position.item(row, 4).text())
@@ -1971,17 +1982,22 @@ class Order(QMainWindow):
                 # Делаем ссылку дя удобства
                 position = product[row]
 
-                query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
+                query = "SELECT Barcode, Client_code, Name FROM product_article_parametrs WHERE Id = %s"
                 sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                     return False
-                if article:
+
+                if article == 1:
+                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["cod"] = sql_info[0][1]
+                elif article == 2:
                     position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
                                        " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
                     position["cod"] = sql_info[0][1]
                 else:
-                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0]) + " - " + sql_info[0][2]
                     position["cod"] = sql_info[0][1]
 
                 position["nds"] = int(self.tw_position.item(row, 4).data(5))
@@ -2097,7 +2113,7 @@ class Order(QMainWindow):
 
         book.save(path[0])
 
-    def of_ex_score(self, article, unite, bank):
+    def of_ex_score(self, article, unite, bank, firm):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -2110,14 +2126,20 @@ class Order(QMainWindow):
         border_all = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
         border_all_big = Border(left=Side(style='medium'), right=Side(style='medium'), top=Side(style='medium'), bottom=Side(style='medium'))
 
-        if bank == "ВТБ":
-            sheet["A2"] = "ИНН/КПП: 7703561330/773001001"
-            sheet["A3"] = "Расчетный счет: 40702810417030008128 в Филиал № 7701 Банка ВТБ (ПАО)  г. Москва"
-            sheet["A4"] = "Корр. счет: 30101810345250000745 БИК банка: 044525745"
-        elif bank == "Альфа":
-            sheet["A2"] = "ИНН/КПП: 7703561330/773001001"
-            sheet["A3"] = "Расчетный счет: 40702810301300019217 в АО 'АЛЬФА-БАНК'"
-            sheet["A4"] = "Корр. счет: 30101810200000000593 БИК банка: 044525593"
+        if firm == 'ави':
+            if bank == "ВТБ":
+                sheet["A2"] = "ИНН/КПП: 7703561330/773001001"
+                sheet["A3"] = "Расчетный счет: 40702810417030008128 в Филиал № 7701 Банка ВТБ (ПАО)  г. Москва"
+                sheet["A4"] = "Корр. счет: 30101810345250000745 БИК банка: 044525745"
+            elif bank == "Альфа":
+                sheet["A2"] = "ИНН/КПП: 7703561330/773001001"
+                sheet["A3"] = "Расчетный счет: 40702810301300019217 в АО 'АЛЬФА-БАНК'"
+                sheet["A4"] = "Корр. счет: 30101810200000000593 БИК банка: 044525593"
+        else:
+            sheet["A1"] = "Поставщик: ИП Рублёв Александр Александрович"
+            sheet["A2"] = "ИНН/КПП: 773013683314"
+            sheet["A3"] = "Расчетный счет: 40802810938000063715 в ПАО 'Сбербанк' г.Москва"
+            sheet["A4"] = "Корр. счет: 30101810400000000225 БИК банка: 044525225"
 
         sheet["A5"] = "Счет № %s от %s г." % (self.le_number_doc.text(), self.de_date_order.date().toString("dd.MM.yyyy"))
         sheet["A6"] = "Плательщик: " + self.le_client.text()
@@ -2203,18 +2225,24 @@ class Order(QMainWindow):
                 # Делаем ссылку дя удобства
                 position = product[row]
 
-                query = "SELECT Barcode, Client_code FROM product_article_parametrs WHERE Id = %s"
+                query = "SELECT Barcode, Client_code, Name FROM product_article_parametrs WHERE Id = %s"
                 sql_info = my_sql.sql_select(query, (self.tw_position.item(row, 2).data(5),))
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql получения информации номера поставщика", sql_info.msg, QMessageBox.Ok)
                     return False
-                if article:
+
+                if article == 1:
+                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["cod"] = sql_info[0][1]
+                elif article == 2:
                     position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
                                        " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0])
                     position["cod"] = sql_info[0][1]
                 else:
-                    position["name"] = self.tw_position.item(row, 3).text() + " " + str(sql_info[0][0])
+                    position["name"] = self.tw_position.item(row, 3).text() + " а " + self.tw_position.item(row, 0).text() + \
+                                       " р " + self.tw_position.item(row, 1).text() + " " + str(sql_info[0][0]) + " - " + sql_info[0][2]
                     position["cod"] = sql_info[0][1]
+
 
                 position["nds"] = int(self.tw_position.item(row, 4).data(5))
                 position["price"] = float(self.tw_position.item(row, 4).text())
@@ -2268,6 +2296,9 @@ class Order(QMainWindow):
         sheet["G%s" % row_ex].number_format = "#,##0.00"
         row_ex += 1
 
+        if firm == 'ип':  # Если документы для ИП, то тогда НДС 0
+            all_nds = 0
+
         sheet.merge_cells("A%s:F%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "В том числе НДС:"
         sheet["G%s" % row_ex] = all_nds
@@ -2287,7 +2318,11 @@ class Order(QMainWindow):
         int_units = ((u'рубль', u'рубля', u'рублей'), 'm')
         exp_units = ((u'копейка', u'копейки', u'копеек'), 'f')
         sheet.merge_cells("A%s:F%s" % (row_ex, row_ex))
-        sheet["A%s" % row_ex] = "В том числе НДС: " + num2t4ru.decimal2text(Decimal(str(all_nds)), int_units=int_units, exp_units=exp_units)
+        if firm == 'ави':  # Если документы для ИП, то НДС не облагается
+            sheet["A%s" % row_ex] = "В том числе НДС: " + num2t4ru.decimal2text(Decimal(str(all_nds)), int_units=int_units, exp_units=exp_units)
+        else:
+            sheet["A%s" % row_ex] = "В том числе НДС: НДС не облагается"
+
         row_ex += 2
 
         # подписи
@@ -2620,6 +2655,11 @@ class OrderDocList(QDialog):
             self.sw_main.setCurrentIndex(5)
 
     def ui_acc(self):
+        if self.cb_firm.currentText() == "Авидевелопмент-М":
+            firm = "ави"
+        else:
+            firm = "ип"
+
         if self.lw_main.selectedItems()[0].text() == "Накладная":
             if self.cb_edo.isChecked():
                 edo = True
@@ -2642,9 +2682,11 @@ class OrderDocList(QDialog):
                 addres = False
 
             if self.rb_name_1.isChecked():
-                article = False
+                article = 1
+            elif self.rb_name_2.isChecked():
+                article = 2
             else:
-                article = True
+                article = 3
 
             manager_name = self.cb_manager_name_1.currentText()
             no_pcb = self.cb_no_pcb_1.isChecked()
@@ -2667,9 +2709,11 @@ class OrderDocList(QDialog):
                 addres = "legal"
 
             if self.rb_fact_name_1.isChecked():
-                article = False
+                article = 1
+            elif self.rb_fact_name_2.isChecked():
+                article = 2
             else:
-                article = True
+                article = 3
 
             self.main.of_ex_invoice(article, addres, unite)
             self.close()
@@ -2690,9 +2734,11 @@ class OrderDocList(QDialog):
                 addres = "legal"
 
             if self.rb_ttn_name_1.isChecked():
-                article = False
+                article = 1
+            elif self.rb_ttn_name_2.isChecked():
+                article = 2
             else:
-                article = True
+                article = 3
 
             manager_name = self.cb_manager_name_3.currentText()
             self.main.of_ex_ttn(addres, article, self.le_ttn_auto.text(), self.le_ttn_driver.text(), unite, manager_name)
@@ -2701,9 +2747,11 @@ class OrderDocList(QDialog):
 
         elif self.lw_main.selectedItems()[0].text() == "Счет":
             if self.rb_score_name_1.isChecked():
-                article = False
+                article = 1
+            elif self.rb_score_name_2.isChecked():
+                article = 2
             else:
-                article = True
+                article = 3
 
             if self.cb_unite_4.isChecked():
                 unite = True
@@ -2712,7 +2760,7 @@ class OrderDocList(QDialog):
 
             bank = self.rb_score_bank.currentText()
 
-            self.main.of_ex_score(article, unite, bank)
+            self.main.of_ex_score(article, unite, bank, firm)
             self.close()
             self.destroy()
 
