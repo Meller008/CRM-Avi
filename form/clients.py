@@ -109,14 +109,14 @@ class Client(QDialog):
                     self.lw_file.addItem(list_item)
 
     def select_file(self, file):  # Открываем выбраный фаил
-        dir_name = self.le_name.text()
+        dir_name = self.le_name.text().replace('.', '').strip()
         self.path = self.inspection_path(dir_name, 'Путь корень клиенты')
         if self.path:
             file_name = file.text()
             subprocess.call([r'%s/%s' % (self.path.replace("/", "\\"), file_name.replace("/", "\\"))], shell=True)
 
     def open_dir(self):  # Открываем выбраную папку
-        dir_name = self.le_name.text()
+        dir_name = self.le_name.text().replace('.', '').strip()
         self.path = self.inspection_path(dir_name, 'Путь корень клиенты')
         if self.path:
             subprocess.call([self.path.replace("/", "\\")], shell=True)
@@ -126,7 +126,7 @@ class Client(QDialog):
         if info.exec() == 0:
             return False
         new_r = path.splitext(info.path_copy_file.text())[1]
-        dir_name = self.le_name.text()
+        dir_name = self.le_name.text().replace('.', '').strip()
         copy(info.path_copy_file.text(), self.inspection_path(dir_name, 'Путь корень клиенты') + "/" + info.le_new_file_name.text() + path.splitext(info.path_copy_file.text())[1])
         self.inspection_files(dir_name, 'Путь корень клиенты')
 
@@ -302,7 +302,7 @@ class Client(QDialog):
                 self.tw_vendor_number.setItem(row, 2, table_item)
                 row += 1
 
-            self.inspection_files(self.le_name.text(), "Путь корень клиенты")
+            self.inspection_files(self.le_name.text().replace('.', '').strip(), "Путь корень клиенты")
 
     def add_adress(self):
         adress = ClientAdress()
