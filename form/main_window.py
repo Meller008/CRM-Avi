@@ -210,8 +210,16 @@ class MainWindow(QMainWindow):
         self.sub_article_list.resize(self.article_list.size())
         self.sub_article_list.show()
 
-    def view_order_list(self):
-        self.order_list = order.OrderList()
+    def view_order_ooo_list(self):
+        self.order_list = order.OrderListOOO()
+        self.sub_order_list = QMdiSubWindow()
+        self.sub_order_list.setWidget(self.order_list)
+        self.mdi.addSubWindow(self.sub_order_list)
+        self.sub_order_list.resize(self.order_list.size())
+        self.sub_order_list.show()
+
+    def view_order_ip_list(self):
+        self.order_list = order.OrderListIP()
         self.sub_order_list = QMdiSubWindow()
         self.sub_order_list.setWidget(self.order_list)
         self.mdi.addSubWindow(self.sub_order_list)

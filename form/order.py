@@ -156,6 +156,92 @@ class OrderList(table.TableList):
         self.ui_update()
 
 
+class OrderListOOO(OrderList):
+    # Список зазказов для ООО
+    def set_settings(self):
+        self.setWindowTitle("Заказы")  # Имя окна
+        self.resize(900, 270)
+        self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
+        self.toolBar.setStyleSheet("background-color: rgb(126, 176, 127);")  # Цвет бара
+
+        # Названия колонк (Имя, Длинна)
+        self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата поствки", 70), ("№ док.", 50),
+                                  ("Стоимость", 85), ("Стоимость без ндс", 85), ('НДС', 70), ("Примечание", 150), ("Отгр.", 40))
+
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("ArtLog")
+
+        self.filter = None
+        self.query_table_all = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
+                              `order`.Date_Shipment, `order`.Number_Doc, ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
+                              ROUND(`order`.Sum_In_Nds - `order`.Sum_Off_Nds, 2),
+                              `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
+                            FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                              LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                              LEFT JOIN order_position ON `order`.Id = order_position.Order_Id 
+                            WHERE `order`.Shipment_Ip = 0
+                            GROUP BY `order`.Id
+                            ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
+
+        #  нулевой элемент должен быть ID
+        self.query_table_select = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
+                                          `order`.Date_Shipment, `order`.Number_Doc, ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
+                                          ROUND(`order`.Sum_In_Nds - `order`.Sum_Off_Nds, 2),
+                                          `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
+                                      FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                                          LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id 
+                                      WHERE `order`.Shipment_Ip = 0
+                                      GROUP BY `order`.Id
+                                      ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
+
+        self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
+
+
+class OrderListIP(OrderList):
+    # Список заказов для ИП
+    def set_settings(self):
+        self.setWindowTitle("Заказы")  # Имя окна
+        self.resize(900, 270)
+        self.pb_copy.deleteLater()
+        self.pb_other.deleteLater()
+        self.toolBar.setStyleSheet("background-color: rgb(126, 176, 127);")  # Цвет бара
+
+        # Названия колонк (Имя, Длинна)
+        self.table_header_name = (("Клиент", 120), ("№ закза", 70), ("Пункт разгрузки", 100), ("Дата поствки", 70), ("№ док.", 50),
+                                  ("Стоимость", 85), ("Стоимость без ндс", 85), ('НДС', 70), ("Примечание", 150), ("Отгр.", 40))
+
+        logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+        self.logger = logging.getLogger("ArtLog")
+
+        self.filter = None
+        self.query_table_all = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
+                              `order`.Date_Shipment, `order`.Number_Doc, ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
+                              ROUND(`order`.Sum_In_Nds - `order`.Sum_Off_Nds, 2),
+                              `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
+                            FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                              LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                              LEFT JOIN order_position ON `order`.Id = order_position.Order_Id 
+                            WHERE `order`.Shipment_Ip = 1
+                            GROUP BY `order`.Id
+                            ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
+
+        #  нулевой элемент должен быть ID
+        self.query_table_select = """SELECT `order`.Id, clients.Name, `order`.Number_Order, clients_actual_address.Name,
+                                          `order`.Date_Shipment, `order`.Number_Doc, ROUND(`order`.Sum_In_Nds, 2), ROUND(`order`.Sum_Off_Nds, 2),
+                                          ROUND(`order`.Sum_In_Nds - `order`.Sum_Off_Nds, 2),
+                                          `order`.Note, IF(`order`.Shipped = 0, 'Нет', 'Да'), clients.No_Nds
+                                      FROM `order` LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                                          LEFT JOIN clients_actual_address ON `order`.Clients_Adress_Id = clients_actual_address.Id
+                                          LEFT JOIN order_position ON `order`.Id = order_position.Order_Id 
+                                      WHERE `order`.Shipment_Ip = 1
+                                      GROUP BY `order`.Id
+                                      ORDER BY `order`.Date_Order DESC, `order`.Number_Doc DESC """
+
+        self.query_table_dell = "DELETE FROM `order` WHERE Id = %s"
+
+
 class Order(QMainWindow):
     def __init__(self, main_class=0, id=False):
         super(Order, self).__init__()
@@ -243,7 +329,7 @@ class Order(QMainWindow):
     def start_set_sql_info(self):
         query = """SELECT `order`.Client_Id, clients.Name, `order`.Clients_Vendor_Id, `order`.Clients_Adress_Id, order_transport_company.Id,
                     order_transport_company.Name, `order`.Date_Order, `order`.Date_Shipment, `order`.Number_Order, `order`.Number_Doc, `order`.Note, `order`.Shipped,
-                    `order`.Combined
+                    `order`.Combined, `order`.Shipment_Ip
                     FROM `order` LEFT JOIN order_transport_company ON `order`.Transport_Company_Id = order_transport_company.Id
                     LEFT JOIN clients ON `order`.Client_Id = clients.Id WHERE `order`.Id = %s"""
         sql_info = my_sql.sql_select(query, (self.id,))
@@ -289,6 +375,13 @@ class Order(QMainWindow):
             self.cb_combined.setChecked(True)
         else:
             self.cb_combined.setChecked(False)
+
+        if sql_info[0][13] == 0:
+            self.rb_ooo.setChecked(True)
+            self.rb_ip.setChecked(False)
+        else:
+            self.rb_ip.setChecked(True)
+            self.rb_ooo.setChecked(False)
 
         query = """SELECT order_position.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Id, product_article_parametrs.Name,
                     product_article_parametrs.Client_Name, order_position.Price, order_position.NDS, order_position.Value, order_position.In_On_Place,
@@ -879,6 +972,11 @@ class Order(QMainWindow):
             else:
                 combined = 0
 
+            if self.rb_ooo.isChecked():
+                shipped_ip = 0
+            else:
+                shipped_ip = 1
+
             if self.id:
                 if self.le_transport_company.text() == "":
                     tc_id = None
@@ -886,10 +984,11 @@ class Order(QMainWindow):
                     tc_id = self.le_transport_company.whatsThis()
 
                 query = """UPDATE `order` SET Client_Id = %s, Clients_Vendor_Id = %s, Clients_Adress_Id = %s, Transport_Company_Id = %s, Date_Order = %s,
-                            Date_Shipment = %s, Number_Order = %s, Number_Doc = %s, Note = %s, Sum_In_Nds = %s, Sum_Off_Nds = %s, Combined = %s WHERE Id = %s"""
+                            Date_Shipment = %s, Number_Order = %s, Number_Doc = %s, Note = %s, Sum_In_Nds = %s, Sum_Off_Nds = %s, Combined = %s, Shipment_Ip = %s
+                             WHERE Id = %s"""
                 parametrs = (self.le_client.whatsThis(), self.cb_clients_vendor.currentData(), self.cb_clients_adress.currentData(),
                              tc_id, self.de_date_order.date().toString(Qt.ISODate), self.de_date_shipment.date().toString(Qt.ISODate), self.le_number_order.text(),
-                             self.le_number_doc.text(), self.le_note.text(), self.le_sum_in_nds.text(), self.le_sum_no_nds.text(), combined, self.id)
+                             self.le_number_doc.text(), self.le_note.text(), self.le_sum_in_nds.text(), self.le_sum_no_nds.text(), combined, shipped_ip, self.id)
                 sql_info = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql изменения заказа", sql_info.msg, QMessageBox.Ok)
@@ -897,12 +996,12 @@ class Order(QMainWindow):
                 self.new_id = False
             else:
                 query = """INSERT INTO `order` (Client_Id, Clients_Vendor_Id, Clients_Adress_Id, Transport_Company_Id, Date_Order, Date_Shipment,
-                                                Number_Order, Number_Doc, Note, Shipped, Sum_In_Nds, Sum_Off_Nds, Combined) 
-                                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s, %s, %s)"""
+                                                Number_Order, Number_Doc, Note, Shipped, Sum_In_Nds, Sum_Off_Nds, Combined, Shipment_Ip) 
+                                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s, %s, %s, %s)"""
                 parametrs = (self.le_client.whatsThis(), self.cb_clients_vendor.currentData(), self.cb_clients_adress.currentData(),
                              self.le_transport_company.whatsThis(), self.de_date_order.date().toString(Qt.ISODate),
                              self.de_date_shipment.date().toString(Qt.ISODate), self.le_number_order.text(), self.le_number_doc.text(), self.le_note.text(),
-                             self.le_sum_in_nds.text(), self.le_sum_no_nds.text(), combined)
+                             self.le_sum_in_nds.text(), self.le_sum_no_nds.text(), combined, shipped_ip)
                 sql_info = my_sql.sql_change(query, parametrs)
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql добавления заказа", sql_info.msg, QMessageBox.Ok)
@@ -2465,7 +2564,10 @@ class OrderFilter(QDialog):
 
         # Делаем замену так как Were должно быть перед Group by
         if where:
-            self.sql_query_all = self.sql_query_all.replace("GROUP BY", " WHERE " + where + " GROUP BY")
+            if self.sql_query_all.find("WHERE"):  # Если в запросе уже есть WHERE то фильтр вставляем после него
+                self.sql_query_all = self.sql_query_all.replace("GROUP BY", " AND " + where + " GROUP BY")
+            else:
+                self.sql_query_all = self.sql_query_all.replace("GROUP BY", " WHERE " + where + " GROUP BY")
 
         self.main.of_set_filter(self.sql_query_all)
 

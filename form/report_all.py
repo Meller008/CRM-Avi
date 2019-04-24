@@ -1876,7 +1876,7 @@ class ReportAll(QMainWindow):
           <tr> <th>Произвели шт.</th> <th>Произвели по себест</th><th>Произвели по продаже</th><th>Прибыль прогнозируемая</th> </tr>
           <tr> <td>#le_supply_value_article#</td><td>#le_supply_sum_seb_article#</td><td>#le_supply_sum_price_article#</td><td>#le_supply_sum_balance_article#</td> </tr>
           
-          <tr> <th>Продали шт.</th> <th>Продали по себест</th><th>Продали по продажной</th><th>Прибыль</th> </tr>
+          <tr> <th>Продали шт.</th> <th>Продали по продажно</th><th>Продали по себест</th><th>Прибыль</th> </tr>
           <tr> <td>#le_sel_value_article#</td><td>#le_sel_sum_price_article#</td><td>#le_sel_sum_seb_article#</td><td>#le_sel_sum_balance_article#</td> </tr>
           </table>
           <table>       

@@ -142,7 +142,8 @@
      <string>Номенклатура</string>
     </property>
     <addaction name="ma_article_test"/>
-    <addaction name="ma_order_list"/>
+    <addaction name="ma_order_ooo_list"/>
+    <addaction name="ma_order_ip_list"/>
     <addaction name="ma_clients"/>
     <addaction name="ma_product_operations"/>
     <addaction name="ma_product_article"/>
@@ -335,9 +336,9 @@
     <string>Клиенты</string>
    </property>
   </action>
-  <action name="ma_order_list">
+  <action name="ma_order_ooo_list">
    <property name="text">
-    <string>Заказы</string>
+    <string>Заказы ООО</string>
    </property>
   </action>
   <action name="ma_cut_mission_list">
@@ -632,6 +633,11 @@
     <string>Заказ на отгрузку</string>
    </property>
   </action>
+  <action name="ma_order_ip_list">
+   <property name="text">
+    <string>Заказы ИП</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -876,10 +882,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>ma_order_list</sender>
+   <sender>ma_order_ooo_list</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>view_order_list()</slot>
+   <slot>view_order_ooo_list()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1643,6 +1649,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_order_ip_list</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_order_ip_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1660,7 +1682,7 @@
   <slot>view_clients()</slot>
   <slot>view_operation()</slot>
   <slot>view_product()</slot>
-  <slot>view_order_list()</slot>
+  <slot>view_order_ooo_list()</slot>
   <slot>view_cut_mission_list()</slot>
   <slot>view_cut_list()</slot>
   <slot>view_other_order_edi()</slot>
@@ -1708,5 +1730,6 @@
   <slot>view_article_test()</slot>
   <slot>view_product_warehouse_2()</slot>
   <slot>view_shipment_order()</slot>
+  <slot>view_order_ip_list()</slot>
  </slots>
 </ui>

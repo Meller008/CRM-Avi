@@ -589,7 +589,10 @@
       <property name="spacing">
        <number>2</number>
       </property>
-      <item row="0" column="0">
+      <item row="2" column="0">
+       <widget class="QLineEdit" name="le_note"/>
+      </item>
+      <item row="0" column="0" rowspan="2">
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>Примечание</string>
@@ -599,25 +602,53 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLineEdit" name="le_note"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="cb_shipping">
-        <property name="enabled">
-         <bool>false</bool>
+      <item row="0" column="1" rowspan="3">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
         </property>
-        <property name="text">
-         <string>Отгружено</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="cb_combined">
-        <property name="text">
-         <string>Объединенный</string>
-        </property>
-       </widget>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QRadioButton" name="rb_ooo">
+            <property name="text">
+             <string>ООО</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_ip">
+            <property name="text">
+             <string>ИП</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cb_combined">
+          <property name="text">
+           <string>Объединенный</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cb_shipping">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Отгружено</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -857,8 +888,8 @@
    <slot>ui_acc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>618</x>
-     <y>419</y>
+     <x>690</x>
+     <y>456</y>
     </hint>
     <hint type="destinationlabel">
      <x>619</x>
@@ -873,8 +904,8 @@
    <slot>ui_can()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>711</x>
-     <y>407</y>
+     <x>771</x>
+     <y>456</y>
     </hint>
     <hint type="destinationlabel">
      <x>711</x>
@@ -1049,12 +1080,60 @@
    <slot>ui_order_info_edit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>46</x>
-     <y>149</y>
+     <x>52</x>
+     <y>176</y>
     </hint>
     <hint type="destinationlabel">
      <x>-106</x>
      <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_ooo</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_order_info_edit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>450</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>453</x>
+     <y>-39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_ip</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_order_info_edit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>485</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>476</x>
+     <y>-96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_combined</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_order_info_edit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>467</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>471</x>
+     <y>-70</y>
     </hint>
    </hints>
   </connection>

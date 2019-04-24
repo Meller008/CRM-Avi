@@ -109,6 +109,7 @@ class Staff(QMainWindow):
             self.lw_position.addItem("Не принятые")
             self.lw_position.addItem("Все работающие")
 
+        self.tw_workers.setSortingEnabled(False)
         self.tw_workers.clearContents()
         self.tw_workers.setRowCount(len(self.staff_workers))
         for row in range(len(self.staff_workers)):
@@ -116,6 +117,8 @@ class Staff(QMainWindow):
                 a = self.staff_workers[row][column]
                 item = QTableWidgetItem(str(a))
                 self.tw_workers.setItem(row, column, item)
+
+        self.tw_workers.setSortingEnabled(True)
 
     def add(self):
         self.add_mat = OneStaff(self)

@@ -45,6 +45,7 @@ class ReportSibestoimost(QMainWindow):
         self.table_widget.horizontalHeader().resizeSection(20, 70)
 
     def ui_calc(self):
+        self.table_widget.setSortingEnabled(False)
         self.pb_awg.setEnabled(True)
         # Составим sql запрос
         sql_quere = """SELECT cut.Id, pack.Id
@@ -223,25 +224,28 @@ class ReportSibestoimost(QMainWindow):
                 item = QTableWidgetItem(str(all_material_weight_in_piece))
                 self.table_widget.setItem(self.table_widget.rowCount() - 1, 20, item)
 
+        self.table_widget.setSortingEnabled(True)
+
     def ui_calc_awg(self):
 
-        self.pb_awg.setEnabled(False)
+        if self.table_widget.rowCount():
+            self.pb_awg.setEnabled(False)
 
-        self.table_widget.insertRow(0)
-        self.table_widget.insertRow(0)
+            self.table_widget.insertRow(0)
+            self.table_widget.insertRow(0)
 
-        self.table_widget.setSpan(0, 0, 1, 20)
-        item = QTableWidgetItem("СРЕДНИЕ ЗНАЧЕНИЯ")
-        item.setTextAlignment(Qt.AlignHCenter)
-        self.table_widget.setItem(0, 0, item)
+            self.table_widget.setSpan(0, 0, 1, 20)
+            item = QTableWidgetItem("СРЕДНИЕ ЗНАЧЕНИЯ")
+            item.setTextAlignment(Qt.AlignHCenter)
+            self.table_widget.setItem(0, 0, item)
 
-        for col in range(8, self.table_widget.columnCount()):
-            list = []
-            for row in range(2, self.table_widget.rowCount()):
-                list.append(float(self.table_widget.item(row, col).text()))
-            else:
-                item = QTableWidgetItem(str(round(sum(list) / len(list), 4)))
-                self.table_widget.setItem(1, col, item)
+            for col in range(8, self.table_widget.columnCount()):
+                list = []
+                for row in range(2, self.table_widget.rowCount()):
+                    list.append(float(self.table_widget.item(row, col).text()))
+                else:
+                    item = QTableWidgetItem(str(round(sum(list) / len(list), 4)))
+                    self.table_widget.setItem(1, col, item)
 
     def ui_view_art(self):
         self.but_name = QObject.sender(self).objectName()

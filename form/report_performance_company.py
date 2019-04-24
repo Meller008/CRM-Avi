@@ -129,7 +129,7 @@ class ReportPerformanceCompany(QMainWindow):
                                         LEFT JOIN material_supplyposition ON material_balance.Material_SupplyPositionId = material_supplyposition.Id
                                       WHERE pack.Id = pm.Id AND transaction_records_material.Note NOT LIKE '%доп. тк%'
                                       ),(
-                                          SELECT ((pack_add_material.Weight + pack_add_material.Weight_Rest) / pack.Value_Pieces) * pack_add_material.Price
+                                          SELECT SUM(((pack_add_material.Weight + pack_add_material.Weight_Rest) / pack.Value_Pieces) * pack_add_material.Price)
                                             FROM pack_add_material LEFT JOIN pack ON pack_add_material.Pack_Id = pack.Id
                                             WHERE pack.Id = pm.Id
                                       ),(
