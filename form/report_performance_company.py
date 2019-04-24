@@ -1,10 +1,10 @@
 from os import getcwd
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QMessageBox, QMainWindow, QTableWidgetItem, QFileDialog
 from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtGui import QIcon
 import re
-from function import my_sql
+from function import my_sql, to_excel
 from function import table_to_html
 from classes import print_qt
 
@@ -21,7 +21,7 @@ class ReportPerformanceCompany(QMainWindow):
         self.de_date_from.setDate(QDate.currentDate().addMonths(-1))
         self.de_date_to.setDate(QDate.currentDate())
 
-        self.tableWidget.horizontalHeader().resizeSection(0, 150)
+        self.tableWidget.horizontalHeader().resizeSection(0, 215)
         self.tableWidget.horizontalHeader().resizeSection(1, 80)
         self.tableWidget.horizontalHeader().resizeSection(2, 80)
         self.tableWidget.horizontalHeader().resizeSection(3, 100)
@@ -80,7 +80,8 @@ class ReportPerformanceCompany(QMainWindow):
 
         article_list = {}
 
-        query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ')[', product_article_parametrs.Name, ']'),
+        query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ') [', product_article_parametrs.Name, ']',
+                    ' НДС ', product_article_parametrs.NDS, '%'),
                         SUM(pack.Value_Pieces - pack.Value_Damage)
                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
@@ -218,4 +219,10 @@ class ReportPerformanceCompany(QMainWindow):
 
         html = table_to_html.tab_html(self.tableWidget, table_head=head, up_template=up_html)
         self.print_class = print_qt.PrintHtml(self, html)
+
+    def ui_export(self):
+        path = QFileDialog.getSaveFileName(self, "Сохранение")
+        if path[0]:
+            to_excel.table_to_excel(self.tableWidget, path[0])
+
 

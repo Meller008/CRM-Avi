@@ -35,10 +35,10 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="6">
-       <widget class="QPushButton" name="pushButton_10">
+      <item row="0" column="5">
+       <widget class="QPushButton" name="pushButton_9">
         <property name="text">
-         <string>Печать</string>
+         <string>Расчитать</string>
         </property>
        </widget>
       </item>
@@ -83,10 +83,17 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="5">
-       <widget class="QPushButton" name="pushButton_9">
+      <item row="0" column="6">
+       <widget class="QPushButton" name="pushButton_10">
         <property name="text">
-         <string>Расчитать</string>
+         <string>Печать</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QPushButton" name="pb_export">
+        <property name="text">
+         <string>Экспорт</string>
         </property>
        </widget>
       </item>
@@ -316,8 +323,8 @@
    <slot>ui_calc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>444</x>
-     <y>15</y>
+     <x>369</x>
+     <y>29</y>
     </hint>
     <hint type="destinationlabel">
      <x>295</x>
@@ -332,8 +339,8 @@
    <slot>ui_print()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>496</x>
-     <y>11</y>
+     <x>444</x>
+     <y>25</y>
     </hint>
     <hint type="destinationlabel">
      <x>584</x>
@@ -341,9 +348,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pb_export</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_export()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>491</x>
+     <y>30</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>617</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ui_calc()</slot>
   <slot>ui_print()</slot>
+  <slot>ui_export()</slot>
  </slots>
 </ui>
