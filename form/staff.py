@@ -1267,8 +1267,12 @@ class OneStaff(QMainWindow):
         n = 0
         if len(col) < len(text):
             m = len(col)
-            while text[m] != " ":
-                m -= 1
+            try:
+                while text[m] != " ":
+                    m -= 1
+            except IndexError:
+                QMessageBox.critical(self, "Ошибка", "Не могу разделить место регистрации на 2 строки, добавте символ пробела в месте переноса строки!", QMessageBox.Ok)
+                return False
         else:
             m = len(text)
         i = 0

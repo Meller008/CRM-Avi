@@ -1295,7 +1295,7 @@ class Order(QMainWindow):
         self.le_transport_company.setText(item[1])
         self.le_transport_company.setWhatsThis(str(item[0]))
 
-    def of_ex_torg12(self,edo, head, article, addres, unite, manager_name, no_pcb):
+    def of_ex_torg12(self,edo, head, article, addres, unite, manager_name, no_pcb, firm):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1347,6 +1347,13 @@ class Order(QMainWindow):
                 return False
             adr = sql_adr[0][0]
             kpp = sql_adr[0][1]
+
+
+        if firm == 'ип':  # Если документ для ИП, то меняем аоставщика
+            text = "ИП Рублёв Александр Александрович, ИНН/КПП: 773013683314, Р/с: 40802810938000063715 в ПАО 'Сбербанк'  г.Москва,Корр. счет: 30101810400000000225" \
+                   " БИК банка: 044525225,г.Москва 121601 г.Москва, Филевский бульвар, д.40, кв.334"
+            sheet["A5"] = text
+            sheet["C10"] = text
 
         client = sql_info[0][9] + " ИНН " + str(sql_info[0][1])
         if sql_info[0][2]:
@@ -1523,9 +1530,13 @@ class Order(QMainWindow):
             sheet["N%s" % row_ex].alignment = ald_right
             sheet["P%s" % row_ex] = moneyfmt.moneyfmt(position["sum_no_nds"])
             sheet["P%s" % row_ex].alignment = ald_right
-            sheet["R%s" % row_ex] = position["nds"]
-            sheet["T%s" % row_ex] = moneyfmt.moneyfmt(position["nds_sum"])
-            sheet["T%s" % row_ex].alignment = ald_right
+            if firm == 'ип':  # Если документы для ИП, то НДС не считается
+                sheet["R%s" % row_ex] = 'Без НДС'
+                sheet["T%s" % row_ex] = ' '
+            else:
+                sheet["R%s" % row_ex] = position["nds"]
+                sheet["T%s" % row_ex] = moneyfmt.moneyfmt(position["nds_sum"])
+                sheet["T%s" % row_ex].alignment = ald_right
             sheet["V%s" % row_ex] = moneyfmt.moneyfmt(position["sum"])
             sheet["V%s" % row_ex].alignment = ald_right
 
@@ -1577,8 +1588,12 @@ class Order(QMainWindow):
         sheet["R%s" % row_ex].alignment = ald_center
 
         sheet.merge_cells("T%s:U%s" % (row_ex, row_ex))
-        sheet["T%s" % row_ex] = moneyfmt.moneyfmt(all_nds)
-        sheet["T%s" % row_ex].alignment = ald_right
+        if firm == 'ип':  # Если документы для ИП, то НДС не считается
+            sheet["T%s" % row_ex] = "X"
+            sheet["T%s" % row_ex].alignment = ald_center
+        else:
+            sheet["T%s" % row_ex] = moneyfmt.moneyfmt(all_nds)
+            sheet["T%s" % row_ex].alignment = ald_right
 
         sheet["V%s" % row_ex] = moneyfmt.moneyfmt(all_sum)
         sheet["V%s" % row_ex].alignment = ald_right
@@ -1622,8 +1637,16 @@ class Order(QMainWindow):
 
         sheet2 = book['Низ']
 
-        # Вставляем имя менеджера
-        sheet2['G15'] = manager_name
+        if firm == 'ип':  # Если документы для ИП, то ответственный и дир. РУБЛЁВ
+            sheet2['G10'] = 'Рублев А.А.'
+            sheet2['G13'] = 'Рублев А.А.'
+            sheet2['G15'] = 'Рублев А.А.'
+
+            sheet2['D12'] = ' '
+            sheet2['D13'] = ' '
+        else:
+            # Вставляем имя менеджера
+            sheet2['G15'] = manager_name
 
         for row in sheet2.iter_rows(min_row=1, max_col=22, max_row=17):
             for cell in row:
@@ -2793,7 +2816,7 @@ class OrderDocList(QDialog):
             manager_name = self.cb_manager_name_1.currentText()
             no_pcb = self.cb_no_pcb_1.isChecked()
 
-            self.main.of_ex_torg12(edo, head, article, addres, unite, manager_name, no_pcb)
+            self.main.of_ex_torg12(edo, head, article, addres, unite, manager_name, no_pcb, firm)
             self.close()
             self.destroy()
 
