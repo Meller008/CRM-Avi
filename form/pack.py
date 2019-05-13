@@ -804,7 +804,7 @@ class PackBrows(QDialog):
 
             color = None
             note = ""
-            if round(dict["value"] * dict["value_thing"], 4) != dict["sql_value_sum"]:
+            if round(dict["value"] * dict["value_thing"], 4) != round(dict["sql_value_sum"], 4):
                 balance = self.pack.check_balance_accessories(dict["id"])
                 if balance[0]:
                     color = QBrush(QColor(122, 247, 84, 255))
