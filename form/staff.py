@@ -21,7 +21,7 @@ class Staff(QMainWindow):
         self.dc_select = dc_select
         self.filter = None
         self.query_table_all = """SELECT staff_worker_info.Id, Last_Name, First_Name, DATE_FORMAT(Date_Recruitment, '%d.%m.%Y'), staff_worker_login.Login,
-                                      `Leave`, Date_Leave, staff_position.Name, Date_Recruitment
+                                      `Leave`, Date_Leave, staff_position.Name, Date_Recruitment, Ip
                                     FROM staff_worker_info LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id
                                       LEFT JOIN staff_worker_login ON staff_worker_info.Id = staff_worker_login.Worker_Info_Id
                                     ORDER BY Last_Name"""
@@ -102,8 +102,10 @@ class Staff(QMainWindow):
         for position in self.staff_positions:
             self.lw_position.addItem(position[1])
         else:
-            self.lw_position.addItem("Принятые в этом месяце")
-            self.lw_position.addItem("Уволеные в этом месяце")
+            self.lw_position.addItem("Принятые в этом месяце ООО")
+            self.lw_position.addItem("Принятые в этом месяце ИП")
+            self.lw_position.addItem("Уволеные в этом месяце ООО")
+            self.lw_position.addItem("Уволеные в этом месяце ИП")
             self.lw_position.addItem("Уволеные в этом году")
             self.lw_position.addItem("Уволеные")
             self.lw_position.addItem("Не принятые")
@@ -169,11 +171,24 @@ class Staff(QMainWindow):
         self.to_date = QDate.currentDate()
         self.tw_workers.setSortingEnabled(False)
 
-        if self.select_position == "Принятые в этом месяце":  # Вставляем принятых в этом месяце
+        if self.select_position == "Принятые в этом месяце ООО":  # Вставляем принятых в этом месяце
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][5] == 0 and self.staff_workers[row][8].month == self.to_date.month() and self.staff_workers[row][8].year == self.to_date.year():
+                if self.staff_workers[row][5] == 0 and self.staff_workers[row][8].month == self.to_date.month() and\
+                        self.staff_workers[row][8].year == self.to_date.year() and self.staff_workers[row][9] == 0:
+                    self.tw_workers.insertRow(self.tw_workers.rowCount())
+                    for column in range(5):
+                        a = self.staff_workers[row][column]
+                        item = QTableWidgetItem(str(a))
+                        self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
+
+        elif self.select_position == "Принятые в этом месяце ИП":  # Вставляем принятых в этом месяце
+            self.tw_workers.clearContents()
+            self.tw_workers.setRowCount(0)
+            for row in range(len(self.staff_workers)):
+                if self.staff_workers[row][5] == 0 and self.staff_workers[row][8].month == self.to_date.month() and\
+                        self.staff_workers[row][8].year == self.to_date.year() and self.staff_workers[row][9] == 1:
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
                     for column in range(5):
                         a = self.staff_workers[row][column]
@@ -202,11 +217,24 @@ class Staff(QMainWindow):
                         item = QTableWidgetItem(str(a))
                         self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
 
-        elif self.select_position == "Уволеные в этом месяце":  # Вставляем уволеных
+        elif self.select_position == "Уволеные в этом месяце ООО":  # Вставляем уволеных
             self.tw_workers.clearContents()
             self.tw_workers.setRowCount(0)
             for row in range(len(self.staff_workers)):
-                if self.staff_workers[row][5] == 1 and self.staff_workers[row][6].month == self.to_date.month() and self.staff_workers[row][6].year == self.to_date.year():
+                if self.staff_workers[row][5] == 1 and self.staff_workers[row][6].month == self.to_date.month() and\
+                        self.staff_workers[row][6].year == self.to_date.year() and self.staff_workers[row][9] == 0:
+                    self.tw_workers.insertRow(self.tw_workers.rowCount())
+                    for column in range(5):
+                        a = self.staff_workers[row][column]
+                        item = QTableWidgetItem(str(a))
+                        self.tw_workers.setItem(self.tw_workers.rowCount() - 1, column, item)
+
+        elif self.select_position == "Уволеные в этом месяце ИП":  # Вставляем уволеных
+            self.tw_workers.clearContents()
+            self.tw_workers.setRowCount(0)
+            for row in range(len(self.staff_workers)):
+                if self.staff_workers[row][5] == 1 and self.staff_workers[row][6].month == self.to_date.month() and\
+                        self.staff_workers[row][6].year == self.to_date.year() and self.staff_workers[row][9] == 1:
                     self.tw_workers.insertRow(self.tw_workers.rowCount())
                     for column in range(5):
                         a = self.staff_workers[row][column]
