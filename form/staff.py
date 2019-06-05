@@ -587,7 +587,7 @@ class OneStaff(QMainWindow):
         # Вставляем основную информацию
         self.id_info = id_worker
         query = """SELECT staff_worker_info.Id, First_Name, Last_Name, Middle_Name, Sex, Date_Birth, Date_Recruitment, staff_worker_info.Leave,
-                    Date_Leave, staff_country.Country_name, Phone, Address, staff_position.Name, INN, SNILS, Note, Birthplace
+                    Date_Leave, staff_country.Country_name, Phone, Address, staff_position.Name, INN, SNILS, Note, Birthplace, Ip
                     FROM staff_worker_info LEFT JOIN staff_country ON staff_worker_info.Country_Id = staff_country.Id
                     LEFT JOIN staff_position ON staff_worker_info.Position_Id = staff_position.Id  WHERE staff_worker_info.Id = %s"""
         sql_reply = my_sql.sql_select(query, (id_worker,))
@@ -622,6 +622,10 @@ class OneStaff(QMainWindow):
         self.le_info_inn.setText(sql_reply[0][13])
         self.le_info_snils.setText(sql_reply[0][14])
         self.le_info_note.appendPlainText(sql_reply[0][15])
+
+        if sql_reply[0][17]:
+            self.cb_ip.setChecked(True)
+
         leave = sql_reply[0][7]
 
         #Запомним имя фамилию дату для проверки изменения дирректории
@@ -802,17 +806,23 @@ class OneStaff(QMainWindow):
                     elif self.rb_not_employed.isChecked():
                         self.leave = 2
 
+                    if self.cb_ip.isChecked():
+                        ip = 1
+                    else:
+                        ip = 0
+
                     id_country = my_sql.sql_select("SELECT Id FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
                     id_position = my_sql.sql_select("SELECT Id FROM staff_position WHERE Name = %s", (self.cb_info_position.currentText(),))[0][0]
 
                     query = """UPDATE staff_worker_info SET First_Name = %s, Last_Name = %s, Middle_Name = %s, Sex = %s, Date_Birth = %s, Birthplace = %s, Date_Recruitment = %s,
-                        `Leave` = %s,  Date_Leave = %s, Country_Id = %s, Phone = %s, Address = %s, Position_Id = %s, INN = %s, SNILS = %s, Note = %s WHERE Id = %s"""
+                        `Leave` = %s,  Date_Leave = %s, Country_Id = %s, Phone = %s, Address = %s, Position_Id = %s, INN = %s, SNILS = %s, Note = %s, Ip = %s
+                         WHERE Id = %s"""
                     parametrs = (self.le_info_first_name.text(), self.le_info_last_name.text(), self.le_info_middle_name.text(), self.sex,
                                  self.de_info_birth.date().toString(Qt.ISODate), self.le_info_birthplace.text(),
                                  self.de_info_recruitment.date().toString(Qt.ISODate),
                                  self.leave, self.de_info_leave.date().toString(Qt.ISODate), id_country, self.le_info_phone.text(),
                                  self.le_info_address.text(), id_position, self.le_info_inn.text(), self.le_info_snils.text(), self.le_info_note.toPlainText(),
-                                 self.id_info)
+                                 ip, self.id_info)
                     info_sql = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(info_sql)):
                         QMessageBox.critical(self, "Ошибка sql i", info_sql.msg, QMessageBox.Ok)
@@ -984,17 +994,22 @@ class OneStaff(QMainWindow):
                     elif self.rb_not_employed.isChecked():
                         self.leave = 2
 
+                    if self.cb_ip.isChecked():
+                        ip = 1
+                    else:
+                        ip = 0
+
                     id_country = my_sql.sql_select("SELECT Id FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0][0]
                     id_position = my_sql.sql_select("SELECT Id FROM staff_position WHERE Name = %s", (self.cb_info_position.currentText(),))[0][0]
 
                     query = """INSERT INTO staff_worker_info (First_Name, Last_Name, Middle_Name, Sex, Date_Birth, Birthplace, Date_Recruitment, `Leave`,
-                                                              Date_Leave, Country_Id, Phone, Address, Position_Id, INN, SNILS, Note)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                                                              Date_Leave, Country_Id, Phone, Address, Position_Id, INN, SNILS, Note, Ip)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                     parametrs = (self.le_info_first_name.text(), self.le_info_last_name.text(), self.le_info_middle_name.text(), self.sex,
                                  self.de_info_birth.date().toString(Qt.ISODate), self.le_info_birthplace.text(),
                                  self.de_info_recruitment.date().toString(Qt.ISODate),
                                  self.leave, self.de_info_leave.date().toString(Qt.ISODate), id_country, self.le_info_phone.text(),
-                                 self.le_info_address.text(), id_position, self.le_info_inn.text(), self.le_info_snils.text(), self.le_info_note.toPlainText())
+                                 self.le_info_address.text(), id_position, self.le_info_inn.text(), self.le_info_snils.text(), self.le_info_note.toPlainText(), ip)
                     self.id_info = my_sql.sql_change(query, parametrs)
                     if "mysql.connector.errors" in str(type(self.id_info)):
                         QMessageBox.critical(self, "Ошибка sql", self.id_info.msg, QMessageBox.Ok)
@@ -1099,6 +1114,52 @@ class OneStaff(QMainWindow):
             book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_out.xlsx')
         sheet = book['s1']
 
+        # Если работник ИП то поменяем шапку
+        if self.cb_ip.isChecked():
+            col = ("A", "E", "I", "M", "Q", "U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ",
+                   "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE", "DI", "DM", "DQ", "DU", "DY", "EC")
+
+            for i, t in enumerate("46.64"):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], 33)] = t
+
+            for i, t in enumerate("ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ   "):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], 35)] = t
+
+            for i, t in enumerate("РУБЛЁВ АЛЕКСАНДР АЛЕКСАНДРОВИЧ   "):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], 37)] = t
+
+            for i, t in enumerate("ОГРНИП 317774600502549"):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], 43)] = t
+
+            for i, t in enumerate("ИНН 773013683314 КПП 773001001"):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], 47)] = t
+
+            for i, t in enumerate("121601 МОСКВА ФИЛЁВСКИЙ БУЛЬВАР "):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], 49)] = t
+
+            for i, t in enumerate("ДОМ 40 КВАРТИРА 334"):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], 51)] = t
+
+            col = ("AB", "AF", "AJ", "AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX")
+            for i, t in enumerate("89299024574 "):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (col[i], 57)] = t
+
+            sheet = book['s2']
+            sheet['A56'] = 'ИП Рублёв Александр Александрович'
+            sheet['C58'] = '27'
+            sheet['H58'] = '05'
+            sheet['Z58'] = '19'
+
+            sheet = book['s1']
+
         col = ("U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ", "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE",
                "DI", "DM", "DQ", "DU", "DY", "EC")
 
@@ -1162,8 +1223,8 @@ class OneStaff(QMainWindow):
             n += 1
             i += 1
 
-        col = ("A70", "E70", "I70", "M70", "Q70", "U70", "Y70", "AC70", "AG70", "AK70", "AO70", "AS70", "AW70", "BA70", "BE70", "BI70", "BM70", "BQ70",
-               "BU70", "BY70", "CC70", "CG70", "CK70", "CO70", "CS70", "CW70", "DA70", "DE70", "DI70", "DM70", "DQ70", "DU70", "DY70", "EC70")
+        col = ("A", "E", "I", "M", "Q", "U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ",
+               "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE", "DI", "DM", "DQ", "DU", "DY", "EC")
         if m < len(text):
             if len(text) - m > len(col):
                 QMessageBox.critical(self, "Ошибка", "Место рождения длиннее строки ввода", QMessageBox.Ok)
