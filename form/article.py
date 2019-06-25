@@ -1680,7 +1680,11 @@ class ArticleList(QMainWindow):
         self.print_label.show()
 
     def ui_view_label(self):
-        if self.lw_size.currentItem().text() and self.lw_parametr.currentItem().text() :
+        if not self.tw_article.selectedItems():
+            QMessageBox.information(self, 'Артикул', 'Выберите артикул!', QMessageBox.Ok)
+            return False
+
+        if self.lw_size.currentItem().text() and self.lw_parametr.currentItem().text():
             dir_name = self.tw_article.selectedItems()[0].text().replace("/", "-") + " " +\
                        self.lw_size.currentItem().text() + " " +\
                        self.lw_parametr.currentItem().text()
