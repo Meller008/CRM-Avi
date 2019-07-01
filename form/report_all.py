@@ -1326,7 +1326,7 @@ class ReportAll(QMainWindow):
                         LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
-                      WHERE `order`.Date_Shipment >= %s AND `order`.Date_Shipment <= %s """
+                      WHERE `order`.Date_Shipment >= %s AND `order`.Date_Shipment <= %s"""
         sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения проданых позиций", sql_info.msg, QMessageBox.Ok)
@@ -1543,7 +1543,7 @@ class ReportAll(QMainWindow):
                          `order`.Sum_Off_Nds, `order`.Sum_In_Nds, SUM(order_position.Value)
                       FROM `order` LEFT JOIN order_position ON `order`.Id = order_position.Order_Id
                         LEFT JOIN clients ON `order`.Client_Id = clients.Id
-                      WHERE `order`.Date_Shipment >= %s AND `order`.Date_Shipment <= %s AND `order`.Shipped = 1 GROUP BY `order`.Id ORDER BY clients.Id"""
+                      WHERE `order`.Date_Shipment >= %s AND `order`.Date_Shipment <= %s GROUP BY `order`.Id ORDER BY clients.Id"""
         sql_info = my_sql.sql_select(query, (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate()))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения отгруженных зказов", sql_info.msg, QMessageBox.Ok)
