@@ -1613,7 +1613,11 @@ class ReportAll(QMainWindow):
             item.setData(5, order[0])
             self.tw_product_2.setItem(self.tw_product_2.rowCount() - 1, 5, item)
 
-            sum_value += order[7]
+            try:
+                sum_value += order[7]
+            except TypeError:
+                pass
+
             text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(order[7]))
             item = QTableWidgetItem(text)
             item.setData(5, order[0])
