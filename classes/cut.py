@@ -844,6 +844,7 @@ class Pack:
         self.__print_label = 0
 
         self.__material_price = None
+        self.__material_name = None
         self.__weight_old_sql = 0
 
         self.__save_sql_info = False
@@ -880,12 +881,13 @@ class Pack:
                         pack.Weight, pack.Note, pack.Size, pack.Client_Id, clients.Name, pack.Date_Make, pack.Date_Coplete, cut.Material_Id, product_article.Article,
                         product_article_size.Size, product_article_parametrs.Name, cut.Date_Cut, product_article.Name,
                         product_article_parametrs.Barcode, product_article.Id, product_article_parametrs.Id, product_article_parametrs.Product_Note,
-                        product_article_parametrs.Client_Name, pack.Print
+                        product_article_parametrs.Client_Name, pack.Print, material_name.Name
                       FROM pack LEFT JOIN cut ON pack.Cut_Id = cut.Id
                       LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                       LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                       LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
                       LEFT JOIN clients ON pack.Client_Id = clients.Id
+                      LEFT JOIN material_name ON cut.Material_Id = material_name.Id
                       WHERE pack.Id = %s"""
         sql_info = my_sql.sql_select(query, (sql_id,))
         if "mysql.connector.errors" in str(type(sql_info)):
@@ -921,6 +923,7 @@ class Pack:
         self.__note_article = sql_info[0][23]
         self.__article_client_name = sql_info[0][24]
         self.__print_label = sql_info[0][25]
+        self.__material_name = sql_info[0][26]
 
         self.__value_all = self.__value_pieces - self.__value_damage
         self.__value_all_sql = self.__value_all
@@ -2149,6 +2152,9 @@ class Pack:
                 self.__material_price = 0
 
         return self.__material_price
+
+    def material_name(self):
+        return self.material_name()
 
     def cut_date(self):
         return self.__cut_date
