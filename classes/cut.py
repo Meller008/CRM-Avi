@@ -2154,7 +2154,7 @@ class Pack:
         return self.__material_price
 
     def material_name(self):
-        return self.material_name()
+        return self.__material_name
 
     def cut_date(self):
         return self.__cut_date
