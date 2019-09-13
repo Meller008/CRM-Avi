@@ -1123,12 +1123,13 @@ class OneStaff(QMainWindow):
     def exel_petition_out(self):
         self.build_word_petition("out")
 
-    # Уведомление о заключении трудового договора
+    # Уведомление о заключении и расторжении трудового договора
     def build_new_exel(self, option):
-        # Уведомление о заключении трудового договора
-        # row = (17, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 53, 55, 57, 59, 61, 63, 65)
-        # col = ("A", "D", "G", "j", "M", "P", "S", "V", "Y", "AB", "AE", "AH", "AK", "AN", "AQ", "AT", "AW", "AZ", "BC", "BF", "BI", "BL", "BO", "BR", "BU", "BX",
-        #       "CA", "CD", "CG", "CJ", "CM", "CP", "CS", "CV", "CY", "DB", "DE", "DH", "DK", "DN", "DQ", "DT", "DW")
+        # Уведомление о заключении и расторжении трудового договора
+
+        # Колонки EXCEL
+        all_col = ("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+               "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP",)
 
         to_excel.patch_worksheet()
 
@@ -1137,60 +1138,61 @@ class OneStaff(QMainWindow):
             info = InfoDate(self.de_info_recruitment.date())
             if info.exec() == 0:
                 return False
-            book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_in.xlsx')
+            book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_in_2019.xlsx')
         elif option == "out":
-            book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_out.xlsx')
+            book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/notif_out_2019.xlsx')
         sheet = book['s1']
 
         # Если работник ИП то поменяем шапку
         if self.cb_ip.isChecked():
-            col = ("A", "E", "I", "M", "Q", "U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ",
-                   "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE", "DI", "DM", "DQ", "DU", "DY", "EC")
 
+            col = all_col[26:]
             for i, t in enumerate("46.64"):
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 33)] = t
+                sheet['%s%s' % (col[i], 28)] = t
 
-            for i, t in enumerate("ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ   "):
+            for i, t in enumerate("ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ"):
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 35)] = t
+                sheet['%s%s' % (all_col[i], 30)] = t
 
-            for i, t in enumerate("РУБЛЁВ АЛЕКСАНДР АЛЕКСАНДРОВИЧ   "):
+            for i, t in enumerate("РУБЛЁВ АЛЕКСАНДР    "):
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 37)] = t
+                sheet['%s%s' % (all_col[i], 32)] = t
+
+            for i, t in enumerate("АЛЕКСАНДРОВИЧ    "):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (all_col[i], 34)] = t
 
             for i, t in enumerate("ОГРНИП 317774600502549"):
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 43)] = t
+                sheet['%s%s' % (all_col[i], 37)] = t
 
-            for i, t in enumerate("ИНН 773013683314 КПП 773001001"):
+            for i, t in enumerate("ИНН 773013683314  "):
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 47)] = t
+                sheet['%s%s' % (all_col[i], 42)] = t
 
-            for i, t in enumerate("121601 МОСКВА ФИЛЁВСКИЙ БУЛЬВАР "):
+            for i, t in enumerate("КПП 773001001  "):
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 49)] = t
+                sheet['%s%s' % (all_col[i], 44)] = t
 
-            for i, t in enumerate("ДОМ 40 КВАРТИРА 334"):
+            for i, t in enumerate("121601 МОСКВА ФИЛЁВСКИЙ БУЛЬВАР   "):
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 51)] = t
+                sheet['%s%s' % (all_col[i], 46)] = t
 
-            col = ("AB", "AF", "AJ", "AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX")
+            for i, t in enumerate("ДОМ 40 КВАРТИРА 334   "):
+                self.statusBar().showMessage("Создаю %s" % i)
+                sheet['%s%s' % (all_col[i], 48)] = t
+
+            col = all_col[8:]
             for i, t in enumerate("89299024574 "):
                 self.statusBar().showMessage("Создаю %s" % i)
                 sheet['%s%s' % (col[i], 57)] = t
 
             sheet = book['s2']
-            sheet['A56'] = 'ИП Рублёв Александр Александрович'
-            sheet['C58'] = '27'
-            sheet['H58'] = '05'
-            sheet['Z58'] = '19'
-
+            sheet['A61'] = 'ИП Рублёв Александр Александрович'
             sheet = book['s1']
 
-        col = ("U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ", "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE",
-               "DI", "DM", "DQ", "DU", "DY", "EC")
-
+        col = all_col[8:]
         text = tuple(self.le_info_last_name.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Фамилия длиннее строки ввода", QMessageBox.Ok)
@@ -1198,7 +1200,7 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 60)] = t
+            sheet['%s%s' % (col[i], 57)] = t
             i += 1
 
         text = tuple(self.le_info_first_name.text().upper())
@@ -1208,11 +1210,8 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 62)] = t
+            sheet['%s%s' % (col[i], 59)] = t
             i += 1
-
-        col = ("AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ", "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE",
-               "DI", "DM", "DQ", "DU", "DY", "EC")
 
         text = tuple(self.le_info_middle_name.text().upper())
         if len(text) > len(col):
@@ -1221,7 +1220,7 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 64)] = t
+            sheet['%s%s' % (col[i], 61)] = t
             i += 1
 
         text = tuple(self.cb_info_country.currentText().upper())
@@ -1231,11 +1230,13 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 66)] = t
+            sheet['%s%s' % (col[i], 63)] = t
             i += 1
 
-        col = ("AO68", "AS68", "AW68", "BA68", "BE68", "BI68", "BM68", "BQ68",
-               "BU68", "BY68", "CC68", "CG68", "CK68", "CO68", "CS68", "CW68", "DA68", "DE68", "DI68", "DM68", "DQ68", "DU68", "DY68", "EC68")
+        col = [x + '65' for x in all_col[14:]]
+        col += [x + '67' for x in all_col]
+        col += [x + '69' for x in all_col]
+
         text = tuple(self.le_info_birthplace.text().upper())
         n = 0
         if len(col) < len(text):
@@ -1251,37 +1252,16 @@ class OneStaff(QMainWindow):
             n += 1
             i += 1
 
-        col = ("A", "E", "I", "M", "Q", "U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ",
-               "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE", "DI", "DM", "DQ", "DU", "DY", "EC")
-        if m < len(text):
-            if len(text) - m > len(col):
-                QMessageBox.critical(self, "Ошибка", "Место рождения длиннее строки ввода", QMessageBox.Ok)
-                return False
-            else:
-                m = len(text)
-        i = 0
-        while n < m:
-            self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s' % col[i]] = text[n]
-            n += 1
-            i += 1
-
-        col = ("U", "Y", "AG", "AK", "AS", "AW", "BA", "BE")
+        col = ("I", "J", "M", "N", "Q", "R", "S", "T")
         text = tuple(self.de_info_birth.date().toString("ddMMyyyy"))
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 72)] = t
+            sheet['%s%s' % (col[i], 71)] = t
             i += 1
 
-        # if self.rb_sex_m.isChecked():  # Узнаем пол работника
-        #     sheet['%s%s' % ("BL", 65)] = "Х"
-        # elif self.rb_sex_f.isChecked():
-        #     sheet['%s%s' % ("BU", 65)] = "Х"
-
         # Заполняем пасспорт
-        sheet = book['s2']
-        col = ("I", "M", "Q", "U", "Y", "AC", "AG")
+        col = all_col[8:17]
         text = tuple(self.le_passport_series.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Серия паспорта длиннее строки ввода", QMessageBox.Ok)
@@ -1289,10 +1269,10 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 4)] = t
+            sheet['%s%s' % (col[i], 75)] = t
             i += 1
 
-        col = ("AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX")
+        col = all_col[20:30]
         text = tuple(self.le_passport_number.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Номер паспорта длиннее строки ввода", QMessageBox.Ok)
@@ -1300,10 +1280,11 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 4)] = t
+            sheet['%s%s' % (col[i], 75)] = t
             i += 1
 
-        col = ("CN", "CR", "CY", "DC", "DJ", "DN", "DR", "DV")
+        sheet = book['s2']
+        col = ("F", "G", "J", "K", "N", "O", "P", "Q")
         text = tuple(self.de_passport_issued.date().toString("ddMMyyyy"))
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Дата выдачи паспорта длиннее строки ввода", QMessageBox.Ok)
@@ -1311,11 +1292,11 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 4)] = t
+            sheet['%s%s' % (col[i], 1)] = t
             i += 1
 
-        col = ("P", "T", "X", "AB", "AF", "AJ", "AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX", "CB", "CF", "CJ",
-               "CN", "CR", "CV", "CZ", "DD", "DH", "DL", "DP", "DT")
+        col = [x + '3' for x in all_col[5:]]
+        col += [x + '5' for x in all_col]
         text = tuple(self.le_passport_issued.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Кем выдан паспорт, длиннее строки ввода", QMessageBox.Ok)
@@ -1323,11 +1304,11 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 6)] = t
+            sheet['%s' % (col[i])] = t
             i += 1
 
         # Миграционка
-        col = ("AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX", "CB", "CF", "CJ")
+        col = all_col[14:23]
         text = tuple(self.le_migration_number.text().upper())
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Номер миграционки длиннее строки ввода", QMessageBox.Ok)
@@ -1335,11 +1316,10 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 8)] = t
+            sheet['%s%s' % (col[i], 7)] = t
             i += 1
 
-        # Регистрация
-        col = ("O", "S", "AA", "AE", "AM", "AQ", "AU", "AY")
+        col = ("AE", "AF", "AI", "AJ", "AM", "AN", "AO", "AP")
         text = tuple(self.de_migration.date().toString("ddMMyyyy"))
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Дата выдачи миграционки длиннее строки ввода", QMessageBox.Ok)
@@ -1347,11 +1327,12 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 11)] = t
+            sheet['%s%s' % (col[i], 7)] = t
             i += 1
 
-        col = ("BI14", "BM14", "BQ14",
-               "BU14", "BY14", "CC14", "CG14", "CK14", "CO14", "CS14", "CW14", "DA14", "DE14", "DI14", "DM14", "DQ14", "DU14", "DY14", "EC14")
+        col = [x + '10' for x in all_col[17:]]
+        col += [x + '12' for x in all_col]
+        col += [x + '14' for x in all_col]
         text = tuple(self.le_registration_address.text().upper())
         n = 0
         if len(col) < len(text):
@@ -1360,7 +1341,7 @@ class OneStaff(QMainWindow):
                 while text[m] != " ":
                     m -= 1
             except IndexError:
-                QMessageBox.critical(self, "Ошибка", "Не могу разделить место регистрации на 2 строки, добавте символ пробела в месте переноса строки!", QMessageBox.Ok)
+                QMessageBox.critical(self, "Ошибка", "Не могу разделить место регистрации на строки, добавте символ пробела в месте переноса строки!", QMessageBox.Ok)
                 return False
         else:
             m = len(text)
@@ -1371,22 +1352,7 @@ class OneStaff(QMainWindow):
             n += 1
             i += 1
 
-        col = ("A16", "E16", "I16", "M16", "Q16", "U16", "Y16", "AC16", "AG16", "AK16", "AO16", "AS16", "AW16", "BA16", "BE16", "BI16", "BM16", "BQ16",
-               "BU16", "BY16", "CC16", "CG16", "CK16", "CO16", "CS16", "CW16", "DA16", "DE16", "DI16", "DM16", "DQ16", "DU16", "DY16", "EC16")
-        if m < len(text):
-            if len(text) - m > len(col):
-                QMessageBox.critical(self, "Ошибка", "Место регистрации длиннее строки ввода", QMessageBox.Ok)
-                return False
-            else:
-                m = len(text)
-        i = 0
-        while n < m:
-            self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s' % col[i]] = text[n]
-            n += 1
-            i += 1
-
-        col = ("AS", "AW", "BE", "BI", "BQ", "BU", "BY", "CC")
+        col = ("T", "U", "X", "Y", "AB", "AC", "AD", "AE")
         text = tuple(self.de_registration.date().toString("ddMMyyyy"))
         if len(text) > len(col):
             QMessageBox.critical(self, "Ошибка", "Дата регистрации длиннее строки ввода", QMessageBox.Ok)
@@ -1394,14 +1360,13 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 19)] = t
+            sheet['%s%s' % (col[i], 16)] = t
             i += 1
 
         # Патент
         country = my_sql.sql_select("SELECT Patent, Act FROM staff_country WHERE Country_name = %s", (self.cb_info_country.currentText(),))[0]
         if country[0] == 1:
-            col = ("AB", "AF", "AJ", "AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX", "CB", "CF", "CJ",
-                   "CN", "CR", "CV")
+            col = all_col[9:]
             text = tuple("ПАТЕНТ " + self.le_patent_additional_number.text().upper())
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Доп номер патента длиннее строки ввода", QMessageBox.Ok)
@@ -1409,10 +1374,10 @@ class OneStaff(QMainWindow):
             i = 0
             for t in text:
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 22)] = t
+                sheet['%s%s' % (col[i], 21)] = t
                 i += 1
 
-            col = ("P", "T", "X", "AB", "AF", "AJ", "AN", "AR")
+            col = all_col[3:13]
             text = tuple(self.le_patent_serial.text().upper())
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Серия патента длиннее строки ввода", QMessageBox.Ok)
@@ -1420,10 +1385,10 @@ class OneStaff(QMainWindow):
             i = 0
             for t in text:
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 24)] = t
+                sheet['%s%s' % (col[i], 23)] = t
                 i += 1
 
-            col = ("BJ", "BN", "BR", "BV", "BZ", "CD", "CH", "CL", "CP", "CT")
+            col = all_col[16:]
             text = tuple(self.le_patent_number.text().upper())
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Номер патента длиннее строки ввода", QMessageBox.Ok)
@@ -1431,10 +1396,10 @@ class OneStaff(QMainWindow):
             i = 0
             for t in text:
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 24)] = t
+                sheet['%s%s' % (col[i], 23)] = t
                 i += 1
 
-            col = ("P", "T", "AB", "AF", "AN", "AR", "AV", "AZ")
+            col = ("F", "G", "J", "K", "N", "O", "P", "Q")
             text = tuple(self.de_patent_issued.date().toString("ddMMyyyy"))
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Дата выдачи патента длиннее строки ввода", QMessageBox.Ok)
@@ -1442,10 +1407,11 @@ class OneStaff(QMainWindow):
             i = 0
             for t in text:
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 26)] = t
+                sheet['%s%s' % (col[i], 25)] = t
                 i += 1
 
-            col = ("P", "T", "X", "AB", "AF", "AJ", "AN", "AR", "AV", "AZ", "BD", "BH", "BL", "BP", "BT", "BX", "CB", "CF", "CJ", "CN", "CR")
+            col = [x + '27' for x in all_col[4:]]
+            col += [x + '29' for x in all_col]
             text = tuple(self.le_patent_issued.text().upper())
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Кем выдан патент длиннее строки ввода", QMessageBox.Ok)
@@ -1453,10 +1419,10 @@ class OneStaff(QMainWindow):
             i = 0
             for t in text:
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 28)] = t
+                sheet['%s' % (col[i])] = t
                 i += 1
 
-            col = ("P", "T", "AB", "AF", "AN", "AR", "AV", "AZ")
+            col = ("F", "G", "J", "K", "N", "O", "P", "Q")
             text = tuple(self.de_patent_issued.date().toString("ddMMyyyy"))
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Срок С патента длиннее строки ввода", QMessageBox.Ok)
@@ -1464,10 +1430,10 @@ class OneStaff(QMainWindow):
             i = 0
             for t in text:
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 30)] = t
+                sheet['%s%s' % (col[i], 31)] = t
                 i += 1
 
-            col = ("BH", "BL", "BT", "BX", "CF", "CJ", "CN", "CR")
+            col = ("U", "V", "Y", "Z", "AC", "AD", "AE", "AF")
             text = tuple(self.de_patent_ending.date().toString("ddMMyyyy"))
             if len(text) > len(col):
                 QMessageBox.critical(self, "Ошибка", "Срок ДО патента длиннее строки ввода", QMessageBox.Ok)
@@ -1475,17 +1441,14 @@ class OneStaff(QMainWindow):
             i = 0
             for t in text:
                 self.statusBar().showMessage("Создаю %s" % i)
-                sheet['%s%s' % (col[i], 30)] = t
+                sheet['%s%s' % (col[i], 31)] = t
                 i += 1
         else:
+
+            col = [x + '34' for x in all_col]
+            col += [x + '36' for x in all_col]
+            col += [x + '38' for x in all_col]
             text = tuple(country[1].upper())
-            col = (("A33", "E33", "I33", "M33", "Q33", "U33", "Y33", "AC33", "AG33", "AK33", "AO33", "AS33", "AW33", "BA33", "BE33", "BI33", "BM33", "BQ33",
-                    "BU33", "BY33", "CC33", "CG33", "CK33", "CO33", "CS33", "CW33", "DA33", "DE33", "DI33", "DM33", "DQ33", "DU33", "DY33", "EC33"),
-                   ("A35", "E35", "I35", "M35", "Q35", "U35", "Y35", "AC35", "AG35", "AK35", "AO35", "AS35", "AW35", "BA35", "BE35", "BI35", "BM35", "BQ35",
-                    "BU35", "BY35", "CC35", "CG35", "CK35", "CO35", "CS35", "CW35", "DA35", "DE35", "DI35", "DM35", "DQ35", "DU35", "DY35", "EC35"),
-                   ("A37", "E37", "I37", "M37", "Q37", "U37", "Y37", "AC37", "AG37", "AK37", "AO37", "AS37", "AW37", "BA37", "BE37", "BI37", "BM37", "BQ37",
-                    "BU37", "BY37", "CC37", "CG37", "CK37", "CO37", "CS37", "CW37", "DA37", "DE37", "DI37", "DM37", "DQ37", "DU37", "DY37", "EC37"),
-                   )
             m, n = 0, 0
             for t in text:
                 if t == "\n":
@@ -1502,20 +1465,18 @@ class OneStaff(QMainWindow):
 
         # Должность
         position_number = my_sql.sql_select("SELECT Number FROM staff_position WHERE Name = %s", (self.cb_info_position.currentText(),))[0][0]
-        col = ("A", "E", "I", "M", "Q", "U", "Y", "AC", "AG", "AK", "AO", "AS", "AW", "BA", "BE", "BI", "BM", "BQ",
-               "BU", "BY", "CC", "CG", "CK", "CO", "CS", "CW", "DA", "DE", "DI", "DM", "DQ", "DU", "DY", "EC")
         text = tuple(self.cb_info_position.currentText().upper() + " " + position_number)
-        if len(text) > len(col):
+        if len(text) > len(all_col):
             QMessageBox.critical(self, "Ошибка", "Должность длиннее строки ввода", QMessageBox.Ok)
             return False
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 39)] = t
+            sheet['%s%s' % (all_col[i], 41)] = t
             i += 1
 
         # Дата работы / увольнения
-        col = ("CO", "CS", "DA", "DE", "DM", "DQ", "DU", "DY")
+        col = ("AG", "AH", "AJ", "AK", "AM", "AN", "AO", "AP")
         if option == "in":
             text = tuple(info.de_in.date().toString("ddMMyyyy"))
         elif option == "out":
@@ -1526,14 +1487,14 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 47)] = t
+            sheet['%s%s' % (col[i], 49)] = t
             i += 1
 
         # вставляем сегоднюшнюю дату
         date_now = QDate.currentDate()
-        sheet['C58'] = date_now.toString("dd")
-        sheet['H58'] = date_now.toString("MM")
-        sheet['Z58'] = date_now.toString("yy")
+        sheet['B65'] = date_now.toString("dd")
+        sheet['E65'] = date_now.toString("MM")
+        sheet['M65'] = date_now.toString("yy")
 
         dir_name = self.id_info
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
@@ -1545,6 +1506,68 @@ class OneStaff(QMainWindow):
             elif option == "out":
                 file_name = "Уведомление о расторжении договора %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
                 book.save('%s/%s' % (self.path, file_name))
+            dir_name = self.id_info
+            self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
+            self.inspection_files(dir_name, 'Путь корень рабочие')
+            self.statusBar().showMessage("Готово")
+        else:
+            self.statusBar().showMessage("Ошибка сохранения")
+            return False
+
+    def build_new_exel_additional_sheet(self):
+        to_excel.patch_worksheet()
+
+        self.statusBar().showMessage("Открываю шаблон")
+        book = openpyxl.load_workbook(filename=getcwd() + '/templates/staff/additional_sheet.xlsx')
+        sheet = book['s1']
+
+        col = ("I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+               "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP",)
+
+        text = tuple(self.le_info_last_name.text().upper())
+        if len(text) > len(col):
+            QMessageBox.critical(self, "Ошибка", "Фамилия длиннее строки ввода", QMessageBox.Ok)
+            return False
+        i = 0
+        for t in text:
+            self.statusBar().showMessage("Создаю %s" % i)
+            sheet['%s%s' % (col[i], 12)] = t
+            i += 1
+
+        text = tuple(self.le_info_first_name.text().upper())
+        if len(text) > len(col):
+            QMessageBox.critical(self, "Ошибка", "Имя длиннее строки ввода", QMessageBox.Ok)
+            return False
+        i = 0
+        for t in text:
+            self.statusBar().showMessage("Создаю %s" % i)
+            sheet['%s%s' % (col[i], 14)] = t
+            i += 1
+
+        text = tuple(self.le_info_middle_name.text().upper())
+        if len(text) > len(col):
+            QMessageBox.critical(self, "Ошибка", "Отчество длиннее строки ввода", QMessageBox.Ok)
+            return False
+        i = 0
+        for t in text:
+            self.statusBar().showMessage("Создаю %s" % i)
+            sheet['%s%s' % (col[i], 16)] = t
+            i += 1
+
+        sheet = book['s2']
+        date_now = QDate.currentDate()
+        sheet['B58'] = date_now.toString("dd")
+        sheet['E58'] = date_now.toString("MM")
+        sheet['M58'] = date_now.toString("yy")
+
+        dir_name = self.id_info
+        self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
+        if self.path:
+            self.statusBar().showMessage("Сохраняю")
+
+            file_name = "Доп лист для уведомления %s.xlsx" % QDate.currentDate().toString("dd.MM.yyyy")
+            book.save('%s/%s' % (self.path, file_name))
+
             dir_name = self.id_info
             self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
             self.inspection_files(dir_name, 'Путь корень рабочие')
@@ -1926,6 +1949,14 @@ class OneStaff(QMainWindow):
         f.close()
         self.statusBar().showMessage("Создаю документ")
 
+        # Если работник ИП то поменяем шапку
+        if self.cb_ip.isChecked():
+            xml = xml.replace("?КОМУ", """ИП Рублёву Александру Александровичу""")
+        else:
+            xml = xml.replace("?КОМУ", """Генеральному директору
+                                          ООО «Авидевелопмент-М»	
+                                          Ширяевой Н.А.""")
+
         xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
         xml = xml.replace("?СЕРИЯ", self.le_passport_series.text().upper())
         xml = xml.replace("?НОМЕР", self.le_passport_number.text().upper())
@@ -2187,6 +2218,14 @@ class OneStaff(QMainWindow):
         f.close()
         self.statusBar().showMessage("Создаю документ")
 
+        # Если работник ИП то поменяем шапку
+        if self.cb_ip.isChecked():
+            xml = xml.replace("?ФИРМА", 'ИП Рублёв Александр Александрович"')
+            xml = xml.replace("?ПОДПИСАНТ", 'Рублёв А.А."')
+        else:
+            xml = xml.replace("?ФИРМА", 'Общество с ограниченной ответственностью "Авидевелопмент-М"')
+            xml = xml.replace("?ПОДПИСАНТ", 'Ширяева Н.А.')
+
         xml = xml.replace("?НОМЕРДОК", str(doc_number))
         xml = xml.replace("?ДАТАСОСТ", doc_date.strftime("%d.%m.%Y"))
         xml = xml.replace("?ФИО", self.le_info_last_name.text() + " " + self.le_info_first_name.text() + " " + self.le_info_middle_name.text())
@@ -2269,6 +2308,14 @@ class OneStaff(QMainWindow):
         self.statusBar().showMessage("Закрываю шаблон")
         f.close()
         self.statusBar().showMessage("Создаю документ")
+
+        # Если работник ИП то поменяем шапку
+        if self.cb_ip.isChecked():
+            xml = xml.replace("?ФИРМА", 'ИП Рублёв Александр Александрович"')
+            xml = xml.replace("?ПОДПИСАНТ", 'Рублёв А.А.')
+        else:
+            xml = xml.replace("?ФИРМА", 'Общество с ограниченной ответственностью "Авидевелопмент-М"')
+            xml = xml.replace("?ПОДПИСАНТ", 'Ширяева Н.А.')
 
         xml = xml.replace("?НОМЕРДОК", str(doc_number))
         xml = xml.replace("?ДАТАСОСТ", doc_date.strftime("%d.%m.%Y"))
