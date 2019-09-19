@@ -1445,9 +1445,10 @@ class OneStaff(QMainWindow):
                 i += 1
         else:
 
-            col = [x + '34' for x in all_col]
-            col += [x + '36' for x in all_col]
-            col += [x + '38' for x in all_col]
+            col = []
+            col.append([x + '34' for x in all_col])
+            col.append([x + '36' for x in all_col])
+            col.append([x + '38' for x in all_col])
             text = tuple(country[1].upper())
             m, n = 0, 0
             for t in text:
