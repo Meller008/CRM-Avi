@@ -7,7 +7,6 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QDate
 from function import my_sql, to_excel
 import openpyxl
-from openpyxl.drawing.image import Image
 import subprocess
 from classes.my_class import User
 
@@ -1795,28 +1794,6 @@ class OneStaff(QMainWindow):
         self.path_templates = getcwd() + '/templates'
 
         sheet = book["s1"]
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'E7')
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'DJ7')
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'E96')
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'CO96')
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'DJ96')
-
-        sheet = book["s2"]
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'E3')
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'DJ3')
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'E81')
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'CO81')
-        img = Image('%s/staff/square.png' % self.path_templates)
-        sheet.add_image(img, 'DJ81')
 
         dir_name = self.id_info
         self.path = self.inspection_path(dir_name, 'Путь корень рабочие')
