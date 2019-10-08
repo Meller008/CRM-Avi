@@ -10,7 +10,7 @@ import logging.config
 from classes.my_class import User
 
 
-IP_SERV_LABEL = "192.168.1.3"
+IP_SERV_LABEL = "192.168.10.54"
 
 
 class LabelFile(QDialog):
