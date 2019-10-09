@@ -317,7 +317,8 @@ class ArticleList(QMainWindow):
         if not current_id and self.lw_parametr.currentItem():
             current_id = self.lw_parametr.currentItem().data(5)
 
-        size_sql = my_sql.sql_select("SELECT Id, Name FROM product_article_parametrs WHERE Product_Article_Size_Id = %s ORDER BY Name", (size_id, ))
+        size_sql = my_sql.sql_select("SELECT Id, Name FROM product_article_parametrs WHERE Product_Article_Size_Id = %s AND product_article_parametrs.`Show` = 1"
+                                     " ORDER BY Name", (size_id, ))
         if "mysql.connector.errors" in str(type(self.table_items)):
                 QMessageBox.critical(self, "Ошибка sql получения параметров", self.table_items.msg, QMessageBox.Ok)
                 return False
