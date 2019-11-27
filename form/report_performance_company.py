@@ -24,7 +24,8 @@ class ReportPerformanceCompany(QMainWindow):
         self.tableWidget.horizontalHeader().resizeSection(0, 215)
         self.tableWidget.horizontalHeader().resizeSection(1, 80)
         self.tableWidget.horizontalHeader().resizeSection(2, 80)
-        self.tableWidget.horizontalHeader().resizeSection(3, 100)
+        self.tableWidget.horizontalHeader().resizeSection(3, 80)
+        self.tableWidget.horizontalHeader().resizeSection(4, 100)
 
     def ui_calc(self):
         date = (self.de_date_from.date().toPyDate(), self.de_date_to.date().toPyDate())
@@ -82,7 +83,7 @@ class ReportPerformanceCompany(QMainWindow):
 
         query = """SELECT product_article_parametrs.Id, CONCAT(product_article.Article, '(', product_article_size.Size, ') [', product_article_parametrs.Name, ']',
                     ' НДС ', product_article_parametrs.NDS, '%'),
-                        SUM(pack.Value_Pieces - pack.Value_Damage)
+                        SUM(pack.Value_Pieces - pack.Value_Damage), SUM(pack.Value_Damage)
                       FROM cut LEFT JOIN pack ON cut.Id = pack.Cut_Id
                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
@@ -96,9 +97,14 @@ class ReportPerformanceCompany(QMainWindow):
 
         for order_position in sql_info:
             if article_list.get(order_position[0]) is None:
-                article_list.update({order_position[0]: {"value": order_position[2], "sum": 0, "seb": None, "name": order_position[1]}})
+                article_list.update({order_position[0]: {"value": order_position[2],
+                                                         "value_damage": order_position[3],
+                                                         "sum": 0,
+                                                         "seb": None,
+                                                         "name": order_position[1]}
+                                     })
 
-        all_value, all_sum = 0, 0
+        all_value = all_sum = all_damage = 0
 
         for key, value in article_list.items():
 
@@ -174,12 +180,17 @@ class ReportPerformanceCompany(QMainWindow):
             item = QTableWidgetItem(text)
             self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 1, item)
 
+            all_damage += article_list[key]["value_damage"]
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(article_list[key]["value_damage"]))
+            item = QTableWidgetItem(text)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 2, item)
+
             if article_list[key]["seb"]:
                 text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(article_list[key]["seb"], 4)))
             else:
                 text = "None"
             item = QTableWidgetItem(text)
-            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 2, item)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 3, item)
 
             all_sum += article_list[key]["sum"]
             if article_list[key]["sum"]:
@@ -187,7 +198,7 @@ class ReportPerformanceCompany(QMainWindow):
             else:
                 text = "None"
             item = QTableWidgetItem(text)
-            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 3, item)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 4, item)
 
         else:
             self.tableWidget.insertRow(self.tableWidget.rowCount())
@@ -196,9 +207,13 @@ class ReportPerformanceCompany(QMainWindow):
             item = QTableWidgetItem(text)
             self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 1, item)
 
+            text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(all_damage))
+            item = QTableWidgetItem(text)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 2, item)
+
             text = re.sub(r'(?<=\d)(?=(\d\d\d)+\b.)', ' ', str(round(all_sum, 4)))
             item = QTableWidgetItem(text)
-            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 3, item)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 4, item)
 
             self.le_sum.setText(text)
 
