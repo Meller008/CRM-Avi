@@ -40,6 +40,10 @@ def sql_select(query, parametr=tuple()):
         connect.close()
         return error
 
+    except TypeError as error:
+        print(error)
+        return error
+
 
 def sql_change(query, parametr=tuple()):
     try:
