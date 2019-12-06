@@ -3105,14 +3105,32 @@ class ImportEDI(QDialog):
                     item = QTableWidgetItem(str(value_one_position))
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 3, item)
 
-                    OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
-                    item = QTableWidgetItem(OrderedUnitPacksize)
+                    try:
+                        OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+                    except AttributeError:
+                        OrderedUnitPacksize = None
+
+                    if OrderedUnitPacksize:
+                        item = QTableWidgetItem(OrderedUnitPacksize)
+                    else:
+                        item = QTableWidgetItem(0)
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
 
-                    item = QTableWidgetItem(str(int(value_one_position / float(OrderedUnitPacksize))))
+                    if OrderedUnitPacksize:
+                        item = QTableWidgetItem(str(int(value_one_position / float(OrderedUnitPacksize))))
+                    else:
+                        item = QTableWidgetItem(0)
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
 
-                    item = QTableWidgetItem(element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text)
+                    try:
+                        edi_price = element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text
+                    except AttributeError:
+                        edi_price = None
+
+                    if edi_price:
+                        item = QTableWidgetItem(edi_price)
+                    else:
+                        item = QTableWidgetItem(0)
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 6, item)
 
                     price = round(sql_position[5] - (sql_position[5] * sql_position[6]) / (100 + sql_position[6]), 2)
@@ -3124,7 +3142,7 @@ class ImportEDI(QDialog):
                                              "client_Name": sql_position[4],
                                              "price": sql_position[5]})
 
-                    if str(price) == element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text:
+                    if str(price) == edi_price:
                         item_price = QTableWidgetItem(str(price))
                         item_price.setData(5, sql_position[6])
                     else:
@@ -3174,14 +3192,32 @@ class ImportEDI(QDialog):
                 item = QTableWidgetItem(str(value))
                 self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 3, item)
 
-                OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
-                item = QTableWidgetItem(OrderedUnitPacksize)
+                try:
+                    OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+                except AttributeError:
+                    OrderedUnitPacksize = None
+
+                if OrderedUnitPacksize:
+                    item = QTableWidgetItem(OrderedUnitPacksize)
+                else:
+                    item = QTableWidgetItem(0)
                 self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
 
-                item = QTableWidgetItem(str(value / int(float(OrderedUnitPacksize))))
+                if OrderedUnitPacksize:
+                    item = QTableWidgetItem(str(value / int(float(OrderedUnitPacksize))))
+                else:
+                    item = QTableWidgetItem(0)
                 self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
 
-                item = QTableWidgetItem(element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text)
+                try:
+                    edi_price = element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text
+                except AttributeError:
+                    edi_price = None
+
+                if edi_price:
+                    item = QTableWidgetItem(element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text)
+                else:
+                    item = QTableWidgetItem(0)
                 self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 6, item)
 
                 if sql_info:
@@ -3197,7 +3233,7 @@ class ImportEDI(QDialog):
                                                  "client_Name": sql_info[0][4],
                                                  "price": sql_info[0][5]})
 
-                        if str(price) == element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text:
+                        if str(price) == edi_price:
                             item_price = QTableWidgetItem(str(price))
                             item_price.setData(5, sql_info[0][6])
                         else:
