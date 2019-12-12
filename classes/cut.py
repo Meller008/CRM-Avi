@@ -941,22 +941,23 @@ class Pack:
             if "mysql.connector.errors" in str(type(sql_info)):
                 raise RuntimeError("Не смог получить операции артикула")
             self.__operation = []
-            for item in sql_info:
-                operation = {"id": self.__new_operation_count,
-                             "position": item[0],
-                             "operation_id": item[1],
-                             "name": item[2],
-                             "worker_id": None,
-                             "worker_name": None,
-                             "date_make": None,
-                             "date_input": None,
-                             "value": self.__value_all,
-                             "price": item[3],
-                             "pay": 0}
-                self.__save_operation_sql.append(self.__new_operation_count)
-                self.__new_operation_count -= 1
-                self.__operation.append(operation)
-            return self.__operation
+            if sql_info[0][1]:  # Если нету операций, то пропускаем этот шаг
+                for item in sql_info:
+                    operation = {"id": self.__new_operation_count,
+                                 "position": item[0],
+                                 "operation_id": item[1],
+                                 "name": item[2],
+                                 "worker_id": None,
+                                 "worker_name": None,
+                                 "date_make": None,
+                                 "date_input": None,
+                                 "value": self.__value_all,
+                                 "price": item[3],
+                                 "pay": 0}
+                    self.__save_operation_sql.append(self.__new_operation_count)
+                    self.__new_operation_count -= 1
+                    self.__operation.append(operation)
+                return self.__operation
         else:
             print("Нету артикула")
             return False
