@@ -1,152 +1,247 @@
 from os import getcwd
-from datetime import datetime
+import random
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QFileDialog, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QDate
 import re
 import openpyxl
 
 from function import my_sql
+from form.supply_material import MaterialSupplyList
+from form.provider import ProviderMaterial, ProviderAccessories
 
+# Типы материалов
+# 0 - Ткани
+# 1 - Нитки
+# 2 - Резинка
+# 3 - Пуговицы
+# 4 - Этикетки
 
-class AuditVerification(QMainWindow):
+class AuditVerification(QDialog):
     def __init__(self):
         super(AuditVerification, self).__init__()
-        loadUi(getcwd() + '/ui/audit_verification.ui', self)
+        loadUi(getcwd() + '/ui/audit.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
-        self.de_date.setDate(QDate.currentDate())
+        self.tip = 0
 
-    def ui_file_json(self):
-        file_dir = QFileDialog.getOpenFileName(self, "Выберите базу", "C:/", "*.json")
-        if file_dir[1] == "":
+        self.update()
+
+    def update(self):
+
+        if self.tip == 0:
+            table = self.ui_tw_0
+        elif self.tip == 1:
+            table = self.ui_tw_1
+        elif self.tip == 2:
+            table = self.ui_tw_2
+        elif self.tip == 3:
+            table = self.ui_tw_3
+        elif self.tip == 4:
+            table = self.ui_tw_4
+        else:
+            return
+
+        query = """SELECT supply_date, supply_provider, type_material, sertificat, type_pack,
+                           supply_value, supply_date, audit_location, audit_date, quality
+                    FROM audit WHERE type_supply = %s ORDER BY audit_date"""
+        sql_info = my_sql.sql_select(query, (self.tip, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql при получении информации", sql_info.msg, QMessageBox.Ok)
             return False
 
-        self.le_dir.setText(file_dir[0])
+        table.clearContents()
+        table.setRowCount(len(sql_info))
+        for row, data in enumerate(sql_info):
+            item = QTableWidgetItem(data[0].strftime("%d.%m.%Y"))
+            table.setItem(row, 0, item)
 
-    def ui_start(self):
-        book = openpyxl.load_workbook(filename=getcwd() + '/templates/audit/verification/verification_journal.xlsx')
-        sheet = book["Лист1"]
+            item = QTableWidgetItem(data[1])
+            table.setItem(row, 1, item)
 
-        row = 3
-        start_date = datetime.strptime(self.de_date.date().toString("dd.MM.yyyy"), "%d.%m.%Y")
+            item = QTableWidgetItem(data[2])
+            table.setItem(row, 2, item)
 
-        if self.cb_material.isChecked():
-            query = """SELECT material_supply.Data, material_provider.Name, SUM(material_supplyposition.Weight), material_supply.Note
-                        FROM material_supply LEFT JOIN material_supplyposition ON material_supply.Id = material_supplyposition.Material_SupplyId
-                          LEFT JOIN material_provider ON material_supply.Material_ProviderId = material_provider.Id
-                        WHERE material_supply.Data > '2017-10-31'
-                        GROUP BY material_supply.Id"""
-            sql_info = my_sql.sql_select(query)
-            if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получения ткани", sql_info.msg, QMessageBox.Ok)
-                return False
-            for base_item in sql_info:
-                print(base_item[0])
-                if base_item[0] is not None and base_item[0] > start_date.date():
-                    sheet["A%s" % row] = base_item[0].strftime("%d.%m.%Y")
+            item = QTableWidgetItem(data[3])
+            table.setItem(row, 3, item)
 
-                    post_name = base_item[1]
+            item = QTableWidgetItem(data[4])
+            table.setItem(row, 4, item)
 
-                    sheet["B%s" % row] = post_name
-                    sheet["C%s" % row] = "Кулирное полотно"
+            item = QTableWidgetItem(str(data[5]))
+            table.setItem(row, 5, item)
 
-                    if post_name == "Мадио Декна ООО":
-                        sert = "RU Д-UZ.AB71.B.34983"
-                    else:
-                        sert = "RU Д-UZ.ГР01.B.09974"
+            item = QTableWidgetItem(data[6].strftime("%m.%Y"))
+            table.setItem(row, 6, item)
 
-                    sheet["D%s" % row] = sert
-                    sheet["E%s" % row] = "пакет"
-                    sheet["F%s" % row] = base_item[2]
+            item = QTableWidgetItem(data[7])
+            table.setItem(row, 7, item)
 
-                    mon = str(base_item[0].month - 1)
-                    year = str(base_item[0].year)
+            item = QTableWidgetItem(data[8].strftime("%d.%m.%Y"))
+            table.setItem(row, 8, item)
 
-                    if mon == 0:
-                        mon = 12
-                        year -= 1
+            item = QTableWidgetItem(data[9])
+            table.setItem(row, 9, item)
 
-                    sheet["G%s" % row] = mon + "." + year
-                    sheet["H%s" % row] = "Склад"
-                    sheet["I%s" % row] = base_item[0].strftime("%d.%m.%Y")
-                    sheet["J%s" % row] = "Хорошее кач."
+    def ui_change_type(self, tab):
+        self.tip = tab
+        self.update()
 
-                    f = open(getcwd() + '/templates/audit/verification/act.xml', "r", -1, "utf-8")
-                    xml = f.read()
-                    f.close()
+    def ui_add(self):
+        act_window = AuditAct(self.tip)
+        act_window.show()
+        act_window.setModal(True)
+        act_window.exec()
 
-                    xml = xml.replace("ПОСТ", post_name)
-                    xml = xml.replace("ДАТА", base_item[0].strftime("%d.%m.%Y"))
-                    xml = xml.replace("НОМЕР", re.sub(r', сумма+.*', "", str(base_item[3])))
-                    xml = xml.replace("КОЛ-ВО", str(base_item[2]))
-                    xml = xml.replace("ПРОБЫ", str(int(base_item[2] // 1000)))
+    def ui_generate(self):
+        act_window = AuditGeneration(self.tip)
+        act_window.show()
+        act_window.setModal(True)
+        act_window.exec()
 
-                    file_name = "АКТ%s.xml" % (row-2, )
-                    f = open('%s/%s' % ("C:/Users/Meller/Desktop/aud/mater/act", file_name), "w", -1, "utf-8")
-                    f.write(xml)
-                    f.close()
 
-                    row += 1
+class AuditAct(QDialog):
+    def __init__(self, tip, act_id=None):
+        """
+        tip: Тип материала 0-ткань 1++ - фурнитура
+        """
+        super(AuditAct, self).__init__()
+        loadUi(getcwd() + '/ui/audit_act.ui', self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
-            book.save("C:/Users/Meller/Desktop/aud/mater/verification_journal.xlsx")
+        self.tip = tip
+
+    def ui_viev_supply_list(self):
+        if self.tip == 0:
+            self.supply_list = MaterialSupplyList(self, dc_select=True)
+            self.supply_list.show()
+
+    def of_select_material_supply(self, data):
+        self.ui_le_supply.setText(data[0])
+
+
+class AuditGeneration(QDialog):
+    def __init__(self, tip):
+        """
+        tip: Тип материала 0-ткань 1++ - фурнитура
+        """
+        super(AuditGeneration, self).__init__()
+        loadUi(getcwd() + '/ui/audit_generation.ui', self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.tip = tip
+        self.provider_id = None
+        self.new_table = None
+
+    def ui_view_provider(self):
+        if self.tip == 0:
+            self.provider_window = ProviderMaterial(self, True)
         else:
-            query = """SELECT accessories_supply.Data, accessories_provider.Name, SUM(accessories_supplyposition.Value), accessories_supply.Note
-                        FROM accessories_supply LEFT JOIN accessories_supplyposition ON accessories_supply.Id = accessories_supplyposition.Accessories_SupplyId
-                          LEFT JOIN accessories_provider ON accessories_supply.Accessories_ProviderId = accessories_provider.Id
-                        WHERE accessories_supply.Data > '2017-10-31' AND accessories_provider.Id = 14
-                        GROUP BY accessories_supply.Id"""
-            sql_info = my_sql.sql_select(query)
+            self.provider_window = ProviderAccessories(self, True)
+
+        self.provider_window.show()
+
+    def ui_acc(self):
+        if not self.provider_id:
+            QMessageBox.critical(self, "Ошибка ID", "Выберите поставщика", QMessageBox.Ok)
+            return
+
+        if (not self.ui_le_density_from.text() or not self.ui_le_density_to.text()) and self.tip == 0:
+            QMessageBox.critical(self, "Ошибка плотности", "Введите плотность ткани", QMessageBox.Ok)
+            return
+
+        date_from = self.ui_de_from.date().toPyDate()
+        date_to = self.ui_de_to.date().toPyDate()
+
+        if self.tip == 0:
+            query = """SELECT material_supply.Id, material_supply.Data, material_supply.Note, SUM(msp.Weight)
+                        FROM material_supply LEFT JOIN material_supplyposition msp on material_supply.Id = msp.Material_SupplyId
+                        WHERE material_supply.Material_ProviderId = %s AND material_supply.Data BETWEEN %s AND %s
+                        GROUP BY material_supply.Id"""
+            sql_info = my_sql.sql_select(query, (self.provider_id, date_from, date_to))
             if "mysql.connector.errors" in str(type(sql_info)):
-                QMessageBox.critical(self, "Ошибка sql получения фурн", sql_info.msg, QMessageBox.Ok)
+                QMessageBox.critical(self, "Ошибка sql при получении информации", sql_info.msg, QMessageBox.Ok)
                 return False
-            for base_item in sql_info:
-                print(base_item[0])
-                if base_item[0] is not None and base_item[0] > start_date.date():
+        else:
+            query = """SELECT accessories_supply.Id, accessories_supply.Data, accessories_supply.Note, SUM(msp.Value)
+                                    FROM accessories_supply LEFT JOIN accessories_supplyposition msp on accessories_supply.Id = msp.accessories_SupplyId
+                                    WHERE accessories_supply.accessories_ProviderId = %s AND accessories_supply.Data BETWEEN %s AND %s
+                                    GROUP BY accessories_supply.Id"""
+            sql_info = my_sql.sql_select(query, (self.provider_id, date_from, date_to))
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql при получении информации", sql_info.msg, QMessageBox.Ok)
+                return False
 
-                    vid = "Резинка"
-                    pack = "Гофрокартон"
-                    post_name = base_item[1]
-                    sert = "РОСС RU.AB51.H00287"
+        new_audit = []
+        for supply in sql_info:
+            if self.tip == 0:
+                density = random.randint(int(self.ui_le_density_from.text()), int(self.ui_le_density_to.text()))
+            else:
+                density = None
 
-                    sheet["A%s" % row] = base_item[0].strftime("%d.%m.%Y")
-                    sheet["B%s" % row] = post_name
-                    sheet["C%s" % row] = vid
-                    sheet["D%s" % row] = sert
-                    sheet["E%s" % row] = pack
-                    sheet["F%s" % row] = base_item[2]
+            new_row = [
+                supply[0],
+                self.tip,
+                supply[1],
+                self.ui_le_sertificat.text(),
+                self.ui_le_type_pack.text(),
+                random.randint(1, 4),
+                self.ui_le_audit_location.text(),
+                self.ui_cb_quality.currentText(),
+                self.ui_le_workers.text(),
+                self.ui_le_provider.text(),
+                supply[1],
+                supply[2],
+                self.ui_le_type_material.text(),
+                supply[3],
+                self.ui_le_gost.text(),
+                density
+            ]
 
-                    mon = str(base_item[0].month - 1)
-                    year = str(base_item[0].year)
-                    if mon == 0:
-                        mon = 12
-                        year -= 1
+            new_audit.append(new_row)
 
-                    sheet["G%s" % row] = mon + "." + year
-                    sheet["H%s" % row] = "Склад"
-                    sheet["I%s" % row] = base_item[0].strftime("%d.%m.%Y")
-                    sheet["J%s" % row] = "Хорошее кач."
+        if new_audit:
+            self.new_table = new_audit
+            self.set_table(new_audit)
+            self.pushButton_3.setEnabled(True)
 
-                    f = open(getcwd() + '/templates/audit/verification/act.xml', "r", -1, "utf-8")
-                    xml = f.read()
-                    f.close()
+    def ui_save_sql(self):
+        for row in self.new_table:
+            query = """INSERT INTO audit (supply_id, type_supply, audit_date, sertificat,
+                                          type_pack, audit_value, audit_location, quality, workers, supply_provider,
+                                          supply_date, supply_act, type_material, supply_value, gost, density)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            sql_info = my_sql.sql_change(query, row)
+            if "mysql.connector.errors" in str(type(sql_info)):
+                QMessageBox.critical(self, "Ошибка sql при сохранении", sql_info.msg, QMessageBox.Ok)
+                return False
 
-                    xml = xml.replace("ВИД", vid)
-                    xml = xml.replace("ПОСТ", post_name)
-                    xml = xml.replace("УПАКОВКА", pack)
-                    xml = xml.replace("ДАТА", base_item[0].strftime("%d.%m.%Y"))
-                    xml = xml.replace("НОМЕР", re.sub(r', сумма+.*', "", base_item[3]))
-                    xml = xml.replace("КОЛ-ВО", str(base_item[2]))
-                    xml = xml.replace("ПРОБЫ", "10-50")
+        self.done(1)
+        self.close()
+        self.destroy()
 
-                    file_name = "АКТ%s.xml" % (row-2, )
-                    f = open('%s/%s' % ("C:/Users/Meller/Desktop/aud/furn/rez/act", file_name), "w", -1, "utf-8")
-                    f.write(xml)
-                    f.close()
+    def ui_can(self):
+        self.done(0)
+        self.close()
+        self.destroy()
 
-                    row += 1
+    def set_table(self, data):
+        self.ui_tw_generate.setColumnCount(len(data[0]))
+        self.ui_tw_generate.setRowCount(len(data))
 
-            book.save("C:/Users/Meller/Desktop/aud/furn/rez/verification_journal.xlsx")
+        for row, data_row in enumerate(data):
+            for col, data in enumerate(data_row):
+                item = QTableWidgetItem(str(data))
+                self.ui_tw_generate.setItem(row, col, item)
 
+    def of_list_reason_provider_material(self, item):
+        self.ui_le_provider.setText(item[1])
+        self.provider_id = item[0]
 
+        self.pushButton_2.setEnabled(True)
 
+    def of_list_reason_provider_accessories(self, item):
+        self.ui_le_provider.setText(item[1])
+        self.provider_id = item[0]
+
+        self.pushButton_2.setEnabled(True)

@@ -877,7 +877,7 @@ class SalaryDate(QDialog, salary_date):
         query = """(SELECT Date_Pay FROM pack_operation WHERE Pay = 1 AND Worker_Id = %s GROUP BY Date_Pay ORDER BY Date_Pay DESC)
                     UNION
                     (SELECT Date_Pay FROM pay_worker WHERE Pay = 1 AND Worker_Id = %s GROUP BY Date_Pay ORDER BY Date_Pay DESC)
-                    ORDER BY Date_Pay DESC LIMIT 3"""
+                    ORDER BY Date_Pay DESC LIMIT 6"""
         sql_info = my_sql.sql_select(query, (self.work, self.work))
         if "mysql.connector.errors" in str(type(sql_info)):
             return False
