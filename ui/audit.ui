@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1064</width>
-    <height>414</height>
+    <height>423</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,7 +75,7 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
+          <number>22</number>
          </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
           <number>18</number>
@@ -565,7 +565,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_4">
        <property name="text">
-        <string>Печать</string>
+        <string>Экспорт</string>
        </property>
       </widget>
      </item>
@@ -634,12 +634,140 @@
    <slot>ui_generate()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1028</x>
-     <y>8</y>
+     <x>1061</x>
+     <y>12</y>
     </hint>
     <hint type="destinationlabel">
      <x>1031</x>
      <y>-22</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_change()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>9</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>145</x>
+     <y>-110</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ui_tw_0</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_dc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>761</x>
+     <y>255</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>755</x>
+     <y>633</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_del()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>203</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>215</x>
+     <y>-70</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>288</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>-105</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ui_tw_1</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_dc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>624</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>643</x>
+     <y>555</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ui_tw_2</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_dc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>571</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>590</x>
+     <y>529</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ui_tw_3</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_dc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>708</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>746</x>
+     <y>562</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ui_tw_4</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_dc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>532</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>534</x>
+     <y>507</y>
     </hint>
    </hints>
   </connection>
@@ -648,5 +776,9 @@
   <slot>ui_change_type()</slot>
   <slot>ui_add()</slot>
   <slot>ui_generate()</slot>
+  <slot>ui_change()</slot>
+  <slot>ui_dc()</slot>
+  <slot>ui_del()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>

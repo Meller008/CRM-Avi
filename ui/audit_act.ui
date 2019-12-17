@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>326</width>
+    <width>344</width>
     <height>389</height>
    </rect>
   </property>
@@ -256,6 +256,13 @@
    <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Печать</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -308,17 +315,68 @@
    <slot>ui_viev_supply_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
-     <y>79</y>
+     <x>340</x>
+     <y>87</y>
     </hint>
     <hint type="destinationlabel">
-     <x>407</x>
+     <x>343</x>
      <y>136</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_acc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>377</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>222</x>
+     <y>472</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_can()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>325</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>327</x>
+     <y>459</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ui_print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>24</x>
+     <y>377</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>30</x>
+     <y>497</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>ui_viev_supply_list()</slot>
+  <slot>ui_acc()</slot>
+  <slot>ui_can()</slot>
+  <slot>ui_print()</slot>
  </slots>
 </ui>

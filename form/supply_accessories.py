@@ -98,6 +98,16 @@ class AccessoriesSupplyList(table.TableList):
         self.change_supply.setWindowModality(Qt.ApplicationModal)
         self.change_supply.show()
 
+    def ui_double_click_table_item(self, item):  # Двойной клик по элементу
+        if not self.dc_select:
+            self.ui_change_table_item(item.data(5))
+        else:
+            # что хотим получить ставим всместо 0
+            item = (self.table_widget.item(item.row(), 0).text(), item.data(5))
+            self.main.of_select_accessories_supply(item)
+            self.close()
+            self.destroy()
+
     def ui_dell_table_item(self):
         result = QMessageBox.question(self, "Удаление", "Точно удалить элемент?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if result == 16384:
