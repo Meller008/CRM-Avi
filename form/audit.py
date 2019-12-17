@@ -32,7 +32,7 @@ class AuditVerification(QDialog):
 
         query = """SELECT supply_date, supply_provider, type_material, sertificat, type_pack,
                            supply_value, supply_date, audit_location, audit_date, quality, Id
-                    FROM audit WHERE type_supply = %s ORDER BY audit_date"""
+                    FROM audit WHERE type_supply = %s ORDER BY audit_date DESC """
         sql_info = my_sql.sql_select(query, (self.tip, ))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql при получении информации", sql_info.msg, QMessageBox.Ok)
