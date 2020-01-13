@@ -1832,7 +1832,7 @@ class OneStaff(QMainWindow):
                 QMessageBox.critical(self, "Ошибка sql", doc_number.msg, QMessageBox.Ok)
 
             doc_number = doc_number[0][0]
-            if "No Number" == doc_number:
+            if "No Number" != doc_number:
                 doc_number = int(doc_number) + 1
                 doc_date = self.de_info_recruitment.date().toPyDate()
                 doc_date_new = True
@@ -2089,7 +2089,7 @@ class OneStaff(QMainWindow):
             QMessageBox.critical(self, "Ошибка sql", doc_number.msg, QMessageBox.Ok)
         doc_number = doc_number[0][0]
 
-        if "No Number" == doc_number:
+        if "No Number" != doc_number:
             doc_number = int(doc_number) + 1
         else:
             doc_number = 1
