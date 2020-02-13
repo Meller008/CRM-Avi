@@ -1138,7 +1138,11 @@ class ArticleList(QMainWindow):
             status_sql = self.tw_materials.item(row, 0).data(-1)
             price = [i[1] for i in sql_info if i[0] == id][0]
             value = Decimal(self.tw_materials.item(row, 1).text())
-            sum = value * price
+            try:
+                sum = value * price
+            except:
+                QMessageBox.critical(self, "Ошибка расчета", "%s нет цены" % (self.tw_materials.item(row, 10),), QMessageBox.Ok)
+                return False
 
             new_item = QTableWidgetItem(str(price))
             new_item.setData(5, material_id)
