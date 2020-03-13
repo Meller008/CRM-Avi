@@ -147,7 +147,12 @@ class ShipmentOrder(QDialog):
             ...
         }"""
 
-        query = """SELECT product_article.Article, product_article_size.Size, order_position.Value
+        # query = """SELECT product_article.Article, product_article_size.Size, order_position.Value
+        #               FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+        #                 LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+        #                 LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+        #               WHERE Order_Id = %s"""
+        query = """SELECT product_article.Article, CONCAT(product_article_size.Size, '[', product_article_parametrs.Name, ']'), order_position.Value
                       FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
