@@ -147,16 +147,18 @@ class ShipmentOrder(QDialog):
             ...
         }"""
 
-        # query = """SELECT product_article.Article, product_article_size.Size, order_position.Value
-        #               FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
-        #                 LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
-        #                 LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
-        #               WHERE Order_Id = %s"""
-        query = """SELECT product_article.Article, CONCAT(product_article_size.Size, '[', product_article_parametrs.Name, ']'), order_position.Value
-                      FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
-                        LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
-                        LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
-                      WHERE Order_Id = %s"""
+        if self.rb_size.isChecked():
+            query = """SELECT product_article.Article, product_article_size.Size, order_position.Value
+                          FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+                            LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                            LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                          WHERE Order_Id = %s"""
+        else:
+            query = """SELECT product_article.Article, CONCAT(product_article_size.Size, '[', product_article_parametrs.Name, ']'), order_position.Value
+                          FROM order_position LEFT JOIN product_article_parametrs ON order_position.Product_Article_Parametr_Id = product_article_parametrs.Id
+                            LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+                            LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+                          WHERE Order_Id = %s"""
         sql_info = my_sql.sql_select(query, (order_id,))
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения позиций заказа", sql_info.msg, QMessageBox.Ok)
