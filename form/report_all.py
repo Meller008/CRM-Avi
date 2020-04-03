@@ -1757,12 +1757,11 @@ class ReportAll(QMainWindow):
                 return False
 
             if sql_info[0][0]:
-                if sql_info[0][1] is None:
-                    sql_info[0][1] = 0
-                if sql_info[0][2] is None:
-                    sql_info[0][2] = 0
-
-                article_list[key]["seb"] = sql_info[0][0] + sql_info[0][1] + sql_info[0][2]
+                article_list[key]["seb"] = sql_info[0][0]
+                if sql_info[0][1]:
+                    article_list[key]["seb"] += sql_info[0][1]
+                if sql_info[0][2]:
+                    article_list[key]["seb"] += sql_info[0][2]
             else:
                 article_list[key]["seb"] = 0
 
