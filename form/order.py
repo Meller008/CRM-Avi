@@ -592,7 +592,10 @@ class Order(QMainWindow):
         self.position.le_size.setText(self.tw_position.item(select_row, 1).text())
         self.position.le_parametr.setText(self.tw_position.item(select_row, 2).text())
         self.position.le_parametr.setWhatsThis(str(self.tw_position.item(select_row, 2).data(5)))
-        self.position.le_client_cod.setText(self.tw_position.item(select_row, 7).text())
+        try:
+            self.position.le_client_cod.setText(self.tw_position.item(select_row, 7).text())
+        except:
+            pass
 
         nds = self.tw_position.item(select_row, 4).data(5)
         if nds == 18:
@@ -3114,18 +3117,18 @@ class ImportEDI(QDialog):
                     try:
                         OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
                     except AttributeError:
-                        OrderedUnitPacksize = None
+                        OrderedUnitPacksize = 0
 
                     if OrderedUnitPacksize:
                         item = QTableWidgetItem(OrderedUnitPacksize)
                     else:
-                        item = QTableWidgetItem(0)
+                        item = QTableWidgetItem("0")
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
 
                     if OrderedUnitPacksize:
                         item = QTableWidgetItem(str(int(value_one_position / float(OrderedUnitPacksize))))
                     else:
-                        item = QTableWidgetItem(0)
+                        item = QTableWidgetItem("0")
                     self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
 
                     try:
