@@ -3081,6 +3081,12 @@ class ImportEDI(QDialog):
                     QMessageBox.critical(self, "Ошибка sql получения артикула", sql_info.msg, QMessageBox.Ok)
                     return False
 
+                # Проверим что найдена хотя бы один артикул с колом клиента
+                if not len(sql_info):
+                    QMessageBox.warning(self, "Ошибка кода клиента",
+                                        "Не найдено артикулов со следующим кодом клиента %s" % element.find('{http://www.comarch.com/}BuyerItemCode').text.lstrip("0"), QMessageBox.Ok)
+                    return False
+
                 # разделем заказаное кол-во на найденое кол-во строк
                 # Найдем кол-во в зависимости от того есть ли оно в документе ЕДИ
                 if self.cb_no_all_value.isChecked():
