@@ -1277,12 +1277,14 @@ class Pack:
                     change_value = -change_value
                     # Ткани стало меньше будем возвращать
                     # получим записаные расходы
-                    query = """SELECT id, Supply_Balance_Id, SUM(Balance)
+                    query = """SELECT transaction_records_material.id, Supply_Balance_Id, SUM(Balance)
                                   FROM transaction_records_material
-                                  WHERE Cut_Material_Id = %s
+                                    LEFT JOIN material_balance mb on transaction_records_material.Supply_Balance_Id = mb.Id
+                                    LEFT JOIN material_supplyposition ms on mb.Material_SupplyPositionId = ms.Id
+                                  WHERE Cut_Material_Id = %s AND ms.Material_NameId = %s
                                   GROUP BY Supply_Balance_Id
                                   ORDER BY Date DESC , transaction_records_material.Id DESC"""
-                    sql_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, (self.__cut_id, ))
+                    sql_transaction = my_sql.sql_select_transaction(sql_connect_transaction, query, (self.__cut_id, self.__material_id))
                     if "mysql.connector.errors" in str(type(sql_transaction)):
                         my_sql.sql_rollback_transaction(sql_connect_transaction)
                         return [False, "Не смог получить записи расходов при уменьшении ткани (Это плохо к админу)"]
