@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>250</width>
-    <height>92</height>
+    <height>99</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,6 +29,13 @@
    <property name="spacing">
     <number>1</number>
    </property>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>От какого числа</string>
+     </property>
+    </widget>
+   </item>
    <item row="4" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
@@ -41,9 +48,6 @@
    </item>
    <item row="2" column="1">
     <widget class="QLineEdit" name="le_contract"/>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="le_vendor"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label">
@@ -59,19 +63,8 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QDateEdit" name="de_date_from">
-     <property name="calendarPopup">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>От какого числа</string>
-     </property>
-    </widget>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="le_vendor"/>
    </item>
    <item row="0" column="0" colspan="2">
     <widget class="QWidget" name="widget" native="true">
@@ -86,12 +79,44 @@
      </property>
     </widget>
    </item>
+   <item row="3" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QDateEdit" name="de_date_from">
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cb_enabled_date">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>20</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
  <tabstops>
   <tabstop>le_vendor</tabstop>
   <tabstop>le_contract</tabstop>
-  <tabstop>de_date_from</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -124,6 +149,22 @@
     <hint type="destinationlabel">
      <x>249</x>
      <y>91</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_enabled_date</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>de_date_from</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>67</y>
     </hint>
    </hints>
   </connection>

@@ -359,7 +359,10 @@ class Client(QDialog):
         self.tw_vendor_number.setItem(row, 0, table_item)
         table_item = QTableWidgetItem(number.le_contract.text())
         self.tw_vendor_number.setItem(row, 1, table_item)
-        table_item = QTableWidgetItem(number.de_date_from.date().toString("dd.MM.yyyy"))
+        if self.cb_enabled_date.isChecked():
+            table_item = QTableWidgetItem(number.de_date_from.date().toString("dd.MM.yyyy"))
+        else:
+            table_item = QTableWidgetItem("")
         self.tw_vendor_number.setItem(row, 2, table_item)
 
     def double_click_number(self, select_items):
