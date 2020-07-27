@@ -197,7 +197,10 @@ class Client(QDialog):
                 if item.data(-2) is not None:
                     if item.data(-2) == "new":
                         query = "INSERT INTO clients_vendor_number (Client_Id, Number, Contract, Data_From) VALUES (%s, %s, %s, %s)"
-                        data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
+                        try:
+                            data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
+                        except ValueError:
+                            data = None
                         paremetrs = (self.select_id, self.tw_vendor_number.item(row, 0).text(), self.tw_vendor_number.item(row, 1).text(), data)
                         info_sql = my_sql.sql_change(query, paremetrs)
                         if "mysql.connector.errors" in str(type(info_sql)):
@@ -205,7 +208,10 @@ class Client(QDialog):
                             return False
                     elif item.data(-2) == "update":
                         query = "UPDATE clients_vendor_number SET Number = %s, Contract = %s, Data_From = %s WHERE Id = %s"
-                        data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
+                        try:
+                            data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
+                        except ValueError:
+                            data = None
                         paremetrs = (self.tw_vendor_number.item(row, 0).text(), self.tw_vendor_number.item(row, 1).text(), data, item.data(-1))
                         info_sql = my_sql.sql_change(query, paremetrs)
                         if "mysql.connector.errors" in str(type(info_sql)):
@@ -298,7 +304,10 @@ class Client(QDialog):
                 self.tw_vendor_number.setItem(row, 0, table_item)
                 table_item = QTableWidgetItem(item[2])
                 self.tw_vendor_number.setItem(row, 1, table_item)
-                table_item = QTableWidgetItem(item[3].strftime("%d.%m.%Y"))
+                try:
+                    table_item = QTableWidgetItem(item[3].strftime("%d.%m.%Y"))
+                except AttributeError:
+                    table_item = QTableWidgetItem("")
                 self.tw_vendor_number.setItem(row, 2, table_item)
                 row += 1
 
@@ -359,7 +368,7 @@ class Client(QDialog):
         self.tw_vendor_number.setItem(row, 0, table_item)
         table_item = QTableWidgetItem(number.le_contract.text())
         self.tw_vendor_number.setItem(row, 1, table_item)
-        if self.cb_enabled_date.isChecked():
+        if number.cb_enabled_date.isChecked():
             table_item = QTableWidgetItem(number.de_date_from.date().toString("dd.MM.yyyy"))
         else:
             table_item = QTableWidgetItem("")
@@ -372,7 +381,12 @@ class Client(QDialog):
         number = ClientNumber()
         number.le_vendor.setText(select_adres[1])
         number.le_contract.setText(select_adres[2])
-        data = datetime.strptime(select_adres[3], "%d.%m.%Y")
+        try:
+            data = datetime.strptime(select_adres[3], "%d.%m.%Y")
+        except ValueError:
+            data = QDate.currentDate()
+            number.cb_enabled_date.setChecked(False)
+            number.de_date_from.setEnabled(False)
         number.de_date_from.setDate(data)
         if number.exec() == 0:
             return False
@@ -383,7 +397,10 @@ class Client(QDialog):
         self.tw_vendor_number.setItem(row, 0, table_item)
         table_item = QTableWidgetItem(number.le_contract.text())
         self.tw_vendor_number.setItem(row, 1, table_item)
-        table_item = QTableWidgetItem(number.de_date_from.date().toString("dd.MM.yyyy"))
+        if number.cb_enabled_date.isChecked():
+            table_item = QTableWidgetItem(number.de_date_from.date().toString("dd.MM.yyyy"))
+        else:
+            table_item = QTableWidgetItem("")
         self.tw_vendor_number.setItem(row, 2, table_item)
 
     def dell_number(self):
