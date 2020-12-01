@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1197</width>
+    <width>1367</width>
     <height>668</height>
    </rect>
   </property>
@@ -477,7 +477,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <layout class="QGridLayout" name="gridLayout_3" columnstretch="3,4,4">
+       <layout class="QGridLayout" name="gridLayout_3" columnstretch="2,3,4">
         <item row="1" column="0" rowspan="2">
          <widget class="QTableWidget" name="tw_workshop">
           <property name="font">
@@ -569,7 +569,17 @@
           </column>
           <column>
            <property name="text">
+            <string>Дата пост.</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>Штук в заказе</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Пункт разг.</string>
            </property>
           </column>
          </widget>

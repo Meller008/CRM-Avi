@@ -899,9 +899,10 @@ class Warehouse2(QMainWindow):
 
     def set_order_table(self, _id):
 
-        query = """SELECT `order`.Id, `order`.Number_Doc, clients.Name, `order`.Date_Order, order_position.Value
+        query = """SELECT `order`.Id, `order`.Number_Doc, clients.Name, `order`.Date_Order, order_position.Value, `order`.Date_Shipment, caa.Name
                       FROM order_position LEFT JOIN `order` ON order_position.Order_Id = `order`.Id
                         LEFT JOIN clients ON `order`.Client_Id = clients.Id
+                        LEFT JOIN clients_actual_address caa on `order`.Clients_Adress_Id = caa.Client_Id
                       WHERE `order`.Shipped = 0 AND order_position.Product_Article_Parametr_Id = %s"""
         sql_info_order = my_sql.sql_select(query, (_id,))
         if "mysql.connector.errors" in str(type(sql_info_order)):
@@ -923,9 +924,17 @@ class Warehouse2(QMainWindow):
             new_table_item.setData(-2, order[0])
             self.tw_order.setItem(row, 2, new_table_item)
 
-            new_table_item = QTableWidgetItem(str(order[4]))
+            new_table_item = QTableWidgetItem(order[5].strftime("%d.%m.%Y"))
             new_table_item.setData(-2, order[0])
             self.tw_order.setItem(row, 3, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(order[4]))
+            new_table_item.setData(-2, order[0])
+            self.tw_order.setItem(row, 4, new_table_item)
+
+            new_table_item = QTableWidgetItem(str(order[6]))
+            new_table_item.setData(-2, order[0])
+            self.tw_order.setItem(row, 5, new_table_item)
 
     def ui_calc_date(self):
         article_id = self.tw_article.currentItem().data(5)
