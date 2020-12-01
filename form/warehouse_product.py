@@ -902,7 +902,7 @@ class Warehouse2(QMainWindow):
         query = """SELECT `order`.Id, `order`.Number_Doc, clients.Name, `order`.Date_Order, order_position.Value, `order`.Date_Shipment, caa.Name
                       FROM order_position LEFT JOIN `order` ON order_position.Order_Id = `order`.Id
                         LEFT JOIN clients ON `order`.Client_Id = clients.Id
-                        LEFT JOIN clients_actual_address caa on `order`.Clients_Adress_Id = caa.Client_Id
+                        LEFT JOIN clients_actual_address caa on `order`.Clients_Adress_Id = caa.Id
                       WHERE `order`.Shipped = 0 AND order_position.Product_Article_Parametr_Id = %s"""
         sql_info_order = my_sql.sql_select(query, (_id,))
         if "mysql.connector.errors" in str(type(sql_info_order)):
