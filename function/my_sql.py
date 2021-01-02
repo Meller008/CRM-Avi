@@ -15,7 +15,7 @@ def sql_settings():
 def sql_conn():
     con_conf = sql_settings()
     try:
-        conn = mysql.connector.connect(host=con_conf[0], database=con_conf[1], user=con_conf[2], password=con_conf[3])
+        conn = mysql.connector.connect(host=con_conf[0], database=con_conf[1], user=con_conf[2], password=con_conf[3], auth_plugin='mysql_native_password')
         cursor = conn.cursor()
         return conn, cursor
 
