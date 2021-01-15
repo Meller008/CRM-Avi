@@ -1858,19 +1858,6 @@
       </widget>
       <widget class="QWidget" name="page_5">
        <layout class="QGridLayout" name="gridLayout_18">
-        <item row="6" column="1">
-         <spacer name="verticalSpacer_12">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="0" column="0" colspan="2">
          <widget class="QLabel" name="le_error">
           <property name="font">
@@ -1906,6 +1893,19 @@
            <string>2 - Выберите дату когда нарезали бейку</string>
           </property>
          </widget>
+        </item>
+        <item row="7" column="1">
+         <spacer name="verticalSpacer_12">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item row="4" column="1">
          <widget class="QLabel" name="label_25">
@@ -1949,7 +1949,7 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0" colspan="2">
+        <item row="8" column="0" colspan="2">
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
            <widget class="QPushButton" name="pushButton_19">
@@ -2004,6 +2004,40 @@
           </item>
          </layout>
         </item>
+        <item row="3" column="1">
+         <spacer name="verticalSpacer_11">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLineEdit" name="le_value">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Tahoma</family>
+            <pointsize>16</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_23">
           <property name="font">
@@ -2019,7 +2053,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0" rowspan="5">
+        <item row="2" column="0" rowspan="6">
          <widget class="QListWidget" name="lw_material">
           <property name="font">
            <font>
@@ -2040,37 +2074,10 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <spacer name="verticalSpacer_11">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="le_value">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>Tahoma</family>
-            <pointsize>16</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+         <widget class="QLabel" name="label_28">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;ВЕС ВНОСИТЬ ПРАВИЛЬНО! СТАВИТЬ ЗАПЯТЫЕ! ВНЕСТИ БОЛЬШЕ 30кг НЕЛЬЗЯ!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -2287,8 +2294,8 @@
    <slot>ui_cut_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>53</x>
-     <y>75</y>
+     <x>63</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>-21</x>
@@ -2303,8 +2310,8 @@
    <slot>ui_cut_next()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>205</x>
-     <y>75</y>
+     <x>1109</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>1150</x>
@@ -2319,8 +2326,8 @@
    <slot>ui_pack_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>75</y>
+     <x>74</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>-43</x>
@@ -2335,8 +2342,8 @@
    <slot>ui_pack_next()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>205</x>
-     <y>75</y>
+     <x>1109</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>1178</x>
@@ -2431,8 +2438,8 @@
    <slot>ui_salary_operation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>32</x>
-     <y>94</y>
+     <x>42</x>
+     <y>375</y>
     </hint>
     <hint type="destinationlabel">
      <x>-45</x>
@@ -2447,8 +2454,8 @@
    <slot>ui_salary_p_m()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>61</x>
-     <y>94</y>
+     <x>440</x>
+     <y>375</y>
     </hint>
     <hint type="destinationlabel">
      <x>542</x>
@@ -2463,8 +2470,8 @@
    <slot>ui_salary_history()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>94</y>
+     <x>836</x>
+     <y>375</y>
     </hint>
     <hint type="destinationlabel">
      <x>1182</x>
@@ -2479,8 +2486,8 @@
    <slot>ui_salary_menu_back()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>73</y>
+     <x>99</x>
+     <y>717</y>
     </hint>
     <hint type="destinationlabel">
      <x>1251</x>
@@ -2495,8 +2502,8 @@
    <slot>ui_back_to_salary_menu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>73</y>
+     <x>99</x>
+     <y>717</y>
     </hint>
     <hint type="destinationlabel">
      <x>567</x>
@@ -2511,8 +2518,8 @@
    <slot>ui_back_to_salary_menu()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>70</y>
+     <x>99</x>
+     <y>717</y>
     </hint>
     <hint type="destinationlabel">
      <x>627</x>

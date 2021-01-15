@@ -668,14 +668,26 @@ class MainWindowOperation(QMainWindow, main_class):
 
     def ui_beika_change_value(self, text):
         if text:
-            if text[-1].isdigit():
-                return True
-            elif text[-1] == ".":
-                return True
-            elif text[-1] == ",":
-                self.le_value.setText(text.replace(",", "."))
+            if text[-1].isdigit() or text[-1] == "." or text[-1] == ",":
+                try:
+                    check_val = float(text.replace(",", "."))
+                    if check_val > 30:
+                        self.le_value.setText(text[:-1])
+                    else:
+                        self.le_value.setText(text.replace(",", "."))
+                except ValueError:
+                    self.le_value.setText(text[:-1])
             else:
                 self.le_value.setText(text[:-1])
+
+            # if text[-1].isdigit():
+            #     return True
+            # elif text[-1] == ".":
+            #     return True
+            # elif text[-1] == ",":
+            #     self.le_value.setText(text.replace(",", "."))
+            # else:
+            #     self.le_value.setText(text[:-1])
 
     def ui_beika_acc(self):
         self.timer.start(900000)
