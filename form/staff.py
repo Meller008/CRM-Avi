@@ -1231,7 +1231,7 @@ class OneStaff(QMainWindow):
         i = 0
         for t in text:
             self.statusBar().showMessage("Создаю %s" % i)
-            sheet['%s%s' % (col[i], 63)] = t
+            sheet['%s%s' % (col[i], 25)] = t
             i += 1
 
         col = [x + '27' for x in all_col[14:]]
