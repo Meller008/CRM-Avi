@@ -1145,6 +1145,7 @@ class OneStaff(QMainWindow):
         # Если работник ИП то поменяем шапку
         if self.cb_ip.isChecked():
 
+            sheet = book['s1']
             col = all_col[26:]
             for i, t in enumerate("46.64"):
                 self.statusBar().showMessage("Создаю %s" % i)
