@@ -65,6 +65,10 @@ class MainWindowOperation(QMainWindow, main_class):
         self.operation_list = None
 
     def start_settings(self):
+        self.pushButton.setEnabled(True)
+        self.pushButton_2.setEnabled(True)
+        self.pb_beika.setEnabled(False)
+        self.pb_traffic.setEnabled(False)
         self.tw_operation.horizontalHeader().resizeSection(0, 45)
         self.tw_operation.horizontalHeader().resizeSection(1, 340)
         self.tw_operation.horizontalHeader().resizeSection(2, 185)
