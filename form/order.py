@@ -1694,6 +1694,8 @@ class Order(QMainWindow):
         sheet.oddHeader.right.size = 7
 
         sheet["A2"] = "Счет-фактура № %s от %s" % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
+        sheet["H10"] = self.le_number_doc.text()
+        sheet["J10"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
 
         query = "SELECT Name, INN, KPP, Actual_Address, Legal_Address, Full_Name FROM clients WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(),))
@@ -1717,9 +1719,9 @@ class Order(QMainWindow):
             kpp = sql_info[0][2]
 
         sheet["A8"] = "Грузополучатель и его адрес: " + sql_info[0][5] + " " + adr
-        sheet["A10"] = "Покупатель: " + sql_info[0][5]
-        sheet["A11"] = "Адрес: " + sql_info[0][4]
-        sheet["A12"] = "ИНН/КПП покупателя: " + sql_info[0][1] + "/" + str(kpp)
+        sheet["A11"] = "Покупатель: " + sql_info[0][5]
+        sheet["A12"] = "Адрес: " + sql_info[0][4]
+        sheet["A13"] = "ИНН/КПП покупателя: " + sql_info[0][1] + "/" + str(kpp)
 
         if self.cb_clients_vendor.currentData():
             query = "SELECT Number, Contract, Data_From FROM clients_vendor_number WHERE Id = %s"
@@ -1729,10 +1731,10 @@ class Order(QMainWindow):
                 return False
             base = "Идентификатор государственного контракта, договора (соглашения) (при наличии): Договор поставки № " + str(sql_info[0][1]) + \
                    " от " + sql_info[0][2].strftime("%d.%m.%Y")
-            sheet["A14"] = base
+            sheet["A15"] = base
 
             base = "№ поставщика: %s, № заказа: %s" % (str(sql_info[0][0]), self.le_number_order.text())
-            sheet["A15"] = base
+            sheet["A16"] = base
 
         if unite:
             query = """SELECT DISTINCT(product_article_parametrs.Client_code)
