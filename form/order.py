@@ -1899,7 +1899,7 @@ class Order(QMainWindow):
             list_all += 1
 
         # Формируем границы таблицы
-        for row in sheet.iter_rows(min_row=17, max_col=18, max_row=row_ex-1):
+        for row in sheet.iter_rows(min_row=17, max_col=21, max_row=row_ex-1):
             for cell in row:
                 cell.border = border_all
 
@@ -1924,7 +1924,7 @@ class Order(QMainWindow):
 
         sheet2 = book['низ']
 
-        for row in sheet2.iter_rows(min_row=1, max_col=16, max_row=7):
+        for row in sheet2.iter_rows(min_row=1, max_col=21, max_row=7):
             for cell in row:
                 sheet["%s%s" % (cell.column, row_ex)] = cell.value
                 sheet.row_dimensions[row_ex].height = sheet2.row_dimensions[cell.row].height
