@@ -502,6 +502,13 @@
            </layout>
           </item>
           <item>
+           <widget class="QCheckBox" name="cb_old_date">
+            <property name="text">
+             <string>Старая дата</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QListWidget" name="lw_label">
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
@@ -663,24 +670,7 @@
             </property>
            </widget>
           </item>
-          <item row="11" column="0">
-           <widget class="QLabel" name="label_52">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="1">
-           <widget class="QLineEdit" name="le_cost_price">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="0" colspan="2">
+          <item row="13" column="0" colspan="2">
            <widget class="QPushButton" name="pb_article_acc">
             <property name="enabled">
              <bool>false</bool>
@@ -856,6 +846,27 @@
             </property>
            </widget>
           </item>
+          <item row="11" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLineEdit" name="le_cost_price">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_52">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Себестоимость&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item row="0" column="2" colspan="2">
@@ -970,6 +981,45 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>le_in_on_place</tabstop>
+  <tabstop>pe_product_note</tabstop>
+  <tabstop>pe_cut_note</tabstop>
+  <tabstop>le_filter_article</tabstop>
+  <tabstop>tree_widget</tabstop>
+  <tabstop>pb_up</tabstop>
+  <tabstop>pb_down</tabstop>
+  <tabstop>toolButton_10</tabstop>
+  <tabstop>toolButton_11</tabstop>
+  <tabstop>tw_operations</tabstop>
+  <tabstop>toolButton_13</tabstop>
+  <tabstop>toolButton_12</tabstop>
+  <tabstop>toolButton_14</tabstop>
+  <tabstop>tw_materials</tabstop>
+  <tabstop>pb_label_view</tabstop>
+  <tabstop>lw_label</tabstop>
+  <tabstop>le_name</tabstop>
+  <tabstop>le_client_name</tabstop>
+  <tabstop>le_barcode</tabstop>
+  <tabstop>le_client_code</tabstop>
+  <tabstop>tw_article</tabstop>
+  <tabstop>le_price</tabstop>
+  <tabstop>rb_nds_1</tabstop>
+  <tabstop>rb_nds_2</tabstop>
+  <tabstop>rb_nds_3</tabstop>
+  <tabstop>sb_no_nds</tabstop>
+  <tabstop>le_cost_price</tabstop>
+  <tabstop>pb_article_acc</tabstop>
+  <tabstop>pb_size_add</tabstop>
+  <tabstop>pb_size_del</tabstop>
+  <tabstop>pb_size_chenge</tabstop>
+  <tabstop>lw_size</tabstop>
+  <tabstop>pb_param_add</tabstop>
+  <tabstop>pb_param_del</tabstop>
+  <tabstop>pb_param_change</tabstop>
+  <tabstop>lw_parametr</tabstop>
+  <tabstop>cb_old_date</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -1044,7 +1094,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>998</x>
-     <y>490</y>
+     <y>489</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1060,7 +1110,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1062</x>
-     <y>490</y>
+     <y>489</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1076,7 +1126,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1081</x>
-     <y>490</y>
+     <y>489</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1108,7 +1158,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1062</x>
-     <y>293</y>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1124,7 +1174,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1081</x>
-     <y>293</y>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1156,7 +1206,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1014</x>
-     <y>295</y>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1172,7 +1222,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1039</x>
-     <y>295</y>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1188,7 +1238,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>328</x>
-     <y>294</y>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>1014</x>
@@ -1204,7 +1254,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>369</x>
-     <y>294</y>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>1050</x>
@@ -1220,7 +1270,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>347</x>
-     <y>294</y>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>1012</x>
@@ -1284,7 +1334,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>490</x>
-     <y>294</y>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>1133</x>
@@ -1300,7 +1350,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>531</x>
-     <y>294</y>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>1181</x>
@@ -1316,7 +1366,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>509</x>
-     <y>294</y>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>1145</x>
@@ -1460,7 +1510,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1192</x>
-     <y>292</y>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
      <x>1196</x>
@@ -1492,7 +1542,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>534</x>
-     <y>506</y>
+     <y>502</y>
     </hint>
     <hint type="destinationlabel">
      <x>454</x>
@@ -1524,7 +1574,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>534</x>
-     <y>550</y>
+     <y>546</y>
     </hint>
     <hint type="destinationlabel">
      <x>417</x>
@@ -1572,7 +1622,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>458</x>
-     <y>592</y>
+     <y>588</y>
     </hint>
     <hint type="destinationlabel">
      <x>548</x>
@@ -1721,6 +1771,22 @@
     <hint type="destinationlabel">
      <x>598</x>
      <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_old_date</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ui_save_change_info()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1156</x>
+     <y>301</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1216</x>
+     <y>297</y>
     </hint>
    </hints>
   </connection>

@@ -348,7 +348,7 @@ class ArticleList(QMainWindow):
 
         query = """SELECT product_article.Name, product_article_parametrs.Client_Name, product_article_parametrs.Barcode,
                 product_article_parametrs.Client_code, product_article_parametrs.In_On_Place, product_article_parametrs.Price,
-                product_article_parametrs.Product_Note, product_article_parametrs.Cut_Note, product_article_parametrs.NDS
+                product_article_parametrs.Product_Note, product_article_parametrs.Cut_Note, product_article_parametrs.NDS, product_article_parametrs.Old_Date
                 FROM product_article_parametrs LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                 LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
                 WHERE product_article_parametrs.Id = %s"""
@@ -373,6 +373,11 @@ class ArticleList(QMainWindow):
                 self.rb_nds_3.setChecked(True)
             else:
                 self.rb_nds_2.setChecked(True)
+
+            if sql_info[0][9]:
+                self.cb_old_date.setChecked(True)
+            else:
+                self.cb_old_date.setChecked(False)
 
         query = """SELECT product_article_operation.Product_Article_Parametrs_Id, product_article_operation.Id, product_article_operation.Operation_Id,
                     operations.Name, operations.Price, sewing_machine.Name, product_article_operation.Change_Price
@@ -1243,15 +1248,20 @@ class ArticleList(QMainWindow):
 
         if self.flag_need_save_article:
             query = """UPDATE product_article_parametrs SET Client_Name = %s, Barcode = %s,
-                      Client_code = %s, In_On_Place = %s, Price = %s, Product_Note = %s, Cut_Note = %s, NDS = %s WHERE Id = %s"""
+                      Client_code = %s, In_On_Place = %s, Price = %s, Product_Note = %s, Cut_Note = %s, NDS = %s, Old_Date = %s WHERE Id = %s"""
             if self.rb_nds_1.isChecked():
                 nds = 18
             elif self.rb_nds_3.isChecked():
                 nds = 20
             else:
                 nds = 10
+
+            if self.cb_old_date.isChecked():
+                old_date = 1
+            else:
+                old_date = 0
             sql_param = (self.le_client_name.text(), self.le_barcode.text(), self.le_client_code.text(), self.le_in_on_place.text().replace(",", "."),
-                         self.le_price.text().replace(",", "."), self.pe_product_note.toPlainText(), self.pe_cut_note.toPlainText(), nds, parametr_id)
+                         self.le_price.text().replace(",", "."), self.pe_product_note.toPlainText(), self.pe_cut_note.toPlainText(), nds, old_date, parametr_id)
             sql_info = my_sql.sql_change(query, sql_param)
             if "mysql.connector.errors" in str(type(sql_info)):
                 QMessageBox.critical(self, "Ошибка sql изменения параметров", sql_info.msg, QMessageBox.Ok)
@@ -1664,9 +1674,11 @@ class ArticleList(QMainWindow):
 
     # Бирки
     def ui_print_label(self, item):
+        parametr_id = self.lw_parametr.currentItem().data(5)
         data = {"article": self.tw_article.selectedItems()[0].text(),
                 "article_size": self.lw_size.currentItem().text(),
-                "article_parametr": self.lw_parametr.currentItem().text()}
+                "article_parametr": self.lw_parametr.currentItem().text(),
+                "article_parametr_id": parametr_id}
 
         query = 'SELECT `Values` FROM program_settings_path WHERE Name = "Путь корень бирки"'
         info_sql = my_sql.sql_select(query)

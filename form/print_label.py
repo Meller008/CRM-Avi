@@ -19,6 +19,8 @@ class LabelFile(QDialog):
         loadUi(getcwd() + '/ui/print_birk_file.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
+        self.article_parametr_id = article_parametr_id
+
         self.data = data
 
         query = """SELECT product_article.Article, product_article_size.Size, product_article_parametrs.Name
@@ -37,6 +39,7 @@ class LabelFile(QDialog):
 
     def ui_select_label(self, item):
         path = self.full_path + "/" + item.text()
+        self.data["article_parametr_id"] = self.article_parametr_id
         self.print = LabelSettings(path, self.data)
         self.print.setModal(True)
         self.print.show()
@@ -100,6 +103,10 @@ class LabelSettings(QDialog):
         logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
         self.logger = logging.getLogger("LabelLog")
 
+        # Будем получать дату, в зависимости от галочки oldDate. НЕ ЗАБЫТЬ ВЫСТАВИТЬ ДАТУ В ФУНКЦИИ
+        # print_date = self.get_print_date(data.get("article_parametr_id"))
+        print_date = QDate.currentDate().toString("MM.yyyy")
+
         self.label_data = {"label_path": path.replace("/", '\\'),
                            "label_value": "None",
                            "label_print": "None",
@@ -111,7 +118,7 @@ class LabelSettings(QDialog):
                            "clients_vendor": "None",
                            "date_order": "None",
                            "number_order": "None",
-                           "date_now": QDate.currentDate().toString("MM.yyyy")}
+                           "date_now": print_date}
 
         self.le_label_path.setText(path)
 
@@ -159,3 +166,16 @@ class LabelSettings(QDialog):
         self.done(-1)
         self.close()
         self.destroy()
+
+    def get_print_date(self, product_id):
+        query = """SELECT product_article_parametrs.Old_Date FROM product_article_parametrs WHERE product_article_parametrs.Id = %s"""
+        sql_info = my_sql.sql_select(query, (product_id, ))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            QMessageBox.critical(self, "Ошибка sql получение таблицы закройных листов", sql_info.msg, QMessageBox.Ok)
+            return False
+
+        if sql_info[0][0]:
+            # Вставить нужную дату
+            return QDate(2021, 9, 10).toString("MM.yyyy")
+        else:
+            return QDate.currentDate().toString("MM.yyyy")
