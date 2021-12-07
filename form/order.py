@@ -1694,8 +1694,8 @@ class Order(QMainWindow):
         sheet.oddHeader.right.size = 7
 
         sheet["A2"] = "Счет-фактура № %s от %s" % (self.le_number_doc.text(), self.de_date_shipment.date().toString("dd.MM.yyyy"))
-        sheet["H10"] = self.le_number_doc.text()
-        sheet["J10"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
+        sheet["I10"] = self.le_number_doc.text()
+        sheet["K10"] = self.de_date_shipment.date().toString("dd.MM.yyyy")
 
         query = "SELECT Name, INN, KPP, Actual_Address, Legal_Address, Full_Name FROM clients WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(),))
@@ -1854,31 +1854,32 @@ class Order(QMainWindow):
         row_ex = 20
         num = 1
         for cod, position in product.items():
-            sheet.merge_cells("A%s:D%s" % (row_ex, row_ex))
+            sheet.merge_cells("B%s:E%s" % (row_ex, row_ex))
 
-            sheet["A%s" % row_ex] = position["name"]
-            sheet["A%s" % row_ex].font = font_7
-            sheet["A%s" % row_ex].alignment = Alignment(wrapText=True)
-            sheet["E%s" % row_ex] = "-"
-            sheet["E%s" % row_ex].alignment = alg_center
-            sheet["F%s" % row_ex] = position["cod"]
+            sheet["A%s" % row_ex] = num
+            sheet["B%s" % row_ex] = position["name"]
+            sheet["B%s" % row_ex].font = font_7
+            sheet["B%s" % row_ex].alignment = Alignment(wrapText=True)
+            sheet["F%s" % row_ex] = "-"
+            sheet["F%s" % row_ex].alignment = alg_center
+            sheet["G%s" % row_ex] = position["cod"]
 
-            sheet["G%s" % row_ex] = "796"
-            sheet["H%s" % row_ex] = "Шт."
-            sheet["I%s" % row_ex] = position["value"]
-            sheet["J%s" % row_ex] = moneyfmt.moneyfmt(position["price_no_nds"])
-            sheet["J%s" % row_ex].alignment = alg_right
-            sheet["K%s" % row_ex] = moneyfmt.moneyfmt(position["sum_no_nds"])
+            sheet["H%s" % row_ex] = "796"
+            sheet["I%s" % row_ex] = "Шт."
+            sheet["J%s" % row_ex] = position["value"]
+            sheet["K%s" % row_ex] = moneyfmt.moneyfmt(position["price_no_nds"])
             sheet["K%s" % row_ex].alignment = alg_right
-            sheet["L%s" % row_ex] = "без акциза"
-            sheet["L%s" % row_ex].font = font_7
-            sheet["M%s" % row_ex] = position["nds"]
-            sheet["N%s" % row_ex] = moneyfmt.moneyfmt(position["nds_sum"])
-            sheet["N%s" % row_ex].alignment = alg_right
-            sheet["O%s" % row_ex] = moneyfmt.moneyfmt(position["sum"])
+            sheet["L%s" % row_ex] = moneyfmt.moneyfmt(position["sum_no_nds"])
+            sheet["L%s" % row_ex].alignment = alg_right
+            sheet["M%s" % row_ex] = "без акциза"
+            sheet["M%s" % row_ex].font = font_7
+            sheet["N%s" % row_ex] = position["nds"]
+            sheet["O%s" % row_ex] = moneyfmt.moneyfmt(position["nds_sum"])
             sheet["O%s" % row_ex].alignment = alg_right
-            sheet["Q%s" % row_ex] = "РФ"
-            sheet["Q%s" % row_ex].alignment = alg_center
+            sheet["P%s" % row_ex] = moneyfmt.moneyfmt(position["sum"])
+            sheet["P%s" % row_ex].alignment = alg_right
+            sheet["R%s" % row_ex] = "РФ"
+            sheet["R%s" % row_ex].alignment = alg_center
 
             all_no_nds += position["sum_no_nds"]
             all_nds += round(position["nds_sum"], 2)
@@ -1893,30 +1894,31 @@ class Order(QMainWindow):
 
             row_break += 1
             row_ex += 1
+            num += 1
 
         if row_break + 5 > 23:
             sheet.page_breaks.append(Break(row_ex-4))
             list_all += 1
 
         # Формируем границы таблицы
-        for row in sheet.iter_rows(min_row=17, max_col=21, max_row=row_ex-1):
+        for row in sheet.iter_rows(min_row=17, max_col=22, max_row=row_ex-1):
             for cell in row:
                 cell.border = border_all
 
         # Запишем итог
-        sheet.merge_cells("A%s:J%s" % (row_ex, row_ex))
+        sheet.merge_cells("A%s:K%s" % (row_ex, row_ex))
         sheet["A%s" % row_ex] = "ВСЕГО К ОПЛАТЕ"
-        sheet["K%s" % row_ex] = moneyfmt.moneyfmt(all_no_nds)
-        sheet["K%s" % row_ex].alignment = alg_right
-        sheet["L%s" % row_ex] = "X"
-        sheet["L%s" % row_ex].alignment = alg_center
+        sheet["L%s" % row_ex] = moneyfmt.moneyfmt(all_no_nds)
+        sheet["L%s" % row_ex].alignment = alg_right
         sheet["M%s" % row_ex] = "X"
         sheet["M%s" % row_ex].alignment = alg_center
-        sheet["N%s" % row_ex] = moneyfmt.moneyfmt(all_nds)
-        sheet["N%s" % row_ex].alignment = alg_right
-        sheet["O%s" % row_ex] = moneyfmt.moneyfmt(all_sum)
+        sheet["N%s" % row_ex] = "X"
+        sheet["N%s" % row_ex].alignment = alg_center
+        sheet["O%s" % row_ex] = moneyfmt.moneyfmt(all_nds)
         sheet["O%s" % row_ex].alignment = alg_right
-        for row in sheet.iter_rows(min_row=row_ex, max_col=15):
+        sheet["P%s" % row_ex] = moneyfmt.moneyfmt(all_sum)
+        sheet["P%s" % row_ex].alignment = alg_right
+        for row in sheet.iter_rows(min_row=row_ex, max_col=16):
             for cell in row:
                 cell.border = border_all
 
@@ -1924,7 +1926,7 @@ class Order(QMainWindow):
 
         sheet2 = book['низ']
 
-        for row in sheet2.iter_rows(min_row=1, max_col=21, max_row=7):
+        for row in sheet2.iter_rows(min_row=1, max_col=22, max_row=7):
             for cell in row:
                 sheet["%s%s" % (cell.column, row_ex)] = cell.value
                 sheet.row_dimensions[row_ex].height = sheet2.row_dimensions[cell.row].height
