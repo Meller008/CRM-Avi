@@ -562,6 +562,14 @@ class MainWindow(QMainWindow):
         self.sub_shipment_order.resize(self.shipment_order.size())
         self.sub_shipment_order.show()
 
+    def view_change_pay_reason(self):
+        self.change_reason = pay.PayChangeReason()
+        self.sub_change_reason = QMdiSubWindow()
+        self.sub_change_reason.setWidget(self.change_reason)
+        self.mdi.addSubWindow(self.sub_change_reason)
+        self.sub_change_reason.resize(self.change_reason.size())
+        self.sub_change_reason.show()
+
     def view_test_window(self):
         self.test_window = test_window.TestWindow()
         self.sub_test_window = QMdiSubWindow()

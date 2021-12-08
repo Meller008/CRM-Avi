@@ -2,7 +2,7 @@ from os import getcwd
 from form import staff, supply_material
 from datetime import datetime
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QListWidgetItem
 from PyQt5.QtGui import QIcon, QBrush, QColor
 from PyQt5.QtCore import Qt, QDate
 import re
@@ -827,3 +827,86 @@ class PayReasonMinus(list.ListItems):
             self.m_class.of_list_reason_minus(item)
             self.close()
             self.destroy()
+
+
+class PayChangeReason(QDialog):
+    def __init__(self):
+        super(PayChangeReason, self).__init__()
+        loadUi(getcwd() + '/ui/pay_change_reason.ui', self)
+        self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
+
+        self.from_plus_id = None
+        self.from_plus_name = None
+        self.from_minus_id = None
+        self.from_minus_name = None
+
+        self.update_pluse_reasons()
+        self.update_minus_reasons()
+
+    def update_pluse_reasons(self):
+        query = """SELECT Id, Name FROM pay_reason WHERE Plus_Or_Minus = 1"""
+        sql_result = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_result)):
+            QMessageBox.critical(self, "Ошибка sql получение причин", sql_result.msg, QMessageBox.Ok)
+            return False
+
+        self.lw_plus.clear()
+        for item in sql_result:
+            item_list = QListWidgetItem(item[1])
+            item_list.setData(3, item[0])
+            self.lw_plus.addItem(item_list)
+
+    def update_minus_reasons(self):
+        query = """SELECT Id, Name FROM pay_reason WHERE Plus_Or_Minus = 0"""
+        sql_result = my_sql.sql_select(query)
+        if "mysql.connector.errors" in str(type(sql_result)):
+            QMessageBox.critical(self, "Ошибка sql получение причин", sql_result.msg, QMessageBox.Ok)
+            return False
+
+        self.lw_minus.clear()
+        for item in sql_result:
+            item_list = QListWidgetItem(item[1])
+            item_list.setData(3, item[0])
+            self.lw_minus.addItem(item_list)
+
+    def select_plus_reason(self, item):
+        self.from_plus_id = item.data(3)
+        self.from_plus_name = item.text()
+        self.reason_list = PayReasonPlus(self, True)
+        self.reason_list.setWindowModality(Qt.ApplicationModal)
+        self.reason_list.show()
+
+    def select_minus_reason(self, item):
+        self.from_minus_id = item.data(3)
+        self.from_minus_name = item.text()
+        self.reason_list = PayReasonMinus(self, True)
+        self.reason_list.setWindowModality(Qt.ApplicationModal)
+        self.reason_list.show()
+
+    def of_list_reason_plus(self, item):
+        text = "Меняем " + self.from_plus_name + "  -->  " + item[1]
+        result = QMessageBox.question(self, "Изменение", text, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            self.change_reason(self.from_plus_id, item[0])
+            self.update_pluse_reasons()
+
+    def of_list_reason_minus(self, item):
+        text = "Меняем " + self.from_minus_name + "  -->  " + item[1]
+        result = QMessageBox.question(self, "Изменение", text, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if result == 16384:
+            self.change_reason(self.from_minus_id, item[0])
+            self.update_minus_reasons()
+
+    def change_reason(self, from_id, to_id):
+        print(from_id, to_id)
+        query = "UPDATE pay_worker SET Reason_Id = %s WHERE Reason_Id = %s"
+        sql_result = my_sql.sql_change(query, (to_id, from_id))
+        if "mysql.connector.errors" in str(type(sql_result)):
+            QMessageBox.critical(self, "Ошибка sql изменения причины", sql_result.msg, QMessageBox.Ok)
+            return False
+
+        query = "DELETE FROM pay_reason WHERE id = %s"
+        sql_result = my_sql.sql_change(query, (from_id, ))
+        if "mysql.connector.errors" in str(type(sql_result)):
+            QMessageBox.critical(self, "Ошибка sql удаления причины", sql_result.msg, QMessageBox.Ok)
+            return False

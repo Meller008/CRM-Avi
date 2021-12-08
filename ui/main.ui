@@ -165,6 +165,7 @@
     <addaction name="ma_scan_pack"/>
     <addaction name="ma_article_list"/>
     <addaction name="ma_access_add_operation"/>
+    <addaction name="ma_pay_changed"/>
    </widget>
    <widget class="QMenu" name="menu_11">
     <property name="title">
@@ -636,6 +637,11 @@
   <action name="ma_order_ip_list">
    <property name="text">
     <string>Заказы ИП</string>
+   </property>
+  </action>
+  <action name="ma_pay_changed">
+   <property name="text">
+    <string>Изменение причин доплат</string>
    </property>
   </action>
  </widget>
@@ -1665,6 +1671,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ma_pay_changed</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_change_pay_reason()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>view_material()</slot>
@@ -1731,5 +1753,6 @@
   <slot>view_product_warehouse_2()</slot>
   <slot>view_shipment_order()</slot>
   <slot>view_order_ip_list()</slot>
+  <slot>view_change_pay_reason()</slot>
  </slots>
 </ui>
