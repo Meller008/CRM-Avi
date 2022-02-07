@@ -1298,7 +1298,7 @@ class Order(QMainWindow):
         self.le_transport_company.setText(item[1])
         self.le_transport_company.setWhatsThis(str(item[0]))
 
-    def of_ex_torg12(self,edo, head, article, addres, unite, manager_name, no_pcb, firm):
+    def of_ex_torg12(self,edo, head, article, addres, unite, manager_name, no_pcb, firm, new_address):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1334,6 +1334,11 @@ class Order(QMainWindow):
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
             return False
+
+        if new_address:
+            adr = """Общество с ограниченной ответственностью "Авидевелопмент-М"(ООО"Авидевелопмент-М") ИНН7703561330\\773101001 121351, г. Москва, вн.тер.г. муниципальный округ кунцево, ул. молодогвардейская, д. 61 стр. 20, этаж 1 антресоль, ком. 2 тел. (499)145-43-33 р/с 40702810617030008128 в Филиал "ЦЕНТРАЛЬНЫЙ" Банка ВТБ (ПАО)  г. Москва к/с 30101810145250000411 БИК 044525411"""
+            sheet["A5"] = adr
+            sheet["C10"] = adr
 
         if addres:
             adr = sql_info[0][3]
@@ -1675,7 +1680,7 @@ class Order(QMainWindow):
 
         book.save(path[0])
 
-    def of_ex_invoice(self, article, addres, unite):
+    def of_ex_invoice(self, article, addres, unite, new_address):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1702,6 +1707,14 @@ class Order(QMainWindow):
         if "mysql.connector.errors" in str(type(sql_info)):
             QMessageBox.critical(self, "Ошибка sql получения информации о клиенте", sql_info.msg, QMessageBox.Ok)
             return False
+
+        if new_address:
+            adr = "Адрес: 121351, г. Москва, вн.тер.г. муниципальный округ кунцево, ул. молодогвардейская, д. 61 стр. 20, этаж 1 антресоль, ком. 2"
+            adr2 = "Грузоотправитель и его адрес:  Общество с ограниченной ответственностью 'Авидевелопмент-М'(ООО'Авидевелопмент-М'), 121351, г. Москва, вн.тер.г. муниципальный округ кунцево, ул. молодогвардейская, д. 61 стр. 20, этаж 1 антресоль, ком. 2"
+            kpp = "ИНН/КПП продавца: 7703561330/773101001"
+            sheet["A5"] = adr
+            sheet["A6"] = kpp
+            sheet["A7"] = adr2
 
         if addres == "fact":
             adr = sql_info[0][3]
@@ -1944,7 +1957,7 @@ class Order(QMainWindow):
         except PermissionError:
             QMessageBox.critical(self, "Ошибка сохранения", "Не удалось сохранить документ\n Скорее всего во сохраняете заместо открытого документа!", QMessageBox.Ok)
 
-    def of_ex_ttn(self, addres, article, auto, driver, unite, manager_name):
+    def of_ex_ttn(self, addres, article, auto, driver, unite, manager_name, new_address):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -1985,6 +1998,13 @@ class Order(QMainWindow):
 
         sheet["B7"] = auto
         sheet["C11"] = driver
+
+        if new_address:
+            adr = 'Общество с ограниченной ответственностью "Авидевелопмент-М"(ООО"Авидевелопмент-М") ИНН7703561330\\773101001 121351, г. Москва, вн.тер.г. муниципальный округ кунцево, ул. молодогвардейская, д. 61 стр. 20, этаж 1 антресоль, ком. 2 тел. (499)145-43-33 р/с 40702810417030008128 в Филиал "ЦЕНТРАЛЬНЫЙ" Банка ВТБ (ПАО)  г. Москва к/с 30101810145250000411 БИК 044525411'
+            adr2 = "121351, г. Москва, вн.тер.г. муниципальный округ кунцево, ул. молодогвардейская, д. 61 стр. 20, этаж 1 антресоль, ком. 2"
+            sheet["C9"] = adr
+            sheet["E68"] = adr
+            sheet["B16"] = adr2
 
         for row in sheet.iter_rows(min_row=23, max_col=31, max_row=25):
             for cell in row:
@@ -2487,7 +2507,7 @@ class Order(QMainWindow):
         f.write(xml)
         f.close()
 
-    def of_word_act(self, price):
+    def of_word_act(self, price, new_address):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Word(*.doc)")
         if not path[0]:
             return False
@@ -2495,6 +2515,13 @@ class Order(QMainWindow):
         f = open(getcwd() + '/templates/order/act.xml', "r", -1, "utf-8")
         xml = f.read()
         f.close()
+
+        if new_address:
+            adr = """Общество с ограниченной ответственностью "Авидевелопмент-М"(ООО"Авидевелопмент-М") ИНН7703561330\\773101001 121351, г. Москва, вн.тер.г. муниципальный округ кунцево, ул. молодогвардейская, д. 61 стр. 20, этаж 1 антресоль, ком. 2 тел. (499)145-43-33 р/с 40702810617030008128 в Филиал “ЦЕНТРАЛЬНЫЙ” Банка ВТБ (ПАО)  г. Москва к/с 30101810145250000411 БИК 044525411"""
+            xml = xml.replace("?НАШ", adr)
+        else:
+            adr = """Общество с ограниченной ответственностью "Авидевелопмент-М"(ООО"Авидевелопмент-М") ИНН7703561330\\773001001 123995, г.Москва, Кутузовский проезд д.16 стр.15 тел. (499)145-43-33 р/с 40702810617030008128 в Филиал “ЦЕНТРАЛЬНЫЙ” Банка ВТБ (ПАО)  г. Москва к/с 30101810145250000411 БИК 044525411"""
+            xml = xml.replace("?НАШАДР", adr)
 
         query = "SELECT Full_Name, Legal_Address, INN, KPP FROM clients WHERE Id = %s"
         sql_info = my_sql.sql_select(query, (self.le_client.whatsThis(), ))
@@ -2820,10 +2847,15 @@ class OrderDocList(QDialog):
             else:
                 article = 3
 
+            if self.cb_new_addres.isChecked():
+                new_address = True
+            else:
+                new_address = False
+
             manager_name = self.cb_manager_name_1.currentText()
             no_pcb = self.cb_no_pcb_1.isChecked()
 
-            self.main.of_ex_torg12(edo, head, article, addres, unite, manager_name, no_pcb, firm)
+            self.main.of_ex_torg12(edo, head, article, addres, unite, manager_name, no_pcb, firm, new_address)
             self.close()
             self.destroy()
 
@@ -2847,7 +2879,12 @@ class OrderDocList(QDialog):
             else:
                 article = 3
 
-            self.main.of_ex_invoice(article, addres, unite)
+            if self.cb_new_addres_2.isChecked():
+                new_address = True
+            else:
+                new_address = False
+
+            self.main.of_ex_invoice(article, addres, unite, new_address)
             self.close()
             self.destroy()
 
@@ -2872,8 +2909,13 @@ class OrderDocList(QDialog):
             else:
                 article = 3
 
+            if self.cb_new_addres_3.isChecked():
+                new_address = True
+            else:
+                new_address = False
+
             manager_name = self.cb_manager_name_3.currentText()
-            self.main.of_ex_ttn(addres, article, self.le_ttn_auto.text(), self.le_ttn_driver.text(), unite, manager_name)
+            self.main.of_ex_ttn(addres, article, self.le_ttn_auto.text(), self.le_ttn_driver.text(), unite, manager_name, new_address)
             self.close()
             self.destroy()
 
@@ -2902,11 +2944,16 @@ class OrderDocList(QDialog):
             self.destroy()
 
         elif self.lw_main.selectedItems()[0].text() == "Акт доставки":
+            if self.cb_new_addres_5.isChecked():
+                new_address = True
+            else:
+                new_address = False
+
             try:
                 price = float(self.le_act_price.text())
             except:
                 return False
-            self.main.of_word_act(price)
+            self.main.of_word_act(price, new_address)
             self.close()
             self.destroy()
 
