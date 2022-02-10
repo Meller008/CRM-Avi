@@ -32,7 +32,7 @@
    <item row="1" column="1">
     <widget class="QStackedWidget" name="sw_main">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="page_3"/>
      <widget class="QWidget" name="page">
@@ -631,14 +631,7 @@
        <property name="verticalSpacing">
         <number>5</number>
        </property>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="cb_unite_4">
-         <property name="text">
-          <string>Объединить по коду клиента</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
+       <item row="8" column="0">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -651,7 +644,7 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <layout class="QGridLayout" name="gridLayout_15">
          <property name="spacing">
           <number>0</number>
@@ -679,7 +672,14 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="cb_unite_4">
+         <property name="text">
+          <string>Объединить по коду клиента</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
           <string>Название позиции</string>
@@ -731,6 +731,13 @@
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="cb_new_addres_6">
+         <property name="text">
+          <string>Новый адрес</string>
+         </property>
         </widget>
        </item>
       </layout>

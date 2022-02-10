@@ -2262,7 +2262,7 @@ class Order(QMainWindow):
 
         book.save(path[0])
 
-    def of_ex_score(self, article, unite, bank, firm):
+    def of_ex_score(self, article, unite, bank, firm, new_address):
         path = QFileDialog.getSaveFileName(self, "Сохранение", filter="Excel(*.xlsx)")
         if not path[0]:
             return False
@@ -2289,6 +2289,9 @@ class Order(QMainWindow):
             sheet["A2"] = "ИНН/КПП: 773013683314"
             sheet["A3"] = "Расчетный счет: 40802810938000063715 в ПАО 'Сбербанк' г.Москва"
             sheet["A4"] = "Корр. счет: 30101810600000000225 БИК банка: 044525225"
+
+        if new_address:
+            sheet["A2"] = "ИНН/КПП: 7703561330/773101001"
 
         sheet["A5"] = "Счет № %s от %s г." % (self.le_number_doc.text(), self.de_date_order.date().toString("dd.MM.yyyy"))
         sheet["A6"] = "Плательщик: " + self.le_client.text()
@@ -2932,9 +2935,14 @@ class OrderDocList(QDialog):
             else:
                 unite = False
 
+            if self.cb_new_addres_6.isChecked():
+                new_address = True
+            else:
+                new_address = False
+
             bank = self.rb_score_bank.currentText()
 
-            self.main.of_ex_score(article, unite, bank, firm)
+            self.main.of_ex_score(article, unite, bank, firm, new_address)
             self.close()
             self.destroy()
 
