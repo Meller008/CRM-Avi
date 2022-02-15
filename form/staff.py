@@ -1880,7 +1880,7 @@ class OneStaff(QMainWindow):
             xml = xml.replace("ВРЕМЯ", "время действия патента серии")
             xml = xml.replace("ПАТЕНТ", self.le_patent_serial.text() + " № " + self.le_patent_number.text() + ".")
         else:
-            xml = xml.replace("ВРЕМЯ", "неопределенный срок.")
+            xml = xml.replace("ВРЕМЯ", "неопределенный срок и пролонгируется ежегодно при отсутствии возражений сторон.")
             xml = xml.replace("ПАТЕНТ", "")
         xml = xml.replace("ДАТРОЖ", self.de_info_birth.date().toString("dd.MM.yyyy"))
         xml = xml.replace("ГРАЖДАНСТВО", self.cb_info_country.currentText())
