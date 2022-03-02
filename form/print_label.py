@@ -104,8 +104,8 @@ class LabelSettings(QDialog):
         self.logger = logging.getLogger("LabelLog")
 
         # Будем получать дату, в зависимости от галочки oldDate. НЕ ЗАБЫТЬ ВЫСТАВИТЬ ДАТУ В ФУНКЦИИ
-        # print_date = self.get_print_date(data.get("article_parametr_id"))
-        print_date = QDate.currentDate().toString("MM.yyyy")
+        print_date = self.get_print_date(data.get("article_parametr_id"))
+        # print_date = QDate.currentDate().toString("MM.yyyy")
 
         self.label_data = {"label_path": path.replace("/", '\\'),
                            "label_value": "None",
