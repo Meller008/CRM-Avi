@@ -176,6 +176,6 @@ class LabelSettings(QDialog):
 
         if sql_info[0][0]:
             # Вставить нужную дату
-            return QDate(2021, 9, 10).toString("MM.yyyy")
+            return QDate(2022, 2, 10).toString("MM.yyyy")
         else:
             return QDate.currentDate().toString("MM.yyyy")
