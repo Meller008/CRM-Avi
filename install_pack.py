@@ -4,7 +4,7 @@ import shutil
 # modules = ["pyserial", "openpyxl", "pyBarcode", "Pillow", "requests"]
 
 copy_modules = ["certifi", "chardet", "idna", "mysql-connector-python", "num to text",
-                "openpyxl", "PIL", "pyBarcode", "pyserial", "requests", "urllib3", "suds", "xmltodict"]
+                "openpyxl", "PIL", "pyBarcode", "pyserial", "requests", "urllib3"]
 modules_folder = "C:\\Python34\\Lib\\site-packages"
 
 
