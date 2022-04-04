@@ -184,11 +184,6 @@
            <string>Дата документа</string>
           </property>
          </column>
-         <column>
-          <property name="text">
-           <string>Дата обработки</string>
-          </property>
-         </column>
         </widget>
        </item>
        <item row="2" column="4">

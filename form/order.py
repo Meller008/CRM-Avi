@@ -3,7 +3,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QMainWindow, QFileDialog, QPushButton
 from PyQt5.QtCore import Qt, QDate, QDateTime, QObject
 from PyQt5.QtGui import QIcon, QBrush, QColor
-import re, requests, xml.etree.cElementTree as xml_pars
+import re, requests, xml.etree.cElementTree as cElementTree
 from decimal import Decimal
 import datetime
 import openpyxl
@@ -19,6 +19,9 @@ from classes.my_class import User
 import collections
 import logging
 import logging.config
+from suds.client import Client
+from base64 import b64decode
+import xmltodict
 
 
 class OrderList(table.TableList):
@@ -2976,7 +2979,10 @@ class ImportEDI(QDialog):
         loadUi(getcwd() + '/ui/order_import_edi.ui', self)
         self.setWindowIcon(QIcon(getcwd() + "/images/icon.ico"))
 
-        self.login = {'Name': '4607191149998EC', 'Password': '3NxK8bAyG'}
+        # self.login = {'Name': '4607191149998EC', 'Password': '3NxK8bAyG'}
+        self.wsdl = "https://edi-ws.esphere.ru/edi.wsdl"
+        self.login = {"Name": "4607191149998WS", "Password": "iUGpoftS"}
+        self.suds_client = Client(self.wsdl)
         self.main = main
         self.set_size_table()
         self.start_edi()
@@ -3002,43 +3008,64 @@ class ImportEDI(QDialog):
         self.tw_edi_3.horizontalHeader().resizeSection(9, 40)
 
     def start_edi(self):
-        url = "https://www.ecod.pl/webserv2/EDIservice.asmx/Relationships"
-        values = self.login
-        values.update( {"Timeout": 2000} )
-        req = requests.get(url, params=values)
-
-        text = req.text.replace("&lt;", "<")
-        text = text.replace("&gt;", ">")
-
-        tree = xml_pars.fromstring(text)
-
-        if tree[0].text != "00000000":
-            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+        result = self.suds_client.service['RelationshipsEndpointPort'].process(**self.login)
+        if result["Res"] != 1:
+            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % result["Res"], QMessageBox.Ok)
             self.close()
             self.destroy()
             return False
 
         self.tw_edi_1.setRowCount(0)
-        for relation in tree[1][0]:
-            if relation[3].text == "IN" and relation[4].text == "ORDER":
-                info = {"PartnerIln": relation[1].text,
-                        "DocumentType": relation[4].text,
-                        "DocumentVersion": relation[5].text,
-                        "DocumentStandard": relation[6].text,
-                        "DocumentTest": relation[7].text
-                        }
-
+        for res in result["Cnt"]["relation-response"]["relation"]:
+            if res["direction"] == "IN" and res["document-type"] == "ORDERS":
                 self.tw_edi_1.insertRow(self.tw_edi_1.rowCount())
 
-                item = QTableWidgetItem(str(relation[2].text))
-                item.setData(5, info)
+                item = QTableWidgetItem(str(res["partner-name"]))
+                item.setData(5, res["relation-id"])
                 self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 0, item)
 
-                item = QTableWidgetItem(str(relation[4].text))
+                item = QTableWidgetItem(str(res["document-type"]))
                 self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 1, item)
 
-                item = QTableWidgetItem(str(relation[8].text))
+                item = QTableWidgetItem(str(res["relation-id"]))
                 self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 2, item)
+        # url = "https://www.ecod.pl/webserv2/EDIservice.asmx/Relationships"
+        # values = self.login
+        # values.update( {"Timeout": 2000} )
+        # req = requests.get(url, params=values)
+        #
+        # text = req.text.replace("&lt;", "<")
+        # text = text.replace("&gt;", ">")
+        #
+        # tree = xml_pars.fromstring(text)
+        #
+        # if tree[0].text != "00000000":
+        #     QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+        #     self.close()
+        #     self.destroy()
+        #     return False
+        #
+        # self.tw_edi_1.setRowCount(0)
+        # for relation in tree[1][0]:
+        #     if relation[3].text == "IN" and relation[4].text == "ORDER":
+        #         info = {"PartnerIln": relation[1].text,
+        #                 "DocumentType": relation[4].text,
+        #                 "DocumentVersion": relation[5].text,
+        #                 "DocumentStandard": relation[6].text,
+        #                 "DocumentTest": relation[7].text
+        #                 }
+        #
+        #         self.tw_edi_1.insertRow(self.tw_edi_1.rowCount())
+        #
+        #         item = QTableWidgetItem(str(relation[2].text))
+        #         item.setData(5, info)
+        #         self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 0, item)
+        #
+        #         item = QTableWidgetItem(str(relation[4].text))
+        #         self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 1, item)
+        #
+        #         item = QTableWidgetItem(str(relation[8].text))
+        #         self.tw_edi_1.setItem(self.tw_edi_1.rowCount()-1, 2, item)
 
     def ui_edi1_acc(self):
         try:
@@ -3047,43 +3074,72 @@ class ImportEDI(QDialog):
             QMessageBox.critical(self, "Ошибка ", "Выделите клиента", QMessageBox.Ok)
             return False
 
-        url = "https://www.ecod.pl/webserv2/EDIservice.asmx/ListMBEx"
-        item_info.update(self.login)
-        item_info.update({'DocumentStatus': 'A', 'Timeout': 3000, "DateFrom": "", "DateTo": "", "ItemFrom": "", "ItemTo": 60})
-        req = requests.get(url, params=item_info)
-
-        text = req.text.replace("&lt;", "<")
-        text = text.replace("&gt;", ">")
-
-        tree = xml_pars.fromstring(text)
-
-        if tree[0].text != "00000000":
-            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+        res_data = {
+            "RelationId": item_info,
+            "DocumentStatus": "A",
+            "DocDateTo": datetime.datetime.now(),
+            "DocDateFrom": datetime.datetime.now() - datetime.timedelta(days=90)
+        }
+        res_data.update(self.login)
+        result = self.suds_client.service['ListMBEndpointPort'].process(**res_data)
+        if result["Res"] != 1:
+            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % result["Res"], QMessageBox.Ok)
             self.close()
             self.destroy()
             return False
 
         self.tw_edi_2.setRowCount(0)
-        for relation in tree[1][0]:
-            info = {"PartnerIln": relation[0].text,
-                    "DocumentType": relation[2].text,
-                    "DocumentStandard": relation[4].text,
-                    "TrackingId": relation[1].text
-                    }
+        if len(result["Cnt"]["mailbox-response"]) > 0:
+            for res in result["Cnt"]["mailbox-response"]["document-info"]:
 
-            self.tw_edi_2.insertRow(self.tw_edi_2.rowCount())
+                self.tw_edi_2.insertRow(self.tw_edi_2.rowCount())
 
-            item = QTableWidgetItem(str(relation[7].text))
-            item.setData(5, info)
-            self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 0, item)
+                item = QTableWidgetItem(str(res["document-number"]))
+                item.setData(5, {"RelationId": item_info, "TrackingId": res["tracking-id"], "DocumentStatus": res["document-status"], "OrderNumber": res["document-number"], "OrderDate": res["recieve_date"]})
+                self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 0, item)
 
-            item = QTableWidgetItem(QDate.fromString(relation[8].text, Qt.ISODate).toString("dd.MM.yyyy"))
-            self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 1, item)
-
-            item = QTableWidgetItem(QDateTime.fromString(relation[10].text, "yyyy-MM-dd HH:mm:ss").toString("dd.MM.yyyy HH:mm:ss"))
-            self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 2, item)
+                item = QTableWidgetItem(res["recieve_date"].strftime('%d.%m.%Y'))
+                self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 1, item)
 
         self.sw_main.setCurrentIndex(1)
+
+        # url = "https://www.ecod.pl/webserv2/EDIservice.asmx/ListMBEx"
+        # item_info.update(self.login)
+        # item_info.update({'DocumentStatus': 'A', 'Timeout': 3000, "DateFrom": "", "DateTo": "", "ItemFrom": "", "ItemTo": 60})
+        # req = requests.get(url, params=item_info)
+        #
+        # text = req.text.replace("&lt;", "<")
+        # text = text.replace("&gt;", ">")
+        #
+        # tree = xml_pars.fromstring(text)
+        #
+        # if tree[0].text != "00000000":
+        #     QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+        #     self.close()
+        #     self.destroy()
+        #     return False
+        #
+        # self.tw_edi_2.setRowCount(0)
+        # for relation in tree[1][0]:
+        #     info = {"PartnerIln": relation[0].text,
+        #             "DocumentType": relation[2].text,
+        #             "DocumentStandard": relation[4].text,
+        #             "TrackingId": relation[1].text
+        #             }
+        #
+        #     self.tw_edi_2.insertRow(self.tw_edi_2.rowCount())
+        #
+        #     item = QTableWidgetItem(str(relation[7].text))
+        #     item.setData(5, info)
+        #     self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 0, item)
+        #
+        #     item = QTableWidgetItem(QDate.fromString(relation[8].text, Qt.ISODate).toString("dd.MM.yyyy"))
+        #     self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 1, item)
+        #
+        #     item = QTableWidgetItem(QDateTime.fromString(relation[10].text, "yyyy-MM-dd HH:mm:ss").toString("dd.MM.yyyy HH:mm:ss"))
+        #     self.tw_edi_2.setItem(self.tw_edi_2.rowCount()-1, 2, item)
+        #
+        # self.sw_main.setCurrentIndex(1)
 
     def ui_edi2_to_edi1(self):
         self.start_edi()
@@ -3091,46 +3147,65 @@ class ImportEDI(QDialog):
 
     def ui_edi2_acc(self):
         try:
-            item_info = self.tw_edi_2.selectedItems()[0].data(5)
+            order_data = self.tw_edi_2.selectedItems()[0].data(5)
         except:
             QMessageBox.critical(self, "Ошибка ", "Выделите заказ", QMessageBox.Ok)
             return False
 
-        url = "https://www.ecod.pl/webserv2/EDIservice.asmx/Receive"
-        item_info.update(self.login)
-        item_info.update({'ChangeDocumentStatus': 'R', 'Timeout': 5000})
-        req = requests.get(url, params=item_info)
-
-        text = req.text.replace("&lt;", "<")
-        text = text.replace("&gt;", ">")
-
-        tree = xml_pars.fromstring(text)
-
-        if tree[0].text != "00000000":
-            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+        res_data = {
+            "RelationId": order_data["RelationId"],
+            "TrackingId": order_data["TrackingId"],
+            "DocumentStatus": order_data["DocumentStatus"],
+        }
+        res_data.update(self.login)
+        result = self.suds_client.service['ReceiveEndpointPort'].process(**res_data)
+        if result["Res"] != 1:
+            QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % result["Res"], QMessageBox.Ok)
             self.close()
             self.destroy()
             return False
 
-        self.tw_edi_3.setRowCount(0)
-        color = QBrush(QColor(252, 141, 141, 255))
+        xml_str = b64decode(result["Cnt"]).decode('utf-8')
+        xml_order = xmltodict.parse(xml_str)["ORDERS"]
 
-        for element in tree.iter('{http://www.comarch.com/}OrderNumber'):
-            self.lb_order_number.setText(element.text)
+        self.lb_order_number.setText(order_data["OrderNumber"])
+        self.le_order_date.setText(order_data["OrderDate"].strftime('%d.%m.%Y'))
+        self.le_order_position.setText(str(len(xml_order["SG28"])))
+        # self.le_order_value.setText(element.text)
 
-        for element in tree.iter('{http://www.comarch.com/}OrderDate'):
-            self.le_order_date.setText(element.text)
+        order_items = []
+        if len(xml_order["SG28"]) > 0:
+            for row in xml_order["SG28"]:
+                order_item = {
+                    "name": row["IMD"]["C273"]["E7008"],
+                    "barcode": row["LIN"]["C212"]["E7140"],
+                    "client_code": row["PIA"][0]["C212"]["E7140"],
+                    "value": None,
+                    "pcb": None,
+                    "box_value": None,
+                    "edi_price": None,
+                    "articles": []
+                }
+                # Перебор кол-ва, изем PCB и сколько всего товара
+                for row_value in row["QTY"]:
+                    if int(row_value["C186"]["E6063"]) == 21:
+                        # Это кол-во всего
+                        order_item["value"] = int(float(row_value["C186"]["E6060"]))
+                    elif int(row_value["C186"]["E6063"]) == 59:
+                        # Это PCB
+                        order_item["pcb"] = int(float(row_value["C186"]["E6060"]))
 
-        for element in tree.iter('{http://www.comarch.com/}TotalLines'):
-            self.le_order_position.setText(element.text)
+                if order_item["value"] and order_item["pcb"]:
+                    order_item["box_value"] = order_item["value"] / order_item["pcb"]
 
-        for element in tree.iter('{http://www.comarch.com/}TotalOrderedAmount'):
-            self.le_order_value.setText(element.text)
+                # Переберем данные о ценах, и найдем цену без НДС
+                for row_value in row["SG32"]:
+                    if row_value["PRI"]["C509"]["E5125"] == "AAA":
+                        # Это цена без НДС
+                        order_item["edi_price"] = float(row_value["PRI"]["C509"]["E5118"])
+                        break
 
-        if self.cb_division_position.isChecked():  # Если позиции надо разделять
-            for element in tree.iter('{http://www.comarch.com/}Line-Item'):  # Начинаем перебирать позиции
-
-                # Находим все артикула с одинаковывм кодом клиента
+                # Находим все артикула с одиннаковым кодом клиента
                 query = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
                                 product_article_parametrs.Client_Name, product_article_parametrs.Price, product_article_parametrs.NDS, product_article_parametrs.In_On_Place,
                                 product_article_parametrs.Barcode
@@ -3138,192 +3213,342 @@ class ImportEDI(QDialog):
                                 LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                                 LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
                               WHERE product_article_parametrs.Client_code = %s"""
-                sql_info = my_sql.sql_select(query, (element.find('{http://www.comarch.com/}BuyerItemCode').text.lstrip("0"),))
+                sql_info = my_sql.sql_select(query, (order_item["client_code"].lstrip("0"),))
                 if "mysql.connector.errors" in str(type(sql_info)):
                     QMessageBox.critical(self, "Ошибка sql получения артикула", sql_info.msg, QMessageBox.Ok)
                     return False
 
-                # Проверим что найдена хотя бы один артикул с колом клиента
-                if not len(sql_info):
-                    QMessageBox.warning(self, "Ошибка кода клиента",
-                                        "Не найдено артикулов со следующим кодом клиента %s" % element.find('{http://www.comarch.com/}BuyerItemCode').text.lstrip("0"), QMessageBox.Ok)
-                    return False
+                order_item["articles"] = sql_info
+                order_items.append(order_item)
 
-                # разделем заказаное кол-во на найденое кол-во строк
-                # Найдем кол-во в зависимости от того есть ли оно в документе ЕДИ
-                if self.cb_no_all_value.isChecked():
-                    value = int(float(element.find('{http://www.comarch.com/}OrderedUnitPacksize').text) * float(element.find('{http://www.comarch.com/}OrderedQuantity').text))
-                else:
-                    value = int(float(element.find('{http://www.comarch.com/}OrderedQuantity').text))
-                value_one_position = value / len(sql_info)
+            rows_table = []
+            for item in order_items:
+                if len(item["articles"]) == 0:
+                    rows_table.append(item)
 
-                # вставляем поочередно все найденые совпадения для кода клиента
-                for sql_position in sql_info:
-                    self.tw_edi_3.insertRow(self.tw_edi_3.rowCount())
+                else:  # Есть совпадения артикула
+                    if self.cb_division_position.isChecked():  # Позиции надо разделять
+                        for article in item["articles"]:
+                            row = {
+                                "name": item["name"],
+                                "barcode": item["barcode"],
+                                "client_code": item["client_code"],
+                                "value": item["value"] / len(item["articles"]),
+                                "pcb": item["pcb"],
+                                "box_value": int((item["value"] / len(item["articles"])) / item["pcb"]),
+                                "edi_price": item["edi_price"],
+                                "articles": [article]
+                            }
+                            rows_table.append(row)
 
-                    item = QTableWidgetItem(sql_position[4])
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 0, item)
+                    else:  # Позиции делить не нужно
+                        if len(item["articles"]) == 1:
+                            rows_table.append(item)
+                        else:
+                            rows_table.append(item)
 
-                    item = QTableWidgetItem(sql_position[8])
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 1, item)
+            color = QBrush(QColor(252, 141, 141, 255))
+            self.tw_edi_3.setRowCount(0)
+            for row in rows_table:
+                self.tw_edi_3.insertRow(self.tw_edi_3.rowCount())
 
-                    item = QTableWidgetItem(element.find('{http://www.comarch.com/}BuyerItemCode').text)
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 2, item)
+                q_item = QTableWidgetItem(str(row["name"]))
+                self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 0, q_item)
 
-                    item = QTableWidgetItem(str(value_one_position))
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 3, item)
+                q_item = QTableWidgetItem(str(row["barcode"]))
+                self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 1, q_item)
 
-                    try:
-                        OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
-                    except AttributeError:
-                        OrderedUnitPacksize = 0
+                q_item = QTableWidgetItem(str(row["client_code"]))
+                self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 2, q_item)
 
-                    if OrderedUnitPacksize:
-                        item = QTableWidgetItem(OrderedUnitPacksize)
-                    else:
-                        item = QTableWidgetItem("0")
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
+                q_item = QTableWidgetItem(str(row["value"]))
+                self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 3, q_item)
 
-                    if OrderedUnitPacksize:
-                        item = QTableWidgetItem(str(int(value_one_position / float(OrderedUnitPacksize))))
-                    else:
-                        item = QTableWidgetItem("0")
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
+                q_item = QTableWidgetItem(str(row["box_value"]))
+                self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 4, q_item)
 
-                    try:
-                        edi_price = element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text
-                    except AttributeError:
-                        edi_price = None
+                q_item = QTableWidgetItem(str(row["pcb"]))
+                self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 5, q_item)
 
-                    if edi_price:
-                        item = QTableWidgetItem(edi_price)
-                    else:
-                        item = QTableWidgetItem(0)
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 6, item)
+                q_item = QTableWidgetItem(str(row["edi_price"]))
+                self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 6, q_item)
 
-                    price = round(sql_position[5] - (sql_position[5] * sql_position[6]) / (100 + sql_position[6]), 2)
-                    item_product = QTableWidgetItem(sql_position[1] + " " + sql_position[2] + " " + sql_position[3])
-                    item_product.setData(5, {"article": sql_position[1],
-                                             "size": sql_position[2],
-                                             "parametr": sql_position[3],
-                                             "parametr_id": sql_position[0],
-                                             "client_Name": sql_position[4],
-                                             "price": sql_position[5]})
-
-                    if str(price) == edi_price:
-                        item_price = QTableWidgetItem(str(price))
-                        item_price.setData(5, sql_position[6])
-                    else:
-                        item_price = QTableWidgetItem(str(price))
-                        item_price.setData(5, sql_position[6])
-                        item_price.setBackground(color)
-
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 8, item_product)
-                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 7, item_price)
+                if len(row["articles"]) == 0:
+                    q_item = QTableWidgetItem("Нет совпадений")
+                    self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 8, q_item)
 
                     butt = QPushButton("Изм.")
                     butt.setProperty("row", self.tw_edi_3.rowCount()-1)
                     butt.clicked.connect(self.change_material_name)
                     self.tw_edi_3.setCellWidget(self.tw_edi_3.rowCount()-1, 9, butt)
 
-        else:  # Если позиции не надо разделять
-            for element in tree.iter('{http://www.comarch.com/}Line-Item'):
+                else:  # Есть совпадения артикула
+                    if not self.cb_division_position.isChecked() and len(row["articles"]) > 1:
+                        q_item = QTableWidgetItem("Несколько совпадений")
+                        self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 8, q_item)
 
-                query = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
-                                product_article_parametrs.Client_Name, product_article_parametrs.Price, product_article_parametrs.NDS, product_article_parametrs.In_On_Place
-                              FROM product_article_parametrs
-                                LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
-                                LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
-                              WHERE product_article_parametrs.Client_code = %s"""
-                sql_info = my_sql.sql_select(query, (element.find('{http://www.comarch.com/}BuyerItemCode').text.lstrip("0"),))
-                if "mysql.connector.errors" in str(type(sql_info)):
-                    QMessageBox.critical(self, "Ошибка sql получения артикула", sql_info.msg, QMessageBox.Ok)
-                    return False
+                        butt = QPushButton("Изм.")
+                        butt.setProperty("row", self.tw_edi_3.rowCount() - 1)
+                        butt.clicked.connect(self.change_material_name)
+                        self.tw_edi_3.setCellWidget(self.tw_edi_3.rowCount() - 1, 9, butt)
 
-                self.tw_edi_3.insertRow(self.tw_edi_3.rowCount())
-
-                # Найдем кол-во в зависимости от того есть ли оно в документе ЕДИ
-                if self.cb_no_all_value.isChecked():
-                    value = int(float(element.find('{http://www.comarch.com/}OrderedUnitPacksize').text) * float(element.find('{http://www.comarch.com/}OrderedQuantity').text))
-                else:
-                    value = int(float(element.find('{http://www.comarch.com/}OrderedQuantity').text))
-
-                item = QTableWidgetItem(element.find('{http://www.comarch.com/}ItemDescription').text)
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 0, item)
-
-                item = QTableWidgetItem(element.find('{http://www.comarch.com/}EAN').text)
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 1, item)
-
-                item = QTableWidgetItem(element.find('{http://www.comarch.com/}BuyerItemCode').text)
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 2, item)
-
-                item = QTableWidgetItem(str(value))
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 3, item)
-
-                try:
-                    OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
-                except AttributeError:
-                    OrderedUnitPacksize = None
-
-                if OrderedUnitPacksize:
-                    item = QTableWidgetItem(OrderedUnitPacksize)
-                else:
-                    item = QTableWidgetItem(0)
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
-
-                if OrderedUnitPacksize:
-                    item = QTableWidgetItem(str(value / int(float(OrderedUnitPacksize))))
-                else:
-                    item = QTableWidgetItem(0)
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
-
-                try:
-                    edi_price = element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text
-                except AttributeError:
-                    edi_price = None
-
-                if edi_price:
-                    item = QTableWidgetItem(element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text)
-                else:
-                    item = QTableWidgetItem(0)
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 6, item)
-
-                if sql_info:
-                    if len(sql_info) == 1:  # Одно совпадение
-
-                        price = round(sql_info[0][5] - (sql_info[0][5] * sql_info[0][6]) / (100 + sql_info[0][6]), 2)
-
-                        item_product = QTableWidgetItem(sql_info[0][1] + " " + sql_info[0][2] + " " + sql_info[0][3])
-                        item_product.setData(5, {"article": sql_info[0][1],
-                                                 "size": sql_info[0][2],
-                                                 "parametr": sql_info[0][3],
-                                                 "parametr_id": sql_info[0][0],
-                                                 "client_Name": sql_info[0][4],
-                                                 "price": sql_info[0][5]})
-
-                        if str(price) == edi_price:
+                    else:
+                        price = round(row["articles"][0][5] - (row["articles"][0][5] * row["articles"][0][6]) / (100 + row["articles"][0][6]), 2)
+                        if float(price) == float(row["edi_price"]):
                             item_price = QTableWidgetItem(str(price))
-                            item_price.setData(5, sql_info[0][6])
+                            item_price.setData(5, row["articles"][0][6])
                         else:
                             item_price = QTableWidgetItem(str(price))
-                            item_price.setData(5, sql_info[0][6])
+                            item_price.setData(5, row["articles"][0][6])
                             item_price.setBackground(color)
-                    else:  # Несколько совпадений
-                        item_product = QTableWidgetItem("Несколько совпадений")
-                        item_price = QTableWidgetItem("")
-                else:  # Нет совпадений
-                    item_product = QTableWidgetItem("Нет совпадений")
-                    item_price = QTableWidgetItem("")
 
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 8, item_product)
-                self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 7, item_price)
+                        self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 7, item_price)
 
-                butt = QPushButton("Изм.")
-                butt.setProperty("row", self.tw_edi_3.rowCount()-1)
-                butt.clicked.connect(self.change_material_name)
-                self.tw_edi_3.setCellWidget(self.tw_edi_3.rowCount()-1, 9, butt)
+                        q_item = QTableWidgetItem(row["articles"][0][1] + " " + row["articles"][0][2] + " " + row["articles"][0][3])
+                        q_item.setData(5, {"article": row["articles"][0][1],
+                                           "size": row["articles"][0][2],
+                                           "parametr": row["articles"][0][3],
+                                           "parametr_id": row["articles"][0][0],
+                                           "client_Name": row["articles"][0][4],
+                                           "price": row["articles"][0][5]})
+                        self.tw_edi_3.setItem(self.tw_edi_3.rowCount() - 1, 8, q_item)
+
+                        butt = QPushButton("Изм.")
+                        butt.setProperty("row", self.tw_edi_3.rowCount() - 1)
+                        butt.clicked.connect(self.change_material_name)
+                        self.tw_edi_3.setCellWidget(self.tw_edi_3.rowCount() - 1, 9, butt)
 
         self.sw_main.setCurrentIndex(2)
+
+
+        # url = "https://www.ecod.pl/webserv2/EDIservice.asmx/Receive"
+        # item_info.update(self.login)
+        # item_info.update({'ChangeDocumentStatus': 'R', 'Timeout': 5000})
+        # req = requests.get(url, params=item_info)
+        #
+        # text = req.text.replace("&lt;", "<")
+        # text = text.replace("&gt;", ">")
+        #
+        # tree = xml_pars.fromstring(text)
+        #
+        # if tree[0].text != "00000000":
+        #     QMessageBox.critical(self, "Ошибка EDI", "Ошибка EDI %s" % tree[0].text, QMessageBox.Ok)
+        #     self.close()
+        #     self.destroy()
+        #     return False
+        #
+        # self.tw_edi_3.setRowCount(0)
+        # color = QBrush(QColor(252, 141, 141, 255))
+        #
+        # for element in tree.iter('{http://www.comarch.com/}OrderNumber'):
+        #     self.lb_order_number.setText(element.text)
+        #
+        # for element in tree.iter('{http://www.comarch.com/}OrderDate'):
+        #     self.le_order_date.setText(element.text)
+        #
+        # for element in tree.iter('{http://www.comarch.com/}TotalLines'):
+        #     self.le_order_position.setText(element.text)
+        #
+        # for element in tree.iter('{http://www.comarch.com/}TotalOrderedAmount'):
+        #     self.le_order_value.setText(element.text)
+        #
+        # if self.cb_division_position.isChecked():  # Если позиции надо разделять
+        #     for element in tree.iter('{http://www.comarch.com/}Line-Item'):  # Начинаем перебирать позиции
+        #
+        #         # Находим все артикула с одинаковывм кодом клиента
+        #         query = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
+        #                         product_article_parametrs.Client_Name, product_article_parametrs.Price, product_article_parametrs.NDS, product_article_parametrs.In_On_Place,
+        #                         product_article_parametrs.Barcode
+        #                       FROM product_article_parametrs
+        #                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+        #                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+        #                       WHERE product_article_parametrs.Client_code = %s"""
+        #         sql_info = my_sql.sql_select(query, (element.find('{http://www.comarch.com/}BuyerItemCode').text.lstrip("0"),))
+        #         if "mysql.connector.errors" in str(type(sql_info)):
+        #             QMessageBox.critical(self, "Ошибка sql получения артикула", sql_info.msg, QMessageBox.Ok)
+        #             return False
+        #
+        #         # Проверим что найдена хотя бы один артикул с колом клиента
+        #         if not len(sql_info):
+        #             QMessageBox.warning(self, "Ошибка кода клиента",
+        #                                 "Не найдено артикулов со следующим кодом клиента %s" % element.find('{http://www.comarch.com/}BuyerItemCode').text.lstrip("0"), QMessageBox.Ok)
+        #             return False
+        #
+        #         # разделем заказаное кол-во на найденое кол-во строк
+        #         # Найдем кол-во в зависимости от того есть ли оно в документе ЕДИ
+        #         if self.cb_no_all_value.isChecked():
+        #             value = int(float(element.find('{http://www.comarch.com/}OrderedUnitPacksize').text) * float(element.find('{http://www.comarch.com/}OrderedQuantity').text))
+        #         else:
+        #             value = int(float(element.find('{http://www.comarch.com/}OrderedQuantity').text))
+        #         value_one_position = value / len(sql_info)
+        #
+        #         # вставляем поочередно все найденые совпадения для кода клиента
+        #         for sql_position in sql_info:
+        #             self.tw_edi_3.insertRow(self.tw_edi_3.rowCount())
+        #
+        #             item = QTableWidgetItem(sql_position[4])
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 0, item)
+        #
+        #             item = QTableWidgetItem(sql_position[8])
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 1, item)
+        #
+        #             item = QTableWidgetItem(element.find('{http://www.comarch.com/}BuyerItemCode').text)
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 2, item)
+        #
+        #             item = QTableWidgetItem(str(value_one_position))
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 3, item)
+        #
+        #             try:
+        #                 OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+        #             except AttributeError:
+        #                 OrderedUnitPacksize = 0
+        #
+        #             if OrderedUnitPacksize:
+        #                 item = QTableWidgetItem(OrderedUnitPacksize)
+        #             else:
+        #                 item = QTableWidgetItem("0")
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
+        #
+        #             if OrderedUnitPacksize:
+        #                 item = QTableWidgetItem(str(int(value_one_position / float(OrderedUnitPacksize))))
+        #             else:
+        #                 item = QTableWidgetItem("0")
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
+        #
+        #             try:
+        #                 edi_price = element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text
+        #             except AttributeError:
+        #                 edi_price = None
+        #
+        #             if edi_price:
+        #                 item = QTableWidgetItem(edi_price)
+        #             else:
+        #                 item = QTableWidgetItem(0)
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 6, item)
+        #
+        #             price = round(sql_position[5] - (sql_position[5] * sql_position[6]) / (100 + sql_position[6]), 2)
+        #             item_product = QTableWidgetItem(sql_position[1] + " " + sql_position[2] + " " + sql_position[3])
+        #             item_product.setData(5, {"article": sql_position[1],
+        #                                      "size": sql_position[2],
+        #                                      "parametr": sql_position[3],
+        #                                      "parametr_id": sql_position[0],
+        #                                      "client_Name": sql_position[4],
+        #                                      "price": sql_position[5]})
+        #
+        #             if str(price) == edi_price:
+        #                 item_price = QTableWidgetItem(str(price))
+        #                 item_price.setData(5, sql_position[6])
+        #             else:
+        #                 item_price = QTableWidgetItem(str(price))
+        #                 item_price.setData(5, sql_position[6])
+        #                 item_price.setBackground(color)
+        #
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 8, item_product)
+        #             self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 7, item_price)
+        #
+        #             butt = QPushButton("Изм.")
+        #             butt.setProperty("row", self.tw_edi_3.rowCount()-1)
+        #             butt.clicked.connect(self.change_material_name)
+        #             self.tw_edi_3.setCellWidget(self.tw_edi_3.rowCount()-1, 9, butt)
+        #
+        # else:  # Если позиции не надо разделять
+        #     for element in tree.iter('{http://www.comarch.com/}Line-Item'):
+        #
+        #         query = """SELECT product_article_parametrs.Id, product_article.Article, product_article_size.Size, product_article_parametrs.Name,
+        #                         product_article_parametrs.Client_Name, product_article_parametrs.Price, product_article_parametrs.NDS, product_article_parametrs.In_On_Place
+        #                       FROM product_article_parametrs
+        #                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
+        #                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
+        #                       WHERE product_article_parametrs.Client_code = %s"""
+        #         sql_info = my_sql.sql_select(query, (element.find('{http://www.comarch.com/}BuyerItemCode').text.lstrip("0"),))
+        #         if "mysql.connector.errors" in str(type(sql_info)):
+        #             QMessageBox.critical(self, "Ошибка sql получения артикула", sql_info.msg, QMessageBox.Ok)
+        #             return False
+        #
+        #         self.tw_edi_3.insertRow(self.tw_edi_3.rowCount())
+        #
+        #         # Найдем кол-во в зависимости от того есть ли оно в документе ЕДИ
+        #         if self.cb_no_all_value.isChecked():
+        #             value = int(float(element.find('{http://www.comarch.com/}OrderedUnitPacksize').text) * float(element.find('{http://www.comarch.com/}OrderedQuantity').text))
+        #         else:
+        #             value = int(float(element.find('{http://www.comarch.com/}OrderedQuantity').text))
+        #
+        #         item = QTableWidgetItem(element.find('{http://www.comarch.com/}ItemDescription').text)
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 0, item)
+        #
+        #         item = QTableWidgetItem(element.find('{http://www.comarch.com/}EAN').text)
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 1, item)
+        #
+        #         item = QTableWidgetItem(element.find('{http://www.comarch.com/}BuyerItemCode').text)
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 2, item)
+        #
+        #         item = QTableWidgetItem(str(value))
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 3, item)
+        #
+        #         try:
+        #             OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+        #         except AttributeError:
+        #             OrderedUnitPacksize = None
+        #
+        #         if OrderedUnitPacksize:
+        #             item = QTableWidgetItem(OrderedUnitPacksize)
+        #         else:
+        #             item = QTableWidgetItem(0)
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 5, item)
+        #
+        #         if OrderedUnitPacksize:
+        #             item = QTableWidgetItem(str(value / int(float(OrderedUnitPacksize))))
+        #         else:
+        #             item = QTableWidgetItem(0)
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 4, item)
+        #
+        #         try:
+        #             edi_price = element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text
+        #         except AttributeError:
+        #             edi_price = None
+        #
+        #         if edi_price:
+        #             item = QTableWidgetItem(element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text)
+        #         else:
+        #             item = QTableWidgetItem(0)
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 6, item)
+        #
+        #         if sql_info:
+        #             if len(sql_info) == 1:  # Одно совпадение
+        #
+        #                 price = round(sql_info[0][5] - (sql_info[0][5] * sql_info[0][6]) / (100 + sql_info[0][6]), 2)
+        #
+        #                 item_product = QTableWidgetItem(sql_info[0][1] + " " + sql_info[0][2] + " " + sql_info[0][3])
+        #                 item_product.setData(5, {"article": sql_info[0][1],
+        #                                          "size": sql_info[0][2],
+        #                                          "parametr": sql_info[0][3],
+        #                                          "parametr_id": sql_info[0][0],
+        #                                          "client_Name": sql_info[0][4],
+        #                                          "price": sql_info[0][5]})
+        #
+        #                 if str(price) == edi_price:
+        #                     item_price = QTableWidgetItem(str(price))
+        #                     item_price.setData(5, sql_info[0][6])
+        #                 else:
+        #                     item_price = QTableWidgetItem(str(price))
+        #                     item_price.setData(5, sql_info[0][6])
+        #                     item_price.setBackground(color)
+        #             else:  # Несколько совпадений
+        #                 item_product = QTableWidgetItem("Несколько совпадений")
+        #                 item_price = QTableWidgetItem("")
+        #         else:  # Нет совпадений
+        #             item_product = QTableWidgetItem("Нет совпадений")
+        #             item_price = QTableWidgetItem("")
+        #
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 8, item_product)
+        #         self.tw_edi_3.setItem(self.tw_edi_3.rowCount()-1, 7, item_price)
+        #
+        #         butt = QPushButton("Изм.")
+        #         butt.setProperty("row", self.tw_edi_3.rowCount()-1)
+        #         butt.clicked.connect(self.change_material_name)
+        #         self.tw_edi_3.setCellWidget(self.tw_edi_3.rowCount()-1, 9, butt)
+        #
+        # self.sw_main.setCurrentIndex(2)
 
     def ui_edi3_to_edi2(self):
         self.sw_main.setCurrentIndex(1)

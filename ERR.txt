@@ -1291,3 +1291,1708 @@ Time = 03.05.2018 15:56:52Traceback (most recent call last):
   File "C:\Python34\lib\site-packages\openpyxl\utils\cell.py", line 135, in range_boundaries
     raise ValueError("{0} is not a valid coordinate or range")
 ValueError: {0} is not a valid coordinate or range
+
+---===Error===---
+Time = 14.05.2018 19:05:20Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 512, in view_material_in_pack
+    self.material_in_pack = material_in_pack.MaterialInPack()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 18, in __init__
+    self.start_settings()
+AttributeError: 'MaterialInPack' object has no attribute 'start_settings'
+
+---===Error===---
+Time = 15.05.2018 14:51:43Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 72, in ui_calc
+    item = QTableWidgetItem(str(value[3]))
+IndexError: list index out of range
+
+---===Error===---
+Time = 15.05.2018 15:36:45Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 66, in ui_calc
+    avg = [i for i in values[3] / values[2]]
+IndexError: list index out of range
+
+---===Error===---
+Time = 15.05.2018 15:51:40Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 70, in ui_calc
+    m_ = m * 1.15
+TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+
+---===Error===---
+Time = 15.05.2018 15:52:25Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 68, in ui_calc
+    avg_ = [i[5] / i[4] for i in values]
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 68, in <listcomp>
+    avg_ = [i[5] / i[4] for i in values]
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'NoneType'
+
+---===Error===---
+Time = 15.05.2018 15:53:29Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 93, in ui_calc
+    if _m > value[4] / value[3] > m_:
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'NoneType'
+
+---===Error===---
+Time = 15.05.2018 15:58:44Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 98, in ui_calc
+    item = QTableWidgetItem(str(round(value[4] / value[3], 7)))
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'NoneType'
+
+---===Error===---
+Time = 15.05.2018 16:00:26Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 60, in ui_calc
+    new = [pack[1], pack[2], pack[3], pack[4], pack[5]/pack[4], pack[6], None]
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'NoneType'
+
+---===Error===---
+Time = 15.05.2018 16:02:06Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 61, in ui_calc
+    new = [pack[1], pack[2], pack[3], pack[4], pack[5]/pack[4], pack[6], None]
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'NoneType'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\material_in_pack.py", line 64, in ui_calc
+    print([pack[1], pack[2], pack[3], pack[4], pack[5]/pack[4], pack[6], None])
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'NoneType'
+
+---===Error===---
+Time = 16.05.2018 17:58:28Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_adjustments.py", line 43, in ui_add_table_item
+    self.new_order = MaterialAdjustments(self)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_adjustments.py", line 51, in __init__
+    loadUi(getcwd() + '/ui/order_filter.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 889, in createConnections
+    conn.findtext('slot').split('(')[0])
+  File "C:\Python34\lib\site-packages\PyQt5\uic\objcreator.py", line 137, in getSlot
+    return self._cpolicy.getSlot(obj, slotname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\qobjectcreator.py", line 149, in getSlot
+    return getattr(object, slotname)
+AttributeError: 'MaterialAdjustments' object has no attribute 'ui_can'
+
+---===Error===---
+Time = 17.05.2018 18:23:38Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_adjustments.py", line 64, in ui_dell_table_item
+    value_change = sql_info[0][0]
+IndexError: list index out of range
+
+---===Error===---
+Time = 18.05.2018 18:45:28Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 129, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 80, in ui_change_table_item
+    self.cut_window = CutBrows(self, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 154, in __init__
+    logging.config.fileConfig(getcwd() + '/settings/logger_conf.ini')
+  File "C:\Python34\lib\logging\config.py", line 76, in fileConfig
+    formatters = _create_formatters(cp)
+  File "C:\Python34\lib\logging\config.py", line 109, in _create_formatters
+    flist = cp["formatters"]["keys"]
+  File "C:\Python34\lib\configparser.py", line 936, in __getitem__
+    raise KeyError(key)
+KeyError: 'formatters'
+
+---===Error===---
+Time = 18.05.2018 18:46:10Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 129, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 80, in ui_change_table_item
+    self.cut_window = CutBrows(self, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 154, in __init__
+    logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+  File "C:\Python34\lib\logging\config.py", line 76, in fileConfig
+    formatters = _create_formatters(cp)
+  File "C:\Python34\lib\logging\config.py", line 120, in _create_formatters
+    class_name = cp[sectname].get("class")
+  File "C:\Python34\lib\configparser.py", line 936, in __getitem__
+    raise KeyError(key)
+KeyError: 'formatter_simpleFormatter'
+
+---===Error===---
+Time = 18.05.2018 18:47:13Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 129, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 80, in ui_change_table_item
+    self.cut_window = CutBrows(self, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 154, in __init__
+    logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+  File "C:\Python34\lib\logging\config.py", line 84, in fileConfig
+    handlers = _install_handlers(cp, formatters)
+  File "C:\Python34\lib\logging\config.py", line 138, in _install_handlers
+    section = cp["handler_%s" % hand]
+  File "C:\Python34\lib\configparser.py", line 936, in __getitem__
+    raise KeyError(key)
+KeyError: 'handler_FileHandler'
+
+---===Error===---
+Time = 18.05.2018 18:48:54Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 129, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 80, in ui_change_table_item
+    self.cut_window = CutBrows(self, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 154, in __init__
+    logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+  File "C:\Python34\lib\logging\config.py", line 85, in fileConfig
+    _install_loggers(cp, handlers, disable_existing_loggers)
+  File "C:\Python34\lib\logging\config.py", line 253, in _install_loggers
+    logger.addHandler(handlers[hand])
+KeyError: 'handler_fileHandler_cut'
+
+---===Error===---
+Time = 18.05.2018 18:50:49Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\templates\table.py", line 129, in ui_double_click_table_item
+    self.ui_change_table_item(item.data(5))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 80, in ui_change_table_item
+    self.cut_window = CutBrows(self, item_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\cut.py", line 154, in __init__
+    logging.config.fileConfig(getcwd() + '/setting/logger_conf.ini')
+  File "C:\Python34\lib\logging\config.py", line 85, in fileConfig
+    _install_loggers(cp, handlers, disable_existing_loggers)
+  File "C:\Python34\lib\logging\config.py", line 253, in _install_loggers
+    logger.addHandler(handlers[hand])
+KeyError: 'handler_fileHandler_cut'
+
+---===Error===---
+Time = 21.05.2018 14:55:59Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\login_window.py", line 30, in check_login
+    self.main.login_access()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 539, in login_access
+    self.access()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 50, in access
+    a(val)
+TypeError: QWidget.setEnabled(bool): argument 1 has unexpected type 'str'
+
+---===Error===---
+Time = 25.05.2018 17:35:19Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 563, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 29.05.2018 14:19:55Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1812, in __init__
+    self.set_tree_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1820, in set_tree_info
+    self.tree_widget.clear()
+AttributeError: 'ArticleTest' object has no attribute 'tree_widget'
+
+---===Error===---
+Time = 29.05.2018 15:09:26Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1938, in ui_select_parametr
+    self.set_parametr_info(parametr_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1912, in set_parametr_info
+    self.le_client_name.setText(sql_info[1])
+IndexError: list index out of range
+
+---===Error===---
+Time = 29.05.2018 16:08:25Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1944, in ui_select_parametr
+    self.set_parametr_info(parametr_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1915, in set_parametr_info
+    self.le_name.appendPlainText(sql_info[0][9])
+AttributeError: 'QLineEdit' object has no attribute 'appendPlainText'
+
+---===Error===---
+Time = 29.05.2018 16:11:50Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1970, in ui_select_parametr
+    self.set_parametr_info(parametr_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1921, in set_parametr_info
+    self.le_name.setText(sql_info[0][9])
+TypeError: QLineEdit.setText(str): argument 1 has unexpected type 'int'
+
+---===Error===---
+Time = 30.05.2018 14:00:26Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1813, in __init__
+    self.set_article_list()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1886, in set_article_list
+    for table_tuple in self.table_items:
+AttributeError: 'ArticleTest' object has no attribute 'table_items'
+
+---===Error===---
+Time = 30.05.2018 16:23:18Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2144, in ui_select_article
+    self.clear_parametr_list()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1930, in clear_parametr_list
+    self.lw_parametr.clear()
+AttributeError: 'ArticleTest' object has no attribute 'lw_parametr'
+
+---===Error===---
+Time = 30.05.2018 17:02:27Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 571, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 30.05.2018 17:03:15Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\supply_material.py", line 1006, in ui_double_click_item
+    self.m_class.of_list_material_name(item)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2197, in of_list_material_name
+    self.calc()
+AttributeError: 'ArticleTest' object has no attribute 'calc'
+
+---===Error===---
+Time = 31.05.2018 13:21:05Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2240, in ui_dell_operation
+    self.calc()
+AttributeError: 'ArticleTest' object has no attribute 'calc'
+
+---===Error===---
+Time = 31.05.2018 13:53:22Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2139, in ui_add_size
+    self.update_article_list()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1885, in update_article_list
+    tree_id = self.tree_widget.currentItem().data(0, 5)
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 31.05.2018 13:54:33Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2158, in ui_change_size
+    self.set_size_list(self.tw_article.currentItem().data(5))
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 31.05.2018 13:55:14Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2175, in ui_dell_size
+    self.set_size_list(self.tw_article.currentItem().data(5))
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 01.06.2018 15:52:45Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2278, in ui_add_article
+    self.add_article = ArticleName()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2708, in __init__
+    self.le_article.setText(article)
+AttributeError: 'ArticleName' object has no attribute 'le_article'
+
+---===Error===---
+Time = 01.06.2018 16:04:52Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2156, in ui_change_size
+    self.set_size_list(self.tw_article.currentItem().data(5))
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 01.06.2018 16:33:59Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2122, in ui_select_article
+    article_id = self.tw_article.currentItem().data(5)
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 01.06.2018 17:19:12Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1814, in __init__
+    self.set_article_list()
+TypeError: function_decorate() missing 2 required positional arguments: 'arg1' and 'arg2'
+
+---===Error===---
+Time = 01.06.2018 17:19:55Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1814, in __init__
+    self.set_article_list()
+TypeError: function_decorate() missing 2 required positional arguments: 'arg1' and 'arg2'
+
+---===Error===---
+Time = 01.06.2018 17:38:09Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 571, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 01.06.2018 18:25:41Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1823, in __init__
+    self.set_tree_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 21, in function_decorate
+    _function(*args)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1915, in set_tree_info
+    print(self.tree_widget.findItems("32", 0, 0))
+TypeError: QTreeWidget.findItems(str, Qt.MatchFlags, int column=0): argument 2 has unexpected type 'int'
+
+---===Error===---
+Time = 01.06.2018 18:27:08Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1823, in __init__
+    self.set_tree_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 21, in function_decorate
+    _function(*args)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1915, in set_tree_info
+    print(self.tree_widget.findItems("МАЙКИ, ФУТБ, КОМП. ОБЩАЯ БАЗА"))
+TypeError: QTreeWidget.findItems(str, Qt.MatchFlags, int column=0): not enough arguments
+
+---===Error===---
+Time = 01.06.2018 18:51:33Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 571, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 01.06.2018 18:52:40Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1823, in __init__
+    self.set_tree_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 21, in function_decorate
+    _function(*args)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1914, in set_tree_info
+    if current_id and current_id == new_item.data(0, 5):
+AttributeError: 'bool' object has no attribute 'data'
+
+---===Error===---
+Time = 01.06.2018 19:08:40Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 571, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 04.06.2018 14:53:39Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2696, in ui_down_operation
+    set_down_item = QTableWidgetItem(down_item.text())
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 04.06.2018 14:55:38Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 571, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 04.06.2018 14:56:14Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2628, in ui_dell_operation
+    if self.tw_operations.item(row, 0).data(-1) == "new":
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 04.06.2018 16:56:08Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1819, in __init__
+    loadUi(getcwd() + '/ui/article_test.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 889, in createConnections
+    conn.findtext('slot').split('(')[0])
+  File "C:\Python34\lib\site-packages\PyQt5\uic\objcreator.py", line 137, in getSlot
+    return self._cpolicy.getSlot(obj, slotname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\qobjectcreator.py", line 149, in getSlot
+    return getattr(object, slotname)
+AttributeError: 'ArticleTest' object has no attribute 'ui_change_info'
+
+---===Error===---
+Time = 04.06.2018 16:57:05Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1819, in __init__
+    loadUi(getcwd() + '/ui/article_test.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 889, in createConnections
+    conn.findtext('slot').split('(')[0])
+  File "C:\Python34\lib\site-packages\PyQt5\uic\objcreator.py", line 137, in getSlot
+    return self._cpolicy.getSlot(obj, slotname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\qobjectcreator.py", line 149, in getSlot
+    return getattr(object, slotname)
+AttributeError: 'ArticleTest' object has no attribute 'ui_change_info'
+
+---===Error===---
+Time = 04.06.2018 18:51:36Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2585, in ui_past_article
+    self.past_window = PastParametr(self, self.copy_article_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1782, in __init__
+    loadUi(getcwd() + '/ui/article_copy_parametr_2.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 889, in createConnections
+    conn.findtext('slot').split('(')[0])
+  File "C:\Python34\lib\site-packages\PyQt5\uic\objcreator.py", line 137, in getSlot
+    return self._cpolicy.getSlot(obj, slotname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\qobjectcreator.py", line 149, in getSlot
+    return getattr(object, slotname)
+AttributeError: 'PastParametr' object has no attribute 'ui_cancel'
+
+---===Error===---
+Time = 04.06.2018 18:52:36Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2585, in ui_past_article
+    self.past_window = PastParametr(self, self.copy_article_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1786, in __init__
+    self.set_copy_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1800, in set_copy_info
+    if "mysql.connector.errors" in str(type(self.table_items)):
+AttributeError: 'PastParametr' object has no attribute 'table_items'
+
+---===Error===---
+Time = 04.06.2018 18:54:47Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2585, in ui_past_article
+    self.past_window = PastParametr(self, self.copy_article_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1786, in __init__
+    self.set_copy_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1800, in set_copy_info
+    if "mysql.connector.errors" in str(type(self.table_items)):
+AttributeError: 'PastParametr' object has no attribute 'table_items'
+
+---===Error===---
+Time = 04.06.2018 18:55:30Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2585, in ui_past_article
+    self.past_window = PastParametr(self, self.copy_article_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1788, in __init__
+    self.access()
+AttributeError: 'PastParametr' object has no attribute 'access'
+
+---===Error===---
+Time = 05.06.2018 15:22:00Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2577, in ui_search_article
+    self.set_article_list()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 21, in function_decorate
+    _function(*args)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2008, in set_article_list
+    for table_tuple in self.table_items:
+TypeError: 'ProgrammingError' object is not iterable
+
+---===Error===---
+Time = 05.06.2018 15:40:13Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2599, in ui_change_article_category
+    info.set_settings(self.set_transfer_win)
+AttributeError: 'ArticleTest' object has no attribute 'set_transfer_win'
+
+---===Error===---
+Time = 05.06.2018 17:19:16Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 3328, in ui_view_label
+    self.lw_size.currentItem().text() + " " +\
+AttributeError: 'QTableWidget' object has no attribute 'currentItems'
+
+---===Error===---
+Time = 05.06.2018 17:21:26Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 3309, in ui_print_label
+    data = {"article": self.le_article.text(),
+AttributeError: 'ArticleTest' object has no attribute 'le_article'
+
+---===Error===---
+Time = 15.06.2018 18:52:14Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 447, in ui_add_accessories
+    self.set_accessories_name()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 801, in set_accessories_name
+    if round(dict["value"] * dict["value_thing"], 4) != dict["sql_value_sum"]:
+KeyError: 'value_thing'
+
+---===Error===---
+Time = 15.06.2018 18:53:42Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 447, in ui_add_accessories
+    self.set_accessories_name()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 801, in set_accessories_name
+    if round(dict["value"] * dict["value_thing"], 4) != dict["sql_value_sum"]:
+KeyError: 'value_thing'
+
+---===Error===---
+Time = 15.06.2018 18:59:23Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 447, in ui_add_accessories
+    self.set_accessories_name()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 801, in set_accessories_name
+    if round(dict["value"] * dict["value_thing"], 4) != dict["sql_value_sum"]:
+KeyError: 'sql_value_sum'
+
+---===Error===---
+Time = 19.06.2018 16:16:12Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 579, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 19.06.2018 16:17:17Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 308, in view_product_warehouse_2
+    self.product_warehouse2 = warehouse_product.Warehouse2()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 521, in __init__
+    loadUi(getcwd() + '/ui/article_test.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 889, in createConnections
+    conn.findtext('slot').split('(')[0])
+  File "C:\Python34\lib\site-packages\PyQt5\uic\objcreator.py", line 137, in getSlot
+    return self._cpolicy.getSlot(obj, slotname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\qobjectcreator.py", line 149, in getSlot
+    return getattr(object, slotname)
+AttributeError: 'Warehouse2' object has no attribute 'ui_add_material'
+
+---===Error===---
+Time = 19.06.2018 16:17:59Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 308, in view_product_warehouse_2
+    self.product_warehouse2 = warehouse_product.Warehouse2()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 521, in __init__
+    loadUi(getcwd() + '/ui/warehouse_product_info_2.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 889, in createConnections
+    conn.findtext('slot').split('(')[0])
+  File "C:\Python34\lib\site-packages\PyQt5\uic\objcreator.py", line 137, in getSlot
+    return self._cpolicy.getSlot(obj, slotname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\qobjectcreator.py", line 149, in getSlot
+    return getattr(object, slotname)
+AttributeError: 'Warehouse2' object has no attribute 'ui_change_category'
+
+---===Error===---
+Time = 19.06.2018 16:23:27Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 308, in view_product_warehouse_2
+    self.product_warehouse2 = warehouse_product.Warehouse2()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 521, in __init__
+    loadUi(getcwd() + '/ui/warehouse_product_info_2.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 889, in createConnections
+    conn.findtext('slot').split('(')[0])
+  File "C:\Python34\lib\site-packages\PyQt5\uic\objcreator.py", line 137, in getSlot
+    return self._cpolicy.getSlot(obj, slotname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\qobjectcreator.py", line 149, in getSlot
+    return getattr(object, slotname)
+AttributeError: 'Warehouse2' object has no attribute 'ui_search_article'
+
+---===Error===---
+Time = 19.06.2018 16:24:27Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 308, in view_product_warehouse_2
+    self.product_warehouse2 = warehouse_product.Warehouse2()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 524, in __init__
+    self.set_start_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 561, in set_start_settings
+    self.tw_materials.horizontalHeader().resizeSection(0, 240)
+AttributeError: 'Warehouse2' object has no attribute 'tw_materials'
+
+---===Error===---
+Time = 19.06.2018 16:27:27Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 308, in view_product_warehouse_2
+    self.product_warehouse2 = warehouse_product.Warehouse2()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 524, in __init__
+    self.set_start_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 578, in set_start_settings
+    self.pb_up.setIcon(QIcon(getcwd() + "/images/up.ico"))
+AttributeError: 'Warehouse2' object has no attribute 'pb_up'
+
+---===Error===---
+Time = 19.06.2018 16:28:01Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 308, in view_product_warehouse_2
+    self.product_warehouse2 = warehouse_product.Warehouse2()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 525, in __init__
+    self.set_tree_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 19, in function_decorate
+    _function(*args)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 650, in set_tree_info
+    add_item = QTreeWidgetItem((item_tree[2], ))
+NameError: name 'QTreeWidgetItem' is not defined
+
+---===Error===---
+Time = 19.06.2018 16:58:52Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 732, in ui_select_article
+    if self.ui_check_need_save():
+AttributeError: 'Warehouse2' object has no attribute 'ui_check_need_save'
+
+---===Error===---
+Time = 19.06.2018 16:59:56Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 731, in ui_select_article
+    self.set_size_list(article_id)
+AttributeError: 'Warehouse2' object has no attribute 'set_size_list'
+
+---===Error===---
+Time = 19.06.2018 17:16:09Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 579, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 19.06.2018 17:16:34Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 736, in ui_select_tree
+    self.clear_size_list()
+AttributeError: 'Warehouse2' object has no attribute 'clear_size_list'
+
+---===Error===---
+Time = 20.06.2018 15:53:09Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 753, in ui_select_article
+    article_id = self.tw_article.currentItem().data(5)
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 20.06.2018 15:57:43Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 308, in view_product_warehouse_2
+    self.product_warehouse2 = warehouse_product.Warehouse2()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 526, in __init__
+    self.set_article_list()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 20, in function_decorate
+    _function(*args)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 710, in set_article_list
+    for table_tuple in self.table_items:
+TypeError: 'ProgrammingError' object is not iterable
+
+---===Error===---
+Time = 20.06.2018 19:03:30Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 308, in view_product_warehouse_2
+    self.product_warehouse2 = warehouse_product.Warehouse2()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 524, in __init__
+    self.set_start_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 579, in set_start_settings
+    self.de_date_transaction_to.setDate(QDate.currentDate())
+AttributeError: 'Warehouse2' object has no attribute 'de_date_transaction_to'
+
+---===Error===---
+Time = 20.06.2018 19:03:53Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 755, in ui_select_article
+    self.set_parametr_warehouse(article_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 775, in set_parametr_warehouse
+    self.set_warehouse_table(_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\warehouse_product.py", line 832, in set_warehouse_table
+    sql_info_warehouse = my_sql.sql_select(query, (_id, self.de_date_transaction_from.date.toString(1), self.de_date_transaction_to.date.toString(1)))
+AttributeError: 'builtin_function_or_method' object has no attribute 'toString'
+
+---===Error===---
+Time = 20.06.2018 19:23:35Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 579, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 22.06.2018 13:21:30Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2365, in ui_dc_variant
+    self.main.of_select_variant((int(variant_id), article_name))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 916, in of_select_variant
+    self.le_size.setText(sql_result[0][0])
+TypeError: 'ProgrammingError' object does not support indexing
+
+---===Error===---
+Time = 22.06.2018 14:11:43Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2369, in ui_dc_variant
+    self.main.of_select_variant((int(variant_id), article_name))
+AttributeError: 'Position' object has no attribute 'of_select_variant'
+
+---===Error===---
+Time = 22.06.2018 14:12:15Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2369, in ui_dc_variant
+    self.main.of_select_variant((int(variant_id), article_name))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 2551, in of_select_variant
+    self.le_price.setText(article["price"])
+TypeError: QLineEdit.setText(str): argument 1 has unexpected type 'decimal.Decimal'
+
+---===Error===---
+Time = 22.06.2018 14:17:55Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 2344, in ui_dc_article
+    self.main.of_select_article((int(article_id), article_name))
+AttributeError: 'ReportCostArticle' object has no attribute 'of_select_article'
+
+---===Error===---
+Time = 22.06.2018 14:57:33Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 579, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 22.06.2018 15:08:45Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\main_window.py", line 579, in closeEvent
+    self.logger.info(u"[Пользователь {:04d}] {}".format(User().id(), "Вышел из программы"))
+TypeError: non-empty format string passed to object.__format__
+
+---===Error===---
+Time = 25.06.2018 17:40:17Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 244, in view_article_test
+    self.article_test = article.ArticleTest()
+AttributeError: 'module' object has no attribute 'ArticleTest'
+
+---===Error===---
+Time = 02.07.2018 16:19:06Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\login_window.py", line 24, in check_login
+    sql_result = my_sql.sql_select(query, (login, password))
+  File "C:/Users/Meller/Desktop/CRM-Avi\function\my_sql.py", line 29, in sql_select
+    connect, cursor, = sql_conn()
+TypeError: 'ProgrammingError' object is not iterable
+
+---===Error===---
+Time = 03.07.2018 15:56:39Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi/main.py", line 19, in <module>
+    main = form.main_window.MainWindow(sys.argv)
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\main_window.py", line 25, in __init__
+    loadUi('/ui/main.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 972, in parse
+    document = parse(filename)
+  File "C:\Python34\lib\xml\etree\ElementTree.py", line 1186, in parse
+    tree.parse(source, parser)
+  File "C:\Python34\lib\xml\etree\ElementTree.py", line 587, in parse
+    source = open(source, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: '/ui/main.ui'
+
+---===Error===---
+Time = 05.07.2018 12:55:46Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\clients.py", line 50, in ui_double_click_item
+    self.ui_change_item(select_prov.data(3))
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\clients.py", line 45, in ui_change_item
+    self.change_client = Client(self, id_select)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\clients.py", line 66, in __init__
+    self.set_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\clients.py", line 305, in set_info
+    self.inspection_files(self.le_name.text(), "Путь корень клиенты")
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\clients.py", line 92, in inspection_files
+    files = listdir("%s/%s" % (self.path_wor, dir_name.replace('"', "'")))
+FileNotFoundError: [WinError 3] Системе не удается найти указанный путь: "\\\\AVINAS\\programm\\Программа\\Клиенты/Акционерное Общество 'Торговый дом 'ПЕРЕКРЕСТОК' "
+
+---===Error===---
+Time = 06.07.2018 13:48:18Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\salary.py", line 517, in ui_del_salary
+    if not self.select_history_py_date:
+AttributeError: 'SalaryList' object has no attribute 'select_history_py_date'
+
+---===Error===---
+Time = 09.07.2018 13:34:27Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 644, in ui_del_position
+    self.calc_sum()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1070, in calc_sum
+    calc_price.calc_nds(cod_value["price"], cod_value["value"], cod_value["nds"], cod_value["psb"])
+  File "C:/Users/Meller/Desktop/CRM-Avi\function\calc_price.py", line 3, in calc_nds
+    no_nds_price = round(float(price) - (float(price) * float(nds)) / (100 + float(nds)), 2)
+TypeError: float() argument must be a string or a number, not 'NoneType'
+
+---===Error===---
+Time = 19.07.2018 15:32:55Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\staff_traffic.py", line 353, in ui_scan_card
+    number = scan_card.scan()
+  File "C:/Users/Meller/Desktop/CRM-Avi\function\scan_card.py", line 20, in scan
+    time.sleep(1)
+NameError: name 'time' is not defined
+
+---===Error===---
+Time = 27.07.2018 16:47:20Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 3106, in ui_edi3_acc
+    self.main.calc_sum()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1099, in calc_sum
+    price = round(float(self.tw_position.item(row, 4).text().replace(",", ".")), 2)
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 27.07.2018 17:00:18Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 3106, in ui_edi3_acc
+    self.main.calc_sum()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 1099, in calc_sum
+    price = round(float(self.tw_position.item(row, 4).text().replace(",", ".")), 2)
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 04.10.2018 17:52:42Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1340, in ui_double_click_operation
+    self.change_operation.cb_accept_change_price.setChange(bool(self.tw_operations.item(row, 3).text()))
+AttributeError: 'QCheckBox' object has no attribute 'setChange'
+
+---===Error===---
+Time = 04.10.2018 18:12:54Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\operation.py", line 98, in ui_double_click_table_item
+    self.main.of_tree_select_operation(item)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 1485, in of_tree_select_operation
+    add_item = item.append(0)  # добавим 0 разрешение для изменения цены операции
+AttributeError: 'tuple' object has no attribute 'append'
+
+---===Error===---
+Time = 04.10.2018 18:20:47Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\article.py", line 1372, in ui_double_click_operation
+    self.tw_operations.item(row, 0).setData("upd")
+TypeError: QTableWidgetItem.setData(int, QVariant): argument 1 has unexpected type 'str'
+
+---===Error===---
+Time = 04.10.2018 18:36:32Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\article.py", line 545, in ui_select_parametr
+    self.tw_article.setCurrentRow(self.old_select_row_parametr)
+AttributeError: 'QTableWidget' object has no attribute 'setCurrentRow'
+
+---===Error===---
+Time = 05.10.2018 14:05:53Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 420, in ui_change_price_operations
+    self.change_operation_window = PackOperation(self.pack)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 991, in __init__
+    self.set_info()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 995, in set_info
+    self.le_operation.setWhatsThis(str(self.operation["operation_id"]))
+TypeError: 'Pack' object is not subscriptable
+
+---===Error===---
+Time = 05.10.2018 15:07:22Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 1146, in ui_acc
+    if not self.tw_operations.item(row, 2).text():
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 02.11.2018 18:21:13Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 559, in ui_calc_pack
+    all_material_one = material_and_rest_one + add_material_one
+TypeError: unsupported operand type(s) for +: 'decimal.Decimal' and 'float'
+
+---===Error===---
+Time = 02.11.2018 18:30:20Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 562, in ui_calc_pack
+    price_all_one = round((operations_price / value) + (accessories_price / value) + all_material_one, 4)
+TypeError: unsupported operand type(s) for +: 'decimal.Decimal' and 'float'
+
+---===Error===---
+Time = 20.11.2018 13:03:46Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 610, in ui_acc
+    save_note = self.pack.save_sql(cut_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\classes\cut.py", line 1181, in save_sql
+    if self.__date_make_sql is not None and self.__date_make is not None:  # Если пачка уже была принята то провери измененое кол-во
+AttributeError: 'Pack' object has no attribute '_Pack__date_make_sql'
+
+---===Error===---
+Time = 20.11.2018 16:45:20Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 610, in ui_acc
+    save_note = self.pack.save_sql(cut_id)
+  File "C:/Users/Meller/Desktop/CRM-Avi\classes\cut.py", line 1181, in save_sql
+    if self.__date_make_sql is not None and self.__date_make is not None:  # Если пачка уже была принята то провери измененое кол-во
+AttributeError: 'Pack' object has no attribute '_Pack__date_make_sql'
+
+---===Error===---
+Time = 20.11.2018 17:10:33Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 282, in ui_edit_value_product
+    self.set_accessories_name()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\pack.py", line 808, in set_accessories_name
+    balance = self.pack.check_balance_accessories(dict["id"])
+  File "C:/Users/Meller/Desktop/CRM-Avi\classes\cut.py", line 2573, in check_balance_accessories
+    elif sql_info[0][0] > (Decimal(str(sum_accessories)) - accessory["sql_value_sum"]):
+TypeError: unsupported operand type(s) for -: 'decimal.Decimal' and 'float'
+
+---===Error===---
+Time = 23.11.2018 18:42:29Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 328, in ui_view_list_article
+    self.article_list = article.ArticleList(self, select_variant=True, open_variant=self.pack.article())
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\article.py", line 70, in __init__
+    open_tree = sql_result[0][0]
+IndexError: list index out of range
+
+---===Error===---
+Time = 27.11.2018 14:14:13Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 549, in view_shipment_order
+    self.shipment_order = shipment_order.ShipmentOrder()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\shipment_order.py", line 15, in __init__
+    loadUi(getcwd() + '/ui/shipment_order.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 781, in createUserInterface
+    self.toplevelWidget = self.createToplevelWidget(cname, wname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 57, in createToplevelWidget
+    (type(self.toplevelInst), classname)))
+TypeError: ('Wrong base class of toplevel widget', (<class 'form.shipment_order.ShipmentOrder'>, 'QDialog'))
+
+---===Error===---
+Time = 27.11.2018 14:17:19Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 549, in view_shipment_order
+    self.shipment_order = shipment_order.ShipmentOrder()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\shipment_order.py", line 18, in __init__
+    self.set_start_settings()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\shipment_order.py", line 21, in set_start_settings
+    self.tw_order.horizontalHeader().resizeSection(0, 70)
+AttributeError: 'ShipmentOrder' object has no attribute 'tw_order'
+
+---===Error===---
+Time = 27.11.2018 14:33:05Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\order.py", line 86, in ui_double_click_table_item
+    self.main.of_tree_select_order(item)
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\shipment_order.py", line 47, in of_tree_select_order
+    self.tw_position.insertRow(self.tw_position.rowCount())
+AttributeError: 'ShipmentOrder' object has no attribute 'tw_position'
+
+---===Error===---
+Time = 27.11.2018 16:41:50Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\shipment_order.py", line 96, in ui_export
+    sheet["A%s" % start_row_article].alignment = Alignment(horizontal="centr")
+  File "C:\Python34\lib\site-packages\openpyxl\styles\alignment.py", line 50, in __init__
+    self.horizontal = horizontal
+  File "C:\Python34\lib\site-packages\openpyxl\descriptors\base.py", line 145, in __set__
+    super(NoneSet, self).__set__(instance, value)
+  File "C:\Python34\lib\site-packages\openpyxl\descriptors\base.py", line 130, in __set__
+    raise ValueError(self.__doc__)
+ValueError: Value must be one of {'justify', 'left', 'center', 'centerContinuous', 'right', 'general', 'fill', 'distributed'}
+
+---===Error===---
+Time = 29.11.2018 17:42:03Traceback (most recent call last):
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\main_window.py", line 560, in view_test_window
+    self.test_window = worker.WorkerListWindow()
+  File "C:/Users/Meller/Desktop/CRM-Avi\form\new\worker.py", line 14, in __init__
+    self.pb_new.setIcon(QIcon("C:/Users/Meller/Desktop/new.png"))
+AttributeError: 'WorkerListWindow' object has no attribute 'pb_new'
+
+---===Error===---
+Time = 30.11.2018 19:10:23Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\main_window.py", line 560, in view_test_window
+    self.test_window = worker.WorkerListWindow()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\new\worker.py", line 23, in __init__
+    self.set_worker_list()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\new\worker.py", line 72, in set_worker_list
+    set_list_to.table_widget(self.tw_worker, set_worker_list)
+  File "C:\Users\Meller\Desktop\CRM-Avi\function\widget\set_list_to.py", line 64, in table_widget
+    q_date = QDate(date.year, date.month, date.day)
+TypeError: arguments did not match any overloaded call:
+  QDate(): too many arguments
+  QDate(int, int, int): argument 1 has unexpected type 'getset_descriptor'
+  QDate(QDate): argument 1 has unexpected type 'getset_descriptor'
+
+---===Error===---
+Time = 04.12.2018 13:15:14Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\main_window.py", line 247, in view_article_test
+    self.article_test = article.ArticleList()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\article.py", line 31, in __init__
+    loadUi(getcwd() + '/ui/article_test.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 889, in createConnections
+    conn.findtext('slot').split('(')[0])
+  File "C:\Python34\lib\site-packages\PyQt5\uic\objcreator.py", line 137, in getSlot
+    return self._cpolicy.getSlot(obj, slotname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\qobjectcreator.py", line 149, in getSlot
+    return getattr(object, slotname)
+AttributeError: 'ArticleList' object has no attribute 'ui_calc_nds'
+
+---===Error===---
+Time = 21.02.2019 13:47:16Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\staff.py", line 131, in double_click
+    if self.add_mat.insert_info(id):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\staff.py", line 613, in insert_info
+    self.de_info_leave.setDate(sql_reply[0][8])
+TypeError: QDateTimeEdit.setDate(QDate): argument 1 has unexpected type 'NoneType'
+
+---===Error===---
+Time = 04.04.2019 18:10:35Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\clients.py", line 50, in ui_double_click_item
+    self.ui_change_item(select_prov.data(3))
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\clients.py", line 45, in ui_change_item
+    self.change_client = Client(self, id_select)
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\clients.py", line 66, in __init__
+    self.set_info()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\clients.py", line 305, in set_info
+    self.inspection_files(self.le_name.text().replace('.', ''), "Путь корень клиенты")
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\clients.py", line 92, in inspection_files
+    files = listdir("%s/%s" % (self.path_wor, dir_name.replace('"', "'")))
+FileNotFoundError: [WinError 3] Системе не удается найти указанный путь: '\\\\AVINAS\\programm\\Программа\\Клиенты/ИП Хабибуллина Ю Н '
+
+---===Error===---
+Time = 24.04.2019 12:19:11Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_sibestoimost.py", line 243, in ui_calc_awg
+    item = QTableWidgetItem(str(round(sum(list) / len(list), 4)))
+ZeroDivisionError: division by zero
+
+---===Error===---
+Time = 07.05.2019 12:50:55Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\staff.py", line 1072, in exel_in
+    self.build_new_exel("in")
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\staff.py", line 1270, in build_new_exel
+    while text[m] != " ":
+IndexError: tuple index out of range
+
+---===Error===---
+Time = 13.05.2019 16:35:15Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\article.py", line 593, in ui_dc_variant
+    self.main.of_select_variant((int(variant_id), article_name))
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 931, in of_select_variant
+    self.set_accessories_name()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 807, in set_accessories_name
+    if round(dict["value"] * dict["value_thing"], 4) != round(dict["sql_value_sum"], 4):
+TypeError: type NoneType doesn't define __round__ method
+
+---===Error===---
+Time = 16.05.2019 14:46:56Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 328, in ui_view_list_article
+    self.article_list = article.ArticleList(self, select_variant=True, open_variant=self.pack.article())
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\article.py", line 70, in __init__
+    open_tree = sql_result[0][0]
+IndexError: list index out of range
+
+---===Error===---
+Time = 05.06.2019 15:13:09Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\staff.py", line 809, in acc
+    if self.cb_ip.checked():
+AttributeError: 'QCheckBox' object has no attribute 'checked'
+
+---===Error===---
+Time = 02.07.2019 19:28:29Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_all.py", line 168, in ui_calc
+    self.calc_production()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_all.py", line 1616, in calc_production
+    sum_value += order[7]
+TypeError: unsupported operand type(s) for +=: 'int' and 'NoneType'
+
+---===Error===---
+Time = 05.07.2019 15:39:36Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 661, in ui_print_pack_passport
+    barcode.generate(cod)
+  File "C:\Users\Meller\Desktop\CRM-Avi\function\barcode.py", line 7, in generate
+    EAN.save(getcwd() + "/temp/%s" % cod, options={'module_height': 7.0})
+  File "C:\Python34\lib\site-packages\barcode\base.py", line 69, in save
+    _filename = self.writer.save(filename, output)
+  File "C:\Python34\lib\site-packages\barcode\writer.py", line 250, in save
+    with open(_filename, 'wb') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Meller\\Desktop\\CRM-Avi/temp/0062354.svg'
+
+---===Error===---
+Time = 23.07.2019 17:16:41Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\order.py", line 573, in ui_add_position
+    self.calc_sum()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\order.py", line 1144, in calc_sum
+    cod = aricle[int(self.tw_position.item(row, 2).data(5))]
+KeyError: 1839
+
+---===Error===---
+Time = 02.09.2019 16:23:46Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\login_window.py", line 24, in check_login
+    sql_result = my_sql.sql_select(query, (login, password))
+  File "C:\Users\Meller\Desktop\CRM-Avi\function\my_sql.py", line 29, in sql_select
+    connect, cursor, = sql_conn()
+TypeError: 'ProgrammingError' object is not iterable
+
+---===Error===---
+Time = 02.09.2019 16:24:13Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\login_window.py", line 24, in check_login
+    sql_result = my_sql.sql_select(query, (login, password))
+  File "C:\Users\Meller\Desktop\CRM-Avi\function\my_sql.py", line 29, in sql_select
+    connect, cursor, = sql_conn()
+TypeError: 'ProgrammingError' object is not iterable
+
+---===Error===---
+Time = 25.10.2019 14:08:13Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\templates\table.py", line 179, in __lt__
+    return float(self.text().replace(" ", "")) < float(other.text().replace(" ", ""))
+ValueError: could not convert string to float: 
+
+---===Error===---
+Time = 06.12.2019 16:13:09Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\order.py", line 3177, in ui_edi2_acc
+    OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 06.12.2019 16:14:18Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\order.py", line 3108, in ui_edi2_acc
+    OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 06.12.2019 17:29:22Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\order.py", line 3177, in ui_edi2_acc
+    OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 06.12.2019 17:59:17Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\order.py", line 3108, in ui_edi2_acc
+    OrderedUnitPacksize = element.find('{http://www.comarch.com/}OrderedUnitPacksize').text
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 06.12.2019 18:03:53Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\order.py", line 3145, in ui_edi2_acc
+    if str(price) == element.find('{http://www.comarch.com/}OrderedUnitNetPrice').text:
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 12.12.2019 18:13:05Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\article.py", line 594, in ui_dc_variant
+    self.main.of_select_variant((int(variant_id), article_name))
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 932, in of_select_variant
+    self.set_operation_name()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 790, in set_operation_name
+    new_table_item = QTableWidgetItem(str(round(dict["price"] * dict["value"], 4)))
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+
+---===Error===---
+Time = 12.12.2019 18:20:06Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\article.py", line 594, in ui_dc_variant
+    self.main.of_select_variant((int(variant_id), article_name))
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 932, in of_select_variant
+    self.set_operation_name()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\pack.py", line 790, in set_operation_name
+    new_table_item = QTableWidgetItem(str(round(dict["price"] * dict["value"], 4)))
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+
+---===Error===---
+Time = 13.12.2019 16:52:54Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\main_window.py", line 286, in view_audit_verification
+    self.audit_verification = audit.AuditVerification()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 16, in __init__
+    loadUi(getcwd() + '/ui/audit.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 972, in parse
+    document = parse(filename)
+  File "C:\Python34\lib\xml\etree\ElementTree.py", line 1186, in parse
+    tree.parse(source, parser)
+  File "C:\Python34\lib\xml\etree\ElementTree.py", line 587, in parse
+    source = open(source, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Meller\\Desktop\\CRM-Avi/ui/audit.ui'
+
+---===Error===---
+Time = 13.12.2019 16:54:24Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\main_window.py", line 286, in view_audit_verification
+    self.audit_verification = audit.AuditVerification()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 16, in __init__
+    loadUi(getcwd() + '/ui/audit.ui', self)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\__init__.py", line 222, in loadUi
+    return DynamicUILoader(package).loadUi(uifile, baseinstance, resource_suffix)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 72, in loadUi
+    return self.parse(filename, resource_suffix, basedir)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 980, in parse
+    actor(elem)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\uiparser.py", line 781, in createUserInterface
+    self.toplevelWidget = self.createToplevelWidget(cname, wname)
+  File "C:\Python34\lib\site-packages\PyQt5\uic\Loader\loader.py", line 57, in createToplevelWidget
+    (type(self.toplevelInst), classname)))
+TypeError: ('Wrong base class of toplevel widget', (<class 'form.audit.AuditVerification'>, 'QDialog'))
+
+---===Error===---
+Time = 13.12.2019 18:41:55Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\supply_material.py", line 140, in ui_double_click_table_item
+    self.main.of_select_material_supply(item)
+AttributeError: 'int' object has no attribute 'of_select_material_supply'
+
+---===Error===---
+Time = 16.12.2019 15:03:37Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\provider.py", line 26, in ui_double_click_item
+    self.m_class.of_list_reason_provider_material(item)
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 139, in of_list_reason_provider_material
+    self.le_provider.setText(item[1])
+AttributeError: 'AuditGeneration' object has no attribute 'le_provider'
+
+---===Error===---
+Time = 16.12.2019 15:04:20Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\provider.py", line 26, in ui_double_click_item
+    self.m_class.of_list_reason_provider_material(item)
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 139, in of_list_reason_provider_material
+    self.le_provider.setText(item[1])
+AttributeError: 'AuditGeneration' object has no attribute 'le_provider'
+
+---===Error===---
+Time = 16.12.2019 16:15:06Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 144, in ui_acc
+    self.set_table(new_audit)
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 151, in set_table
+    for data, col in enumerate(data_row):
+TypeError: 'int' object is not iterable
+
+---===Error===---
+Time = 16.12.2019 17:38:48Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 155, in ui_save_sql
+    sql_info = my_sql.sql_change(query, *row)
+TypeError: sql_change() takes from 1 to 2 positional arguments but 17 were given
+
+---===Error===---
+Time = 16.12.2019 18:13:18Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 81, in ui_change_type
+    self.update()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 43, in update
+    table.clear()
+UnboundLocalError: local variable 'table' referenced before assignment
+
+---===Error===---
+Time = 16.12.2019 18:16:21Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\main_window.py", line 286, in view_audit_verification
+    self.audit_verification = audit.AuditVerification()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 28, in __init__
+    self.update()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 67, in update
+    item = QTableWidgetItem(data[7].strftime("%m.%Y"))
+AttributeError: 'str' object has no attribute 'strftime'
+
+---===Error===---
+Time = 17.12.2019 13:45:03Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 95, in ui_change
+    _id = table.item(select_row, 0).data(5)
+AttributeError: 'NoneType' object has no attribute 'data'
+
+---===Error===---
+Time = 17.12.2019 14:09:51Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 186, in ui_acc
+    int(self.ui_le_supply.text()),
+ValueError: invalid literal for int() with base 10: ''
+
+---===Error===---
+Time = 17.12.2019 14:13:18Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\supply_accessories.py", line 107, in ui_double_click_table_item
+    self.main.of_select_accessories_supply(item)
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 249, in of_select_accessories_supply
+    self.ui_le_supply_provider.setText(data[1])
+TypeError: QLineEdit.setText(str): argument 1 has unexpected type 'int'
+
+---===Error===---
+Time = 17.12.2019 14:14:04Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 206, in ui_acc
+    if self.act_id:
+AttributeError: 'AuditAct' object has no attribute 'act_id'
+
+---===Error===---
+Time = 17.12.2019 14:47:06Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\audit.py", line 297, in ui_print
+    up_html = up_html.replace("#act_date#", self.ui_de_act_date.date().strftime("%d.%m.%Y"))
+AttributeError: 'QDate' object has no attribute 'strftime'
+
+---===Error===---
+Time = 03.02.2020 14:48:19Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_all.py", line 170, in ui_calc
+    self.calc_production()
+  File "C:\Users\Meller\Desktop\CRM-Avi\form\report_all.py", line 1355, in calc_production
+    print('Расчет артикула %s, кол-во пачек %s', (value["name"], len(sql_pack_id_info)))
+UnboundLocalError: local variable 'sql_pack_id_info' referenced before assignment
+
+---===Error===---
+Time = 17.06.2020 16:12:00Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 721, in ui_double_click_position
+    self.ui_change_position(row)
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 595, in ui_change_position
+    self.position.le_client_cod.setText(self.tw_position.item(select_row, 7).text())
+AttributeError: 'NoneType' object has no attribute 'text'
+
+---===Error===---
+Time = 27.07.2020 14:00:03Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\clients.py", line 362, in add_number
+    if self.cb_enabled_date.isChecked():
+AttributeError: 'Client' object has no attribute 'cb_enabled_date'
+
+---===Error===---
+Time = 27.07.2020 14:01:25Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\clients.py", line 200, in acc
+    data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
+  File "C:\Python34\lib\_strptime.py", line 507, in _strptime_datetime
+    tt, fraction = _strptime(data_string, format)
+  File "C:\Python34\lib\_strptime.py", line 344, in _strptime
+    (data_string, format))
+ValueError: time data '' does not match format '%d.%m.%Y'
+
+---===Error===---
+Time = 27.07.2020 14:43:52Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\clients.py", line 50, in ui_double_click_item
+    self.ui_change_item(select_prov.data(3))
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\clients.py", line 45, in ui_change_item
+    self.change_client = Client(self, id_select)
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\clients.py", line 66, in __init__
+    self.set_info()
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\clients.py", line 304, in set_info
+    table_item = QTableWidgetItem(item[3].strftime("%d.%m.%Y"))
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+---===Error===---
+Time = 27.07.2020 14:45:01Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\clients.py", line 211, in acc
+    data = datetime.strptime(self.tw_vendor_number.item(row, 2).text(), "%d.%m.%Y")
+  File "C:\Python34\lib\_strptime.py", line 507, in _strptime_datetime
+    tt, fraction = _strptime(data_string, format)
+  File "C:\Python34\lib\_strptime.py", line 344, in _strptime
+    (data_string, format))
+ValueError: time data '' does not match format '%d.%m.%Y'
+
+---===Error===---
+Time = 27.07.2020 16:00:20Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\pack.py", line 610, in ui_acc
+    save_note = self.pack.save_sql(cut_id)
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\classes\cut.py", line 1775, in save_sql
+    change_value = sum_material[0][1] + sum_material[0][2]
+IndexError: list index out of range
+
+---===Error===---
+Time = 02.01.2021 20:29:46Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\login_window.py", line 29, in check_login
+    User().set_id(sql_result[0][0])
+TypeError: 'TypeError' object is not subscriptable
+
+---===Error===---
+Time = 02.01.2021 20:30:19Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\login_window.py", line 29, in check_login
+    User().set_id(sql_result[0][0])
+TypeError: 'TypeError' object is not subscriptable
+
+---===Error===---
+Time = 17.01.2021 17:22:16Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\staff.py", line 1117, in exel_out
+    self.build_new_exel("out")
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\staff.py", line 1143, in build_new_exel
+    sheet = book['s2']
+  File "C:\Python34\lib\site-packages\openpyxl\workbook\workbook.py", line 237, in __getitem__
+    raise KeyError("Worksheet {0} does not exist.".format(key))
+KeyError: 'Worksheet s2 does not exist.'
+
+---===Error===---
+Time = 01.03.2021 16:34:30Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\report_all.py", line 164, in ui_calc
+    self.calc_accessories()
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\report_all.py", line 833, in calc_accessories
+    all_value_in += value["value_in"]
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'NoneType'
+
+---===Error===---
+Time = 18.11.2021 13:01:48Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\article.py", line 560, in ui_select_parametr
+    self.set_parametr_info(parametr_id)
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\article.py", line 377, in set_parametr_info
+    self.cb_old_date.setCheckState(sql_info[0][9])
+AttributeError: 'ArticleList' object has no attribute 'cb_old_date'
+
+---===Error===---
+Time = 08.12.2021 17:50:43Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\main_window.py", line 566, in view_change_pay_reason
+    self.change_reason = pay.PayChangeReason()
+TypeError: __init__() missing 1 required positional argument: 'main'
+
+---===Error===---
+Time = 08.12.2021 18:00:53Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\pay.py", line 800, in ui_double_click_item
+    self.m_class.of_list_reason_plus(item)
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\pay.py", line 878, in of_list_reason_plus
+    self.le_reason_plus.setWhatsThis(str(item[0]))
+AttributeError: 'PayChangeReason' object has no attribute 'le_reason_plus'
+
+---===Error===---
+Time = 08.12.2021 18:07:36Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\pay.py", line 800, in ui_double_click_item
+    self.m_class.of_list_reason_plus(item)
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\pay.py", line 888, in of_list_reason_plus
+    result = QMessageBox.question(self, text, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+TypeError: QMessageBox.question(QWidget, str, str, QMessageBox.StandardButtons buttons=QFlags&lt;QMessageBox.StandardButton&gt;(QFlag(81920)), QMessageBox.StandardButton defaultButton=QMessageBox.NoButton): argument 3 has unexpected type 'StandardButtons'
+
+---===Error===---
+Time = 19.01.2022 17:40:25Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 2800, in ui_acc
+    if self.lw_main.selectedItems()[0].text() == "Накладная":
+IndexError: list index out of range
+
+---===Error===---
+Time = 01.04.2022 18:21:03Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3076, in ui_edi1_acc
+    item_info.update(self.login)
+AttributeError: 'Text' object has no attribute 'update'
+
+---===Error===---
+Time = 01.04.2022 18:34:05Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3097, in ui_edi1_acc
+    item = QTableWidgetItem(QDate.fromString(res["recieve_date"], Qt.ISODate).toString("dd.MM.yyyy"))
+TypeError: arguments did not match any overloaded call:
+  QDate.fromString(str, Qt.DateFormat format=Qt.TextDate): argument 1 has unexpected type 'datetime.date'
+  QDate.fromString(str, str): argument 1 has unexpected type 'datetime.date'
+
+---===Error===---
+Time = 01.04.2022 18:35:45Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3097, in ui_edi1_acc
+    item = QTableWidgetItem(QDate.fromString(res["document-date"], Qt.ISODate).toString("dd.MM.yyyy"))
+TypeError: arguments did not match any overloaded call:
+  QDate.fromString(str, Qt.DateFormat format=Qt.TextDate): argument 1 has unexpected type 'datetime.datetime'
+  QDate.fromString(str, str): argument 1 has unexpected type 'datetime.datetime'
+
+---===Error===---
+Time = 01.04.2022 18:40:07Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3097, in ui_edi1_acc
+    item = QTableWidgetItem(QDateTime.fromString(res["recieve_date"], "yyyy-MM-dd").toString("dd.MM.yyyy"))
+TypeError: arguments did not match any overloaded call:
+  QDateTime.fromString(str, Qt.DateFormat format=Qt.TextDate): argument 1 has unexpected type 'datetime.date'
+  QDateTime.fromString(str, str): argument 1 has unexpected type 'datetime.date'
+
+---===Error===---
+Time = 01.04.2022 18:41:55Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3097, in ui_edi1_acc
+    item = QTableWidgetItem(res["recieve_date"])
+TypeError: arguments did not match any overloaded call:
+  QTableWidgetItem(int type=QTableWidgetItem.Type): argument 1 has unexpected type 'datetime.date'
+  QTableWidgetItem(str, int type=QTableWidgetItem.Type): argument 1 has unexpected type 'datetime.date'
+  QTableWidgetItem(QIcon, str, int type=QTableWidgetItem.Type): argument 1 has unexpected type 'datetime.date'
+  QTableWidgetItem(QTableWidgetItem): argument 1 has unexpected type 'datetime.date'
+
+---===Error===---
+Time = 01.04.2022 18:48:19Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3091, in ui_edi1_acc
+    for res in result["Cnt"]["mailbox-response"]["document-info"]:
+TypeError: string indices must be integers
+
+---===Error===---
+Time = 01.04.2022 18:48:59Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3091, in ui_edi1_acc
+    for res in result["Cnt"]["mailbox-response"]["document-info"]:
+TypeError: string indices must be integers
+
+---===Error===---
+Time = 01.04.2022 18:55:10Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3083, in ui_edi1_acc
+    if result["Res"] != 1:
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3083, in ui_edi1_acc
+    if result["Res"] != 1:
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 19:18:09Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3161, in ui_edi2_acc
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3161, in ui_edi2_acc
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 19:20:29Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3162, in ui_edi2_acc
+    print(b64decode(result["Cnt"]).decode('utf-8'))
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3162, in ui_edi2_acc
+    print(b64decode(result["Cnt"]).decode('utf-8'))
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 19:57:47Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3162, in ui_edi2_acc
+    print(b64decode(result["Cnt"]).decode('utf-8'))
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3162, in ui_edi2_acc
+    print(b64decode(result["Cnt"]).decode('utf-8'))
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 20:06:43Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3164, in ui_edi2_acc
+    a = 1
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3164, in ui_edi2_acc
+    a = 1
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 20:13:11Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3164, in ui_edi2_acc
+    a = 1
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3164, in ui_edi2_acc
+    a = 1
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 20:14:05Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3165, in ui_edi2_acc
+    a = 1
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3165, in ui_edi2_acc
+    a = 1
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 20:23:49Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3167, in ui_edi2_acc
+    if len(xml_order["SG28"]) > 0:
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3167, in ui_edi2_acc
+    if len(xml_order["SG28"]) > 0:
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 20:42:24Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3195, in ui_edi2_acc
+    if row_value["C186"]["E6063"] == 21:
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3195, in ui_edi2_acc
+    if row_value["C186"]["E6063"] == 21:
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 20:43:12Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3207, in ui_edi2_acc
+    item = QTableWidgetItem(str(all_value / pcb))
+TypeError: unsupported operand type(s) for /: 'str' and 'str'
+
+---===Error===---
+Time = 01.04.2022 20:43:59Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3197, in ui_edi2_acc
+    all_value = int(row_value["C186"]["E6060"])
+ValueError: invalid literal for int() with base 10: '40.000'
+
+---===Error===---
+Time = 01.04.2022 22:03:34Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3230, in ui_edi2_acc
+    item = QTableWidgetItem(str(item["barcode"]))
+TypeError: 'QTableWidgetItem' object is not subscriptable
+
+---===Error===---
+Time = 01.04.2022 22:08:43Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3227, in ui_edi2_acc
+    item = QTableWidgetItem(str(item["name"]))
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3227, in ui_edi2_acc
+    item = QTableWidgetItem(str(item["name"]))
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 22:53:06Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3286, in ui_edi2_acc
+    if not self.cb_division_position.isChecked() and len(item["articles"]) > 1:
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3286, in ui_edi2_acc
+    if not self.cb_division_position.isChecked() and len(item["articles"]) > 1:
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 747, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 01.04.2022 23:13:49Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3297, in ui_edi2_acc
+    if price == float(row["edi_price"]):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 3297, in ui_edi2_acc
+    if price == float(row["edi_price"]):
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 884, in trace_dispatch
+    self.do_wait_suspend(thread, frame, event, arg)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\_pydevd_bundle\pydevd_frame.py", line 144, in do_wait_suspend
+    self._args[0].do_wait_suspend(*args, **kwargs)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1147, in do_wait_suspend
+    self._do_wait_suspend(thread, frame, event, arg, suspend_type, from_this_thread)
+  File "C:\Program Files\JetBrains\PyCharm 2021.3.2\plugins\python\helpers\pydev\pydevd.py", line 1162, in _do_wait_suspend
+    time.sleep(0.01)
+KeyboardInterrupt
+
+---===Error===---
+Time = 04.04.2022 13:12:05Traceback (most recent call last):
+  File "C:\Python34\lib\site-packages\suds\transport\http.py", line 63, in open
+    return self.u2open(u2request)
+  File "C:\Python34\lib\site-packages\suds\transport\http.py", line 119, in u2open
+    return url.open(u2request, timeout=tm)
+  File "C:\Python34\lib\urllib\request.py", line 470, in open
+    response = meth(req, response)
+  File "C:\Python34\lib\urllib\request.py", line 580, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "C:\Python34\lib\urllib\request.py", line 508, in error
+    return self._call_chain(*args)
+  File "C:\Python34\lib\urllib\request.py", line 442, in _call_chain
+    result = func(*args)
+  File "C:\Python34\lib\urllib\request.py", line 588, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 502: Bad Gateway
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 852, in ui_import_edi
+    self.position = ImportEDI(self)
+  File "C:\Users\Meller\Desktop\Проекты\CRM-Avi\form\order.py", line 2985, in __init__
+    self.suds_client = Client(self.wsdl)
+  File "C:\Python34\lib\site-packages\suds\client.py", line 111, in __init__
+    self.wsdl = reader.open(url)
+  File "C:\Python34\lib\site-packages\suds\reader.py", line 151, in open
+    d = self.fn(url, self.options)
+  File "C:\Python34\lib\site-packages\suds\wsdl.py", line 135, in __init__
+    d = reader.open(url)
+  File "C:\Python34\lib\site-packages\suds\reader.py", line 78, in open
+    d = self.download(url)
+  File "C:\Python34\lib\site-packages\suds\reader.py", line 94, in download
+    fp = self.options.transport.open(Request(url))
+  File "C:\Python34\lib\site-packages\suds\transport\http.py", line 174, in open
+    return HttpTransport.open(self, request)
+  File "C:\Python34\lib\site-packages\suds\transport\http.py", line 65, in open
+    raise TransportError(str(e), e.code, e.fp)
+suds.transport.TransportError: HTTP Error 502: Bad Gateway
