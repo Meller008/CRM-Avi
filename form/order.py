@@ -12,7 +12,8 @@ from openpyxl.worksheet.pagebreak import Break
 from copy import copy
 from function import my_sql, to_excel, table_to_html, moneyfmt, calc_price, str_to
 from classes import print_qt
-from form.templates import table, list
+from form.templates import table
+import form.templates.list as uiList
 from form import clients, article, print_label
 import num2t4ru
 from classes.my_class import User
@@ -2776,7 +2777,7 @@ class Position(QDialog):
         self.ui_calculation()
 
 
-class TransportCompanyName(list.ListItems):
+class TransportCompanyName(uiList.ListItems):
     def set_settings(self):
         self.setWindowTitle("Список транспорт компаний")  # Имя окна
         self.toolBar.setStyleSheet("background-color: rgb(211, 49, 60);")  # Цвет бара
@@ -3175,7 +3176,11 @@ class ImportEDI(QDialog):
 
         order_items = []
         if len(xml_order["SG28"]) > 0:
-            for row in xml_order["SG28"]:
+            if isinstance(xml_order["SG28"], list):
+                edi_order_items = xml_order["SG28"]
+            else:
+                edi_order_items = [xml_order["SG28"]]
+            for row in edi_order_items:
                 order_item = {
                     "name": row["IMD"]["C273"]["E7008"],
                     "barcode": row["LIN"]["C212"]["E7140"],
