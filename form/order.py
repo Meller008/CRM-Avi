@@ -2982,7 +2982,7 @@ class ImportEDI(QDialog):
 
         # self.login = {'Name': '4607191149998EC', 'Password': '3NxK8bAyG'}
         self.wsdl = "https://edi-ws.esphere.ru/edi.wsdl"
-        self.login = {"Name": "4607191149998WS", "Password": "iUGpoftS"}
+        self.login = {"Name": "4607191149998WS", "Password": "4nT!DvNR92NZK!h"}
         self.suds_client = Client(self.wsdl)
         self.main = main
         self.set_size_table()
