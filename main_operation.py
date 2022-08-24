@@ -306,7 +306,7 @@ class MainWindowOperation(QMainWindow, main_class):
                         LEFT JOIN product_article_parametrs ON pack.Article_Parametr_Id = product_article_parametrs.Id
                         LEFT JOIN product_article_size ON product_article_parametrs.Product_Article_Size_Id = product_article_size.Id
                         LEFT JOIN product_article ON product_article_size.Article_Id = product_article.Id
-                      WHERE pack_operation.Worker_Id = %s AND pack_operation.Pay = 0"""
+                      WHERE pack_operation.Worker_Id = %s AND pack_operation.Pay = 0 ORDER BY cut.Id"""
         sql_info = my_sql.sql_select(query, (self.user["id"], ))
         if "mysql.connector.errors" in str(type(sql_info)):
             return False
