@@ -3186,8 +3186,8 @@ class ImportEDI(QDialog):
                     "barcode": row["LIN"]["C212"]["E7140"],
                     "client_code": row["PIA"][0]["C212"]["E7140"],
                     "value": None,
-                    "pcb": None,
-                    "box_value": None,
+                    "pcb": 0,
+                    "box_value": 0,
                     "edi_price": None,
                     "articles": []
                 }
@@ -3198,7 +3198,8 @@ class ImportEDI(QDialog):
                         order_item["value"] = int(float(row_value["C186"]["E6060"]))
                     elif int(row_value["C186"]["E6063"]) == 59:
                         # Это PCB
-                        order_item["pcb"] = int(float(row_value["C186"]["E6060"]))
+                        if row_value["C186"]["E6060"]:
+                            order_item["pcb"] = int(float(row_value["C186"]["E6060"]))
 
                 if order_item["value"] and order_item["pcb"]:
                     order_item["box_value"] = order_item["value"] / order_item["pcb"]
