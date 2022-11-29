@@ -2768,4 +2768,36 @@ class Pack:
             self.__new_operation_count -= 1
             self.__operation.append(operation)
 
-        self.take_article_accessories()
+        # query = """SELECT material.Accessories_Id, accessories_name.Name, accessories_supplyposition.Price, material.Value, MIN(Data)
+        #             FROM product_article_material as material
+        #               LEFT JOIN accessories_name ON material.Accessories_Id = accessories_name.Id
+        #               LEFT JOIN accessories_supplyposition ON accessories_name.Id = accessories_supplyposition.Accessories_NameId
+        #               LEFT JOIN accessories_balance ON accessories_supplyposition.Id = accessories_balance.Accessories_SupplyPositionId
+        #               LEFT JOIN accessories_supply ON accessories_supplyposition.Accessories_SupplyId = accessories_supply.Id
+        #             WHERE material.Product_Article_Parametrs_Id = %s AND material.Accessories_Id IS NOT NULL
+        #                   AND (accessories_balance.BalanceValue > 0 or accessories_balance.BalanceValue IS NULL)
+        #             GROUP BY material.Id"""
+
+        query = """SELECT pack_accessories.Accessories_Id, an.Name, pack_accessories.Value_Thing
+                FROM pack_accessories LEFT JOIN accessories_name an on an.Id = pack_accessories.Accessories_Id
+                WHERE pack_accessories.Pack_Id = %s"""
+        sql_info = my_sql.sql_select(query, (copy_id,))
+        if "mysql.connector.errors" in str(type(sql_info)):
+            raise RuntimeError("Не смог получить фурнитуру артикула")
+        self.__accessories = []
+        for item in sql_info:
+            accessories = {"id": self.__new_accessories_count,
+                           "accessories_id": item[0],
+                           "accessories_name": item[1],
+                           "price": 0,
+                           "value": self.__value_all,
+                           "value_thing": item[2],
+                           "sql_value": None,
+                           "sql_value_thing": item[2],
+                           "sql_value_sum": None}
+            self.__save_accessories_sql.append(self.__new_accessories_count)
+            self.__new_accessories_count -= 1
+            self.__accessories.append(accessories)
+            self.__error_value_accessories_id = []
+
+        # self.take_article_accessories()
